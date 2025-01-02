@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:uilib="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:liftOnScroll="false"
+        app:elevation="0dp"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null"
+        >
+        <!-- Title Bar -->
+
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="70dp"
+        uilib:layout_constraintTop_toBottomOf="@+id/layoutTop"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:padding="@dimen/half_of_normal_margin"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/half_of_normal_margin"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/half_of_normal_margin"
+                android:paddingBottom="@dimen/button_margin"
+
+                >
+
+                <TextView
+                    android:id="@+id/tvDeviceName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:text="Device Name"
+                    android:textSize="16sp"
+                    android:gravity="left"
+                    />
+
+                <TextView
+                    android:id="@+id/etDeviceName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:hint="aov rahul 1"
+                    android:gravity="right"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/tvShareReceiver"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:text="Share Receiver"
+                    android:textSize="16sp"
+                />
+
+                <EditText
+                    android:id="@+id/et_search_bar_input_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:background="@drawable/edit_text_background"
+                    android:padding="8dp"
+                    android:hint="Enter email" />
+
+                <Button
+                    android:id="@+id/btnSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".3"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="#FFFFFF"
+                    android:onClick="onSearchAccount"
+                    android:text="Search" />
+            </LinearLayout>
+            <com.xm.ui.widget.ListSelectItem
+                android:id="@+id/lsi_share_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                uilib:ImageRight1="@mipmap/icon_next"
+                uilib:ImageRight2="@mipmap/icon_next"
+                uilib:ItemTipColor="@color/default_normal_text_color"
+                uilib:ItemTipSize="@dimen/too_small_text_size"
+                uilib:ItemTitleColor="@color/default_normal_text_color"
+                uilib:ItemTitleSize="@dimen/normal_text_size"
+                uilib:Tip=""
+                uilib:Title="" />
+
+
+            <TextView
+                    android:id="@+id/tvSearchResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search Result"
+                    android:visibility="gone"
+                    android:padding="8dp" />
+
+                <Button
+                    android:id="@+id/btnShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Click to Share"
+                    android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="70dp"
+        uilib:layout_constraintTop_toBottomOf="@+id/layoutTop"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:visibility="gone"
+        >
+
+        <!--<include-->
+        <!--android:id="@+id/layoutTop"-->
+        <!--layout="@layout/layout_top_navigate_theme" />-->
+
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout" />
+
+        <ImageView
+            android:id="@+id/iv_qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/edit_text_background"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/eye_closed_svg"
+                android:contentDescription="Toggle Password Visibility"
+                android:id="@+id/userLoginPasswdIcon"/>
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Search For Other Account"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:background="@null"
+                android:textSize="16sp"
+                android:id="@+id/et_user_login_psw"
+                android:layout_marginLeft="@dimen/half_of_normal_margin"
+                />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_search_bar_input"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_edit"
+            android:paddingStart="9dp"
+            android:paddingEnd="9dp"
+            android:layout_marginTop="@dimen/spacing_large">
+
+
+            <ImageView
+                android:id="@+id/iv_search_bar_input"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/ic_xm_ui_search" />
+
+            <EditText
+                android:id="@+id/et_search_bar_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@+id/btn_search"
+                android:layout_toEndOf="@+id/iv_search_bar_input"
+                android:background="@null"
+                android:hint="@string/enter_need_share_account" />
+
+            <Button
+                android:id="@+id/btn_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:onClick="onSearchAccount"
+                android:text="@string/search" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <include
+        layout="@layout/bottom_bav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

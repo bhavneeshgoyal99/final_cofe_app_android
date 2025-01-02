@@ -1,0 +1,43 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/point_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="① Point the QR code at the camera."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/point_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="② Maintain a distance of 25-35 cm."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/point_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="③ Move your phone away after you hear the Configuring Wi-Fi alert tone."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/point_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="④ The Wi-Fi is configured after you hear the Configured alert tone."
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp"/>
+</LinearLayout>

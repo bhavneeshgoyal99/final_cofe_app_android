@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:uilib="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:longClickable="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:background="@drawable/gradient_background"
+        >
+
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"/>
+
+        <RelativeLayout
+            android:id="@+id/wnd_layout"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_below="@+id/layoutTop"
+            android:background="#ff000000"
+            >
+
+            <com.xm.ui.media.MultiWinLayout
+                android:id="@+id/layoutPlayWnd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                uilib:NormalFrameBg="@drawable/wnd_margin_normal"
+                uilib:SelectedFrameBg="@drawable/wnd_margin_normal"
+                android:background="@color/wnd_cover_gray" />
+            <LinearLayout
+                android:id="@+id/ll_dev_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_battery_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tv_wifi_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+                <TextView
+                    android:id="@+id/tv_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:textColor="@color/white"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!--多目Sensor切换-->
+            <com.xm.ui.widget.XMScaleSeekBar
+                android:id="@+id/sb_video_scale"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:itemBackground="@color/default_normal_text_color"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:progress="0"
+                android:visibility="gone"
+                uilib:subCount="7"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/top_nav_bar"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:visibility="gone"
+            >
+
+            <ImageButton
+                android:id="@+id/back_arrow_white"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/back_arrow_icon_white"
+                android:background="@android:color/transparent"
+                android:contentDescription="Back"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/device_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="aov"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                />
+
+
+            <!-- Settings Icon -->
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="240dp"
+                android:layout_weight=".9"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="240dp"
+                android:layout_weight=".1"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight=".05">
+                    <ImageButton
+                        android:id="@+id/settings_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/setting_icon_white"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Settings" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight=".05">
+                    <ImageButton
+                        android:id="@+id/rotate_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/mobile_rotate_white"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Rotate"
+                        android:layout_marginEnd="8dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_monitor_fun"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/wnd_layout"
+            android:visibility="gone" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/rv_monitor_fun"
+            >
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="8dp"
+                android:background="@color/black">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:src="@drawable/mic_icon"
+                    android:contentDescription="Microphone"
+                    android:layout_marginEnd="8dp"
+                    android:id="@+id/microphone"
+                    android:tag="5"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:src="@drawable/speaker_icon_1"
+                    android:contentDescription="mute"
+                    android:layout_marginEnd="8dp"
+                    android:tag="0"
+                    android:id="@+id/sound"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="20dp"
+                    android:src="@drawable/video_icon"
+                    android:contentDescription="Speaker"
+                    android:layout_marginEnd="8dp"
+                    android:tag="2"
+                    android:id="@+id/video"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:src="@drawable/camera_camer_1"
+                    android:contentDescription="Camera"
+                    android:layout_marginEnd="8dp"
+                    android:tag="1"
+                    android:id="@+id/camera"
+                    />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:src="@drawable/sd_icon"
+                    android:contentDescription="UHD"
+                    android:id="@+id/sd"
+                    android:tag="5"
+
+                    />
+            </LinearLayout>
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#F5F5F5"
+                android:visibility="gone"/>
+
+            <!-- ViewPager2 for Tab Content -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="gone"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <!-- Button Group -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/btn_layout1"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="@string/realtime_text"
+                        android:background="@drawable/squaer_button_background"
+                        android:textColor="@android:color/black"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_layout2"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="@string/playback"
+                        android:background="@drawable/squaer_button_background_ubselected"
+                        android:textColor="@android:color/black"/>
+
+                    <Button
+                        android:id="@+id/btn_layout3"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:text="@string/message"
+                        android:background="@drawable/squaer_button_background_ubselected"
+                        android:textColor="@android:color/black"
+                        />
+                </LinearLayout>
+
+                <!-- Layout 1 -->
+                <LinearLayout
+                    android:id="@+id/layout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+                    <include
+                        layout="@layout/fragment_real_time"
+                        />
+                </LinearLayout>
+
+                <!-- Layout 2 -->
+                <LinearLayout
+                    android:id="@+id/layout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@color/layout2_background"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <!-- Layout 3 -->
+                <LinearLayout
+                    android:id="@+id/layout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+                    <include
+                        layout="@layout/fragment_message"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <!-- Completed Button -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Completed"
+                android:backgroundTint="#A7E6D1"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_margin="16dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
