@@ -95,7 +95,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         titleBar.setLeftClick(this);
 
         TextView titleTxtv = findViewById(R.id.toolbar_title);
-        titleTxtv.setText(getString(R.string.set_list));
+        titleTxtv.setText(getString(R.string.device_system_info));
 
 
         devSnText = findViewById(R.id.textDeviceSN_1);

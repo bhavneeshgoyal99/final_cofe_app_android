@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -36,10 +37,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.base.CustomCalendarDialog;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.ScreenOrientationManager;
 import com.manager.device.media.attribute.PlayerAttribute;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.utils.TimeUtils;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.BtnColorBK;
@@ -54,7 +57,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +95,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     private LinearLayoutManager linearLayoutManager;
     private ViewGroup wndLayout;
     private TextView tvPlaySpeed;
+    private TextView noPlayBackTxtv;
     private boolean isCanScroll = true;
     private byte[] lock = new byte[1];
     private int recordType;//录像类型，是本地卡回放还是云回放
@@ -101,6 +107,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     //是否正在拖动播放进度条
     private boolean isSeekTouchPlayProgress = false;
     LinearLayout parentLL;
+    String selectedByuser;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +118,28 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     }
 
     private void initView() {
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.playback));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        noPlayBackTxtv = findViewById(R.id.no_play_back_txtv);
+
+        findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
+        findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                presenter.searchMediaFileCalendar(searchMonthCalendar);
+
+            }
+        });
+
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.app_name));
         titleBar.setRightBtnResource(R.mipmap.icon_date, R.mipmap.icon_date);
@@ -306,7 +335,12 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         hideWaitDialog();
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
+            noPlayBackTxtv.setVisibility(View.VISIBLE);
+            parentLL.setVisibility(View.GONE);
             showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
+        } else{
+            noPlayBackTxtv.setVisibility(View.GONE);
+            parentLL.setVisibility(View.VISIBLE);
         }
     }
 
@@ -321,8 +355,16 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 calendar.setTimeInMillis(searchTime);
                 int times = calendar.get(Calendar.HOUR_OF_DAY) * 3600 + calendar.get(Calendar.MINUTE) * 60 + calendar.get(Calendar.SECOND);
                 presenter.seekToTime(calendar,times);
+                noPlayBackTxtv.setVisibility(View.GONE);
+                parentLL.setVisibility(View.VISIBLE);
+
             }
+            noPlayBackTxtv.setVisibility(View.GONE);
+            parentLL.setVisibility(View.VISIBLE);
+
         } else {
+            noPlayBackTxtv.setVisibility(View.VISIBLE);
+            parentLL.setVisibility(View.GONE);
             showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
         }
     }
@@ -419,10 +461,50 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchCalendarResult(boolean isSuccess, Object result) {
+
+
+
         if (result instanceof String) {
             XMPromptDlg.onShow(this, (String) result, null);
         } else {
+
+
+            Log.d("recordDateMap ","====================================== "  );
+
+
             HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
+            HashSet<CalendarDay> highlightedDates = new HashSet<>();
+
+            for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
+                Log.d("recordDateMap ","recordDateMap looping > "  +info.getKey());
+
+                int year = Integer.parseInt(info.getKey().toString().substring(0, 4));  // First 4 characters
+                int month = Integer.parseInt(info.getKey().toString().substring(4, 6)); // Next 2 characters
+                int day = Integer.parseInt(info.getKey().toString().substring(6, 8));   // Last 2 characters
+
+                highlightedDates.add(CalendarDay.from(year, month, day)); // Jan 1, 2025
+            }
+
+            CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+                // Handle selected date
+                Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                try {
+                    Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
+                    selectedByuser = selectedDate.getDate().toString();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date1);
+                    noPlayBackTxtv.setVisibility(View.GONE);
+                    parentLL.setVisibility(View.GONE);
+                    presenter.searchRecordByTime(calendarShow);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+            dialog.show();
+            /*HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
             List recordDateList = new ArrayList();
             HashMap<String, Object> itemMap;
             for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
@@ -492,7 +574,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     presenter.searchMediaFileCalendar(searchMonthCalendar);
                     dialog.dismiss();
                 }
-            });
+            });*/
 
         }
     }

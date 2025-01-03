@@ -4,17 +4,21 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -25,9 +29,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.FileUtils;
+import com.cofe.solution.base.CustomCalendarDialog;
+import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.image.BaseImageManager;
 import com.manager.image.DevImageManager;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.utils.XUtils;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
@@ -38,7 +45,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +57,7 @@ import com.cofe.solution.base.DemoBaseActivity;
 import com.cofe.solution.ui.device.picture.listener.DevPictureContract;
 import com.cofe.solution.ui.device.picture.presenter.DevPicturePresenter;
 import io.reactivex.annotations.Nullable;
+import org.threeten.bp.LocalDate;
 
 import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_COMPLETE_ALL;
 import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_FAILED;
@@ -60,12 +70,39 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
     private Calendar searchMonthCalendar = Calendar.getInstance();
     private Calendar calendarShow;
     private DevImageManager devImageManager;//设备端图片管理（下载缩略图）
-
+    LinearLayout noDataContLl;
+    TextView noDatTextv;
+    String selectedByuser;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_picture_list);
+
+        findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
+        noDataContLl = findViewById(R.id.no_data_cont_ll);
+        noDatTextv = findViewById(R.id.text_txtv);
+
+
+
+        findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                presenter.searchMediaFileCalendar(searchMonthCalendar);
+            }
+        });
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.picture_list));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.app_name));
@@ -106,7 +143,25 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onUpdateView() {
-        picListAdapter.notifyDataSetChanged();
+        hideWaitDialog();
+
+        if(picListAdapter.getItemCount()<=0){
+            noDataContLl.setVisibility(View.VISIBLE);
+            rvDevPic.setVisibility(View.GONE);
+
+            if(selectedByuser!=null) {
+                noDatTextv.setText(getString(R.string.no_message_yet)+""+selectedByuser);
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendarShow = Calendar.getInstance();
+                noDatTextv.setText(getString(R.string.no_picture_video_yet)+""+dateFormat.format(calendarShow.getTime()));
+            }
+
+        } else{
+            picListAdapter.notifyDataSetChanged();
+            noDataContLl.setVisibility(View.GONE);
+            rvDevPic.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -130,12 +185,74 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             });
         }
     }
-
+    Dialog calendarDlg;
     @Override
     public void onSearchCalendarResult(boolean isSuccess, Object result) {
         if (result instanceof String) {
             XMPromptDlg.onShow(this, (String) result, null);
         } else {
+
+            Log.d("recordDateMap ","====================================== "  );
+
+            Log.d("recordDateMap ","====================================== "  );
+
+
+            HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
+            HashSet<CalendarDay> highlightedDates = new HashSet<>();
+
+            for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
+                Log.d("recordDateMap ","recordDateMap looping > "  +info.getKey());
+
+                int year = Integer.parseInt(info.getKey().toString().substring(0, 4));  // First 4 characters
+                int month = Integer.parseInt(info.getKey().toString().substring(4, 6)); // Next 2 characters
+                int day = Integer.parseInt(info.getKey().toString().substring(6, 8));   // Last 2 characters
+
+                highlightedDates.add(CalendarDay.from(year, month, day)); // Jan 1, 2025
+            }
+
+                CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+                    // Handle selected date
+                    Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                try {
+                    Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
+                    selectedByuser = selectedDate.getDate().toString();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date1);
+                    noDataContLl.setVisibility(View.GONE);
+                    presenter.searchPicByFile(calendar);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    //throw new RuntimeException(e);
+                }
+
+
+            });
+            dialog.show();
+
+            /*CalendarView calendarView = new CalendarView(DevPictureActivity.this);
+            calendarView.setBackgroundColor(Color.WHITE);
+            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                @Override
+                public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                    showWaitDialog();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    presenter.searchPicByFile(calendar);
+                    showTitleDate();
+                    if (calendarDlg != null) {
+                        calendarDlg.dismiss();
+                    }
+                }
+            });
+            calendarDlg = XMPromptDlg.onShow(DevPictureActivity.this, calendarView);
+
+
+
+            /*
+
             HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
             List recordDateList = new ArrayList();
             HashMap<String, Object> itemMap;
@@ -165,8 +282,10 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
                         calendarShow = Calendar.getInstance();
                         calendarShow.setTime(dateFormat.parse(date));
+
                         presenter.searchPicByFile(calendarShow);
                         showTitleDate();
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -174,6 +293,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
                     dialog.dismiss();
                 }
+
             });
 
             //取消 Cancel
@@ -206,6 +326,8 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
                     dialog.dismiss();
                 }
             });
+
+             */
         }
     }
 

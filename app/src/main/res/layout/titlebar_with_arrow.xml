@@ -41,14 +41,23 @@
             android:id="@+id/save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="Save"
             android:textSize="@dimen/font_large"
-            android:textColor="@color/black"
-            android:textStyle="normal"
-            android:gravity="right"
+            android:textColor="@color/white"
             android:layout_alignParentRight="true"
-            android:background="@drawable/button_background"
+            android:background="@color/colorAccent"
+            android:visibility="gone"
         />
+
+        <ImageView
+            android:id="@+id/img_btn"
+            android:src="@drawable/calendar_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+
 
 
     </RelativeLayout>

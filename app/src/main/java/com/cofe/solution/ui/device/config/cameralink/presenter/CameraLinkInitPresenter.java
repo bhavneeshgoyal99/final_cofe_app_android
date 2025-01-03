@@ -62,7 +62,8 @@ public class CameraLinkInitPresenter extends XMBasePresenter<DeviceManager>  imp
             devConfigInfo.setJsonData(jsonObject.toString());
             devConfigManager.setDevCmd(devConfigInfo);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            //throw new RuntimeException(e);
         }
 
 

@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -94,8 +95,8 @@ public class MainActivity extends DemoBaseActivity<MainPresenter> implements Mai
      * 获取SD卡读写权限、振动权限、录音权限等
      * Access to SD card read and write permissions, vibration permissions, recording permissions, etc
      */
-    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.VIBRATE
-            , Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO, CHANGE_WIFI_MULTICAST_STATE})
+    @NeedsPermission({Manifest.permission.VIBRATE
+            , Manifest.permission.RECORD_AUDIO, CHANGE_WIFI_MULTICAST_STATE})
     protected void initData() {
         allowMulticast();
     }

@@ -19,5 +19,6 @@
         android:layout_gravity="bottom"
         android:id="@+id/tv_pic_name"
         android:textColor="@color/white"
-        android:background="@color/wnd_cover_gray"/>
+        android:background="@color/wnd_cover_gray"
+        android:visibility="gone"/>
 </FrameLayout>

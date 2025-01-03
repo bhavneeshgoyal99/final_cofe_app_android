@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp"
     android:background="@drawable/item_selector">
     <com.xm.ui.widget.ListSelectItem
         android:id="@+id/lis_alarm_msg"
@@ -20,7 +19,118 @@
         app:ItemTipSize="@dimen/small_text_size"
         app:LineColor="@color/line_color"
         app:ShowBottomLine="true"
-        app:ShowTopLine="false" />
+        app:ShowTopLine="false"
+        android:visibility="gone"
+        />
     <include
-        layout="@layout/view_alarm_msg_fun"/>
+        layout="@layout/view_alarm_msg_fun"
+        android:visibility="gone"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <!-- Content Area -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!-- Left Icon with Line -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".15"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/left_icon_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Top Line -->
+                    <View
+                        android:id="@+id/top_line"
+                        android:layout_width="2dp"
+                        android:layout_height="0dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignBottom="@+id/left_icon"
+                        android:layout_marginBottom="35dp"
+                        android:background="@color/grey"
+                        android:visibility="visible" />
+
+                    <!-- Icon -->
+                    <ImageView
+                        android:id="@+id/left_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/run_icon" />
+
+                    <!-- Bottom Line -->
+                    <View
+                        android:id="@+id/bottom_line"
+                        android:layout_width="2dp"
+                        android:layout_height="0dp"
+                        android:layout_alignTop="@+id/left_icon"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="39dp"
+                        android:background="@color/grey"
+                        android:visibility="visible" />
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+            <!-- Text Content -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".45"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/detection_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Person Detected"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/detection_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2025-01-02 20:35:01"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Image Content -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".4"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                >
+
+                <ImageView
+                    android:id="@+id/photo_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    android:src="@drawable/demo_image" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
 </LinearLayout>

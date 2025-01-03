@@ -126,6 +126,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
                 toSaveDevAlarm();
             }
         });
+    findViewById(R.id.save_btn).setVisibility(View.VISIBLE);
     findViewById(R.id.save_btn).setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View view) {

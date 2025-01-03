@@ -58,6 +58,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lib.EFUN_ERROR;
@@ -361,13 +362,17 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 onFeatureClicked(FUN_PLAYBACK+"");
                 break;
             case 3:
-                layout3.setVisibility(View.VISIBLE);
+                /*layout3.setVisibility(View.VISIBLE);
                 layout1.setVisibility(View.GONE);
                 layout2.setVisibility(View.GONE);
                 btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
                 btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
+                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));*/
+                presenter.getDevId();
+                turnToActivity(DevAlarmMsgActivity.class);
                 break;
+
+
         }
 
 
@@ -384,6 +389,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         LinearLayout icon_ptz_reverse = findViewById(R.id.icon_ptz_reverse);
         LinearLayout icon_sd_card_alb = findViewById(R.id.icon_sd_card_alb);
         LinearLayout zoom = findViewById(R.id.zoom);
+        LinearLayout imageListLl = findViewById(R.id.image_list_ll);
         battery = findViewById(R.id.battery);
 
         // Set click listeners
@@ -431,11 +437,27 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 onFeatureClicked(zoom.getTag().toString());
         });
 
+
+        imageListLl.setOnClickListener(v -> {
+                onFeatureClicked(imageListLl.getTag().toString());
+        });
+
         battery.setOnClickListener(v -> {
                 onFeatureClicked(battery.getTag().toString());
         });
 
     }
+
+
+    //--------------------- MESSAGE VIEW PUSH NOTIFICATION ---------------- //
+
+
+
+
+
+    //--------------------- MESSAGE VIEW PUSH NOTIFICATION ---------------- //
+
+
 
 
     /*private BroadcastReceiver mHomeClickReceiver = new BroadcastReceiver() {
@@ -2560,7 +2582,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
              */
             @Override
             public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
-                    //battery.setVisibility(VISIBLE);
+                if(getContext()!=null) {
+                    if (battery != null) {
+                        battery.setVisibility(VISIBLE);
+                    }
+                }
             }
 
             /**

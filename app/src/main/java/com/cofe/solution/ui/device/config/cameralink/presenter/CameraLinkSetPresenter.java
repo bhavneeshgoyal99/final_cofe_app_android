@@ -46,7 +46,8 @@ public class CameraLinkSetPresenter extends XMBasePresenter<DeviceManager> imple
                     try {
                         jsonObject =new JSONObject(jsonData);
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
+                        //throw new RuntimeException(e);
                     }
                     if(iCameraLinkSetView != null){
                         iCameraLinkSetView.getCameraLinkSuccess(jsonObject);
@@ -125,7 +126,8 @@ public class CameraLinkSetPresenter extends XMBasePresenter<DeviceManager> imple
             devConfigInfo.setJsonData(jsonObject.toString());
             devConfigManager.setDevCmd(devConfigInfo);
         } catch (JSONException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            //throw new RuntimeException(e);
         }
 
 

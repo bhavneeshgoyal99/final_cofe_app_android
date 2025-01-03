@@ -382,7 +382,9 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:id="@+id/about_device_item"
-                        android:layout_marginTop="2dp">
+                        android:layout_marginTop="2dp"
+                        android:visibility="gone"
+                        >
 
                         <ImageView
                             android:layout_width="24dp"
@@ -409,7 +411,9 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#E0E0E0" />
+                        android:background="#E0E0E0"
+                        android:visibility="gone"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"

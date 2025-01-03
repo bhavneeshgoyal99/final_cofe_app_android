@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 
+import com.google.firebase.FirebaseApp;
 import com.lib.EFUN_ATTR;
 import com.lib.FunSDK;
 import com.lib.SDKCONST;
@@ -52,6 +53,8 @@ public class SDKDemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         actMap = new LinkedHashMap<>();
+        FirebaseApp.initializeApp(this);
+
         /**
          * 初始化 SDK
          * init SDK

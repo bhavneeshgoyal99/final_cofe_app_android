@@ -306,6 +306,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                     }
                 } else {
                     showToast(getResources().getString(R.string.user_login_please_input_username_and_pwd), Toast.LENGTH_SHORT);
+
                 }
                 break;
             case R.id.btn_user_register:

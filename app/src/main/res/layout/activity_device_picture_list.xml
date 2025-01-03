@@ -1,19 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:uilib="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:uilib="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:background="@drawable/gradient_background"
+    android:id="@+id/parent_rl">
 
-    <include
-        android:id="@+id/layoutTop"
-        layout="@layout/include_title_layout"/>
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_dev_pic"
+
+
+        <!-- Toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="0dp" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/layoutTop"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_dev_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/layoutTop"/>
+
+        <LinearLayout
+            android:id="@+id/no_data_cont_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            >
 
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/text_txtv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_date_to_see_device_images"
+                android:textSize="@dimen/middle_text_size"
+                android:layout_marginTop="30dp"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

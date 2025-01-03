@@ -402,7 +402,7 @@
     <string name="ptz_ctrl"> PTZ control </string>
     <string name="one_way_intercom"> one-way intercom</string>
     <string name="remote_capture"> remote capture </string>
-    <string name="playback"> video playback</string>
+    <string name="playback"> Video Playback</string>
     <string name="main_stream"> main stream </string>
     <string name="preset"> preset point settings</string>
     <string name="not_support_tip"> temporarily not implemented, please refer to the old Demo</string>
@@ -974,5 +974,10 @@
     <string name="network_configuration_procedure">Network Configuration Procedure</string>
     <string name="please_enter_password">Please enter password</string>
     <string name="share_device_by_account">Share Device By Account</string>
+    <string name="no_message_yet">There is no new message on .</string>
+    <string name="picture_list">Device Picture List</string>
+    <string name="select_date_to_see_device_images">Select date to see device images</string>
+    <string name="select_another_date_to_see_device_images">Select another date to see device images</string>
+    <string name="no_picture_video_yet">There is no picture or video to display</string>
 
 </resources>

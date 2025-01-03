@@ -16,6 +16,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,7 @@ import com.xm.ui.widget.XTitleBar;
 
 import org.apache.commons.lang3.time.CalendarUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -61,7 +64,9 @@ import io.reactivex.annotations.Nullable;
 public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> implements DevAlarmContract.IDevAlarmView {
     private RecyclerView recyclerView;
     private AlarmMsgAdapter alarmMsgAdapter;
-
+    LinearLayout noDataContLl;
+    TextView noDataTxtv;
+    String selectedByuser;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +77,23 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.push_msg));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        noDataContLl = findViewById(R.id.no_data_cont_ll);
+        noDataTxtv = findViewById(R.id.text_txtv);
+        recyclerView = findViewById(R.id.rv_alarm_info);
+
+        /*titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.guide_module_title_device_alarm));
         titleBar.setRightBtnResource(R.mipmap.ic_more, R.mipmap.ic_more);
         titleBar.setLeftClick(this);
-        recyclerView = findViewById(R.id.rv_alarm_info);
         titleBar.setBottomTip(getClass().getName());
 
         titleBar.setRightIvClick(new XTitleBar.OnRightClickListener() {
@@ -84,7 +101,16 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
             public void onRightClick() {
                 showPopupMenu(titleBar.getRightBtn());
             }
+        });*/
+
+        findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
+        findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
+            }
         });
+
     }
 
     private void initData() {
@@ -104,16 +130,18 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // 在这里处理菜单项的点击事件
+                // Handle menu item click events here
                 switch (item.getItemId()) {
                     case R.id.menu_item1:
-                        //显示日期选择
+                        // Show date selection
                         CalendarView calendarView = new CalendarView(DevAlarmMsgActivity.this);
                         calendarView.setBackgroundColor(Color.WHITE);
                         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                             @Override
                             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                                 showWaitDialog();
+                                selectedByuser = year +"-"+month+"-"+dayOfMonth;
+
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(Calendar.YEAR, year);
                                 calendar.set(Calendar.MONTH, month);
@@ -128,8 +156,8 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                         calendarDlg = XMPromptDlg.onShow(DevAlarmMsgActivity.this, calendarView);
                         return true;
                     case R.id.menu_item2:
-                        //删除所有消息
-                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, "确定要删除所有消息、图片和视频么?", new View.OnClickListener() {
+                        // Delete all messages
+                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, "Are you sure you want to delete all messages, images, and videos?", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 presenter.deleteAllAlarmMsg();
@@ -148,22 +176,34 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
     public void onUpdateView() {
         hideWaitDialog();
         if (presenter.getAlarmInfoSize() <= 0) {
-            showToast("未查询到报警推送消息", Toast.LENGTH_LONG);
+            showToast("No alarm notifications found", Toast.LENGTH_LONG);
+            noDataContLl.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+
+            if(selectedByuser!=null) {
+                noDataTxtv.setText(getString(R.string.no_message_yet)+""+selectedByuser);
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendarShow = Calendar.getInstance();
+                noDataTxtv.setText(getString(R.string.no_message_yet)+""+dateFormat.format(calendarShow.getTime()));
+            }
         } else {
+            noDataContLl.setVisibility(View.GONE);
             alarmMsgAdapter.notifyDataSetChanged();
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onDeleteAlarmMsgResult(boolean isSuccess) {
-        showToast(isSuccess ? "删除成功" : "删除失败", Toast.LENGTH_LONG);
+        showToast(isSuccess ? "Delete successful" : "Delete failed", Toast.LENGTH_LONG);
         alarmMsgAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onShowPicResult(boolean isSuccess, Bitmap bitmap) {//Download picture display
+    public void onShowPicResult(boolean isSuccess, Bitmap bitmap) { // Download picture display
         hideWaitDialog();
-        showToast(isSuccess ? "图片下载成功" : "图片下载失败", Toast.LENGTH_LONG);
+        showToast(isSuccess ? "Image download successful" : "Image download failed", Toast.LENGTH_LONG);
         if (isSuccess && bitmap != null) {
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
@@ -196,49 +236,21 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             AlarmInfo alarmInfo = presenter.getAlarmInfo(position);
             if (alarmInfo != null) {
-                /**
-                 * Event 对应的内容如下
-                 *  public final static String TYPE_LOCAL_ALARM = "LocalAlarm";//本地报警（实际意义根据设备不同而不同）
-                 *     public final static String TYPE_MOTION_DETECT = "MotionDetect";//移动侦测
-                 *     public final static String TYPE_VIDEO_MOTION = "VideoMotion";//移动侦测
-                 *     public final static String TYPE_LOSS_DETECT = "LossDetect";//视频丢失
-                 *     public final static String TYPE_VIDEO_LOSS = "VideoLoss";//视频丢失
-                 *     public final static String TYPE_BLIND_DETECT = "BlindDetect";//视频遮挡
-                 *     public final static String TYPE_VIDEO_BLIND = "VideoBlind";//视频遮挡
-                 *     public final static String TYPE_IPC_ALARM = "IPCAlarm";
-                 *     public final static String TYPE_LOCAL_IO = "LocalIO";//本地报警（实际意义根据设备不同而不同）
-                 *     public final static String TYPE_STORAGE_WRITE_ERROR = "StorageWriteError";//SD卡写错误
-                 *     public final static String TYPE_STORAGE_READ_ERROR = "StorageReadError";//SD卡读错误
-                 *     public final static String TYPE_STORAGE_FAILURE = "StorageFailure";//SD卡出错
-                 *     public final static String TYPE_STORAGE_LOW_SPACE = "StorageLowSpace";//SD卡容量不足
-                 *     public final static String TYPE_STORAGE_NOT_EXIST = "StorageNotExist";//SD卡不存在
-                 *     public final static String TYPE_SERIAL_ALARM = "SerialAlarm";//串口报警
-                 *     public final static String TYPE_CONS_SENSOR_ALARM = "ConsSensorAlarm";//传感器报警
-                 *     public final static String TYPE_HUMAN_DETECT = "HumanDetect";//人形检测
-                 *     public final static String TYPE_FACE_DETECTION = "FaceDetection";//人脸检测
-                 *     public final static String TYPE_FACE_DETECT = "FaceDetect";//人脸检测
-                 *     public final static String TYPE_FACE_RECOGNITION = "FaceRecognition";//人脸识别
-                 *     public final static String TYPE_REMOTE_SNAP = "RemoteSnap";//远程抓图(天猫精灵抓图)
-                 *     public final static String TYPE_NET_IP_CONFLICT ="NetIPConflict";//IP冲突
-                 *     public final static String TYPE_SPEED_ALARM = "SpeedAlarm";//速度报警
-                 */
+                // Set alarm information in the view
+                AlarmTranslationIconBean alarmTranslationIconBean = new AlarmTranslationIconBean();
 
-                //该翻译仅供参考，可以根据自己的需求来随意改动
-                Object afterTranslation = ((SDKDemoApplication) getApplication()).getAlarmTranslationIconBean().getLanguageInfo().get("ZH").get(alarmInfo.getEvent());
-                if (afterTranslation instanceof AlarmTranslationIconBean.AlarmLanIconInfo) {
-                    holder.lisAlarmMsg.setTitle(((AlarmTranslationIconBean.AlarmLanIconInfo) afterTranslation).getTl());
-                } else {
-                    holder.lisAlarmMsg.setTitle(alarmInfo.getEvent());
-                }
-                holder.lisAlarmMsg.setTip(alarmInfo.getStartTime());
-                holder.lisAlarmMsg.setTag(position);
-                holder.lisAlarmMsg.getImageLeft().setImageBitmap(null);
+                holder.detectionText.setText(alarmInfo.getEvent());
+                //Object afterTranslation = ((SDKDemoApplication) getApplication()).getAlarmTranslationIconBean().getLanguageInfo().get("ZH").get(alarmInfo.getEvent());
 
-                //判断当前报警消息是否有报警图片
+                holder.detectionTime.setText(alarmInfo.getStartTime());
+                //holder.detectionText.setTip(alarmInfo.getStartTime());
+                holder.detectionText.setTag(position);
+                //holder.lisAlarmMsg.getImageLeft().setImageBitmap(null);
+
+                // Check if alarm message has an image
                 if (alarmInfo.isHavePic()) {
-                    //加载并显示缩略图
                     if (!StringUtils.isStringNULL(alarmInfo.getPic())) {
-                        Glide.with(holder.lisAlarmMsg).load(alarmInfo.getPic()).into(holder.lisAlarmMsg.getImageLeft());
+                        Glide.with(holder.photoImage).load(alarmInfo.getPic()).into(holder.photoImage);
                     } else {
                         presenter.loadThumb(position, new BaseImageManager.OnImageManagerListener() {
                             @Override
@@ -247,7 +259,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                                 if (lsiAlarmMsg != null) {
                                     lsiAlarmMsg.getImageLeft().setImageBitmap(bitmap);
                                 } else {
-                                    holder.lisAlarmMsg.getImageLeft().setImageBitmap(bitmap);
+                                    holder.photoImage.setImageBitmap(bitmap);
                                 }
                             }
 
@@ -258,12 +270,27 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                         });
                     }
 
-                    holder.btnPicture.setVisibility(View.VISIBLE);
+                    holder.photoImage.setVisibility(View.VISIBLE);
                 } else {
-                    holder.btnPicture.setVisibility(View.GONE);
+                    holder.photoImage.setVisibility(View.GONE);
+                }
+                holder.photoImage.setTag((alarmInfo.isVideoInfo())?"video":"image");
+                //holder.btnVideo.setVisibility(alarmInfo.isVideoInfo() ? View.VISIBLE : View.GONE);
+
+
+                // Handle visibility of top and bottom lines
+                if (position == 0) {
+                    holder.topLine.setVisibility(View.INVISIBLE); // First item, no top line
+                } else {
+                    holder.topLine.setVisibility(View.VISIBLE);
                 }
 
-                holder.btnVideo.setVisibility(alarmInfo.isVideoInfo() ? View.VISIBLE : View.GONE);
+                if (position == presenter.getAlarmInfoSize() - 1) {
+                    holder.bottomLine.setVisibility(View.INVISIBLE); // Last item, no bottom line
+                } else {
+                    holder.bottomLine.setVisibility(View.VISIBLE);
+                }
+
             }
         }
 
@@ -277,6 +304,9 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
             Button btnPicture;
             Button btnVideo;
             Button btnDelete;
+            TextView detectionText, detectionTime;
+            ImageView leftIcon, photoImage;
+            View topLine, bottomLine;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -284,28 +314,49 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                 btnPicture = itemView.findViewById(R.id.btn_picture);
                 btnVideo = itemView.findViewById(R.id.btn_video);
                 btnDelete = itemView.findViewById(R.id.btn_delete);
-                btnPicture.setOnClickListener(new View.OnClickListener() {
+
+                detectionText = itemView.findViewById(R.id.detection_text);
+                detectionTime = itemView.findViewById(R.id.detection_time);
+                leftIcon = itemView.findViewById(R.id.left_icon);
+                photoImage = itemView.findViewById(R.id.photo_img);
+                topLine = itemView.findViewById(R.id.top_line);
+                bottomLine = itemView.findViewById(R.id.bottom_line);
+
+
+                photoImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SliderView sliderView = new SliderView(DevAlarmMsgActivity.this);
-                        sliderView.setInfiniteAdapterEnabled(false);
-                        AlarmInfo alarmInfo = presenter.getAlarmInfo(getAdapterPosition());
-                        List<AlarmInfo.AlarmPicInfo> alarmPicInfos = alarmInfo.getAlarmPicInfos();
-                        List<String> imageUrls = new ArrayList<>();
-                        for (AlarmInfo.AlarmPicInfo alarmPicInfo : alarmPicInfos) {
-                            imageUrls.add(alarmPicInfo.getUrl());
-                        }
+                        if (photoImage.getTag() != null) {
+                            if (photoImage.getTag().equals("video")) {
+                                presenter.showVideo(getAdapterPosition());
+                            } else {
 
-                        SliderAdapter adapter = new SliderAdapter(imageUrls);
-                        sliderView.setSliderAdapter(adapter);
-                        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-                        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
-                        sliderView.setAutoCycle(false);
-                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, sliderView, (int) (DevAlarmMsgActivity.this.screenWidth * 0.6), (int) (DevAlarmMsgActivity.this.screenHeight * 0.6), true, null);
+                                SliderView sliderView = new SliderView(DevAlarmMsgActivity.this);
+                                sliderView.setInfiniteAdapterEnabled(false);
+                                AlarmInfo alarmInfo = presenter.getAlarmInfo(getAdapterPosition());
+                                List<AlarmInfo.AlarmPicInfo> alarmPicInfos = alarmInfo.getAlarmPicInfos();
+                                List<String> imageUrls = new ArrayList<>();
+                                for (AlarmInfo.AlarmPicInfo alarmPicInfo : alarmPicInfos) {
+                                    imageUrls.add(alarmPicInfo.getUrl());
+                                }
+
+                                SliderAdapter adapter = new SliderAdapter(imageUrls);
+                                sliderView.setSliderAdapter(adapter);
+                                sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+                                sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
+                                sliderView.setAutoCycle(false);
+                                XMPromptDlg.onShow(DevAlarmMsgActivity.this,
+                                        sliderView,
+                                        (int) (DevAlarmMsgActivity.this.screenWidth * 0.8),
+                                        (int) (DevAlarmMsgActivity.this.screenHeight * 0.7),
+                                        true,
+                                        null);
+                            }
+                        }
                     }
                 });
 
-                btnVideo.setOnClickListener(new View.OnClickListener() {
+                /*btnVideo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.showVideo(getAdapterPosition());
@@ -315,15 +366,16 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                 btnDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, "确定要删除报警消息?", new View.OnClickListener() {
+                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, "Are you sure you want to delete this alarm message?", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 presenter.deleteAlarmMsg(getAdapterPosition());
                             }
                         }, null);
                     }
-                });
+                });*/
             }
         }
     }
+
 }

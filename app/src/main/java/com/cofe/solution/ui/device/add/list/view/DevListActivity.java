@@ -10,7 +10,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +43,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
+import com.lib.MsgContent;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
 import com.manager.account.AccountManager;
 import com.manager.account.BaseAccountManager;
@@ -363,11 +366,57 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         super.onRestart();
         if (adapter != null) {
             if(presenter!=null) {
-                if(presenter.getDevList().size()>0){
-                    if(noDeviceContLl!=null) {
-                        noDeviceContLl.setVisibility(View.GONE);
+
+                if(DevDataCenter.getInstance().getAccountUserName()!=null) {
+                    if(DevDataCenter.getInstance().getAccessToken()==null) {
+                        AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                                new BaseAccountManager.OnAccountManagerListener() {
+                                    @Override
+                                    public void onSuccess(int msgId) {
+                                        Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                        if (presenter.getDevList() != null) {
+                                            if (presenter.getDevList().size() > 0) {
+                                                if (noDeviceContLl != null) {
+                                                    noDeviceContLl.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailed(int msgId, int errorId) {
+                                        if (presenter.getDevList() != null) {
+                                            if (presenter.getDevList().size() > 0) {
+                                                if (noDeviceContLl != null) {
+                                                    noDeviceContLl.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                    }
+                                });//LOGIN_BY_INTERNET（1）  Account login type
+
+                    } else {
+                        if (presenter.getDevList() != null) {
+                            if (presenter.getDevList().size() > 0) {
+                                if (noDeviceContLl != null) {
+                                    noDeviceContLl.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+
+
                     }
+
                 }
+
+
+
             }
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         }
