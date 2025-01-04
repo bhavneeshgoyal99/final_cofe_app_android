@@ -54,6 +54,7 @@
         android:contentDescription="menu_icon"
         android:layout_gravity="center_vertical|end"
         android:layout_marginLeft="@dimen/btn_text"
+        android:visibility="gone"
         />
 
     <ImageButton
@@ -63,7 +64,9 @@
         android:src="@drawable/stack_icon"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="menu_icon"
-        android:layout_gravity="center_vertical|end"/>
+        android:layout_gravity="center_vertical|end"
+        android:visibility="gone"
+        />
 
 
 </androidx.appcompat.widget.Toolbar>

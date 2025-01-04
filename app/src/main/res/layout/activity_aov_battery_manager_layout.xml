@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:uilib="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/xm_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color"
-    android:orientation="vertical"
-    tools:ignore="MissingDefaultResource">
+    android:background="@drawable/gradient_background"
+    android:id="@+id/parent_rl">
 
-    <include
-        android:id="@+id/layoutTop1"
-        layout="@layout/titlebar_with_arrow"
-        android:visibility="gone"
-        />
-
-    <include
-        android:id="@+id/layoutTop"
-        layout="@layout/include_title_layout"
-        android:visibility="gone"
-        />
-    <ScrollView
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null">
 
-        uilib:layout_constraintTop_toBottomOf="@+id/layoutTop1">
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="gone"/>
+
+        <!-- Toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="0dp" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        uilib:layout_constraintTop_toBottomOf="@+id/layoutTop1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -69,7 +90,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
-                        android:text="TR_Setting_Current_Battery_Level"
+                        android:text="TR Setting Current Battery Level"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintHorizontal_bias="0"
@@ -118,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="11dp"
-                        android:text="TR_Setting_Low_Power_Mode"
+                        android:text="TR Setting Low Power Mode"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -130,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginEnd="23dp"
-                        android:text="TR_Setting_Low_Power_Mode_Description"
+                        android:text="TR Setting Low Power Mode Description"
                         android:textColor="#ff999999"
                         android:textSize="11sp"
                         uilib:layout_constraintEnd_toEndOf="parent"
@@ -175,8 +196,8 @@
                 uilib:layout_constraintBottom_toBottomOf="parent"
                 uilib:layout_constraintVertical_bias="0"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginBottom="@dimen/dp_10"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/corner_white_10">
 
                 <LinearLayout
@@ -199,21 +220,21 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:background="@drawable/corner_white_5"
-                        android:text="TR_Today"/>
+                        android:text="TR Today"/>
                     <TextView
                         android:id="@+id/tvWeek"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="TR_Setting_Last_Week"/>
+                        android:text="TR Setting Last Week"/>
 
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tvBatteryLineChartTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TR_Setting_Power_Level"
+                    android:text="TR Setting Power Level"
                     uilib:layout_constraintStart_toStartOf="parent"
                     uilib:layout_constraintTop_toBottomOf="@+id/llSelectType"
                     android:layout_marginStart="15dp"
@@ -235,7 +256,7 @@
                     android:id="@+id/tvBatteryChartTip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="时"
+                    android:text="hour"
                     android:textColor="@color/text_color"
                     android:textSize="10sp"
                     uilib:layout_constraintBottom_toBottomOf="@+id/LineChart"
@@ -246,7 +267,7 @@
                     android:id="@+id/tvSignalLineChartTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TR_Setting_Signal"
+                    android:text="TR Setting Signal"
                     uilib:layout_constraintStart_toStartOf="parent"
                     uilib:layout_constraintTop_toBottomOf="@+id/LineChart"
                     android:layout_marginStart="15dp"
@@ -271,7 +292,7 @@
                     android:id="@+id/tvSignalChartTip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="时"
+                    android:text="hour"
                     android:textSize="10sp"
                     android:textColor="@color/text_color"
                     uilib:layout_constraintBottom_toBottomOf="@+id/signalChart"
@@ -301,7 +322,7 @@
                             uilib:layout_constraintEnd_toStartOf="@+id/ivPreView"
                             uilib:layout_constraintStart_toStartOf="parent"
                             uilib:layout_constraintTop_toTopOf="parent"
-                            android:text="TR_Setting_Preview_Time"
+                            android:text="TR Setting Preview Time"
                             android:layout_marginTop="13dp"
                             android:layout_marginStart="15dp"
                             android:textColor="#ff6b4d3e"
@@ -346,7 +367,7 @@
                             uilib:layout_constraintStart_toStartOf="parent"
                             uilib:layout_constraintTop_toTopOf="parent"
                             uilib:layout_constraintEnd_toStartOf="@+id/ivWake"
-                            android:text="TR_Setting_Wake_Up_Time"
+                            android:text="TR Setting Wake Up Time"
                             android:layout_marginTop="13dp"
                             android:layout_marginStart="15dp"
                             android:textColor="#ff6b4d3e"
@@ -396,7 +417,7 @@
                         android:layout_height="wrap_content"
                         uilib:layout_constraintStart_toStartOf="parent"
                         uilib:layout_constraintTop_toTopOf="parent"
-                        android:text="TR_Setting_Number_Of_Alarms"
+                        android:text="TR Setting Number Of Alarms"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="15dp"
                         android:textColor="#ff6b4d3e"
@@ -427,6 +448,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

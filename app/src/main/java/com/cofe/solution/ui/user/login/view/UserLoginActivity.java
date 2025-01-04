@@ -26,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.basic.G;
+import com.cofe.solution.base.SharedPreference;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
@@ -194,7 +195,11 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
         //(findViewById(R.id.btn_login_history)).setOnClickListener(this);
         pref = getSharedPreferences("data", MODE_PRIVATE);
         editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-        btnlogin.performClick();
+        SharedPreference cookies =  new SharedPreference(getContext());
+        if(cookies.retrievLoginStatus() !=1) {
+            btnlogin.performClick();
+        }
+
     }
 
 
@@ -297,6 +302,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_user_login:
+
                 if (etPwd.getText().toString().trim().length() != 0 && etUserName.getText().toString().trim().length() != 0) {
                     try {
                         showWaitDialog();

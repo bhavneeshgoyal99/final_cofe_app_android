@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.basic.G;
+import com.cofe.solution.ui.activity.SplashScreen;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lib.Mps.SMCInitInfo;
@@ -56,6 +57,16 @@ import com.cofe.solution.R;
 import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.ui.entity.AlarmTranslationIconBean;
 
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import androidx.core.app.NotificationCompat;
+
+
 /**
  * @author hws
  * @class
@@ -64,6 +75,10 @@ import com.cofe.solution.ui.entity.AlarmTranslationIconBean;
 public class DevPushService extends Service implements DevAlarmInfoManager.OnAlarmInfoListener {
     private XMPushManager xmPushManager;
     private DevAlarmInfoManager devAlarmInfoManager;
+    int count = 0;	
+ private static final String CHANNEL_ID = "custom_channel";
+    private static final String CHANNEL_NAME = "Custom Notifications";
+
 
     @Nullable
     @Override
@@ -250,15 +265,50 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
         Toast.makeText(getApplicationContext(), getString(R.string.received_alarm_message) +
                 XMPushManager.getAlarmName(getApplicationContext(), alarmInfo.getEvent()) + ":" +
                 alarmInfo.getStartTime(), Toast.LENGTH_LONG).show();
+
+       NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Create a notification channel (required for Android 8.0+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create a PendingIntent to open an activity when the notification is tapped
+        Intent intent = new Intent(getApplicationContext(), SplashScreen.class); // Replace with your target activity
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                getApplicationContext(),
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        // Build the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info) // Replace with your app icon
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getString(R.string.received_alarm_message) +
+                XMPushManager.getAlarmName(getApplicationContext(), alarmInfo.getEvent()) + ":" +
+                alarmInfo.getStartTime())
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        // Show the notification
+        count =  count +1 ;
+        notificationManager.notify(count, builder.build());
         //如果是来电消息才需要弹出来电页面
         // Show incoming call page only if it's a call message
         if (isCallAlarm(alarmInfo.getEvent(), alarmInfo.getMsgType(), devId)) {
-            Intent intent = new Intent(DevPushService.this, DevIncomingCallActivity.class);
-            intent.putExtra("devId", devId);
-            intent.putExtra("alarmTime", alarmInfo.getStartTime());
-            intent.putExtra("alarm_msg_type", alarmInfo.getMsgType());
-            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            Intent intent1 = new Intent(DevPushService.this, DevIncomingCallActivity.class);
+            intent1.putExtra("devId", devId);
+            intent1.putExtra("alarmTime", alarmInfo.getStartTime());
+            intent1.putExtra("alarm_msg_type", alarmInfo.getMsgType());
+            intent1.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent1);
         }
     }
 

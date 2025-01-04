@@ -1,25 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:uilib="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/gradient_background"
+    android:id="@+id/parent_rl">
 
-    <include
-        android:id="@+id/layoutTop"
-        layout="@layout/include_title_layout"/>
-
-    <ScrollView
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null"
+        >
+
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="gone"/>
+
+        <!-- Toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="0dp"
+            />
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <com.xm.ui.widget.ListSelectItem
                 android:id="@+id/lsi_human_detection_switch"
@@ -30,7 +70,10 @@
                 uilib:Title="@string/hunman_detect"
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:LineColor="@color/line_color"
-                uilib:RightClickable="false"/>
+                uilib:RightClickable="false"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                />
 
             <com.xm.ui.widget.ListSelectItem
                 android:id="@+id/lsi_human_detection_track"
@@ -42,7 +85,10 @@
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:LineColor="@color/line_color"
                 uilib:RightClickable="false"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                />
 
             <com.xm.ui.widget.ListSelectItem
                 android:id="@+id/lsi_human_detection_perimeter"
@@ -55,13 +101,19 @@
                 uilib:LineColor="@color/line_color"
                 uilib:RightClickable="false"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                />
 
             <LinearLayout
                 android:id="@+id/ll_human_detection_perimeter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                >
 
                 <com.xm.ui.widget.ListSelectItem
                     android:id="@+id/lsi_human_detection_line"
@@ -87,8 +139,9 @@
                     uilib:LineColor="@color/line_color"
                     uilib:RightClickable="false"
                     android:visibility="gone"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible"
+                    />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

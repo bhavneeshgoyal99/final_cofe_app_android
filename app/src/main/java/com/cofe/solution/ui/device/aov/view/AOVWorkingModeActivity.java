@@ -76,6 +76,16 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
         ivPerformanceModeSelect = findViewById(R.id.ivPerformanceModeSelect);
         llCustomModeSetting = findViewById(R.id.llCustomModeSetting);
         tvTips = findViewById(R.id.tvTips);
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.working_mode));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     @Override

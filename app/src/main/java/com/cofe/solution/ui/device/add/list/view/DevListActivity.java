@@ -37,8 +37,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
+import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
 import com.lib.EFUN_ERROR;
@@ -133,6 +136,32 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+
+            if(DevDataCenter.getInstance().getAccountUserName()!=null) {
+                if(DevDataCenter.getInstance().getAccessToken()==null) {
+                    AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                            new BaseAccountManager.OnAccountManagerListener() {
+                                @Override
+                                public void onSuccess(int msgId) {
+                                    Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+
+                                }
+
+                                @Override
+                                public void onFailed(int msgId, int errorId) {
+                                }
+
+                                @Override
+                                public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                }
+                            });//LOGIN_BY_INTERNET（1）  Account login type
+
+                } else {
+
+                }
+
+            }
         }
 
         listView = findViewById(R.id.listViewDevice);
@@ -189,12 +218,44 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         checkPushNotificationPermission();
 
         logoutLl = findViewById(R.id.logout_ll);
+
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
+
                 XMAccountManager.getInstance().logout();
+                if(XMAccountManager.getInstance().getUserName()==null) {
+                    SharedPreference cookies =  new SharedPreference(getContext());
+                    cookies.saveLoginStatus(1);
+
+                    Intent intent = new Intent(DevListActivity.this, UserLoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
+
+        LinearLayout homeLL = findViewById(R.id.home_ll);
+        homeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(DevListActivity.this, DevListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        LinearLayout imageLl = findViewById(R.id.image_ll);
+        imageLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                turnToActivity(DevPictureActivity.class);
+            }
+        });
+
+        SharedPreference cookies =  new SharedPreference(getContext());
+        cookies.saveLoginStatus(0);
     }
 
     private void showPopupMenu(View view) {
@@ -218,6 +279,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         });
         popupMenu.show();
+
     }
 
     private void checkCameraPermission() {
@@ -430,6 +492,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 add_img.setVisibility(View.VISIBLE);
                 noDeviceContLl.setVisibility(View.VISIBLE);
                 textTxtv.setText(getString(R.string.add_dev));
+
             } else {
                 noDeviceContLl.setVisibility(View.GONE);
             }
@@ -448,6 +511,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 if(presenter.getDevList().size()==0) {
                     add_img.setVisibility(View.VISIBLE);
                     noDeviceContLl.setVisibility(View.VISIBLE);
+
                 } else {
                     noDeviceContLl.setVisibility(View.GONE);
                     textTxtv.setText(getString(R.string.Refresh_Dev_Status_F));
@@ -458,6 +522,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if(presenter.getDevList()!=null) {
             if(presenter.getDevList().size()==0) {
                 add_img.setVisibility(View.VISIBLE);
+
                 noDeviceContLl.setVisibility(View.VISIBLE);
             } else {
                 noDeviceContLl.setVisibility(View.GONE);
@@ -515,6 +580,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             if (resultId > 1) {
                 turnToActivity(ChannelListActivity.class);
             } else {
+
                 turnToActivity(DevMonitorActivity.class);
             }
         } else {
@@ -540,7 +606,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         }, false);
             } else if (resultId < 0) {
                 showToast(getString(R.string.login_dev_failed) + resultId, Toast.LENGTH_LONG);
-                turnToActivity(DevMonitorActivity.class);
+                //turnToActivity(DevMonitorActivity.class);
             }
         }
     }
@@ -553,6 +619,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onItemClick(int position, XMDevInfo xmDevInfo) {
         //判断是否为分享设备
+        SharedPreference cookies = new SharedPreference(getApplication());
+        cookies.saveDevName(xmDevInfo.getDevName());
+
         if (xmDevInfo.isShareDev()) {
             OtherShareDevUserBean otherShareDevUserBean = xmDevInfo.getOtherShareDevUserBean();
             if (otherShareDevUserBean != null) {

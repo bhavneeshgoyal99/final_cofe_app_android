@@ -5,18 +5,31 @@
     android:id="@+id/xm_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_color">
+    android:background="@drawable/gradient_background"
+    >
 
     <include
         android:id="@+id/layoutTop"
         layout="@layout/include_title_layout"/>
+
+    <include
+        android:id="@+id/layout_top1"
+        layout="@layout/titlebar_with_arrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:visibility="visible" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/ThemeLayoutStyle"
         android:id="@+id/cl_light_mode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/layoutTop">
+        app:layout_constraintTop_toBottomOf="@+id/layout_top1"
+        android:layout_margin="@dimen/half_of_normal_margin"
+
+        >
 
         <!-- 红外夜视 -->
         <com.xm.ui.widget.ListSelectItem
@@ -79,7 +92,9 @@
         app:RightClickable="false"
         android:visibility="gone"
         tools:visibility="visible"
-        app:singleClick="false" />
+        app:singleClick="false"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        />
     <com.xm.ui.widget.ListSelectItem
         android:id="@+id/lis_Micro_light"
         style="@style/baseListSelectItemStyle"
@@ -98,5 +113,7 @@
         app:RightClickable="false"
         android:visibility="gone"
         tools:visibility="visible"
-        app:singleClick="false" />
+        app:singleClick="false"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

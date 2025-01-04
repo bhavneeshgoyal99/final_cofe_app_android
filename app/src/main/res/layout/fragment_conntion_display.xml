@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="10dp"
-        android:text="Maintain a distance of about 25-35 cm between th qr code and thee camera "
+        android:text="Maintain a distance of about 25-35 cm between the QR code and the camera "
         />
 
 

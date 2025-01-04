@@ -4,6 +4,7 @@ package com.cofe.solution.ui.device.aov.view;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lib.FunSDK;
 import com.lib.SDKCONST;
@@ -55,6 +56,16 @@ public class AOVDoubleLightSettingActivity extends BaseConfigActivity<AOVDoubleL
                 finish();
             }
         });
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.tr_light_settings));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         titleBar.setBottomTip(getClass().getName());
         mLsiNightVision = findViewById(R.id.lsi_night_vision);
         mLsiFullColor = findViewById(R.id.lsi_full_color);

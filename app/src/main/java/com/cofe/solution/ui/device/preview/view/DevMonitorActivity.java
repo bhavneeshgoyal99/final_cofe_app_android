@@ -29,16 +29,21 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +63,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lib.EFUN_ERROR;
@@ -308,17 +316,21 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     int  chId;
     Button btnLayout1, btnLayout2, btnLayout3;
     LinearLayout layout1, layout2, layout3;
+    private PopupWindow popupWindow;
+
+    Handler handler;
 
     public static final String CUSTOM_HOME_ACTION = "com.cofe.solution.HOME_ACTION";
     MyHomeClickReceiver mHomeClickReceiver;
     LinearLayout battery;
+    LinearLayout icon_ptz;
+    LinearLayout mainButtonsLl;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_camera);
-        initView();
-        initData();
+        checkUserLogin();
 
         // Initialize buttons and layouts
         btnLayout1 = findViewById(R.id.btn_layout1);
@@ -382,7 +394,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         LinearLayout alarmIcon = findViewById(R.id.icon_alarm);
 
         LinearLayout icon_motion_tracking = findViewById(R.id.icon_motion_tracking);
-        LinearLayout icon_ptz = findViewById(R.id.icon_ptz);
+        icon_ptz = findViewById(R.id.icon_ptz);
         LinearLayout icon_favorites = findViewById(R.id.icon_favorites);
 
         LinearLayout icon_med_tracking = findViewById(R.id.icon_med_tracking);
@@ -390,6 +402,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         LinearLayout icon_sd_card_alb = findViewById(R.id.icon_sd_card_alb);
         LinearLayout zoom = findViewById(R.id.zoom);
         LinearLayout imageListLl = findViewById(R.id.image_list_ll);
+        icon_sd_card_alb.setVisibility(View.GONE);
+
         battery = findViewById(R.id.battery);
 
         // Set click listeners
@@ -445,51 +459,45 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         battery.setOnClickListener(v -> {
                 onFeatureClicked(battery.getTag().toString());
         });
+        checkAOVBattery();
 
     }
 
+    void checkUserLogin() {
 
-    //--------------------- MESSAGE VIEW PUSH NOTIFICATION ---------------- //
+        if(DevDataCenter.getInstance().getAccountUserName()!=null) {
+            if(DevDataCenter.getInstance().getAccessToken()==null) {
+                AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                        new BaseAccountManager.OnAccountManagerListener() {
+                            @Override
+                            public void onSuccess(int msgId) {
+                                Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                initView();
+                                initData();
 
+                            }
 
+                            @Override
+                            public void onFailed(int msgId, int errorId) {
 
+                            }
 
+                            @Override
+                            public void onFunSDKResult(Message msg, MsgContent ex) {
 
-    //--------------------- MESSAGE VIEW PUSH NOTIFICATION ---------------- //
+                            }
+                        });//LOGIN_BY_INTERNET（1）  Account login type
 
-
-
-
-    /*private BroadcastReceiver mHomeClickReceiver = new BroadcastReceiver() {
-        static final String SYSTEM_DIALOG_REASON_KEY = "reason";
-        static final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
-        static final String SYSTEM_DIALOG_REASON_RECENTAPPS = "recentapps";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            String action = intent.getAction();
-            switch (action) {
-                case Intent.ACTION_CLOSE_SYSTEM_DIALOGS:
-                    String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
-                    if (SYSTEM_DIALOG_REASON_RECENTAPPS.equals(reason)) {
-                        break;
-                    }
-
-                    if (!SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason) && !"fs_gesture".equals(reason)) {
-                        return;
-                    }
-
-                    isHomePress = true;
-
-                    break;
-                default:
-                    return;
+            } else {
+                initView();
+                initData();
             }
+
+        } else {
+            initView();
+            initData();
         }
-    };*/
-
-
+    }
     private void initView() {
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.device_preview));
@@ -504,11 +512,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 DevMonitorActivity.this.startActivity(intent);
             }
         });
+
         titleBar.setBottomTip(DevMonitorActivity.class.getName());
         playWndLayout = findViewById(R.id.layoutPlayWnd);
         rvMonitorFun = findViewById(R.id.rv_monitor_fun);
         wndLayout = findViewById(R.id.wnd_layout);
-
 
         tvBatteryState = findViewById(R.id.tv_battery_state);
         tvWiFiState = findViewById(R.id.tv_wifi_state);
@@ -532,6 +540,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         openSetting = findViewById(R.id.settings_icon);
         backImage = findViewById(R.id.settings_icon);
         dName = findViewById(R.id.device_name);
+        mainButtonsLl = findViewById(R.id.main_buttons_ll);
 
         cameraImg.setOnClickListener(new OnClickListener() {
             @Override
@@ -611,7 +620,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         mHomeClickReceiver = new MyHomeClickReceiver();
 
         initSensorView();
-        checkAOVBattery();
     }
 
     /**
@@ -910,6 +918,10 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         if (mHomeClickReceiver != null) {
             unregisterReceiver(mHomeClickReceiver);
+        }
+        if(handler!=null){
+            handler.removeCallbacks(null);
+            handler =  null;
         }
 
     }
@@ -1613,7 +1625,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             return 0;
         }
     }
-
+    //FUN_APP_OBJ_EFFECT
     private boolean dealWithMonitorFunction(int itemId, boolean isSelected) {
         switch (itemId) {
             case FUN_VOICE://开启和关闭音频
@@ -1668,7 +1680,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                         }
                     }
                 });
-                XMPromptDlg.onShow(this, contentLayout);
+
+                showBottomSheet( contentLayout);
+                //XMPromptDlg.onShow(this, contentLayout);
                 break;
             }
             case FUN_PTZ_CALIBRATION://云台校正
@@ -2144,7 +2158,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
             wndLayout.requestLayout();
             presenter.setPlayViewTouchable(0, true);
-            dName.setText("");
+            SharedPreference cookies = new SharedPreference(getApplication());
+            cookies.retrievDevName();
+            dName.setText(cookies.retrievDevName());
 
             //如果是假多目，横屏的时候需要更改画布
             if (isShowAppMoreScreen) {
@@ -2560,7 +2576,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     @Override
     public void onFeatureClicked(String featureName) {
-        Toast.makeText(this, "Feature clicked: " + featureName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Feature clicked: " + featureName, Toast.LENGTH_SHORT).show();
         if(featureName.equals("battery")) {
             Intent i= new Intent(this, AovSettingActivity.class);
             i.putExtra("devId",presenter.getDevId());
@@ -2573,33 +2589,37 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     }
 
 
-    void checkAOVBattery(){
+    void checkAOVBattery() {
         DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
-            /**
-             * 成功回调
-             * @param devId         设备类型
-             * @param operationType 操作类型
-             */
             @Override
             public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
-                if(getContext()!=null) {
+                Log.d("Device id " , " presenter.getDevId() > "  +presenter.getDevId());
+                Log.d("Device id " , " result.OtherFunction.AovMode > "  +result.OtherFunction.AovMode);
+                Log.d("Device id " , " result.OtherFunction.BatteryManager > "  +result.OtherFunction.BatteryManager);
+
+                /*if(getContext()!=null) {
                     if (battery != null) {
-                        battery.setVisibility(VISIBLE);
+                        if(result.OtherFunction.BatteryManager) {
+                            battery.setVisibility(VISIBLE);
+                        } else {
+                            battery.setVisibility(View.INVISIBLE);
+                        }
                     }
+                }*/
+                try {
+                    if (result.OtherFunction.AovMode) {
+                        battery.setVisibility(VISIBLE);
+                    } else {
+
+                    }
+                }catch ( Exception e) {
+                    e.printStackTrace();
                 }
             }
-
-            /**
-             * 失败回调
-             *
-             * @param devId    设备序列号
-             * @param msgId    消息ID
-             * @param jsonName
-             * @param errorId  错误码
-             */
             @Override
             public void onFailed(String devId, int msgId, String jsonName, int errorId) {
-
+                Log.d("onFailed > ", " errorId > "  +errorId);
+                Log.d("onFailed > ", " jsonName > "  +jsonName);
             }
         });
 
@@ -2674,6 +2694,63 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
 
         }
+    }
+
+
+
+    private void showBottomSheet( View viewToAdd) {
+        // Inflate the bottom sheet layout
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.popup_layout, null);
+        RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_RL);
+
+        // Create a BottomSheetDialog
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.getWindow().setDimAmount(0f);
+
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        parentLL.addView(viewToAdd, layoutParams);
+
+        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+
+        // Calculate the height of the target view
+        int[] location = new int[2];
+        mainButtonsLl.getLocationOnScreen(location);
+        int targetViewHeight = location[1];
+
+        // Set the peek height to match the target view's position
+        behavior.setPeekHeight(targetViewHeight);
+
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        // Add a custom BottomSheetCallback to control the sliding animation
+        behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // Prevent the Bottom Sheet from snapping to hidden state
+                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // Control the slide-down speed
+                bottomSheet.setAlpha(1 - (slideOffset * 0.3f));  // Adjust transparency if needed
+            }
+        });
+
+
+        // Slowly animate the bottom sheet to expand to a specific height
+
+        // Show the Bottom Sheet
+
+        // Show the Bottom Sheet
+        bottomSheetDialog.show();
     }
 }
 

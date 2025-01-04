@@ -82,7 +82,7 @@
             android:layout_height="240dp"
             android:orientation="horizontal"
             android:padding="8dp"
-            android:visibility="gone"
+            android:visibility="visible"
             >
 
             <ImageButton
@@ -238,6 +238,7 @@
                     android:contentDescription="UHD"
                     android:id="@+id/sd"
                     android:tag="5"
+                    android:visibility="gone"
 
                     />
             </LinearLayout>
@@ -263,6 +264,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:id="@+id/main_buttons_ll"
+
                 >
 
                 <!-- Button Group -->

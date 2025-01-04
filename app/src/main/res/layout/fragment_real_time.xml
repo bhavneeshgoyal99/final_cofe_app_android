@@ -24,7 +24,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:tag="-10">
+            android:tag="-10"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="36dp"
@@ -48,7 +49,8 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:tag="-10">
+            android:tag="-10"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="36dp"
@@ -64,43 +66,6 @@
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/icon_alarm"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:tag="23"
-            >
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/bulb_icon"
-                android:contentDescription="Alarm Icon"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Strobe Alarm"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Row 2 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="30dp"
-
-        >
-
         <LinearLayout
             android:id="@+id/icon_motion_tracking"
             android:layout_width="0dp"
@@ -151,6 +116,42 @@
                 android:layout_marginTop="4dp" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/icon_alarm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:tag="23"
+            >
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/bulb_icon"
+                android:contentDescription="Alarm Icon"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Strobe Alarm"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Row 2 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="30dp"
+        >
+
+
+        <LinearLayout
             android:id="@+id/icon_med_tracking"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -173,7 +174,54 @@
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/icon_ptz_reverse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:tag="8"
+            android:visibility="visible">
 
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/refresh_icon"
+                android:contentDescription="PTZ Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/zoom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:tag="28"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/zoom_icon"
+                android:contentDescription="Motion Tracking Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zoom"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/icon_favorites"
             android:layout_width="0dp"
@@ -204,10 +252,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="30dp"
-
+        android:visibility="gone"
         >
-
-
         <LinearLayout
             android:id="@+id/icon_sd_card_alb"
             android:layout_width="0dp"
@@ -232,88 +278,16 @@
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="30dp"
+        android:visibility="gone"
         >
 
-        <LinearLayout
-            android:id="@+id/zoom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:tag="28"
-            android:gravity="center"
-            >
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/zoom_icon"
-                android:contentDescription="Motion Tracking Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Zoom"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
-        <LinearLayout
-
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:tag="battery"
-            android:gravity="center"
-            android:visibility="gone"
-            android:id="@+id/battery"
-            >
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/batery_icon"
-                android:contentDescription="Motion Tracking Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Battery"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/icon_ptz_reverse"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:tag="8"
-            android:visibility="visible">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/refresh_icon"
-                android:contentDescription="PTZ Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reset"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -336,7 +310,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/zoom_icon"
+                android:src="@drawable/image_icon"
                 android:contentDescription="Motion Tracking Icon" />
 
             <TextView
@@ -347,6 +321,59 @@
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:tag="battery"
+            android:gravity="center"
+            android:id="@+id/battery"
+            android:visibility="invisible"
+            >
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/batery_icon"
+                android:contentDescription="Motion Tracking Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Battery"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:tag="battery"
+            android:gravity="center"
+            android:visibility="invisible"
+            >
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/batery_icon"
+                android:contentDescription="Motion Tracking Icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Battery"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
 
     </LinearLayout>
 

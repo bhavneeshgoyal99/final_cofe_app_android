@@ -33,7 +33,6 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dlg_calendar_date_bg"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fillViewport="true"
@@ -51,7 +50,6 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fillViewport="true"
-            android:paddingBottom="70dp"
             android:layout_margin="@dimen/half_of_normal_margin"
             android:listSelector="@drawable/common_list_selector"
             android:footerDividersEnabled="true"
@@ -70,7 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:background="@color/white">
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -97,9 +97,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rl_dev_alarm_video_loss_alarm"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                >
 
 
 
@@ -110,7 +112,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:background="@color/white">
+                    android:layout_marginBottom="@dimen/half_of_normal_margin"
+                    android:background="@drawable/rounder_corner"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -341,8 +345,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_dev_alarm_motion"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
                 android:orientation="vertical">
 
                 <!--人形检测-->
@@ -383,9 +388,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_dev_alarm_human"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+
+                >
 
                 <RelativeLayout
                     style="@style/setup_sub_layout"

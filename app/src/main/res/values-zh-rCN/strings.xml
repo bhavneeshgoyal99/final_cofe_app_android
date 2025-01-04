@@ -964,5 +964,21 @@
     <string name="playback_text"> PlayBack</string>
     <string name="realtime_text">Real-time</string>
 
-
+    <string name="no_device_found">No Device Found</string>
+    <string name="scan_for_lan_connected_dev">Scan For Lan Connected Device</string>
+    <string name="try_to_connect_the_device_again">Try To Connect The Device Again</string>
+    <string name="generate_qr_code">Generate QR Code for Scan</string>
+    <string name="enter_device_name">Entere Device Name</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="device_share">Share This Device</string>
+    <string name="power_on_camera">Power On Camera</string>
+    <string name="network_configuration_procedure">Network Configuration Procedure</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="share_device_by_account">Share Device By Account</string>
+    <string name="no_message_yet">There is no new message on .</string>
+    <string name="picture_list">Device Picture List</string>
+    <string name="select_date_to_see_device_images">Select date to see device images</string>
+    <string name="select_another_date_to_see_device_images">Select another date to see device images</string>
+    <string name="no_picture_video_yet">There is no picture or video to display</string>
+    <string name="working_mode">Working Mode</string>
 </resources>

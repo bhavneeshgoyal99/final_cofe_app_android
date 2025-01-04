@@ -114,6 +114,15 @@ public class AovBatteryManagerActivity extends BaseConfigActivity<AovBatteryMana
         });
         titleBar.setBottomTip(getClass().getName());*/
 
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.aov_battery_management));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         lisPowerSupplyMode = findViewById(R.id.lisPowerSupplyMode);
         tvPower = findViewById(R.id.tvPower);
         ivCharging = findViewById(R.id.ivCharging);

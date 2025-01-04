@@ -487,6 +487,14 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     }
                 }
             });
+            btnTurnToAlarmMsg1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemDevClickListener != null) {
+                        onItemDevClickListener.onTurnToAlarmMsg(getAdapterPosition());
+                    }
+                }
+            });
             settingIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

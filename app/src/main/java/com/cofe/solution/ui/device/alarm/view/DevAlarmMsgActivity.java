@@ -238,11 +238,19 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
             if (alarmInfo != null) {
                 // Set alarm information in the view
                 AlarmTranslationIconBean alarmTranslationIconBean = new AlarmTranslationIconBean();
+                String eventTitlte  = alarmInfo.getEvent().replace("Alarm","")
+                        .replace("appEvent","");
+                eventTitlte = eventTitlte.equals("Human")?"Human Detection": eventTitlte;
+                eventTitlte = eventTitlte.equals("VideoBlind")?"Video Blind": eventTitlte;
+                holder.detectionText.setText(eventTitlte);
 
-                holder.detectionText.setText(alarmInfo.getEvent());
                 //Object afterTranslation = ((SDKDemoApplication) getApplication()).getAlarmTranslationIconBean().getLanguageInfo().get("ZH").get(alarmInfo.getEvent());
+                String[] dateTime = alarmInfo.getStartTime().split(" ");
+                String[] newDateTime = dateTime[0].split("-");
+                String dateToshow = newDateTime[2]+"-"+newDateTime[1]+"-"+newDateTime[0];
 
-                holder.detectionTime.setText(alarmInfo.getStartTime());
+                holder.detectionTime.setText(dateToshow+" " +dateTime[1]);
+
                 //holder.detectionText.setTip(alarmInfo.getStartTime());
                 holder.detectionText.setTag(position);
                 //holder.lisAlarmMsg.getImageLeft().setImageBitmap(null);
@@ -255,12 +263,14 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                         presenter.loadThumb(position, new BaseImageManager.OnImageManagerListener() {
                             @Override
                             public void onDownloadResult(boolean isSuccess, String imagePath, Bitmap bitmap, int mediaType, int seq) {
-                                ListSelectItem lsiAlarmMsg = recyclerView.findViewWithTag(seq);
+                                /*ListSelectItem lsiAlarmMsg = recyclerView.findViewWithTag(seq);
                                 if (lsiAlarmMsg != null) {
                                     lsiAlarmMsg.getImageLeft().setImageBitmap(bitmap);
                                 } else {
                                     holder.photoImage.setImageBitmap(bitmap);
-                                }
+                                }*/
+                                holder.photoImage.setImageBitmap(bitmap);
+
                             }
 
                             @Override

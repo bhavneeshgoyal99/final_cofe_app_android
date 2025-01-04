@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basic.G;
@@ -126,13 +127,23 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
                 toSaveDevAlarm();
             }
         });
-    findViewById(R.id.save_btn).setVisibility(View.VISIBLE);
-    findViewById(R.id.save_btn).setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.device_opt_alarm_config));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        findViewById(R.id.save_btn).setVisibility(View.VISIBLE);
+        findViewById(R.id.save_btn).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
             toSaveDevAlarm();
         }
-    });
+        });
 
 
         titleBar.setRightIvClick(new XTitleBar.OnRightClickListener() {

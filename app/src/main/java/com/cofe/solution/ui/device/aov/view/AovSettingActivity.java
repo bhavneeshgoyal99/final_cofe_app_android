@@ -3,6 +3,7 @@ package com.cofe.solution.ui.device.aov.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lib.FunSDK;
@@ -54,6 +55,15 @@ public class AovSettingActivity extends BaseConfigActivity<AovSettingPresenter> 
         titleBar.setLeftClick(new XTitleBar.OnLeftClickListener() {
             @Override
             public void onLeftclick() {
+                finish();
+            }
+        });
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.aov_device));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });

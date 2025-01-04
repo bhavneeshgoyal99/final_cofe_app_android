@@ -44,12 +44,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/xm_root_layout"
         android:orientation="vertical"
-        android:background="@color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_margin="@dimen/half_of_normal_margin"
+        android:background="@drawable/rounder_corner"
+
         >
 
         <include
@@ -70,7 +71,8 @@
             uilib:ShowBottomLine="true"
             uilib:ImageRight1="@mipmap/icon_next"
             uilib:ImageRight2="@mipmap/icon_next"
-            uilib:RightClickable="false"/>
+            uilib:RightClickable="false"
+            />
 
         <com.xm.ui.widget.ListSelectItem
             android:visibility="gone"
@@ -84,7 +86,8 @@
             uilib:ShowBottomLine="true"
             uilib:ImageRight1="@mipmap/icon_next"
             uilib:ImageRight2="@mipmap/icon_next"
-            uilib:RightClickable="false"/>
+            uilib:RightClickable="false"
+            />
 
         <com.xm.ui.widget.ListSelectItem
             android:visibility="gone"
@@ -98,6 +101,7 @@
             uilib:ShowBottomLine="true"
             uilib:ImageRight1="@mipmap/icon_next"
             uilib:ImageRight2="@mipmap/icon_next"
-            uilib:RightClickable="false"/>
+            uilib:RightClickable="false"
+            />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

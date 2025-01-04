@@ -402,6 +402,17 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
                 finish();
             }
         });
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.tr_back_light_settings));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         mLsiLightSwitch = findViewById(R.id.lsi_light_switch);
         mLsiAutoLight = findViewById(R.id.lsi_auto_light);
         mLsiTimeLight = findViewById(R.id.lsi_time_light);

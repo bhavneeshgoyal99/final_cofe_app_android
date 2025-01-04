@@ -2,6 +2,7 @@ package com.cofe.solution.ui.device.push.view;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lib.SDKCONST;
 import com.xm.activity.base.XMBaseActivity;
@@ -39,6 +40,17 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
             }
         });
         titleBar.setBottomTip(DevPushActivity.class.getName());
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.push_set));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         lsiPushSwitch = findViewById(R.id.lsi_push_switch);
         lsiPushSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
