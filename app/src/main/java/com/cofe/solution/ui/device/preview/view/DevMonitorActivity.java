@@ -325,6 +325,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     LinearLayout battery;
     LinearLayout icon_ptz;
     LinearLayout mainButtonsLl;
+    boolean isAOVDevice;
+    boolean isLoadCompleteFirstTime = false;
+    int playerWindowCount = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -459,7 +462,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         battery.setOnClickListener(v -> {
                 onFeatureClicked(battery.getTag().toString());
         });
-        checkAOVBattery();
+        checkAOVBattery(false);
 
     }
 
@@ -635,8 +638,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         } else {
             wndCount = (int) Math.pow(wndCount, 2);
         }
-        playViews = playWndLayout.setViewCount(wndCount);
+        playerWindowCount = wndCount;
 
+        playViews = playWndLayout.setViewCount(wndCount);
         playWndLayout.setOnMultiWndListener(new MultiWinLayout.OnMultiWndListener() {
             @Override
             public boolean isDisableToChangeWndSize(int i) {
@@ -1272,7 +1276,13 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             presenter.splitScreen(playViews[1]);
         }
 
+        //onFeatureClicked(""+FUN_APP_OBJ_EFFECT);
         monitorFunAdapter.changeBtnState(FUN_CHANGE_STREAM, presenter.getStreamType(attribute.getChnnel()) == SDKCONST.StreamType.Main);
+        if(!isLoadCompleteFirstTime) {
+            checkAOVBattery(true);
+        }
+        isLoadCompleteFirstTime = true;
+
     }
 
     @Override
@@ -2097,6 +2107,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 return true;
             case FUN_APP_OBJ_EFFECT://APP软件实现多目效果
                 if (!isOpenPointPtz) {
+
                     isShowAppMoreScreen = !isShowAppMoreScreen;
                     presenter.destroyAllMonitor();
 
@@ -2582,14 +2593,14 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             i.putExtra("devId",presenter.getDevId());
             startActivity(i);
 
-        } else {
+        }  else {
             dealWithMonitorFunction(Integer.parseInt(featureName), true);
         }
 
     }
 
 
-    void checkAOVBattery() {
+    void checkAOVBattery(boolean isPreviewChange) {
         DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
             @Override
             public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
@@ -2597,20 +2608,24 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 Log.d("Device id " , " result.OtherFunction.AovMode > "  +result.OtherFunction.AovMode);
                 Log.d("Device id " , " result.OtherFunction.BatteryManager > "  +result.OtherFunction.BatteryManager);
 
-                /*if(getContext()!=null) {
-                    if (battery != null) {
-                        if(result.OtherFunction.BatteryManager) {
-                            battery.setVisibility(VISIBLE);
-                        } else {
-                            battery.setVisibility(View.INVISIBLE);
-                        }
-                    }
-                }*/
                 try {
                     if (result.OtherFunction.AovMode) {
+                        isAOVDevice =  result.OtherFunction.AovMode;
                         battery.setVisibility(VISIBLE);
-                    } else {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(isPreviewChange){
+                                    /*if(playerWindowCount==2) {
+                                        onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
+                                    }*/
+                                    onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
+                                }
 
+                            }
+                        }, 3000);
+                    } else {
+                        isAOVDevice =  false;
                     }
                 }catch ( Exception e) {
                     e.printStackTrace();
@@ -2698,7 +2713,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
 
 
-    private void showBottomSheet( View viewToAdd) {
+    @SuppressLint("ClickableViewAccessibility")
+    private void showBottomSheet(View viewToAdd) {
         // Inflate the bottom sheet layout
         View bottomSheetView = getLayoutInflater().inflate(R.layout.popup_layout, null);
         RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_RL);
@@ -2716,7 +2732,21 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         parentLL.addView(viewToAdd, layoutParams);
 
         BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+	
+    	viewToAdd.setOnTouchListener((v, event) -> {
+	    	behavior.setDraggable(true);  // Re-enable dragging
+            return false;
+        });
 
+
+	    viewToAdd.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                behavior.setDraggable(false);  // Disable dragging
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                behavior.setDraggable(true);  // Re-enable dragging
+            }
+            return false;
+        });
         // Calculate the height of the target view
         int[] location = new int[2];
         mainButtonsLl.getLocationOnScreen(location);

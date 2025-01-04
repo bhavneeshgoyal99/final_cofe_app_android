@@ -118,7 +118,7 @@
     <string name="guide_module_title_device_alarm"> device alarm </string>
     <string name="guide_module_title_device_setwifi"> WiFi quick configuration </string>
 
-    <string name="device_opt_alarm_config"> Smart Alarm Configuration </string>
+    <string name="device_opt_alarm_config"> Alarm Configuration </string>
     <string name="device_setup"> device configuration </string>
     <string name="device_preview"> device preview</string>
     <string name="device_setup_encode"> encoding configuration</string>

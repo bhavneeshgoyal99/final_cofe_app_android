@@ -923,4 +923,36 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
     }
 
+    @Override
+    protected void onResume(){
+
+        if (!DevDataCenter.getInstance().isLoginByAccount()) {
+            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+
+            if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                if (DevDataCenter.getInstance().getAccessToken() == null) {
+                    AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                            new BaseAccountManager.OnAccountManagerListener() {
+                                @Override
+                                public void onSuccess(int msgId) {
+                                    Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
+                                    initData();
+
+                                }
+
+                                @Override
+                                public void onFailed(int msgId, int errorId) {
+                                }
+
+                                @Override
+                                public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                }
+                            });
+                }
+            }
+        }
+        super.onResume();
+    }
+
 }
