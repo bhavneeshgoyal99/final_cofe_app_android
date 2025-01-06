@@ -1,12 +1,15 @@
-package com.cofe.solution.ui.device.add.list.view;
+package com.cofe.solution.ui.fragment;
+
+import static com.manager.account.share.ShareInfo.SHARE_NOT_YET_ACCEPT;
+import static com.manager.db.Define.LOGIN_BY_LOCAL;
+import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
 import android.widget.Button;
@@ -24,11 +28,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -37,11 +39,30 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.cofe.solution.R;
+import com.cofe.solution.base.DemoBaseFragment;
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.adapter.DevListAdapter;
+import com.cofe.solution.ui.device.add.AddNewDeviceActivity;
+import com.cofe.solution.ui.device.add.list.listener.DevListConnectContract;
+import com.cofe.solution.ui.device.add.list.presenter.DevListConnectPresenter;
+import com.cofe.solution.ui.device.add.list.view.ChannelListActivity;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
+import com.cofe.solution.ui.device.add.share.ShareFirstScren;
+import com.cofe.solution.ui.device.add.share.view.ShareDevListActivity;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
+import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.device.cloud.view.CloudStateActivity;
+import com.cofe.solution.ui.device.config.DeviceSetting;
+import com.cofe.solution.ui.device.config.interdevlinkage.view.InterDevLinkageActivity;
+import com.cofe.solution.ui.device.config.shadow.view.DevShadowConfigActivity;
+import com.cofe.solution.ui.device.config.simpleconfig.view.DevSimpleConfigActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.preview.view.DevActivity;
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
+import com.cofe.solution.ui.device.push.view.DevPushActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
+import com.cofe.solution.ui.device.record.view.DevRecordActivity;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
@@ -64,45 +85,13 @@ import com.xm.ui.widget.dialog.EditDialog;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.cofe.solution.R;
-import com.cofe.solution.base.CurvedBottomNavigationView;
-import com.cofe.solution.base.DemoBaseActivity;
-import com.cofe.solution.ui.adapter.DevListAdapter;
-import com.cofe.solution.ui.device.add.AddNewDeviceActivity;
-import com.cofe.solution.ui.device.add.list.listener.DevListConnectContract;
-import com.cofe.solution.ui.device.add.list.presenter.DevListConnectPresenter;
-import com.cofe.solution.ui.device.add.qrcode.view.SetDevToRouterByQrCodeActivity;
-import com.cofe.solution.ui.device.add.share.ShareFirstScren;
-import com.cofe.solution.ui.device.add.share.view.DevShareManageActivity;
-import com.cofe.solution.ui.device.add.share.view.ShareDevListActivity;
-import com.cofe.solution.ui.device.add.share.view.ShareDevToOtherAccountActivity;
-import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
-import com.cofe.solution.ui.device.cloud.view.CloudStateActivity;
-import com.cofe.solution.ui.device.config.DeviceSetting;
-import com.cofe.solution.ui.device.config.interdevlinkage.view.InterDevLinkageActivity;
-import com.cofe.solution.ui.device.config.shadow.view.DevShadowConfigActivity;
-import com.cofe.solution.ui.device.config.simpleconfig.view.DevSimpleConfigActivity;
-import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
-import com.cofe.solution.ui.device.push.view.DevPushActivity;
-import com.cofe.solution.ui.device.record.view.DevRecordActivity;
-import com.cofe.solution.ui.widget.DividerItemDecoration;
 import io.reactivex.annotations.Nullable;
 
-import static com.google.gson.internal.$Gson$Types.arrayOf;
-import static com.manager.account.share.ShareInfo.SHARE_NOT_YET_ACCEPT;
-import static com.manager.db.Define.LOGIN_BY_LOCAL;
-import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
-
-
-/**
- * 设备界面,显示相关的列表菜单
- * Device interface, showing the relevant list menu
- * Created by jiangping on 2018-10-23.
- */
-public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
-        implements DevListConnectContract.IDevListConnectView,
+public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresenter> implements DevListConnectContract.IDevListConnectView,
         XTitleBar.OnRightClickListener,
         DevListAdapter.OnItemDevClickListener {
+
+    private static final String TAG = "DevAlarmMsgFragment";
 
     int CAMERA_PERMISSION_REQEST_CODE = 111;
     int NOTIFICATION_PERMISSION_REQUEST_CODE = 222;
@@ -113,17 +102,28 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     TextView textTxtv;
     ImageView add_img;
     LinearLayout logoutLl;
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_device_list);
-        initView();
-        initData();
+    private DevActivity activity;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
+        super.onCreate(savedInstanceState);
+        /*supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_device_list);*/
+
+//        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        View fragmentView = inflater.inflate(R.layout.fragment_dev_alarm_msg, container, false);
+
+        Log.d(TAG, "onCreateView: within the DevAlarmMsgFragment");
+
+        initView(fragmentView);
+        initData();
+        return fragmentView;
     }
 
-    private void initView() {
+    private void initView(View fragmentView) {
         /*titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.set_list));
         //titleBar.setRightTitleText(getString(R.string.share_dev_list));
@@ -131,20 +131,20 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         titleBar.setLeftClick(this);
         titleBar.setRightIvClick(this);
         titleBar.setRightTvClick(this);*/
-        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        TextView titleTxtv = fragmentView.findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.set_list));
-        add_img = findViewById(R.id.add_img);
+        add_img = fragmentView.findViewById(R.id.add_img);
         //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
-           // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
 
-            if(DevDataCenter.getInstance().getAccountUserName()!=null) {
-                if(DevDataCenter.getInstance().getAccessToken()==null) {
+            if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                if (DevDataCenter.getInstance().getAccessToken() == null) {
                     AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
                             new BaseAccountManager.OnAccountManagerListener() {
                                 @Override
                                 public void onSuccess(int msgId) {
-                                    Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                    Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
 
                                 }
 
@@ -165,16 +165,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         }
 
-        listView = findViewById(R.id.listViewDevice);
-        noDeviceContLl  = findViewById(R.id.no_device_cont_ll);
-        textTxtv =  findViewById(R.id.text_txtv);
-        LinearLayoutManager llManager = new LinearLayoutManager(this);
+        listView = fragmentView.findViewById(R.id.listViewDevice);
+        noDeviceContLl = fragmentView.findViewById(R.id.no_device_cont_ll);
+        textTxtv = fragmentView.findViewById(R.id.text_txtv);
+        LinearLayoutManager llManager = new LinearLayoutManager(activity);
         listView.setLayoutManager(llManager);
 
-        //listView.addItemDecoration(new DividerItemDecoration(this, llManager.getOrientation()));
+        //listView.addItemDecoration(new DividerItemDecoration(activity, llManager.getOrientation()));
 //        listView.removeItemDecorationAt(0); // Remove any existing decoration
 
-        slRefresh = findViewById(R.id.sl_refresh);
+        slRefresh = fragmentView.findViewById(R.id.sl_refresh);
         slRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -185,13 +185,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         noDeviceContLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =  new Intent(DevListActivity.this, AddNewDeviceActivity.class);
+                Intent i = new Intent(activity, AddNewDeviceActivity.class);
                 startActivity(i);
             }
         });
         refreshTitle();
 
-        ImageButton menuIcon = findViewById(R.id.menu_icon);
+        ImageButton menuIcon = fragmentView.findViewById(R.id.menu_icon);
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,7 +199,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         });
 
-        AppBarLayout appBarLayout = findViewById(R.id.appBarLayout);
+        AppBarLayout appBarLayout = fragmentView.findViewById(R.id.appBarLayout);
         // Example: Add a listener to log scroll changes
         listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -218,36 +218,36 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         appBarLayout.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         checkPushNotificationPermission();
 
-        logoutLl = findViewById(R.id.logout_ll);
+        logoutLl = fragmentView.findViewById(R.id.logout_ll);
 
         logoutLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
 
                 XMAccountManager.getInstance().logout();
-                if(XMAccountManager.getInstance().getUserName()==null) {
-                    SharedPreference cookies =  new SharedPreference(getContext());
+                if (XMAccountManager.getInstance().getUserName() == null) {
+                    SharedPreference cookies = new SharedPreference(getContext());
                     cookies.saveLoginStatus(1);
 
-                    Intent intent = new Intent(DevListActivity.this, UserLoginActivity.class);
+                    Intent intent = new Intent(activity, UserLoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    finish();
+//                    activity.finish();
                 }
             }
         });
 
-        LinearLayout homeLL = findViewById(R.id.home_ll);
+        LinearLayout homeLL = fragmentView.findViewById(R.id.home_ll);
         homeLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
-                Intent intent = new Intent(DevListActivity.this, DevListActivity.class);
+                /*Intent intent = new Intent(activity, DevListActivity.class);
                 startActivity(intent);
-                finish();
+                activity.finish();*/
             }
         });
 
-        LinearLayout imageLl = findViewById(R.id.image_ll);
+        LinearLayout imageLl = fragmentView.findViewById(R.id.image_ll);
         imageLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
@@ -255,19 +255,19 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         });
 
-        SharedPreference cookies =  new SharedPreference(getContext());
+        SharedPreference cookies = new SharedPreference(getContext());
         cookies.saveLoginStatus(0);
     }
 
     private void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
+        PopupMenu popupMenu = new PopupMenu(activity, view);
         popupMenu.getMenuInflater().inflate(R.menu.toolbar_menu, popupMenu.getMenu()); // Inflate menu XML
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.option1:
-                        Intent i =  new Intent(DevListActivity.this, AddNewDeviceActivity.class);
+                        Intent i = new Intent(activity, AddNewDeviceActivity.class);
                         startActivity(i);
                         return true;
                     case R.id.option2:
@@ -284,7 +284,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             // Permission already granted
             openCamera();
         } else {
@@ -293,22 +293,22 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
-    private void showPermissionExplanationPopup(String permissionName,String message) {
+    private void showPermissionExplanationPopup(String permissionName, String message) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("permissionName Permission Required")
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    if(permissionName.equals("Camera")) {
+                    if (permissionName.equals("Camera")) {
                         // Request camera permission
                         // Request camera permission
-                        ActivityCompat.requestPermissions(DevListActivity.this,
+                        ActivityCompat.requestPermissions(activity,
                                 new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQEST_CODE);
                     } else {
                         // Request camera permission
                         ActivityCompat.requestPermissions(
-                                DevListActivity.this,
+                                activity,
                                 new String[]{Manifest.permission.POST_NOTIFICATIONS},
                                 NOTIFICATION_PERMISSION_REQUEST_CODE
                         );
@@ -317,7 +317,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 })
                 .setNegativeButton("Reject", (dialog, which) -> {
                     dialog.dismiss();
-                    Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Permission denied.", Toast.LENGTH_SHORT).show();
                 });
         builder.create().show();
     }
@@ -332,9 +332,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 openCamera();
             } else {
                 // Permission denied
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup("Camera");
@@ -344,13 +344,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted
                 enablePushNotifications();
-                startService(new Intent(this, DevPushService.class));
+                activity.startService(new Intent(activity, DevPushService.class));
 
             } else {
                 // Permission denied
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required for push notifications.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Permission is required for push notifications.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup("Push Notification ");
@@ -361,9 +361,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void showSettingsRedirectPopup(String permisonName) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(permisonName+ " Permission Required")
-                .setMessage(permisonName +" permission is permanently denied. Please enable it in the app settings.")
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(permisonName + " Permission Required")
+                .setMessage(permisonName + " permission is permanently denied. Please enable it in the app settings.")
                 .setCancelable(false)
                 .setPositiveButton("Open Settings", (dialog, which) -> openAppSettings())
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -371,22 +371,22 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void openCamera() {
-        Toast.makeText(this, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
-        Intent j =  new Intent(DevListActivity.this, DevSnConnectActivity.class);
+        Toast.makeText(activity, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
+        Intent j = new Intent(activity, DevSnConnectActivity.class);
         startActivity(j);
     }
 
     private void openAppSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
         intent.setData(uri);
         startActivity(intent);
     }
 
 
     private void initData() {
-        showWaitDialog();
-        adapter = new DevListAdapter(getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
+//        showWaitDialog();
+        adapter = new DevListAdapter(activity.getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
         listView.setAdapter(adapter);
         presenter.updateDevState();//Update the status of the list
     }
@@ -398,16 +398,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void refreshTitle() {
-        if (null != titleBar) {
+        /*if (null != titleBar) {
             if (DevDataCenter.getInstance().isLoginByAccount()) {
-            //    titleBar.setTitleText(String.format(getString(R.string.user_device_list), DevDataCenter.getInstance().getAccountUserName()));
+                //    titleBar.setTitleText(String.format(getString(R.string.user_device_list), DevDataCenter.getInstance().getAccountUserName()));
             } else {
                 int loginType = DevDataCenter.getInstance().getLoginType();
                 if (loginType == LOGIN_BY_LOCAL) {
-              //      titleBar.setTitleText(String.format(getString(R.string.user_device_list), getString(R.string.login_by_local)));
+                    //      titleBar.setTitleText(String.format(getString(R.string.user_device_list), getString(R.string.login_by_local)));
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -415,7 +415,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (DevDataCenter.getInstance().isLoginByAccount()) {
             turnToActivity(ShareDevListActivity.class);
         } else {
-            XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_all_devices), new View.OnClickListener() {
+            XMPromptDlg.onShow(activity, getString(R.string.is_sure_delete_all_devices), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     presenter.deleteAllDevs();
@@ -424,19 +424,19 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
-    @Override
-    protected void onRestart() {
+    /*@Override
+    public void onRestart() {
         super.onRestart();
         if (adapter != null) {
-            if(presenter!=null) {
+            if (presenter != null) {
 
-                if(DevDataCenter.getInstance().getAccountUserName()!=null) {
-                    if(DevDataCenter.getInstance().getAccessToken()==null) {
+                if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                    if (DevDataCenter.getInstance().getAccessToken() == null) {
                         AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
                                 new BaseAccountManager.OnAccountManagerListener() {
                                     @Override
                                     public void onSuccess(int msgId) {
-                                        Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                        Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
                                         if (presenter.getDevList() != null) {
                                             if (presenter.getDevList().size() > 0) {
                                                 if (noDeviceContLl != null) {
@@ -479,17 +479,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 }
 
 
-
             }
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         }
-    }
+    }*/
 
     @Override
     public void onUpdateDevListView() {
         slRefresh.setRefreshing(false);
-        if(presenter.getDevList()!=null) {
-            if(presenter.getDevList().size()==0) {
+        if (presenter.getDevList() != null) {
+            if (presenter.getDevList().size() == 0) {
                 add_img.setVisibility(View.VISIBLE);
                 noDeviceContLl.setVisibility(View.VISIBLE);
                 textTxtv.setText(getString(R.string.add_dev));
@@ -503,13 +502,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
-        hideWaitDialog();
+//        hideWaitDialog();
         slRefresh.setRefreshing(false);
         if (isSuccess) {
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         } else {
-            if(presenter.getDevList()!=null) {
-                if(presenter.getDevList().size()==0) {
+            if (presenter.getDevList() != null) {
+                if (presenter.getDevList().size() == 0) {
                     add_img.setVisibility(View.VISIBLE);
                     noDeviceContLl.setVisibility(View.VISIBLE);
 
@@ -520,8 +519,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
             showToast(getString(R.string.Refresh_Dev_Status_F), Toast.LENGTH_LONG);
         }
-        if(presenter.getDevList()!=null) {
-            if(presenter.getDevList().size()==0) {
+        if (presenter.getDevList() != null) {
+            if (presenter.getDevList().size() == 0) {
                 add_img.setVisibility(View.VISIBLE);
 
                 noDeviceContLl.setVisibility(View.VISIBLE);
@@ -534,7 +533,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-        hideWaitDialog();
+//        hideWaitDialog();
         if (isSuccess) {
             showToast(getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
@@ -545,7 +544,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onDeleteDevResult(boolean isSuccess) {
-        hideWaitDialog();
+//        hideWaitDialog();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
@@ -556,7 +555,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onAcceptDevResult(boolean isSuccess) {
-        hideWaitDialog();
+//        hideWaitDialog();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.accept_share_s), Toast.LENGTH_LONG);
@@ -574,7 +573,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-        hideWaitDialog();
+//        hideWaitDialog();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -582,29 +581,28 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 turnToActivity(ChannelListActivity.class);
             } else {
 
-//                turnToActivity(DevMonitorActivity.class);
-                Log.d("XMBASE", "onGetChannelListResult: " + presenter.getDevId());
-                turnToActivity(DevActivity.class);
+                turnToActivity(DevMonitorActivity.class);
+//                turnToActivity(DevActivity.class);
 
             }
         } else {
             if (resultId == EFUN_ERROR.EE_DVR_PASSWORD_NOT_VALID) {
                 XMDevInfo devInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-                XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(),
+                XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(),
                         0, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+//                                showWaitDialog();
                                 presenter.getChannelList();
                             }
                         }, false);
             } else if (resultId == EFUN_ERROR.EE_DVR_LOGIN_USER_NOEXIST) {
                 XMDevInfo devInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-                XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(),
+                XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(),
                         0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+//                                showWaitDialog();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -617,13 +615,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public Context getContext() {
-        return this;
+        return activity;
     }
 
     @Override
     public void onItemClick(int position, XMDevInfo xmDevInfo) {
         //判断是否为分享设备
-        SharedPreference cookies = new SharedPreference(getApplication());
+        SharedPreference cookies = new SharedPreference(activity.getApplication());
         cookies.saveDevName(xmDevInfo.getDevName());
 
         if (xmDevInfo.isShareDev()) {
@@ -656,7 +654,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 return;
             }
 
-            showWaitDialog(getString(R.string.get_channel_info));
+//            showWaitDialog(getString(R.string.get_channel_info));
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
 
@@ -676,10 +674,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public boolean onLongItemClick(final int position, XMDevInfo xmDevInfo) {
-        XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
+        XMPromptDlg.onShow(activity, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+//                showWaitDialog();
                 presenter.deleteDev(position);
             }
         }, null);
@@ -721,7 +719,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         String personJson = gson.toJson(xmDevInfo);
 
         // Pass the JSON string to another activity via Intent
-        Intent intent = new Intent(this, DeviceSetting.class);
+        Intent intent = new Intent(activity, DeviceSetting.class);
         intent.putExtra("dev", personJson);
         startActivity(intent);
         //turnToActivity(DeviceSetting.class);
@@ -748,7 +746,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onModifyDevName(int position, XMDevInfo xmDevInfo) {
-        XMPromptDlg.onShowEditDialog(this, getString(R.string.modify_dev_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+        XMPromptDlg.onShowEditDialog(activity, getString(R.string.modify_dev_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
                 presenter.modifyDevNameFromServer(position, devName);
@@ -769,7 +767,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         String personJson = gson.toJson(xmDevInfo);
 
         // Pass the JSON string to another activity via Intent
-        Intent intent = new Intent(this, ShareFirstScren.class);
+        Intent intent = new Intent(activity, ShareFirstScren.class);
         intent.putExtra("dev", personJson);
         startActivity(intent);
 
@@ -784,7 +782,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToEditLocalDevUserPwd(int position, XMDevInfo xmDevInfo) {
-        View layout = LayoutInflater.from(this).inflate(R.layout.dialog_local_dev_user_pwd, null);
+        View layout = LayoutInflater.from(activity).inflate(R.layout.dialog_local_dev_user_pwd, null);
         TextView tvDevId = layout.findViewById(R.id.tv_devid);
         tvDevId.setText(xmDevInfo.getDevId());
         EditText etDevUser = layout.findViewById(R.id.et_local_dev_user);
@@ -792,8 +790,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         EditText etDevPwd = layout.findViewById(R.id.et_local_dev_pwd);
         etDevPwd.setText(xmDevInfo.getDevPassword());
 
-        Dialog dialog = XMPromptDlg.onShow(this, layout,
-                (int) (XUtils.getScreenWidth(this) * 0.8), 0, false, null);
+        Dialog dialog = XMPromptDlg.onShow(activity, layout,
+                (int) (XUtils.getScreenWidth(activity) * 0.8), 0, false, null);
 
         dialog.show();
 
@@ -893,7 +891,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (adapter != null) {
             adapter.release();
@@ -907,24 +905,29 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             // Notifications are auto-enabled for Android 12 and below
             enablePushNotifications();
-            startService(new Intent(this, DevPushService.class));
+            activity.startService(new Intent(activity, DevPushService.class));
 
         } else {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 // Permission already granted
                 enablePushNotifications();
-                startService(new Intent(this, DevPushService.class));
+                activity.startService(new Intent(activity, DevPushService.class));
 
             } else {
                 // Show permission explanation popup
-                showPermissionExplanationPopup("Push Notification ","This app needs your permission to send push notifications. Please grant the permission to stay updated.");
+                showPermissionExplanationPopup("Push Notification ", "This app needs your permission to send push notifications. Please grant the permission to stay updated.");
             }
         }
     }
 
     private void enablePushNotifications() {
-        Toast.makeText(this, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
     }
 
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        this.activity = (DevActivity) activity;
+    }
 }

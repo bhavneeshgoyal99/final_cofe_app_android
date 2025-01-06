@@ -57,6 +57,7 @@ import com.cofe.solution.ui.user.login.listener.UserLoginContract;
 import com.cofe.solution.ui.user.login.presenter.UserLoginPresenter;
 import com.cofe.solution.ui.user.register.view.UserRegisterActivity;
 import com.cofe.solution.utils.SPUtil;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -76,7 +77,7 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> implements UserLoginContract.IUserLoginView, View.OnClickListener {
     private EditText etUserName;
-    private EditText etPwd; 
+    private EditText etPwd;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -100,9 +101,9 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
         //titleBar.setRightTitleText(getString(R.string.user_login_forgot_passwd));
         int lPadding = titleBar.getRightTextView().getPaddingLeft();
         int RPadding = titleBar.getRightTextView().getPaddingRight();
-        int TPadding = titleBar.getRightTextView().getPaddingTop()+9;
+        int TPadding = titleBar.getRightTextView().getPaddingTop() + 9;
         int BPadding = titleBar.getRightTextView().getPaddingBottom();
-        titleBar.getRightTextView().setPadding(lPadding,TPadding,RPadding,BPadding);
+        titleBar.getRightTextView().setPadding(lPadding, TPadding, RPadding, BPadding);
         titleBar.getLeftBtn().setVisibility(View.GONE);
         titleBar.setLeftClick(this);
         //titleBar.setBottomTip(UserLoginActivity.class.getName());
@@ -119,7 +120,6 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                 enterForgotPassword();
             }
         });
-
 
 
         Button btnlogin = findViewById(R.id.btn_user_login);
@@ -195,8 +195,8 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
         //(findViewById(R.id.btn_login_history)).setOnClickListener(this);
         pref = getSharedPreferences("data", MODE_PRIVATE);
         editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-        SharedPreference cookies =  new SharedPreference(getContext());
-        if(cookies.retrievLoginStatus() !=1) {
+        SharedPreference cookies = new SharedPreference(getContext());
+        if (cookies.retrievLoginStatus() != 1) {
             btnlogin.performClick();
         }
 
@@ -243,7 +243,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                 }
             }
 
-            Log.d("login type ", " > "+ DevDataCenter.getInstance().getLoginType());
+            Log.d("login type ", " > " + DevDataCenter.getInstance().getLoginType());
             turnToActivity(DevListActivity.class);
             //startService(new Intent(this, DevPushService.class));
             finish();

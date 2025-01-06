@@ -1,13 +1,22 @@
-package com.cofe.solution.ui.device.preview.view;
+package com.cofe.solution.ui.fragment;
 
 import static android.view.View.VISIBLE;
+import static com.cofe.solution.base.DemoConstant.LAST_CHANGE_SCALE_TIMES;
+import static com.cofe.solution.base.DemoConstant.MULTI_LENS_THREE_SENSOR;
+import static com.cofe.solution.base.DemoConstant.MULTI_LENS_TWO_SENSOR;
+import static com.cofe.solution.base.DemoConstant.SENSOR_MAX_TIMES;
+import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_THREE_LENS;
+import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_TWO_LENS;
+import static com.cofe.solution.base.FunError.EE_DVR_ACCOUNT_PWD_NOT_VALID;
 import static com.manager.db.Define.LOGIN_NONE;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_MEDIA_DISCONNECT;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PlAY;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_PIC_FILE_S;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_RECORD_FILE_S;
 import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_MAN;
 import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_NORMAL;
 import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_WOMAN;
+import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -29,15 +38,10 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,14 +52,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -63,10 +65,36 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.cofe.solution.R;
+import com.cofe.solution.base.DemoBaseFragment;
+import com.cofe.solution.base.HistoryTracker;
 import com.cofe.solution.base.SharedPreference;
-import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.device.alarm.view.ActivityGuideDeviceLanAlarm;
+import com.cofe.solution.ui.device.alarm.view.DoubleLightActivity;
+import com.cofe.solution.ui.device.alarm.view.DoubleLightBoxActivity;
+import com.cofe.solution.ui.device.alarm.view.GardenDoubleLightActivity;
+import com.cofe.solution.ui.device.alarm.view.MusicLightActivity;
+import com.cofe.solution.ui.device.alarm.view.WhiteLightActivity;
+import com.cofe.solution.ui.device.aov.view.AovSettingActivity;
+import com.cofe.solution.ui.device.config.DeviceSetting;
+import com.cofe.solution.ui.device.config.cameralink.view.CameraLinkSetActivity;
+import com.cofe.solution.ui.device.config.detecttrack.DetectTrackActivity;
+import com.cofe.solution.ui.device.config.simpleconfig.view.DevSimpleConfigActivity;
+import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
+import com.cofe.solution.ui.device.preview.listener.DevMonitorContract;
+import com.cofe.solution.ui.device.preview.listener.SensorChangeContract;
+import com.cofe.solution.ui.device.preview.presenter.DevMonitorPresenter;
+import com.cofe.solution.ui.device.preview.presenter.SensorChangePresenter;
+import com.cofe.solution.ui.device.preview.view.DevActivity;
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
+import com.cofe.solution.ui.device.preview.view.PresetListActivity;
+import com.cofe.solution.ui.device.preview.view.VideoIntercomActivity;
+import com.cofe.solution.ui.device.preview.view.fragment_list.MessageFragment;
+import com.cofe.solution.ui.device.preview.view.fragment_list.PlaybackFragment;
+import com.cofe.solution.ui.device.preview.view.fragment_list.RealTimeFragment;
 import com.cofe.solution.ui.device.record.presenter.DevRecordPresenter;
-import com.cofe.solution.ui.fragment.DevRecordFragment;
+import com.cofe.solution.ui.device.record.view.DevRecordActivity;
+import com.cofe.solution.utils.SPUtil;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -104,63 +132,15 @@ import com.xm.ui.widget.BtnColorBK;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.RippleButton;
 import com.xm.ui.widget.XMScaleSeekBar;
-import com.xm.ui.widget.XTitleBar;
 import com.xm.ui.widget.dialog.EditDialog;
 import com.xm.ui.widget.listselectitem.extra.adapter.ExtraSpinnerAdapter;
 import com.xm.ui.widget.ptzview.PtzView;
-
-import com.cofe.solution.R;
-import com.cofe.solution.base.DemoBaseActivity;
-import com.cofe.solution.base.HistoryTracker;
-import com.cofe.solution.ui.activity.DeviceConfigActivity;
-import com.cofe.solution.ui.device.alarm.view.ActivityGuideDeviceLanAlarm;
-import com.cofe.solution.ui.device.alarm.view.DoubleLightActivity;
-import com.cofe.solution.ui.device.alarm.view.DoubleLightBoxActivity;
-import com.cofe.solution.ui.device.alarm.view.GardenDoubleLightActivity;
-import com.cofe.solution.ui.device.alarm.view.MusicLightActivity;
-import com.cofe.solution.ui.device.alarm.view.WhiteLightActivity;
-import com.cofe.solution.ui.device.aov.view.AovSettingActivity;
-import com.cofe.solution.ui.device.config.DeviceSetting;
-import com.cofe.solution.ui.device.config.cameralink.view.CameraLinkSetActivity;
-import com.cofe.solution.ui.device.config.detecttrack.DetectTrackActivity;
-import com.cofe.solution.ui.device.config.simpleconfig.view.DevSimpleConfigActivity;
-import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
-import com.cofe.solution.ui.device.preview.listener.DevMonitorContract;
-import com.cofe.solution.ui.device.preview.listener.SensorChangeContract;
-import com.cofe.solution.ui.device.preview.presenter.DevMonitorPresenter;
-import com.cofe.solution.ui.device.preview.presenter.SensorChangePresenter;
-import com.cofe.solution.ui.device.preview.view.fragment_list.MessageFragment;
-import com.cofe.solution.ui.device.preview.view.fragment_list.PlaybackFragment;
-import com.cofe.solution.ui.device.preview.view.fragment_list.RealTimeFragment;
-import com.cofe.solution.ui.device.record.view.DevRecordActivity;
-import com.cofe.solution.utils.SPUtil;
-
-import io.reactivex.annotations.Nullable;
-
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_MEDIA_DISCONNECT;
-import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
-
-import static com.cofe.solution.base.DemoConstant.LAST_CHANGE_SCALE_TIMES;
-import static com.cofe.solution.base.DemoConstant.MULTI_LENS_THREE_SENSOR;
-import static com.cofe.solution.base.DemoConstant.MULTI_LENS_TWO_SENSOR;
-import static com.cofe.solution.base.DemoConstant.SENSOR_MAX_TIMES;
-import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_THREE_LENS;
-import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_TWO_LENS;
-import static com.cofe.solution.base.FunError.EE_DVR_ACCOUNT_PWD_NOT_VALID;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-/**
- * 设备预览界面,可以控制播放,停止,码流切换,截图,录制,全屏,信息.
- * 保存图像视频,语音对话.设置预设点并控制方向
- * <p>
- * The device preview interface allows control of playback, pause, stream switching, screenshot, recording, fullscreen, and information.
- * Save images and videos, engage in voice conversations, set presets, and control directions.
- */
-public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> implements DevMonitorContract.IDevMonitorView, OnClickListener, SensorChangeContract.ISensorChangeView, RealTimeFragment.OnFeatureClickListener {
+public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> implements DevMonitorContract.IDevMonitorView, View.OnClickListener, SensorChangeContract.ISensorChangeView, RealTimeFragment.OnFeatureClickListener {
     private static final String TAG = "DevMonitorActivity";
     private MultiWinLayout playWndLayout;
     private RecyclerView rvMonitorFun;
@@ -330,22 +310,28 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     LinearLayout mainButtonsLl;
 
     DevRecordPresenter devRecordPresenter;
+    private DevActivity activity;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
+
         super.onCreate(savedInstanceState);
 //        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_device_camera_view_pager);
-        checkUserLogin();
+        View fragmentView = inflater.inflate(R.layout.fragment_dev_monitor, container, false);
+        checkUserLogin(fragmentView);
 
         // Initialize buttons and layouts
-        btnLayout1 = findViewById(R.id.btn_layout1);
-        btnLayout2 = findViewById(R.id.btn_layout2);
-        btnLayout3 = findViewById(R.id.btn_layout3);
+        btnLayout1 = fragmentView.findViewById(R.id.btn_layout1);
+        btnLayout2 = fragmentView.findViewById(R.id.btn_layout2);
+        btnLayout3 = fragmentView.findViewById(R.id.btn_layout3);
 
-        layout1 = findViewById(R.id.layout1);
-        layout2 = findViewById(R.id.layout2);
-        layout3 = findViewById(R.id.layout3);
+        layout1 = fragmentView.findViewById(R.id.layout1);
+        layout2 = fragmentView.findViewById(R.id.layout2);
+        layout3 = fragmentView.findViewById(R.id.layout3);
 
         // Set up button click listeners
         //btnLayout1.setOnClickListener(v -> showLayout(1));
@@ -353,19 +339,21 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         //btnLayout3.setOnClickListener(v -> showLayout(3));
 
         // Initialize default state
-        showLayout(1);
+        showLayout(1, fragmentView);
 
 //        devRecordPresenter = new DevMonitorPresenter(this);
 
+        return fragmentView;
+
     }
 
-    private void showLayout(int layoutNumber) {
+    private void showLayout(int layoutNumber, View fragmentView) {
         // Reset all layouts to GONE
 
         // Reset button colors to dim
-        btnLayout1.setBackgroundTintList(getColorStateList(R.color.dim_color));
-        btnLayout2.setBackgroundTintList(getColorStateList(R.color.dim_color));
-        btnLayout3.setBackgroundTintList(getColorStateList(R.color.dim_color));
+        btnLayout1.setBackgroundTintList(activity.getColorStateList(R.color.dim_color));
+        btnLayout2.setBackgroundTintList(activity.getColorStateList(R.color.dim_color));
+        btnLayout3.setBackgroundTintList(activity.getColorStateList(R.color.dim_color));
 
         // Show the selected layout and highlight the corresponding button
         switch (layoutNumber) {
@@ -374,9 +362,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 layout3.setVisibility(View.GONE);
                 layout2.setVisibility(View.GONE);
 
-                btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
+                btnLayout3.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background_ubselected));
+                btnLayout2.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background_ubselected));
+                btnLayout1.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background));
 
                 break;
             case 2:
@@ -386,9 +374,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 /*layout3.setVisibility(View.VISIBLE);
                 layout1.setVisibility(View.GONE);
                 layout2.setVisibility(View.GONE);
-                btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
-                btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));*/
+                btnLayout3.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background));
+                btnLayout2.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background_ubselected));
+                btnLayout1.setBackground(ContextCompat.getDrawable(activity, R.drawable.squaer_button_background_ubselected));*/
                 presenter.getDevId();
 //                turnToActivity(DevAlarmMsgActivity.class);
                 break;
@@ -398,22 +386,22 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
 
         // Initialize icons
-        LinearLayout cloudStorageIcon = findViewById(R.id.icon_cloud_storage);
-        LinearLayout aiIcon = findViewById(R.id.icon_ai);
-        LinearLayout alarmIcon = findViewById(R.id.icon_alarm);
+        LinearLayout cloudStorageIcon = fragmentView.findViewById(R.id.icon_cloud_storage);
+        LinearLayout aiIcon = fragmentView.findViewById(R.id.icon_ai);
+        LinearLayout alarmIcon = fragmentView.findViewById(R.id.icon_alarm);
 
-        LinearLayout icon_motion_tracking = findViewById(R.id.icon_motion_tracking);
-        icon_ptz = findViewById(R.id.icon_ptz);
-        LinearLayout icon_favorites = findViewById(R.id.icon_favorites);
+        LinearLayout icon_motion_tracking = fragmentView.findViewById(R.id.icon_motion_tracking);
+        icon_ptz = fragmentView.findViewById(R.id.icon_ptz);
+        LinearLayout icon_favorites = fragmentView.findViewById(R.id.icon_favorites);
 
-        LinearLayout icon_med_tracking = findViewById(R.id.icon_med_tracking);
-        LinearLayout icon_ptz_reverse = findViewById(R.id.icon_ptz_reverse);
-        LinearLayout icon_sd_card_alb = findViewById(R.id.icon_sd_card_alb);
-        LinearLayout zoom = findViewById(R.id.zoom);
-        LinearLayout imageListLl = findViewById(R.id.image_list_ll);
+        LinearLayout icon_med_tracking = fragmentView.findViewById(R.id.icon_med_tracking);
+        LinearLayout icon_ptz_reverse = fragmentView.findViewById(R.id.icon_ptz_reverse);
+        LinearLayout icon_sd_card_alb = fragmentView.findViewById(R.id.icon_sd_card_alb);
+        LinearLayout zoom = fragmentView.findViewById(R.id.zoom);
+        LinearLayout imageListLl = fragmentView.findViewById(R.id.image_list_ll);
         icon_sd_card_alb.setVisibility(View.GONE);
 
-        battery = findViewById(R.id.battery);
+        battery = fragmentView.findViewById(R.id.battery);
 
         // Set click listeners
         cloudStorageIcon.setOnClickListener(v -> {
@@ -472,7 +460,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
     }
 
-    void checkUserLogin() {
+    void checkUserLogin(View fragmentView) {
 
         if (DevDataCenter.getInstance().getAccountUserName() != null) {
             if (DevDataCenter.getInstance().getAccessToken() == null) {
@@ -481,7 +469,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                             @Override
                             public void onSuccess(int msgId) {
                                 Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
-                                initView();
+                                initView(fragmentView);
                                 initData();
 
                             }
@@ -498,18 +486,18 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                         });//LOGIN_BY_INTERNET（1）  Account login type
 
             } else {
-                initView();
+                initView(fragmentView);
                 initData();
             }
 
         } else {
-            initView();
+            initView(fragmentView);
             initData();
         }
     }
 
-    private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
+    private void initView(View fragmentView) {
+        /*titleBar = fragmentView.findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.device_preview));
         titleBar.setRightBtnResource(R.mipmap.icon_setting_normal, R.mipmap.icon_setting_pressed);
         titleBar.setLeftClick(this);
@@ -517,93 +505,93 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             @Override
             public void onRightClick() {
                 Intent intent = new Intent();
-                intent.setClass(DevMonitorActivity.this, DeviceConfigActivity.class);
+                intent.setClass(activity, DeviceConfigActivity.class);
                 intent.putExtra("devId", presenter.getDevId());
-                DevMonitorActivity.this.startActivity(intent);
+                activity.startActivity(intent);
             }
         });
 
-        titleBar.setBottomTip(DevMonitorActivity.class.getName());
-        playWndLayout = findViewById(R.id.layoutPlayWnd);
-        rvMonitorFun = findViewById(R.id.rv_monitor_fun);
-        wndLayout = findViewById(R.id.wnd_layout);
+        titleBar.setBottomTip(DevMonitorActivity.class.getName());*/
+        playWndLayout = fragmentView.findViewById(R.id.layoutPlayWnd);
+        rvMonitorFun = fragmentView.findViewById(R.id.rv_monitor_fun);
+        wndLayout = fragmentView.findViewById(R.id.wnd_layout);
 
-        tvBatteryState = findViewById(R.id.tv_battery_state);
-        tvWiFiState = findViewById(R.id.tv_wifi_state);
-        tvRate = findViewById(R.id.tv_rate);
+        tvBatteryState = fragmentView.findViewById(R.id.tv_battery_state);
+        tvWiFiState = fragmentView.findViewById(R.id.tv_wifi_state);
+        tvRate = fragmentView.findViewById(R.id.tv_rate);
         initPresetLayout();
 
         autoHideManager = new AutoHideManager();
-        autoHideManager.addView(findViewById(R.id.ll_dev_state));
+        autoHideManager.addView(fragmentView.findViewById(R.id.ll_dev_state));
         autoHideManager.show();
 
         // Initialize TabLayout and ViewPager2
-        tabLayout = findViewById(R.id.tab_layout);
-        viewPager = findViewById(R.id.pager);
+        tabLayout = fragmentView.findViewById(R.id.tab_layout);
+        viewPager = fragmentView.findViewById(R.id.pager);
 
-        cameraImg = findViewById(R.id.camera);
-        videoImg = findViewById(R.id.video);
-        soundImg = findViewById(R.id.sound);
-        sdImag = findViewById(R.id.sd);
-        microphoneImg = findViewById(R.id.microphone);
-        rotateScreen = findViewById(R.id.rotate_icon);
-        openSetting = findViewById(R.id.settings_icon);
-        backImage = findViewById(R.id.settings_icon);
-        dName = findViewById(R.id.device_name);
-        mainButtonsLl = findViewById(R.id.main_buttons_ll);
+        cameraImg = fragmentView.findViewById(R.id.camera);
+        videoImg = fragmentView.findViewById(R.id.video);
+        soundImg = fragmentView.findViewById(R.id.sound);
+        sdImag = fragmentView.findViewById(R.id.sd);
+        microphoneImg = fragmentView.findViewById(R.id.microphone);
+        rotateScreen = fragmentView.findViewById(R.id.rotate_icon);
+        openSetting = fragmentView.findViewById(R.id.settings_icon);
+        backImage = fragmentView.findViewById(R.id.settings_icon);
+        dName = fragmentView.findViewById(R.id.device_name);
+        mainButtonsLl = fragmentView.findViewById(R.id.main_buttons_ll);
 
-        cameraImg.setOnClickListener(new OnClickListener() {
+        cameraImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
             }
         });
-        videoImg.setOnClickListener(new OnClickListener() {
+        videoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), true);
             }
         });
-        soundImg.setOnClickListener(new OnClickListener() {
+        soundImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), true);
             }
         });
-        sdImag.setOnClickListener(new OnClickListener() {
+        sdImag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(sdImag.getTag().toString()), true);
             }
         });
 
-        microphoneImg.setOnClickListener(new OnClickListener() {
+        microphoneImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(microphoneImg.getTag().toString()), true);
             }
         });
 
-        rotateScreen.setOnClickListener(new OnClickListener() {
+        rotateScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
                     dealWithMonitorFunction(9, true);
                 } else {
-                    screenOrientationManager.portraitScreen(DevMonitorActivity.this, true);
+                    screenOrientationManager.portraitScreen(activity, true);
                 }
             }
         });
 
-        openSetting.setOnClickListener(new OnClickListener() {
+        openSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(DevMonitorActivity.this, DeviceSetting.class);
+                Intent i = new Intent(activity, DeviceSetting.class);
                 startActivity(i);
             }
         });
         // Set up the ViewPager2 Adapter
-        viewPager.setAdapter(new DeviceViewPagerAdapter(this));
+        viewPager.setAdapter(new DeviceViewPagerAdapter(activity));
         historyTracker = new HistoryTracker();
         historyTracker.trackPageChange(viewPager);
 
@@ -629,7 +617,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
         mHomeClickReceiver = new MyHomeClickReceiver();
 
-        initSensorView();
+        initSensorView(fragmentView);
     }
 
     /**
@@ -823,15 +811,15 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     /**
      * 初始化Sensor切换布局(多目变倍)
      */
-    private void initSensorView() {
-        sbVideoScale = findViewById(R.id.sb_video_scale);
+    private void initSensorView(View fragmentView) {
+        sbVideoScale = fragmentView.findViewById(R.id.sb_video_scale);
         sbVideoScale.setOnScaleSeekBarListener(new XMScaleSeekBar.OnScaleSeekBarListener() {
             @Override
             public void onItemSelected(int progress, boolean isTouchUp) {
                 if (isTouchUp) {
                     MonitorManager monitorManager = presenter.getCurSelMonitorManager(playWndLayout.getSelectedId());
                     if (monitorManager != null) {
-                        SPUtil.getInstance(DevMonitorActivity.this).setSettingParam(LAST_CHANGE_SCALE_TIMES + presenter.getDevId(), (float) (progress * ((float) 1 / sbVideoScale.getSmallSubCount())));
+                        SPUtil.getInstance(activity).setSettingParam(LAST_CHANGE_SCALE_TIMES + presenter.getDevId(), (float) (progress * ((float) 1 / sbVideoScale.getSmallSubCount())));
                         sensorChangePresenter.ctrlVideoScaleWhenUp(monitorManager, progress, -1, 1);
                     }
                 }
@@ -843,14 +831,14 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
      * 初始化数据
      */
     private void initData() {
-        Intent intent = getIntent();
+        Intent intent = activity.getIntent();
         if (intent == null) {
-            finish();
+            activity.finish();
             return;
         }
 
         chnCount = intent.getIntExtra("chnCount", 1);
-        titleBar.setTitleText(getString(R.string.channel) + ":" + presenter.getChnId());
+//        titleBar.setTitleText(getString(R.string.channel) + ":" + presenter.getChnId());
         presenter.setChnId(0);
         devId = presenter.getDevId();
         chId = presenter.getChnId();
@@ -862,7 +850,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         }
 
         monitorFunAdapter = new MonitorFunAdapter();
-        rvMonitorFun.setLayoutManager(new GridLayoutManager(this, 4));
+        rvMonitorFun.setLayoutManager(new GridLayoutManager(activity, 4));
         rvMonitorFun.setAdapter(monitorFunAdapter);
 
         screenOrientationManager = ScreenOrientationManager.getInstance();
@@ -870,10 +858,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getContext().registerReceiver(mHomeClickReceiver, filter, RECEIVER_NOT_EXPORTED);
+            activity.registerReceiver(mHomeClickReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
         } else {
-            registerReceiver(mHomeClickReceiver, filter);
-
+            activity.registerReceiver(mHomeClickReceiver, filter);
         }
         sensorChangePresenter = new SensorChangePresenter(this);
     }
@@ -884,21 +871,21 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
      * onResume->manager.loginDev（）-> initData()-> manager.getDevAbility() -> getDevWiFiSignalLevel() ->iDevMonitorView.onWiFiSignalLevelResult() -> Setting the wifi Level
      **/
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (!isHomePress) {
-            showWaitDialog();
-            presenter.loginDev();
+//            showWaitDialog();
+//            presenter.loginDev();
         }
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         for (int i = 0; i < chnCount && i < playViews.length; ++i) {
             presenter.stopMonitor(i);
@@ -908,7 +895,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         for (int i = 0; i < chnCount && i < playViews.length; ++i) {
@@ -916,18 +903,18 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         }
 
         if (screenOrientationManager != null) {
-            screenOrientationManager.release(this);
+            screenOrientationManager.release(activity);
         }
 
         //如果是低功耗设备，退出预览的时候需要发起休眠命令
         if (DevDataCenter.getInstance().isLowPowerDev(presenter.getDevId())) {
-            IDRManager.sleepNow(this, presenter.getDevId());
+            IDRManager.sleepNow(activity, presenter.getDevId());
         }
 
         presenter.release();
 
         if (mHomeClickReceiver != null) {
-            unregisterReceiver(mHomeClickReceiver);
+            activity.unregisterReceiver(mHomeClickReceiver);
         }
         if (handler != null) {
             handler.removeCallbacks(null);
@@ -963,10 +950,10 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 // To reference the pop-up password input box below, if you don't want to participate in the pop-up dialog, you can follow the steps below:
                 // Step 1: Ask the user to enter the correct password. Once you have the correct password, directly call FunSDK.DevSetLocalPwd(devId, userName, passWord), where devId is the device serial number, userName is the device login name (default is admin), and passWord is the correct password you want to pass.
                 // Step 2: Call presenter.loginDev() again.
-                XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
+                XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-                        showWaitDialog();
+//                        showWaitDialog();
                         presenter.loginDev();
                     }
                 });
@@ -987,7 +974,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     public void onGetDevAbilityResult(SystemFunctionBean systemFunctionBean, int errorId) {
         this.systemFunctionBean = systemFunctionBean;
         monitorFunList.clear();
-        hideWaitDialog();
+//        hideWaitDialog();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("itemId", FUN_VOICE);
         hashMap.put("itemName", getString(R.string.device_setup_encode_audio));
@@ -1153,12 +1140,12 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             monitorFunList.add(hashMap);
 
             //将设备是否支持双目或者三目设备端变倍能力保存到本地
-            SPUtil.getInstance(DevMonitorActivity.this).setSettingParam(SUPPORT_SCALE_TWO_LENS + presenter.getDevId(), systemFunctionBean.OtherFunction.SupportScaleTwoLens);
-            SPUtil.getInstance(DevMonitorActivity.this).setSettingParam(SUPPORT_SCALE_THREE_LENS + presenter.getDevId(), systemFunctionBean.OtherFunction.SupportScaleThreeLens);
+            SPUtil.getInstance(activity).setSettingParam(SUPPORT_SCALE_TWO_LENS + presenter.getDevId(), systemFunctionBean.OtherFunction.SupportScaleTwoLens);
+            SPUtil.getInstance(activity).setSettingParam(SUPPORT_SCALE_THREE_LENS + presenter.getDevId(), systemFunctionBean.OtherFunction.SupportScaleThreeLens);
 
             //将双目或者三目设备 是否需要APP支持变倍的能力保存到本地
-            SPUtil.getInstance(DevMonitorActivity.this).setSettingParam(MULTI_LENS_TWO_SENSOR + presenter.getDevId(), systemFunctionBean.OtherFunction.MultiLensTwoSensor);
-            SPUtil.getInstance(DevMonitorActivity.this).setSettingParam(MULTI_LENS_THREE_SENSOR + presenter.getDevId(), systemFunctionBean.OtherFunction.MultiLensThreeSensor);
+            SPUtil.getInstance(activity).setSettingParam(MULTI_LENS_TWO_SENSOR + presenter.getDevId(), systemFunctionBean.OtherFunction.MultiLensTwoSensor);
+            SPUtil.getInstance(activity).setSettingParam(MULTI_LENS_THREE_SENSOR + presenter.getDevId(), systemFunctionBean.OtherFunction.MultiLensThreeSensor);
             //如果设备支持多目变倍功能 需要显示变倍控件
             if (systemFunctionBean.OtherFunction.SupportScaleThreeLens || systemFunctionBean.OtherFunction.SupportScaleTwoLens) {
                 sbVideoScale.setVisibility(VISIBLE);
@@ -1244,19 +1231,19 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         if (state == E_STATE_PlAY) {
             if (errorId == EFUN_ERROR.EE_DVR_PASSWORD_NOT_VALID) {
                 XMDevInfo devInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-                XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
+                XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-                        showWaitDialog();
+//                        showWaitDialog();
                         presenter.startMonitor(chnId);
                     }
                 });
             } else if (errorId == EFUN_ERROR.EE_DVR_LOGIN_USER_NOEXIST) {
                 XMDevInfo devInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-                XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(), 0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
+                XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-                        showWaitDialog();
+//                        showWaitDialog();
                         presenter.startMonitor(chnId);
                     }
                 }, false);
@@ -1291,7 +1278,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
     @Override
     public void onLightCtrlResult(String jsonData) {
-        XMPromptDlg.onShow(this, jsonData, null);
+        XMPromptDlg.onShow(activity, jsonData, null);
     }
 
     /**
@@ -1388,7 +1375,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
     @Override
     public Context getContext() {
-        return this;
+        return activity;
     }
 
     @Override
@@ -1429,9 +1416,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             sensorChangePresenter.setSmallSubCount(5);
         }
 
-        SPUtil.getInstance(this).setSettingParam(SENSOR_MAX_TIMES + devId, sbVideoScale.getSubCount() + 1);
-        boolean scaleTwo = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_TWO_LENS + devId, false);
-        boolean scaleThree = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_THREE_LENS + devId, false);
+        SPUtil.getInstance(activity).setSettingParam(SENSOR_MAX_TIMES + devId, sbVideoScale.getSubCount() + 1);
+        boolean scaleTwo = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_TWO_LENS + devId, false);
+        boolean scaleThree = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_THREE_LENS + devId, false);
         if (scaleTwo || scaleThree) {
             int curSensorId = 0;
             int streamType = presenter.getCurSelMonitorManager(presenter.getChnId()).getStreamType();
@@ -1479,8 +1466,8 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
      */
     private void updateSensorUIByScale(String devId) {
         sbVideoScale.setProgress(sensorChangePresenter.getProgress());
-        boolean scaleTwo = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_TWO_LENS + devId, false);
-        boolean scaleThree = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_THREE_LENS + devId, false);
+        boolean scaleTwo = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_TWO_LENS + devId, false);
+        boolean scaleThree = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_THREE_LENS + devId, false);
         if (!scaleTwo && !scaleThree) {
             MonitorManager monitorManager = presenter.getCurSelMonitorManager(presenter.getChnId());
             if (sensorChangePresenter.getScaleList() != null) {
@@ -1518,14 +1505,14 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             }
             //双目设备变倍
-            boolean scaleTwo = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_TWO_LENS + playerAttribute.getDevId(), false);
+            boolean scaleTwo = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_TWO_LENS + playerAttribute.getDevId(), false);
             //三目设备变倍
-            boolean scaleThree = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_THREE_LENS + playerAttribute.getDevId(), false);
+            boolean scaleThree = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_THREE_LENS + playerAttribute.getDevId(), false);
             int streamType = monitorManager.getStreamType();
 
             //如果当前的码流类型匹配的话，将当前码流信息帧获取到的倍数保存到本地
             if (multiLensParam.st_3_scaleStream == streamType) {
-                SPUtil.getInstance(this).setSettingParam(LAST_CHANGE_SCALE_TIMES + playerAttribute.getDevId(), multiLensParam.st_4_times);
+                SPUtil.getInstance(activity).setSettingParam(LAST_CHANGE_SCALE_TIMES + playerAttribute.getDevId(), multiLensParam.st_4_times);
             }
 
             if (scaleTwo || scaleThree) {
@@ -1537,7 +1524,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                         sbVideoScale.setProgress((int) (curScale * sbVideoScale.getSmallSubCount()));
                     }
                     //双目设备，根据画面倍数，改变云台转动速率, 记录当前画面倍数
-                    SPUtil.getInstance(this).setSettingParam("IS_TURN_AROUND_SPEED_MULTI" + playerAttribute.getDevId(), curScale);
+                    SPUtil.getInstance(activity).setSettingParam("IS_TURN_AROUND_SPEED_MULTI" + playerAttribute.getDevId(), curScale);
                 }
 
                 //如果是首次获取到码流数据并且当前的码流类型不一致的情况下要进行变倍处理
@@ -1559,12 +1546,12 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     public class MonitorFunAdapter extends RecyclerView.Adapter<MonitorFunAdapter.ViewHolder> {
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_monitor_fun, null));
+        public MonitorFunAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new MonitorFunAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_monitor_fun, null));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull MonitorFunAdapter.ViewHolder holder, int position) {
             HashMap<String, Object> hashMap = monitorFunList.get(position);
             if (hashMap != null) {
                 String itemName = (String) hashMap.get("itemName");
@@ -1595,7 +1582,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 btnMonitorFun = itemView.findViewById(R.id.btn_monitor_fun);
-                btnMonitorFun.setOnClickListener(new OnClickListener() {
+                btnMonitorFun.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int position = getAdapterPosition();
@@ -1665,7 +1652,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 return true;
             case FUN_PTZ://云台控制
             {
-                PtzView contentLayout = (PtzView) LayoutInflater.from(this).inflate(R.layout.view_ptz, null);
+                PtzView contentLayout = (PtzView) LayoutInflater.from(activity).inflate(R.layout.view_ptz, null);
                 if (presenter.isOnlyHorizontal() && !presenter.isOnlyVertically()) {
                     //Horizontal display
                     contentLayout.setOnlyHorizontal(true);
@@ -1693,21 +1680,21 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 });
 
                 showBottomSheet(contentLayout);
-                //XMPromptDlg.onShow(this, contentLayout);
+                //XMPromptDlg.onShow(activity, contentLayout);
                 break;
             }
             case FUN_PTZ_CALIBRATION://云台校正
-                showWaitDialog();
+//                showWaitDialog();
                 presenter.ptzCalibration();
                 break;
             case FUN_INTERCOM: //单向对讲，按下去说话，放开后听到设备端的声音，对话框消失后 对讲结束
             {
-                View layout = LayoutInflater.from(this).inflate(R.layout.view_intercom, null);
+                View layout = LayoutInflater.from(activity).inflate(R.layout.view_intercom, null);
                 RippleButton rippleButton = layout.findViewById(R.id.btn_talk);
 
                 ListSelectItem lsiDoubleTalkSwitch = layout.findViewById(R.id.lsi_double_talk_switch);
                 ListSelectItem lsiTalkBroadcast = layout.findViewById(R.id.lsi_double_talk_broadcast);
-                lsiTalkBroadcast.setOnClickListener(new OnClickListener() {
+                lsiTalkBroadcast.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         lsiTalkBroadcast.setRightImage(lsiTalkBroadcast.getRightValue() == SDKCONST.Switch.Close ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
@@ -1757,7 +1744,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                     }
                 });
 
-                lsiDoubleTalkSwitch.setOnClickListener(new OnClickListener() {
+                lsiDoubleTalkSwitch.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         lsiDoubleTalkSwitch.setRightImage(lsiDoubleTalkSwitch.getRightValue() == SDKCONST.Switch.Close ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
@@ -1773,7 +1760,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
                 ListSelectItem lsiChooseVoice = layout.findViewById(R.id.lsi_choose_voice);
                 lsiChooseVoice.getExtraSpinner().initData(new String[]{getString(R.string.speaker_type_normal), getString(R.string.speaker_type_man), getString(R.string.speaker_type_woman)}, new Integer[]{SPEAKER_TYPE_NORMAL, SPEAKER_TYPE_MAN, SPEAKER_TYPE_WOMAN});
-                lsiChooseVoice.setOnClickListener(new OnClickListener() {
+                lsiChooseVoice.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         lsiChooseVoice.toggleExtraView();
@@ -1788,7 +1775,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                     }
                 });
 
-                XMPromptDlg.onShow(this, layout, true, new DialogInterface.OnDismissListener() {
+                XMPromptDlg.onShow(activity, layout, true, new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         presenter.stopIntercom(presenter.getChnId());
@@ -1797,15 +1784,15 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             }
             break;
             case FUN_PLAYBACK://录像回放
-                turnToActivity(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
+//                turnToActivity(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
 
                 break;
             case FUN_CHANGE_STREAM://主副码流切换      The primary stream is clearer and the secondary stream is blurry
                 //如果支持多目镜头变倍切换的，等镜头切换或者变倍后再切换码流
                 if (sensorChangePresenter.getSensorCount() > 1 && sbVideoScale.getVisibility() == VISIBLE) {
                     MonitorManager monitorManager = presenter.getCurSelMonitorManager(presenter.getChnId());
-                    boolean scaleTwo = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_TWO_LENS + presenter.getDevId(), false);
-                    boolean scaleThree = SPUtil.getInstance(this).getSettingParam(SUPPORT_SCALE_THREE_LENS + presenter.getDevId(), false);
+                    boolean scaleTwo = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_TWO_LENS + presenter.getDevId(), false);
+                    boolean scaleThree = SPUtil.getInstance(activity).getSettingParam(SUPPORT_SCALE_THREE_LENS + presenter.getDevId(), false);
 
                     int afterChangeStreamType = monitorManager.getStreamType() == SDKCONST.StreamType.Main ? SDKCONST.StreamType.Extra : SDKCONST.StreamType.Main;
                     //是否支持设备端变倍
@@ -1825,12 +1812,12 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 break;
             case FUN_CRUISE://巡航
             {
-                showWaitDialog();
+//                showWaitDialog();
                 presenter.getTour(presenter.getChnId());
                 break;
             }
             case FUN_LANDSCAPE://全屏
-                screenOrientationManager.landscapeScreen(this, true);
+                screenOrientationManager.landscapeScreen(activity, true);
                 break;
             case FUN_FULL_STREAM://满屏显示 视频画面按比例显示
                 if (isSelected) {
@@ -1846,7 +1833,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 turnToActivity(DevPictureActivity.class);
                 break;
             case FUN_DEV_CAPTURE_SAVE://设备端抓图并保存到设备端本地存储，不会将图片回传给APP
-                XMPromptDlg.onShow(this, getString(R.string.not_all_dev_support), new OnClickListener() {
+                XMPromptDlg.onShow(activity, getString(R.string.not_all_dev_support), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         presenter.capturePicFromDevAndSave(presenter.getChnId());
@@ -1857,7 +1844,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 presenter.capturePicFromDevAndToApp(presenter.getChnId());
                 break;
             case FUN_REAL_PLAY://实时预览实时性（局域网IP访问才生效）
-                showWaitDialog();
+//                showWaitDialog();
                 presenter.setRealTimeEnable(isSelected);
 
                 for (int k = 0; k < chnCount && k < playViews.length; ++k) {
@@ -1871,7 +1858,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                         for (int i = 0; i < chnCount && i < playViews.length; ++i) {
                             presenter.startMonitor(i);
                         }
-                        hideWaitDialog();
+//                        hideWaitDialog();
                     }
                 }, 1000);
                 return true;
@@ -1882,18 +1869,18 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 presenter.setVideoFlip(presenter.getChnId());
                 break;
             case FUN_FEET://喂食，默认喂食3份
-                XMPromptDlg.onShowEditDialog(this, getString(R.string.food_portions), "3", new EditDialog.OnEditContentListener() {
+                XMPromptDlg.onShowEditDialog(activity, getString(R.string.food_portions), "3", new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String content) {
                         if (StringUtils.isStringNULL(content)) {
                             ToastUtils.showLong(R.string.input_food_portions);
                         } else {
-                            XMPromptDlg.onShow(DevMonitorActivity.this, getString(R.string.please_sel_feet_type), getString(R.string.feed_the_dog), getString(R.string.feed_the_fish), new OnClickListener() {
+                            XMPromptDlg.onShow(activity, getString(R.string.please_sel_feet_type), getString(R.string.feed_the_dog), getString(R.string.feed_the_fish), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     presenter.feedTheDog(Integer.parseInt(content));
                                 }
-                            }, new OnClickListener() {
+                            }, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     presenter.feedTheFish(Integer.parseInt(content));
@@ -1906,9 +1893,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 break;
             case FUN_IRCUT://irCut反序
             {
-                View layout = LayoutInflater.from(this).inflate(R.layout.view_ircut, null);
+                View layout = LayoutInflater.from(activity).inflate(R.layout.view_ircut, null);
                 ListSelectItem lsiIrCut = layout.findViewById(R.id.lsi_ircut);
-                lsiIrCut.setOnClickListener(new OnClickListener() {
+                lsiIrCut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (presenter.getCameraParamBean() != null) {
@@ -1929,7 +1916,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                     }
                 });
 
-                XMPromptDlg.onShow(this, layout, true, new DialogInterface.OnDismissListener() {
+                XMPromptDlg.onShow(activity, layout, true, new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                     }
@@ -1945,7 +1932,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             }
             break;
             case FUN_RESET://恢复出厂设置
-                XMPromptDlg.onShow(DevMonitorActivity.this, getString(R.string.factory_reset), getString(R.string.only_factory_reset), getString(R.string.factory_reset_and_delete_dev), new OnClickListener() {
+                XMPromptDlg.onShow(activity, getString(R.string.factory_reset), getString(R.string.only_factory_reset), getString(R.string.factory_reset_and_delete_dev), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.factoryReset(new DeviceManager.OnDevManagerListener() {
@@ -1960,7 +1947,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                             }
                         });
                     }
-                }, new OnClickListener() {
+                }, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         presenter.factoryReset(new DeviceManager.OnDevManagerListener() {
@@ -1971,13 +1958,13 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                                 if (DevDataCenter.getInstance().getLoginType() == LOGIN_NONE) {
                                     DevDataCenter.getInstance().removeDev(devId);
                                     showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
-                                    finish();
+                                    activity.finish();
                                 } else {
                                     AccountManager.getInstance().deleteDev(presenter.getDevId(), new BaseAccountManager.OnAccountManagerListener() {
                                         @Override
                                         public void onSuccess(int msgId) {
                                             showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
-                                            finish();
+                                            activity.finish();
                                         }
 
                                         @Override
@@ -2006,12 +1993,12 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 if (!isShowAppMoreScreen) {
                     isOpenPointPtz = !isOpenPointPtz;
                     if (isOpenPointPtz) {
-                        XMPromptDlg.onShow(DevMonitorActivity.this, getString(R.string.camera_point_ptz_tips), null);
+                        XMPromptDlg.onShow(activity, getString(R.string.camera_point_ptz_tips), null);
                     }
 
                     changePlayViewSize();
                 } else {
-                    XMPromptDlg.onShow(this, getString(R.string.is_app_more_screen_not_support_this_function), null);
+                    XMPromptDlg.onShow(activity, getString(R.string.is_app_more_screen_not_support_this_function), null);
                 }
                 return true;
             case FUN_MANUAL_ALARM://手动警戒
@@ -2025,7 +2012,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                         break;
                     //支持低功耗设备灯光能力 / 支持单品智能警戒
                     case LOW_POWER_WHITE_LIGHT_CAMERA:
-                        Intent intent = new Intent(DevMonitorActivity.this, WhiteLightActivity.class);
+                        Intent intent = new Intent(activity, WhiteLightActivity.class);
                         intent.putExtra("devId", presenter.getDevId());
                         intent.putExtra("supportLightSwitch", false);
                         startActivity(intent);
@@ -2033,28 +2020,28 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
                     //支持白光灯
                     case WHITE_LIGHT_CAMERA:
-                        Intent whiteLightIntent = new Intent(DevMonitorActivity.this, WhiteLightActivity.class);
+                        Intent whiteLightIntent = new Intent(activity, WhiteLightActivity.class);
                         whiteLightIntent.putExtra("devId", presenter.getDevId());
                         whiteLightIntent.putExtra("supportLightSwitch", true);
                         startActivity(whiteLightIntent);
                         break;
                     //支持双光
                     case DOUBLE_LIGHT_CAMERA:
-                        Intent doubleLightIntent = new Intent(DevMonitorActivity.this, DoubleLightActivity.class);
+                        Intent doubleLightIntent = new Intent(activity, DoubleLightActivity.class);
                         doubleLightIntent.putExtra("devId", presenter.getDevId());
                         doubleLightIntent.putExtra("supportLightSwitch", true);
                         startActivity(doubleLightIntent);
                         break;
                     //支持音乐灯
                     case MUSIC_LIGHT_CAMERA:
-                        Intent musicLightIntent = new Intent(DevMonitorActivity.this, MusicLightActivity.class);
+                        Intent musicLightIntent = new Intent(activity, MusicLightActivity.class);
                         musicLightIntent.putExtra("devId", presenter.getDevId());
                         musicLightIntent.putExtra("supportLightSwitch", true);
                         startActivity(musicLightIntent);
                         break;
                     //支持庭院双光灯
                     case GARDEN_DOUBLE_LIGHT_CAMERA:
-                        Intent GardenDoubleLightIntent = new Intent(DevMonitorActivity.this, GardenDoubleLightActivity.class);
+                        Intent GardenDoubleLightIntent = new Intent(activity, GardenDoubleLightActivity.class);
                         GardenDoubleLightIntent.putExtra("devId", presenter.getDevId());
                         startActivity(GardenDoubleLightIntent);
                         break;
@@ -2073,7 +2060,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 break;
             case FUN_SHOW_APP_ZOOMING://APP软变倍
                 if (!(presenter.getCurSelMonitorManager(presenter.getChnId()).getSurfaceView() instanceof GLSurfaceView20)) {
-                    XMPromptDlg.onShow(this, getString(R.string.this_function_only_glsurfaceview), null);
+                    XMPromptDlg.onShow(activity, getString(R.string.this_function_only_glsurfaceview), null);
                     break;
                 }
 
@@ -2083,7 +2070,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                     //推荐真实倍数3倍，显示放大倍数6倍，最好可以整除，显示倍数大于真实倍数
                     int maxTimes = 3;
                     int maxTimesShow = 6;
-                    float scale = SPUtil.getInstance(DevMonitorActivity.this).getSettingParam(LAST_CHANGE_SCALE_TIMES + presenter.getDevId(), 0f);
+                    float scale = SPUtil.getInstance(activity).getSettingParam(LAST_CHANGE_SCALE_TIMES + presenter.getDevId(), 0f);
                     sbVideoScale.setProgress((int) (scale * sbVideoScale.getSmallSubCount()));
                     sbVideoScale.setSubCount(maxTimesShow - 1);
 
@@ -2131,11 +2118,11 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
                     changePlayViewSize();
                 } else {
-                    XMPromptDlg.onShow(this, getString(R.string.is_open_point_ptz_not_support_this_function), null);
+                    XMPromptDlg.onShow(activity, getString(R.string.is_open_point_ptz_not_support_this_function), null);
                 }
                 return true;
             default:
-                Toast.makeText(DevMonitorActivity.this, getString(R.string.not_support_tip), Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, getString(R.string.not_support_tip), Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -2148,9 +2135,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     private void changePlayViewSize() {
         ViewGroup.LayoutParams layoutParams = wndLayout.getLayoutParams();
         if (isOpenPointPtz || isShowAppMoreScreen) {
-            layoutParams.height = XUtils.getScreenWidth(DevMonitorActivity.this) * 18 / 16;
+            layoutParams.height = XUtils.getScreenWidth(activity) * 18 / 16;
         } else {
-            layoutParams.height = XUtils.getScreenWidth(DevMonitorActivity.this) * 9 / 16;
+            layoutParams.height = XUtils.getScreenWidth(activity) * 9 / 16;
         }
 
         wndLayout.setLayoutParams(layoutParams);
@@ -2160,7 +2147,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏
-            titleBar.setVisibility(View.GONE);
+//            titleBar.setVisibility(View.GONE);
             rvMonitorFun.setVisibility(View.GONE);
             portraitWidth = wndLayout.getWidth();
             portraitHeight = wndLayout.getHeight();
@@ -2169,7 +2156,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
             wndLayout.requestLayout();
             presenter.setPlayViewTouchable(0, true);
-            SharedPreference cookies = new SharedPreference(getApplication());
+            SharedPreference cookies = new SharedPreference(activity.getApplication());
             cookies.retrievDevName();
             dName.setText(cookies.retrievDevName());
 
@@ -2209,16 +2196,16 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         super.onConfigurationChanged(newConfig);
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             screenOrientationManager.portraitScreen(this, true);
             super.onBackPressed();
         } else {
-            finish();
+            activity.finish();
             super.onBackPressed();
         }
-    }
+    }*/
 
     class PresetViewHolder {
         /**
@@ -2348,7 +2335,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             });
 
-            btnTurnToPresetList.setOnClickListener(new OnClickListener() {
+            btnTurnToPresetList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     turnToActivity(PresetListActivity.class);
@@ -2367,7 +2354,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
 
     }
 
-    @Override
+    /*@Override
     protected void onRestart() {
         super.onRestart();
         if (isHomePress) {
@@ -2377,7 +2364,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 startActivityForResult(intent, 0);
             }
         }
-    }
+    }*/
 
     @Override
     public void onChangeManualAlarmResult(boolean isSuccess, int errorId) {
@@ -2396,7 +2383,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             showToast(getString(R.string.libfunsdk_operation_failed), Toast.LENGTH_LONG);
         }
 
-        hideWaitDialog();
+//        hideWaitDialog();
     }
 
     /**
@@ -2407,9 +2394,9 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
      */
     @Override
     public void onShowTour(List<TourBean> tourBeans, int errorId) {
-        hideWaitDialog();
+//        hideWaitDialog();
         if (errorId == 0) {
-            LinearLayout contentLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.view_criuse, null);
+            LinearLayout contentLayout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.view_criuse, null);
             BtnColorBK btnOne = contentLayout.findViewById(R.id.btn_keypad_1);
             BtnColorBK btnTwo = contentLayout.findViewById(R.id.btn_keypad_2);
             BtnColorBK btnThree = contentLayout.findViewById(R.id.btn_keypad_3);
@@ -2430,7 +2417,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             }
 
-            btnOne.setOnClickListener(new OnClickListener() {
+            btnOne.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dealWithTourCtrl(252);
@@ -2445,7 +2432,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             });
 
-            btnTwo.setOnClickListener(new OnClickListener() {
+            btnTwo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dealWithTourCtrl(253);
@@ -2460,7 +2447,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             });
 
-            btnThree.setOnClickListener(new OnClickListener() {
+            btnThree.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dealWithTourCtrl(254);
@@ -2475,14 +2462,14 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
                 }
             });
 
-            btnStartCruise.setOnClickListener(new OnClickListener() {
+            btnStartCruise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     presenter.startTour(0);
                 }
             });
 
-            btnStopCruise.setOnClickListener(new OnClickListener() {
+            btnStopCruise.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     presenter.stopTour(0);
@@ -2498,26 +2485,26 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             });
 
 
-            tourDlg = XMPromptDlg.onShow(this, contentLayout);
+            tourDlg = XMPromptDlg.onShow(activity, contentLayout);
         }
     }
 
     @Override
     public void onTourCtrlResult(boolean isSuccess, int tourCmd, int errorId) {
         if (isSuccess) {
-            Toast.makeText(this, getString(R.string.libfunsdk_operation_success), Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getString(R.string.libfunsdk_operation_success), Toast.LENGTH_LONG).show();
             if (tourCmd == PresetManager.PRESET_ADD_TOUR || tourCmd == PresetManager.PRESET_DELETE_TOUR) {
                 tourDlg.dismiss();
                 presenter.getTour(0);
             }
         } else {
-            Toast.makeText(this, getString(R.string.libfunsdk_operation_failed), Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, getString(R.string.libfunsdk_operation_failed), Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onTourEndResult() {
-        Toast.makeText(this, R.string.tour_end, Toast.LENGTH_LONG).show();
+        Toast.makeText(activity, R.string.tour_end, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -2536,7 +2523,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             }
         }
 
-        XMPromptDlg.onShow(DevMonitorActivity.this, "是否设置巡航点?", new OnClickListener() {
+        XMPromptDlg.onShow(activity, "是否设置巡航点?", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.addTour(0, presetId);
@@ -2555,7 +2542,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
             for (TourBean tourBean : tourBeans) {
                 if (tourBean != null) {
                     if (tourBean.Id == presetId) {//判断巡航点是否设置了
-                        XMPromptDlg.onShow(DevMonitorActivity.this, "确定删除该巡航点?", new OnClickListener() {
+                        XMPromptDlg.onShow(activity, "确定删除该巡航点?", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 presenter.deleteTour(0, presetId);
@@ -2574,23 +2561,21 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
      * 监听home键的按下
      */
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             showWaitDialog();
             presenter.loginDev();
         } else {
-            finish();
+            activity.finish();
         }
-    }
-
-
+    }*/
     @Override
     public void onFeatureClicked(String featureName) {
-        //Toast.makeText(this, "Feature clicked: " + featureName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(activity, "Feature clicked: " + featureName, Toast.LENGTH_SHORT).show();
         if (featureName.equals("battery")) {
-            Intent i = new Intent(this, AovSettingActivity.class);
+            Intent i = new Intent(activity, AovSettingActivity.class);
             i.putExtra("devId", presenter.getDevId());
             startActivity(i);
 
@@ -2717,7 +2702,7 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_RL);
 
         // Create a BottomSheetDialog
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.CustomBottomSheetDialog);
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.getWindow().setDimAmount(0f);
 
@@ -2765,5 +2750,10 @@ public class DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> im
         // Show the Bottom Sheet
         bottomSheetDialog.show();
     }
-}
 
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        this.activity = (DevActivity) activity;
+        super.onAttach(activity);
+    }
+}
