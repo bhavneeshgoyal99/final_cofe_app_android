@@ -97,7 +97,13 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
         findViewById(R.id.push_device_item).setOnClickListener(v -> openPushNotificatioNSetting());
         findViewById(R.id.advanced_device_item).setOnClickListener(v -> openAdvanceSetting());
         dTxtv = findViewById(R.id.dname_txtv);
-        dTxtv.setText(xmDevInfo.getDevName());
+        try {
+            dTxtv.setText(xmDevInfo.getDevName());
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            Toast.makeText(getContext(),"device id not found", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void setDimBackground(Activity activity, float dimAmount) {
@@ -213,7 +219,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
     }
 
     private void openLanguageSettings() {
-        Toast.makeText(this, "Language Settings clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Language Settings clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
         Intent intent = new Intent();
         intent.setClass(DeviceSetting.this, DeviceConfigActivity.class);
@@ -228,7 +234,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
     }
 
     private void openWorkingModeSettings() {
-        Toast.makeText(this, "Working Mode Settings clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Working Mode Settings clicked", Toast.LENGTH_SHORT).show();
 
         Intent i= new Intent(this, AovSettingActivity.class);
         i.putExtra("devId",xmDevInfo.getDevId());
@@ -238,7 +244,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
     }
 
     private void openSmartAlarmSettings() {
-        Toast.makeText(this, "Smart Alarm clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Smart Alarm clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
         Intent intent = new Intent(this, DevAlarmSetActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
@@ -247,13 +253,13 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
     }
 
     private void openCloudStorageSettings() {
-        Toast.makeText(this, "Cloud Storage clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Cloud Storage clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
 
     }
 
     private void openAddToDesktopSettings() {
-        Toast.makeText(this, "Add to Desktop clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Add to Desktop clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
     }
 
@@ -290,10 +296,10 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
         //hideWaitDialog();
         if (isSuccess) {
-            Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
+            //Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
 
         } else {
-            Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_F), Toast.LENGTH_LONG);
+           // Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_F), Toast.LENGTH_LONG);
         }
     }
 

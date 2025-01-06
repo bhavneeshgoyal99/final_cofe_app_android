@@ -328,6 +328,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     boolean isAOVDevice;
     boolean isLoadCompleteFirstTime = false;
     int playerWindowCount = 0;
+    ImageView backArrowImg;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -394,7 +396,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         // Initialize icons
         LinearLayout cloudStorageIcon = findViewById(R.id.icon_cloud_storage);
         LinearLayout aiIcon = findViewById(R.id.icon_ai);
-        LinearLayout alarmIcon = findViewById(R.id.icon_alarm);
+        LinearLayout stobeIcon = findViewById(R.id.icon_alarm);
 
         LinearLayout icon_motion_tracking = findViewById(R.id.icon_motion_tracking);
         icon_ptz = findViewById(R.id.icon_ptz);
@@ -415,53 +417,51 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         });
 
         aiIcon.setOnClickListener(v -> {
-                onFeatureClicked(aiIcon.getTag().toString());
+            onFeatureClicked(aiIcon.getTag().toString());
         });
 
-        alarmIcon.setOnClickListener(v -> {
-                onFeatureClicked(alarmIcon.getTag().toString());
+        stobeIcon.setOnClickListener(v -> {
+            onFeatureClicked(stobeIcon.getTag().toString());
         });
 
         icon_motion_tracking.setOnClickListener(v -> {
-                onFeatureClicked(icon_motion_tracking.getTag().toString());
+            onFeatureClicked(icon_motion_tracking.getTag().toString());
         });
 
         icon_ptz.setOnClickListener(v -> {
-                onFeatureClicked(icon_ptz.getTag().toString());
+            onFeatureClicked(icon_ptz.getTag().toString());
         });
 
 
         icon_favorites.setOnClickListener(v -> {
-                onFeatureClicked(icon_favorites.getTag().toString());
+            onFeatureClicked(icon_favorites.getTag().toString());
         });
 
 
         icon_med_tracking.setOnClickListener(v -> {
-                onFeatureClicked(icon_med_tracking.getTag().toString());
+            onFeatureClicked(icon_med_tracking.getTag().toString());
         });
-
 
         icon_ptz_reverse.setOnClickListener(v -> {
-                onFeatureClicked(icon_ptz_reverse.getTag().toString());
+            onFeatureClicked(icon_ptz_reverse.getTag().toString());
         });
 
-
         icon_sd_card_alb.setOnClickListener(v -> {
-                onFeatureClicked(icon_sd_card_alb.getTag().toString());
+            onFeatureClicked(icon_sd_card_alb.getTag().toString());
         });
 
         zoom.setOnClickListener(v -> {
-                onFeatureClicked(zoom.getTag().toString());
+            onFeatureClicked(zoom.getTag().toString());
         });
 
-
         imageListLl.setOnClickListener(v -> {
-                onFeatureClicked(imageListLl.getTag().toString());
+            onFeatureClicked(imageListLl.getTag().toString());
         });
 
         battery.setOnClickListener(v -> {
-                onFeatureClicked(battery.getTag().toString());
+            onFeatureClicked(battery.getTag().toString());
         });
+
         checkAOVBattery(false);
 
     }
@@ -619,6 +619,13 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
         }).attach();
 
+        findViewById(R.id.back_arrow_img).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
         mHomeClickReceiver = new MyHomeClickReceiver();
 
@@ -641,113 +648,119 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         playerWindowCount = wndCount;
 
         playViews = playWndLayout.setViewCount(wndCount);
-        playWndLayout.setOnMultiWndListener(new MultiWinLayout.OnMultiWndListener() {
-            @Override
-            public boolean isDisableToChangeWndSize(int i) {
-                int orientation = getResources().getConfiguration().orientation;
-                return isShowAppMoreScreen && orientation == Configuration.ORIENTATION_PORTRAIT;//如果是APP的假多目效果，则禁止多窗口双击切换
-            }
-
-            @Override
-            public boolean onTouchEvent(int wndId, MotionEvent motionEvent) {
-                return false;
-            }
-
-            @Override
-            public boolean onSingleWnd(int i, MotionEvent motionEvent, boolean b) {
-                //如果当前是假多目模式，默认是通道0
-                if (isShowAppMoreScreen) {
-                    presenter.setChnId(0);
-                } else {
-                    presenter.setChnId(i);
+        try {
+            playWndLayout.setOnMultiWndListener(new MultiWinLayout.OnMultiWndListener() {
+                @Override
+                public boolean isDisableToChangeWndSize(int i) {
+                    int orientation = getResources().getConfiguration().orientation;
+                    return isShowAppMoreScreen && orientation == Configuration.ORIENTATION_PORTRAIT;//如果是APP的假多目效果，则禁止多窗口双击切换
                 }
-                return false;
-            }
 
-            @Override
-            public boolean onSelectedWnd(int i, MotionEvent motionEvent, boolean isSelected) {
-                //如果当前是假多目模式，默认是通道0
-                if (isShowAppMoreScreen) {
-                    presenter.setChnId(0);
-                } else {
-                    if (isSelected) {
+                @Override
+                public boolean onTouchEvent(int wndId, MotionEvent motionEvent) {
+                    return false;
+                }
+
+                @Override
+                public boolean onSingleWnd(int i, MotionEvent motionEvent, boolean b) {
+                    //如果当前是假多目模式，默认是通道0
+                    if (isShowAppMoreScreen) {
+                        presenter.setChnId(0);
+                    } else {
                         presenter.setChnId(i);
                     }
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onSingleTapUp(int i, MotionEvent motionEvent, boolean b) {
-                return false;
-            }
-
-            @Override
-            public boolean onSingleTapConfirmed(int i, MotionEvent motionEvent, boolean b) {
-                if (autoHideManager.isVisible()) {
-                    autoHideManager.hide();
-                } else {
-                    autoHideManager.show();
+                    return false;
                 }
 
-                if (isOpenPointPtz) {
-                    // 上下分屏的时候 打开指哪看哪才会触发
-                    // "When in split-screen mode, triggering 'point-to-view' will activate the view corresponding to the direction pointed at."
-
-                    // 点击相对x坐标
-                    // "Click on the relative X coordinate."
-                    float x = motionEvent.getX();
-                    // 点击相对y坐标
-                    // "Click on the relative Y coordinate."
-                    float y = motionEvent.getY();
-                    int xOffset = 0;
-                    int yOffset = 0;
-
-                    // 按照上半视频中心点划分距离 总共步长范围为 -4096 到 4096
-                    // "Divide the distance based on the center point of the upper half of the video. The total step range is from -4096 to 4096."
-                    xOffset = (int) (x * 8192 / playWndLayout.getWidth() - 4096);
-
-                    // 按照上半视频中心点划分距离 总共步长范围为 -4096 到 4096
-                    // "Divide the distance based on the center point of the upper half of the video. The total step range is from -4096 to 4096."
-                    yOffset = -(int) (y * 8192 / (playWndLayout.getHeight() / 2) - 4096);
-                    Log.d("dzc", "xoffset:" + xOffset + "  yoffset:" + yOffset);
-                    if (xOffset >= -4096 && xOffset <= 4096 && yOffset >= -4096 && yOffset <= 4096) {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("Name", "OPPtzLocate");
-                        JSONObject object = new JSONObject();
-                        object.put("xoffset", xOffset);
-                        object.put("yoffset", yOffset);
-                        JSONArray jsonArray = new JSONArray();
-                        jsonArray.add(object);
-                        jsonObject.put("OPPtzLocate", jsonArray);
-
-                        presenter.setPointPtz(jsonObject.toString());
-
-
+                @Override
+                public boolean onSelectedWnd(int i, MotionEvent motionEvent, boolean isSelected) {
+                    //如果当前是假多目模式，默认是通道0
+                    if (isShowAppMoreScreen) {
+                        presenter.setChnId(0);
+                    } else {
+                        if (isSelected) {
+                            presenter.setChnId(i);
+                        }
                     }
+                    return false;
+                }
+
+                @Override
+                public boolean onSingleTapUp(int i, MotionEvent motionEvent, boolean b) {
+                    return false;
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(int i, MotionEvent motionEvent, boolean b) {
+                    try {
+                        if (autoHideManager.isVisible()) {
+                            autoHideManager.hide();
+                        } else {
+                            autoHideManager.show();
+                        }
+
+                        if (isOpenPointPtz) {
+                            // 上下分屏的时候 打开指哪看哪才会触发
+                            // "When in split-screen mode, triggering 'point-to-view' will activate the view corresponding to the direction pointed at."
+
+                            // 点击相对x坐标
+                            // "Click on the relative X coordinate."
+                            float x = motionEvent.getX();
+                            // 点击相对y坐标
+                            // "Click on the relative Y coordinate."
+                            float y = motionEvent.getY();
+                            int xOffset = 0;
+                            int yOffset = 0;
+
+                            // 按照上半视频中心点划分距离 总共步长范围为 -4096 到 4096
+                            // "Divide the distance based on the center point of the upper half of the video. The total step range is from -4096 to 4096."
+                            xOffset = (int) (x * 8192 / playWndLayout.getWidth() - 4096);
+
+                            // 按照上半视频中心点划分距离 总共步长范围为 -4096 到 4096
+                            // "Divide the distance based on the center point of the upper half of the video. The total step range is from -4096 to 4096."
+                            yOffset = -(int) (y * 8192 / (playWndLayout.getHeight() / 2) - 4096);
+                            Log.d("dzc", "xoffset:" + xOffset + "  yoffset:" + yOffset);
+                            if (xOffset >= -4096 && xOffset <= 4096 && yOffset >= -4096 && yOffset <= 4096) {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("Name", "OPPtzLocate");
+                                JSONObject object = new JSONObject();
+                                object.put("xoffset", xOffset);
+                                object.put("yoffset", yOffset);
+                                JSONArray jsonArray = new JSONArray();
+                                jsonArray.add(object);
+                                jsonObject.put("OPPtzLocate", jsonArray);
+
+                                presenter.setPointPtz(jsonObject.toString());
+
+
+                            }
+                        }
+
+
+                        MonitorManager monitorManager = presenter.getCurSelMonitorManager(playWndLayout.getSelectedId());
+                        if (monitorManager != null) {
+                            dealWithVideoScale(monitorManager.getScale());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        recreate();
+                    }
+                    return false;
                 }
 
 
-                MonitorManager monitorManager = presenter.getCurSelMonitorManager(playWndLayout.getSelectedId());
-                if (monitorManager != null) {
-                    dealWithVideoScale(monitorManager.getScale());
+                @Override
+                public boolean onDoubleTap(View view, MotionEvent motionEvent) {
+                    return false;
                 }
-                return false;
-            }
 
+                @Override
+                public void onLongPress(View view, MotionEvent motionEvent) {
 
-            @Override
-            public boolean onDoubleTap(View view, MotionEvent motionEvent) {
-                return false;
-            }
+                }
 
-            @Override
-            public void onLongPress(View view, MotionEvent motionEvent) {
-
-            }
-
-            @Override
-            public void onFling(View view, MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                @Override
+                public void onFling(View view, MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
 //                float x = motionEvent1.getX() - motionEvent.getX();
 //                float y = motionEvent1.getY() - motionEvent.getY();
 //                int chnId = view.getId();
@@ -802,8 +815,12 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 //                        }
 //                    }
 //                }
-            }
-        });
+                }
+            });
+        } catch ( Exception e) {
+            e.printStackTrace();
+            recreate();
+        }
     }
 
     /**
@@ -1277,11 +1294,16 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         }
 
         //onFeatureClicked(""+FUN_APP_OBJ_EFFECT);
-        monitorFunAdapter.changeBtnState(FUN_CHANGE_STREAM, presenter.getStreamType(attribute.getChnnel()) == SDKCONST.StreamType.Main);
-        if(!isLoadCompleteFirstTime) {
-            checkAOVBattery(true);
+        try {
+            monitorFunAdapter.changeBtnState(FUN_CHANGE_STREAM, presenter.getStreamType(attribute.getChnnel()) == SDKCONST.StreamType.Main);
+            if (!isLoadCompleteFirstTime) {
+                checkAOVBattery(true);
+            }
+            isLoadCompleteFirstTime = true;
+        }catch ( Exception e){
+            e.printStackTrace();
+            recreate();
         }
-        isLoadCompleteFirstTime = true;
 
     }
 
@@ -1656,10 +1678,10 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 }
                 Glide.with(this).
                         load((isSelected)
-                              ? getResources().getDrawable(R.drawable.video_icon, null)
-                              : getResources().getDrawable( R.drawable.active_video,null)
+                                ? getResources().getDrawable(R.drawable.video_icon, null)
+                                : getResources().getDrawable( R.drawable.active_video,null)
                         )
-                .into(videoImg);
+                        .into(videoImg);
 
                 return true;
             case FUN_PTZ://云台控制
@@ -2732,14 +2754,14 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         parentLL.addView(viewToAdd, layoutParams);
 
         BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
-	
-    	viewToAdd.setOnTouchListener((v, event) -> {
-	    	behavior.setDraggable(true);  // Re-enable dragging
+
+        viewToAdd.setOnTouchListener((v, event) -> {
+            behavior.setDraggable(true);  // Re-enable dragging
             return false;
         });
 
 
-	    viewToAdd.setOnTouchListener((v, event) -> {
+        viewToAdd.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 behavior.setDraggable(false);  // Disable dragging
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -2783,4 +2805,3 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         bottomSheetDialog.show();
     }
 }
-

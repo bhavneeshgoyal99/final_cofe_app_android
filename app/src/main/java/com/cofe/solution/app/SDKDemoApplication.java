@@ -170,7 +170,8 @@ public class SDKDemoApplication extends Application {
             setLan = "ru_CN.txt";//俄语 Russian
         }
 
-        XMFunSDKManager.initLanguage(this, getAssets(), "language/" + setLan);
+        //XMFunSDKManager.initLanguage(this, getAssets(), "language/" + setLan);
+        XMFunSDKManager.initLanguage(this, getAssets(), "language/" + "it_US.txt");
     }
 
     /**

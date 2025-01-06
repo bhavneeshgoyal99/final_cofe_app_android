@@ -158,7 +158,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                             });//LOGIN_BY_INTERNET（1）  Account login type
 
                 } else {
-
+                    finish();
+                    startActivity(new Intent(this, UserLoginActivity.class));
                 }
 
             }
@@ -428,7 +429,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         super.onRestart();
         if (adapter != null) {
             if(presenter!=null) {
-
                 if(DevDataCenter.getInstance().getAccountUserName()!=null) {
                     if(DevDataCenter.getInstance().getAccessToken()==null) {
                         AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
@@ -475,6 +475,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
                     }
 
+                } else {
+                    finish();
+                    startActivity(new Intent(this, UserLoginActivity.class));
                 }
 
 

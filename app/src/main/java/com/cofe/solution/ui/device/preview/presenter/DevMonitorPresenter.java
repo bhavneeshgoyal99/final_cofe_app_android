@@ -435,7 +435,6 @@ public class DevMonitorPresenter extends XMBasePresenter<DeviceManager> implemen
             mediaManager = monitorManagers.get(chnId);
         }
 
-        //设置设备列表缩略图保存路径，必须要在视频出图之前调用,传入的路径建议使用私有目录，如果使用外部存储的话，在Android 11及以上系统上需要MANAGE_EXTERNAL_STORAGE这个权限
 //        mediaManager.setSaveThumbnailPath(SDKDemoApplication.PATH_PHOTO_TEMP);
         //设置媒体播放监听（包括播放状态回调、实时码流、时间戳回调等）
         mediaManager.setOnMediaManagerListener(this);

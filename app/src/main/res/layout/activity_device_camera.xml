@@ -79,14 +79,14 @@
         <LinearLayout
             android:id="@+id/top_nav_bar"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="8dp"
             android:visibility="visible"
             >
 
             <ImageButton
-                android:id="@+id/back_arrow_white"
+                android:id="@+id/back_arrow_img"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/back_arrow_icon_white"
@@ -105,24 +105,15 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 />
-
-
-            <!-- Settings Icon -->
-
         </LinearLayout>
-        <LinearLayout
+        <!-- Settings Icon -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_alignParentRight="true"
             >
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="240dp"
-                android:layout_weight=".9"
-                />
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="240dp"
@@ -157,7 +148,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 

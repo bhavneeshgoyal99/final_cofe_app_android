@@ -1,6 +1,5 @@
 package com.cofe.solution.ui.activity;
 
-import static android.Manifest.permission.CHANGE_WIFI_MULTICAST_STATE;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -96,7 +95,7 @@ public class MainActivity extends DemoBaseActivity<MainPresenter> implements Mai
      * Access to SD card read and write permissions, vibration permissions, recording permissions, etc
      */
     @NeedsPermission({Manifest.permission.VIBRATE
-            , Manifest.permission.RECORD_AUDIO, CHANGE_WIFI_MULTICAST_STATE})
+            , Manifest.permission.RECORD_AUDIO})
     protected void initData() {
         allowMulticast();
     }

@@ -75,7 +75,23 @@ public class SharedPreference {
 
     public void deleteDevName() {
         SharedPreferences.Editor editor = sharedPreference.edit();
-        editor.remove("login_status");
+        editor.remove("dev_name");
+        editor.apply();
+    }
+
+    public void saveDevPreviewReloadCount(int count) {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.putInt("dev_preview_load_count",count);
+        editor.apply();
+    }
+
+    public Integer retrievPreviewReloadCount() {
+        return sharedPreference.getInt("dev_preview_load_count",0);
+    }
+
+    public void deletePreviewReloadCount() {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.remove("dev_preview_load_count");
         editor.apply();
     }
 
