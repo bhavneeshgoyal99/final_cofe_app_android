@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -16,7 +16,8 @@
         app:elevation="0dp"
         app:liftOnScroll="false"
         android:translationZ="0.1dp"
-        android:stateListAnimator="@null">
+        android:stateListAnimator="@null"
+        android:visibility="gone">
 
 
 
@@ -36,12 +37,39 @@
         layout="@layout/include_title_layout"
         />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/topview_rl"
+        android:layout_marginTop="@dimen/normal_left_right_margin"
+        android:layout_marginLeft="@dimen/half_of_normal_margin"
+        android:layout_marginRight="@dimen/half_of_normal_margin"
+        >
+        <ImageView
+            android:id="@+id/filter_img"
+            android:src="@drawable/filter_list_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            />
+        <ImageView
+            android:id="@+id/cal_img"
+            android:src="@drawable/calendar_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/topview_rl"
         android:id="@+id/rv_alarm_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="@dimen/normal_left_right_margin"
+        android:layout_marginLeft="@dimen/half_of_normal_margin"
+        android:layout_marginRight="@dimen/half_of_normal_margin"
     />
 
     <LinearLayout
@@ -51,6 +79,7 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone"
+        android:layout_centerInParent="true"
         >
 
 
@@ -65,4 +94,4 @@
             android:gravity="center" />
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

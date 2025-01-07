@@ -2,10 +2,14 @@ package com.cofe.solution.ui.device.add;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
@@ -63,6 +67,81 @@ public class AddNewDeviceActivity extends AppCompatActivity {
     LinearLayout shareLL;
     Button btnShowBottomSheet;
     private static final int BLUETOOTH_PERMISSION_REQUEST_CODE = 1;
+
+
+    private final BroadcastReceiver wifiStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+                int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
+
+                switch (wifiState) {
+                    case WifiManager.WIFI_STATE_ENABLED:
+                        btnTurnOnWifi.setVisibility(View.GONE);
+                        Toast.makeText(context, "WiFi Turned ON", Toast.LENGTH_SHORT).show();
+                        break;
+                    case WifiManager.WIFI_STATE_DISABLED:
+                        btnTurnOnWifi.setVisibility(View.VISIBLE);
+
+                        Toast.makeText(context, "WiFi Turned OFF", Toast.LENGTH_SHORT).show();
+                        break;
+                    case WifiManager.WIFI_STATE_ENABLING:
+                        btnTurnOnWifi.setVisibility(View.GONE);
+                        Toast.makeText(context, "WiFi Turning ON...", Toast.LENGTH_SHORT).show();
+                        break;
+                    case WifiManager.WIFI_STATE_DISABLING:
+                        btnTurnOnWifi.setVisibility(View.VISIBLE);
+                        Toast.makeText(context, "WiFi Turning OFF...", Toast.LENGTH_SHORT).show();
+                        break;
+                    case WifiManager.WIFI_STATE_UNKNOWN:
+                        Toast.makeText(context, "WiFi State Unknown", Toast.LENGTH_SHORT).show();
+                        btnTurnOnWifi.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+
+            /*if (WifiManager.NETWORK_STATE_CHANGED_ACTION.equals(action)) {
+                NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+                if (networkInfo != null) {
+                    if (networkInfo.isConnected()) {
+                        //Toast.makeText(context, "WiFi Connected", Toast.LENGTH_SHORT).show();
+                        //btnTurnOnWifi.setVisibility(View.GONE);
+                    } else if (networkInfo.getState() == NetworkInfo.State.CONNECTING) {
+                        //btnTurnOnWifi.setVisibility(View.GONE);
+                        //Toast.makeText(context, "WiFi Connecting...", Toast.LENGTH_SHORT).show();
+                    } else if (networkInfo.getState() == NetworkInfo.State.DISCONNECTED) {
+                        //btnTurnOnWifi.setVisibility(View.GONE);
+                        //Toast.makeText(context, "WiFi Disconnected", Toast.LENGTH_SHORT).show();
+                    } else if (networkInfo.getState() == NetworkInfo.State.DISCONNECTING) {
+                        //btnTurnOnWifi.setVisibility(View.VISIBLE);
+                        //Toast.makeText(context, "Please connect WiFi to a network", Toast.LENGTH_SHORT).show();
+                    } else if (networkInfo.getState() == NetworkInfo.State.SUSPENDED) {
+                        //btnTurnOnWifi.setVisibility(View.VISIBLE);
+                        //Toast.makeText(context, "WiFi Connection Suspended", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }*/
+
+            if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
+                int errorCode = intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, -1);
+                if (errorCode == WifiManager.ERROR_AUTHENTICATING) {
+                    Toast.makeText(context, "WiFi Authentication Error", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                    Toast.makeText(context, "WiFi Internet Connected", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "WiFi Internet Not Available", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    };
 
 
     @Override
@@ -181,6 +260,16 @@ public class AddNewDeviceActivity extends AppCompatActivity {
         });
 
         btnShowBottomSheet.setOnClickListener(v -> showBottomNavigationDrawer());
+
+
+        /*IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(wifiStateReceiver, intentFilter); */
+
+	IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiStateReceiver, intentFilter);
 
         checkAndRequestPermissions();
         scanForNearbyDevices();

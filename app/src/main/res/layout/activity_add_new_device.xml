@@ -65,7 +65,8 @@
                         android:text="Turn on Wi-Fi"
                         android:drawableEnd="@drawable/warning_circle_icon"
                         android:drawablePadding="8dp"
-                        android:padding="12dp" />
+                        android:padding="12dp"
+                        android:visibility="gone"/>
 
                     <Button
                         android:id="@+id/btn_turn_on_bluetooth"

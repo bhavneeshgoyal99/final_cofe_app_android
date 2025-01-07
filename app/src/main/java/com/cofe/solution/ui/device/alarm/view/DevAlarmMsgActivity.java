@@ -3,16 +3,20 @@ package com.cofe.solution.ui.device.alarm.view;
 import static com.manager.device.media.MediaManager.PLAY_CLOUD_PLAYBACK;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ImageView;
@@ -89,19 +93,6 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
         noDataContLl = findViewById(R.id.no_data_cont_ll);
         noDataTxtv = findViewById(R.id.text_txtv);
         recyclerView = findViewById(R.id.rv_alarm_info);
-
-        /*titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.guide_module_title_device_alarm));
-        titleBar.setRightBtnResource(R.mipmap.ic_more, R.mipmap.ic_more);
-        titleBar.setLeftClick(this);
-        titleBar.setBottomTip(getClass().getName());
-
-        titleBar.setRightIvClick(new XTitleBar.OnRightClickListener() {
-            @Override
-            public void onRightClick() {
-                showPopupMenu(titleBar.getRightBtn());
-            }
-        });*/
 
         findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
         findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
@@ -251,11 +242,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
 
                 holder.detectionTime.setText(dateToshow+" " +dateTime[1]);
 
-                //holder.detectionText.setTip(alarmInfo.getStartTime());
                 holder.detectionText.setTag(position);
-                //holder.lisAlarmMsg.getImageLeft().setImageBitmap(null);
-
-                // Check if alarm message has an image
                 if (alarmInfo.isHavePic()) {
                     if (!StringUtils.isStringNULL(alarmInfo.getPic())) {
                         Glide.with(holder.photoImage).load(alarmInfo.getPic()).into(holder.photoImage);
@@ -263,14 +250,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                         presenter.loadThumb(position, new BaseImageManager.OnImageManagerListener() {
                             @Override
                             public void onDownloadResult(boolean isSuccess, String imagePath, Bitmap bitmap, int mediaType, int seq) {
-                                /*ListSelectItem lsiAlarmMsg = recyclerView.findViewWithTag(seq);
-                                if (lsiAlarmMsg != null) {
-                                    lsiAlarmMsg.getImageLeft().setImageBitmap(bitmap);
-                                } else {
-                                    holder.photoImage.setImageBitmap(bitmap);
-                                }*/
                                 holder.photoImage.setImageBitmap(bitmap);
-
                             }
 
                             @Override
@@ -355,6 +335,8 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                                 sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
                                 sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_BACK_AND_FORTH);
                                 sliderView.setAutoCycle(false);
+
+
                                 XMPromptDlg.onShow(DevAlarmMsgActivity.this,
                                         sliderView,
                                         (int) (DevAlarmMsgActivity.this.screenWidth * 0.8),
@@ -366,26 +348,9 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                     }
                 });
 
-                /*btnVideo.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        presenter.showVideo(getAdapterPosition());
-                    }
-                });
-
-                btnDelete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        XMPromptDlg.onShow(DevAlarmMsgActivity.this, "Are you sure you want to delete this alarm message?", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                presenter.deleteAlarmMsg(getAdapterPosition());
-                            }
-                        }, null);
-                    }
-                });*/
             }
         }
     }
+
 
 }

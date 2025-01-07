@@ -286,19 +286,26 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(result);
+                        devLoginBtn.performClick();
+
                     }
                 } else if (result.startsWith("sn:")) {
                     String[] devInfos = result.split(";");
+                    devLoginBtn.performClick();
 
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(devInfos[0].split(":")[1]);
+                        devLoginBtn.performClick();
+
                     }
 
                     //设备登录Token
                     if (null != devLoginTokenEdit) {
                         devLoginTokenEdit.setText(devInfos[1].split(":")[1]);
+                        devLoginBtn.performClick();
                     }
+
                 } else {
                     try {
                         if (result.startsWith("{")) {
@@ -341,6 +348,8 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                             xmDevInfo.shareDevInfoToXMDevInfo(otherShareDevUser);
                                             DevDataCenter.getInstance().addDev(xmDevInfo);
                                             onAddDevResult(true, 0);
+                                            devLoginBtn.performClick();
+
                                         } else {
                                             Toast.makeText(DevSnConnectActivity.this, R.string.add_share_qr_code_error, Toast.LENGTH_LONG).show();
                                         }
@@ -352,6 +361,8 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                             if (splitResults != null && splitResults.length >= 4) {
                                 if (null != devSNEdit) {
                                     devSNEdit.setText(splitResults[0]);
+                                    devLoginBtn.performClick();
+
                                 }
 
                                 if (XUtils.isInteger(splitResults[3])) {
@@ -360,9 +371,10 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                     if (DevDataCenter.getInstance().isLowPowerDev(devType)) {
                                         spDevType.setValue(21);//低功耗设备
                                         lsiDevType.setRightText(spDevType.getSelectedName());
+                                        devLoginBtn.performClick();
+
                                     }
                                 }
-                                devLoginBtn.performClick();
                             }
                             //f18cd13eafc94f5b3yyd,,,285409282,0,A9A0137601520001
                         }
@@ -391,6 +403,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
                 @Override
                 public void onFailed(String s, int i, String s1, int errorId) {
+                    finish();
                     Toast.makeText(DevSnConnectActivity.this, "Failed to change the password", Toast.LENGTH_SHORT).show();
                 }
             });

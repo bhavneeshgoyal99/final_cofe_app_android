@@ -1,12 +1,15 @@
 package com.cofe.solution.base;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
@@ -58,4 +61,5 @@ public abstract class DemoBaseActivity <T extends XMBasePresenter> extends XMBas
             startActivity(intent);
         }
     }
+
 }

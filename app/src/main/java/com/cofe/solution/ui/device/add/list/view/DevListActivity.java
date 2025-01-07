@@ -40,9 +40,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
+import com.cofe.solution.ui.device.preview.view.DevActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.firebase.Firebase;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
@@ -112,6 +115,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     TextView textTxtv;
     ImageView add_img;
     LinearLayout logoutLl;
+    int onUpdateCount = 0;
+    int onUppdateDevStateCount  = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +141,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
-
             if(DevDataCenter.getInstance().getAccountUserName()!=null) {
                 if(DevDataCenter.getInstance().getAccessToken()==null) {
                     AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
@@ -157,11 +161,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                 }
                             });//LOGIN_BY_INTERNET（1）  Account login type
 
-                } else {
-                    finish();
-                    startActivity(new Intent(this, UserLoginActivity.class));
                 }
 
+            } else {
+                finish();
+                startActivity(new Intent(this, UserLoginActivity.class));
             }
         }
 
@@ -429,6 +433,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         super.onRestart();
         if (adapter != null) {
             if(presenter!=null) {
+                Bundle bundle = new Bundle();
+                bundle.putString( "called", "onRestart");
+                bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
+                bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
+                bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
+                bundle.putInt("device", presenter.getDevList().size());
+                FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+
                 if(DevDataCenter.getInstance().getAccountUserName()!=null) {
                     if(DevDataCenter.getInstance().getAccessToken()==null) {
                         AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
@@ -486,46 +500,121 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         }
     }
+    boolean initDataCalled = false;
 
     @Override
     public void onUpdateDevListView() {
         slRefresh.setRefreshing(false);
-        if(presenter.getDevList()!=null) {
-            if(presenter.getDevList().size()==0) {
-                add_img.setVisibility(View.VISIBLE);
-                noDeviceContLl.setVisibility(View.VISIBLE);
-                textTxtv.setText(getString(R.string.add_dev));
 
-            } else {
-                noDeviceContLl.setVisibility(View.GONE);
+        Bundle bundle = new Bundle();
+        bundle.putString( "called", "onUpdateDevListView");
+        bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
+        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
+        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
+        bundle.putInt("device", (presenter!=null)?presenter.getDevList().size():0);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+
+        Log.d("user Data", " username > " + DevDataCenter.getInstance().getAccountUserName());
+        Log.d("user Data", " password > " + DevDataCenter.getInstance().getAccountPassword());
+        Log.d("user Data", "Access Token > " + DevDataCenter.getInstance().getAccessToken());
+
+
+        if(onUppdateDevStateCount<1) {
+            onUppdateDevStateCount  = onUppdateDevStateCount+1;
+            if (!DevDataCenter.getInstance().isLoginByAccount()) {
+                // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+                if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                    if (DevDataCenter.getInstance().getAccessToken() == null) {
+                        AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                                new BaseAccountManager.OnAccountManagerListener() {
+                                    @Override
+                                    public void onSuccess(int msgId) {
+                                        Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
+                                        if(!initDataCalled) {
+                                            initData();
+                                            initDataCalled = true;
+                                        } else {
+                                            if (presenter.getDevList() != null) {
+                                                if (presenter.getDevList().size() == 0) {
+                                                    add_img.setVisibility(View.VISIBLE);
+                                                    noDeviceContLl.setVisibility(View.VISIBLE);
+                                                    textTxtv.setText(getString(R.string.add_dev));
+
+                                                } else {
+                                                    noDeviceContLl.setVisibility(View.GONE);
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onFailed(int msgId, int errorId) {
+                                        finish();
+                                        startActivity(new Intent(DevListActivity.this, UserLoginActivity.class));
+                                    }
+
+                                    @Override
+                                    public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                    }
+                                });
+
+                    } else {
+                        if(!initDataCalled) {
+                            initData();
+                            initDataCalled = true;
+                        } else {
+                            if (presenter.getDevList() != null) {
+                                if (presenter.getDevList().size() == 0) {
+                                    add_img.setVisibility(View.VISIBLE);
+                                    noDeviceContLl.setVisibility(View.VISIBLE);
+                                    textTxtv.setText(getString(R.string.add_dev));
+
+                                } else {
+                                    noDeviceContLl.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    finish();
+                    startActivity(new Intent(this, UserLoginActivity.class));
+                }
             }
+        } else {
+            finish();
+            startActivity(new Intent(this, UserLoginActivity.class));
         }
+
+
+
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
     }
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
         hideWaitDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putString( "called", "onUpdateDevStateResult");
+        bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
+        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
+        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
+        bundle.putInt("device", (presenter!=null)?presenter.getDevList().size():0);
+        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         slRefresh.setRefreshing(false);
         if (isSuccess) {
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
-        } else {
-            if(presenter.getDevList()!=null) {
-                if(presenter.getDevList().size()==0) {
-                    add_img.setVisibility(View.VISIBLE);
-                    noDeviceContLl.setVisibility(View.VISIBLE);
-
-                } else {
-                    noDeviceContLl.setVisibility(View.GONE);
-                    textTxtv.setText(getString(R.string.Refresh_Dev_Status_F));
-                }
-            }
-            showToast(getString(R.string.Refresh_Dev_Status_F), Toast.LENGTH_LONG);
         }
         if(presenter.getDevList()!=null) {
             if(presenter.getDevList().size()==0) {
                 add_img.setVisibility(View.VISIBLE);
-
                 noDeviceContLl.setVisibility(View.VISIBLE);
             } else {
                 noDeviceContLl.setVisibility(View.GONE);
@@ -584,6 +673,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 turnToActivity(ChannelListActivity.class);
             } else {
 
+                //turnToActivity(DevActivity.class);
                 turnToActivity(DevMonitorActivity.class);
             }
         } else {

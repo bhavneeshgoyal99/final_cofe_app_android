@@ -53,6 +53,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -65,6 +66,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -376,17 +378,21 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
                 break;
             case 2:
+                //layout1.setVisibility(View.GONE);
+                //layout3.setVisibility(View.GONE);
+                //layout2.setVisibility(VISIBLE);
                 onFeatureClicked(FUN_PLAYBACK+"");
                 break;
             case 3:
-                /*layout3.setVisibility(View.VISIBLE);
+                layout3.setVisibility(View.VISIBLE);
                 layout1.setVisibility(View.GONE);
                 layout2.setVisibility(View.GONE);
                 btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
                 btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));*/
+                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
                 presenter.getDevId();
-                turnToActivity(DevAlarmMsgActivity.class);
+
+                //turnToActivity(DevAlarmMsgActivity.class);
                 break;
 
 
@@ -984,6 +990,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             } else if (errorId < 0) {
                 //showToast(getString(R.string.open_video_f) + errorId, Toast.LENGTH_LONG);
                 showToast(getString(R.string.open_video_f), Toast.LENGTH_LONG);
+                recreate();
             }
         }
     }
@@ -2659,6 +2666,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 Log.d("onFailed > ", " jsonName > "  +jsonName);
             }
         });
+        loadFragment();
 
     }
 
@@ -2803,5 +2811,20 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         // Show the Bottom Sheet
         bottomSheetDialog.show();
+
     }
+
+    private void loadFragment() {
+        DevAlarmMsgFragment fragment = new DevAlarmMsgFragment();
+        fragment.setArgumentsFromActivity("devId", presenter.getDevId());
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+
+        /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();*/
+    }
+
 }
