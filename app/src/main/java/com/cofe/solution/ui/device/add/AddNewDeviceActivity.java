@@ -268,7 +268,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(wifiStateReceiver, intentFilter); */
 
-	IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+	    IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(wifiStateReceiver, intentFilter);
 
         checkAndRequestPermissions();
