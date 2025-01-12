@@ -11,19 +11,6 @@ import android.widget.TextView;
 
 import com.cofe.solution.R;
 
-import java.util.List;
-
-
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.RadioButton;
-import android.widget.TextView;
-
-import java.util.List;
-
 public class CustomTractListViewAdapter extends BaseAdapter {
 
     private final Context context;

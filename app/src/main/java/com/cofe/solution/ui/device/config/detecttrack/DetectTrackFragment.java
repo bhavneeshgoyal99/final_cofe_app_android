@@ -165,6 +165,26 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                 presenter.devicePTZControl(0, direction, 4, stop);
             }
         });*/
+
+        view.findViewById(R.id.close_img).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (getView() != null) {
+                            getView().animate()
+                                    .translationY(getView().getHeight())
+                                    .setDuration(300)
+                                    .withEndAction(() -> {
+                                        // Remove the fragment from the back stack after sliding down
+                                        requireActivity().getSupportFragmentManager().popBackStack();
+                                    })
+                                    .start();
+                        }
+
+                    }
+                }
+        );
+
     }
 
     private void initData() {
@@ -226,7 +246,8 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
             lsiEnable.setVisibility(VISIBLE);
             watchTimeLl.setVisibility(VISIBLE);
-            sensitivityLv.setVisibility(VISIBLE);
+            sensitivityLl.setVisibility(VISIBLE);
+
             watchTimeLv.setVisibility(GONE);
             sensitivityLv.setVisibility(GONE);
 
@@ -294,6 +315,10 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         monitorManager = DeviceManager.getInstance().createMonitorPlayer(playView, presenter.getDevId());
         monitorManager.startMonitor();
         allListviewData();
+
+       
+
+
     }
 
     @Override

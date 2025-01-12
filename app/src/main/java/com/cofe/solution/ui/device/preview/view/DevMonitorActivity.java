@@ -671,6 +671,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         mHomeClickReceiver = new MyHomeClickReceiver();
 
+        SharedPreference cookies = new SharedPreference(getApplication());
+        dName.setText(cookies.retrievDevName());
         initSensorView();
     }
 
@@ -2870,10 +2872,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     }
 
     private void loadFragment() {
-        DetectTrackFragment fragment = new DetectTrackFragment();
-        //DevRecordFragment fragment = new DevRecordFragment();
+        DevAlarmMsgFragment fragment = new DevAlarmMsgFragment();
         fragment.setArgumentsFromActivity("devId", presenter.getDevId());
-
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
