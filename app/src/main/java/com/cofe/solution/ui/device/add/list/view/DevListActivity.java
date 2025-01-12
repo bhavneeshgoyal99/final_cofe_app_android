@@ -107,6 +107,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         DevListAdapter.OnItemDevClickListener {
 
     int CAMERA_PERMISSION_REQEST_CODE = 111;
+    int WRITE_EXTERNAL_STORAGE = 333;
     int NOTIFICATION_PERMISSION_REQUEST_CODE = 222;
     private RecyclerView listView;
     private DevListAdapter adapter;
@@ -261,6 +262,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
         SharedPreference cookies =  new SharedPreference(getContext());
         cookies.saveLoginStatus(0);
+        checkExternalStoragePermission();
     }
 
     private void showPopupMenu(View view) {
@@ -297,6 +299,22 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
+    private void checkExternalStoragePermission(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
+
+                showPermissionExplanationPopup("WRITE EXTERNAL STORAGE", " Require to save the screenshot and videos from  device to your mobile phone. Please grant the permission to proceed.");
+            }
+        } else {
+            // Lower versions
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                showPermissionExplanationPopup("WRITE EXTERNAL STORAGE", " Require to save the screenshot and videos from  device to your mobile phone. Please grant the permission to proceed.");
+            }
+        }
+    }
+
     private void showPermissionExplanationPopup(String permissionName,String message) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -309,7 +327,19 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         // Request camera permission
                         ActivityCompat.requestPermissions(DevListActivity.this,
                                 new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQEST_CODE);
-                    } else {
+                    } else if(permissionName.equals("WRITE EXTERNAL STORAGE")) {
+                        // Request camera permission
+                        // Request camera permission
+                        ActivityCompat.requestPermissions(DevListActivity.this,
+                                new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}, WRITE_EXTERNAL_STORAGE);
+                        requestPermissions(new String[]{
+                                Manifest.permission.READ_MEDIA_IMAGES,
+                                Manifest.permission.READ_MEDIA_VIDEO
+                        }, WRITE_EXTERNAL_STORAGE);
+
+                    }
+
+                    else {
                         // Request camera permission
                         ActivityCompat.requestPermissions(
                                 DevListActivity.this,
@@ -360,6 +390,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     showSettingsRedirectPopup("Push Notification ");
                 }
             }
+        } else if (requestCode == WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Toast.makeText(this, "Permission is required to save screenshot and videos from  the camera device to your mobile phone.", Toast.LENGTH_SHORT).show();
+                } else {
+                    showSettingsRedirectPopup("Write External Storage");
+                }
+            }
         }
 
     }
@@ -374,11 +414,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         builder.create().show();
     }
 
+
     private void openCamera() {
         Toast.makeText(this, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
         Intent j =  new Intent(DevListActivity.this, DevSnConnectActivity.class);
         startActivity(j);
     }
+
 
     private void openAppSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -404,11 +446,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     private void refreshTitle() {
         if (null != titleBar) {
             if (DevDataCenter.getInstance().isLoginByAccount()) {
-            //    titleBar.setTitleText(String.format(getString(R.string.user_device_list), DevDataCenter.getInstance().getAccountUserName()));
+
             } else {
                 int loginType = DevDataCenter.getInstance().getLoginType();
                 if (loginType == LOGIN_BY_LOCAL) {
-              //      titleBar.setTitleText(String.format(getString(R.string.user_device_list), getString(R.string.login_by_local)));
+
                 }
             }
         }
@@ -674,6 +716,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             } else {
 
                 //turnToActivity(DevActivity.class);
+
                 turnToActivity(DevMonitorActivity.class);
             }
         } else {
@@ -858,6 +901,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         String personJson = gson.toJson(xmDevInfo);
 
         // Pass the JSON string to another activity via Intent
+        //Intent intent = new Intent(this, ShareFirstScren.class);
         Intent intent = new Intent(this, ShareFirstScren.class);
         intent.putExtra("dev", personJson);
         startActivity(intent);
@@ -1047,5 +1091,4 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
         super.onResume();
     }
-
 }

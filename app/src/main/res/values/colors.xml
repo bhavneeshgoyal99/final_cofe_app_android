@@ -9,9 +9,9 @@
     <color name="demo_title">#ff0d0d0d</color>
     <color name="grey">#808080</color>
     <color name="theme">#2c8dfa</color>
-    <color name="color_gray_light_open">#a6a6a6</color>
+    <color name="color_gray_light_open">#D7D7D7</color>
     <color name="text">#555454</color>
-    <color name="line_color">#eaeaeaea</color>
+    <color name="line_color">#EAF2F2F2</color>
     <color name="theme_color">#DC393E</color>
     <color name="theme_color1">#EC3339</color>
     <!--  hint颜色  -->

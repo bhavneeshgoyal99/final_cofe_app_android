@@ -1,6 +1,9 @@
 package com.cofe.solution.ui.device.config;
 
+import static com.blankj.utilcode.util.ScreenUtils.getScreenWidth;
+
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.TaskInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +31,7 @@ import com.basic.G;
 import com.cofe.solution.ui.activity.DeviceConfigActivity;
 import com.cofe.solution.ui.activity.DeviceConfigPresenter;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.device.config.about.presenter.DevAboutPresenter;
 import com.cofe.solution.ui.device.config.about.view.DevAboutActivity;
 import com.cofe.solution.ui.device.config.advance.view.DevAdvanceActivity;
 import com.cofe.solution.ui.device.config.alarmconfig.view.DevAlarmSetActivity;
@@ -44,8 +48,11 @@ import com.manager.device.DeviceManager;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.dialog.EditDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.cofe.solution.R;
 import com.cofe.solution.ui.device.add.AddNewDeviceActivity;
@@ -54,7 +61,7 @@ import com.cofe.solution.ui.device.add.wifi.CameraConfigInstruction;
 import com.cofe.solution.ui.device.add.wifi.WifiPowerOnCamer;
 import com.cofe.solution.ui.device.aov.view.AovSettingActivity;
 
-public class DeviceSetting extends AppCompatActivity  implements  DevListConnectContract.IDevListConnectView {
+public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implements  DevListConnectContract.IDevListConnectView {
     XMDevInfo xmDevInfo;
     Context context;
     DevListConnectContract.IDevListConnectView presenter ;
@@ -65,6 +72,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
         setContentView(R.layout.activity_device_setting);
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.device_setting));
+
 
         String personJson = getIntent().getStringExtra("dev");
 
@@ -96,6 +104,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
         findViewById(R.id.about_device_item).setOnClickListener(v -> openAboutDeviceSettings());
         findViewById(R.id.push_device_item).setOnClickListener(v -> openPushNotificatioNSetting());
         findViewById(R.id.advanced_device_item).setOnClickListener(v -> openAdvanceSetting());
+        findViewById(R.id.date_device_item).setOnClickListener(v -> syncDateTimeDevice());
         dTxtv = findViewById(R.id.dname_txtv);
         try {
             dTxtv.setText(xmDevInfo.getDevName());
@@ -315,6 +324,61 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
 
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
+
+    }
+    protected DeviceManager getManager() {
+        return DeviceManager.getInstance();
+    }
+
+    public void syncDateTimeDevice() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.time_sync_popup_layout);
+        dialog.setCancelable(false); // Prevent dismissal on outside touch
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) (getScreenWidth() * 0.9);
+        dialog.getWindow().setAttributes(layoutParams);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        // Get references to the buttons
+        Button btnYes = dialog.findViewById(R.id.btn_yes);
+        Button btnNo = dialog.findViewById(R.id.btn_no);
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                showWaitDialog();
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(calendar.getTime());
+                getManager().syncDevTime(xmDevInfo.getDevId(), time, new DeviceManager.OnDevManagerListener() {
+                    @Override
+                    public void onSuccess(String devId, int operationType, Object result) {
+                        hideWaitDialog();
+                        showToast(getString(R.string.dev_time_sync_success), Toast.LENGTH_SHORT);
+                    }
+
+                    @Override
+                    public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                        hideWaitDialog();
+                    }
+                });
+
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform your action for No button
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
 
     }
 

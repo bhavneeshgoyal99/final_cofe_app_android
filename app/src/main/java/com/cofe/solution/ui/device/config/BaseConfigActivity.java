@@ -3,6 +3,7 @@ package com.cofe.solution.ui.device.config;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
@@ -45,4 +46,9 @@ public abstract class BaseConfigActivity<T extends XMBasePresenter> extends XMBa
             startActivity(intent);
         }
     }
+
+    public void showToast(String content, int duration) {
+        Toast.makeText(this, content, duration).show();
+    }
+
 }

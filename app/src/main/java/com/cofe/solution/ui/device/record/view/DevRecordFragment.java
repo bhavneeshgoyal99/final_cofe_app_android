@@ -1,5 +1,20 @@
 package com.cofe.solution.ui.device.record.view;
 
+import static android.app.Activity.RESULT_OK;
+import static com.manager.device.media.MediaManager.PLAY_CLOUD_PLAYBACK;
+import static com.manager.device.media.MediaManager.PLAY_DEV_PLAYBACK;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_CANNOT_PLAY;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_MEDIA_PLAY_SPEED;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PAUSE;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PLAY_COMPLETED;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_PIC_FILE_S;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_RECORD_FILE_S;
+import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_STOP;
+import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_COMPLETE_ALL;
+import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_FAILED;
+import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_START;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -22,11 +38,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +51,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.R;
 import com.cofe.solution.base.CustomCalendarDialog;
-import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.base.DemoBaseFragment;
+import com.cofe.solution.ui.device.alarm.listener.DevAlarmContract;
+import com.cofe.solution.ui.device.alarm.presenter.DevAlarmPresenter;
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
+import com.cofe.solution.ui.device.record.adapter.RecordTimeAxisAdapter;
+import com.cofe.solution.ui.device.record.listener.DevRecordContract;
+import com.cofe.solution.ui.device.record.presenter.DevRecordPresenter;
+import com.lib.MsgContent;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.ScreenOrientationManager;
+import com.manager.account.AccountManager;
+import com.manager.account.BaseAccountManager;
+import com.manager.db.DevDataCenter;
 import com.manager.device.media.attribute.PlayerAttribute;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.utils.TimeUtils;
@@ -64,27 +89,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import com.cofe.solution.R;
-import com.cofe.solution.base.DemoBaseActivity;
-import com.cofe.solution.ui.device.record.adapter.RecordTimeAxisAdapter;
-import com.cofe.solution.ui.device.record.listener.DevRecordContract;
-import com.cofe.solution.ui.device.record.presenter.DevRecordPresenter;
 import io.reactivex.annotations.Nullable;
 
-import static com.manager.device.media.MediaManager.PLAY_CLOUD_PLAYBACK;
-import static com.manager.device.media.MediaManager.PLAY_DEV_PLAYBACK;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_CANNOT_PLAY;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_MEDIA_PLAY_SPEED;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PAUSE;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PLAY_COMPLETED;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_PIC_FILE_S;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_RECORD_FILE_S;
-import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_STOP;
-import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_COMPLETE_ALL;
-import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_FAILED;
-import static com.manager.device.media.download.DownloadManager.DOWNLOAD_STATE_START;
+public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> implements DevRecordContract.IDevRecordView, XTitleBar.OnRightClickListener {
 
-public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> implements DevRecordContract.IDevRecordView, XTitleBar.OnRightClickListener {
+
     private Calendar calendarShow;
     private RecyclerView rvRecordList;
     private RecyclerView rvRecordFun;
@@ -109,28 +118,71 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     private boolean isSeekTouchPlayProgress = false;
     LinearLayout parentLL;
     String selectedByuser;
+
+    private DevMonitorActivity activity;
+    int chnId;
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_device_record_list);
-        initView();
-        initData();
+        View view = inflater.inflate(R.layout.dev_record_fragment, container, false);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            presenter.setDevId(bundle.getString("devId"));
+            recordType = PLAY_DEV_PLAYBACK;
+            chnId = bundle.getInt("chnId");
+            // Use the data as needed
+            Log.d("DevRecordFragment", "Dev ID: " + presenter.getDevId()  + ", Chn ID: " + chnId);
+        }
+
+        AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                new BaseAccountManager.OnAccountManagerListener() {
+                    @Override
+                    public void onSuccess(int msgId) {
+                        Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+
+                    }
+
+                    @Override
+                    public void onFailed(int msgId, int errorId) {
+                        Log.d("onFailed" ,"errorId > ");
+
+                    }
+
+                    @Override
+                    public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                    }
+                });//LOGIN_BY_INTERNET（1）  Account login type
+        initView(view);
+        initData(view);
+        return view;
+
     }
 
-    private void initView() {
-        TextView titleTxtv = findViewById(R.id.toolbar_title);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            this.activity = (DevMonitorActivity) context;
+        } else {
+            Log.d(context.toString() , " must be an instance of DevMonitorActivity");
+        }
+    }
+
+    private void initView(View view) {
+        TextView titleTxtv = view.findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.playback));
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                activity.finish();
             }
         });
-        noPlayBackTxtv = findViewById(R.id.no_play_back_txtv);
+        noPlayBackTxtv = view.findViewById(R.id.no_play_back_txtv);
 
-        findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
-        findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.searchMediaFileCalendar(searchMonthCalendar);
@@ -145,24 +197,24 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         titleBar.setRightIvClick(this);
         titleBar.setBottomTip(DevRecordActivity.class.getName());*/
 
-        rvRecordList = findViewById(R.id.rv_records);
-        rvRecordFun = findViewById(R.id.rv_record_fun);
-        tvPlaySpeed = findViewById(R.id.tv_play_speed);
-        ((RadioButton) findViewById(R.id.rb_by_file)).setChecked(true);
-        parentLL = findViewById(R.id.parent_ll);
-        RelativeLayout rlBanner = findViewById(R.id.banner_rl);
+        rvRecordList = view.findViewById(R.id.rv_records);
+        rvRecordFun = view.findViewById(R.id.rv_record_fun);
+        tvPlaySpeed = view.findViewById(R.id.tv_play_speed);
+        ((RadioButton) view.findViewById(R.id.rb_by_file)).setChecked(true);
+        parentLL = view.findViewById(R.id.parent_ll);
+        RelativeLayout rlBanner = view.findViewById(R.id.banner_rl);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
-        rvRecordTimeAxis = new XMRecyclerView(this, null);
+        rvRecordTimeAxis = new XMRecyclerView(activity, null);
         rlBanner.addView(rvRecordTimeAxis);
 
-        ImageView arrowView = new ImageView(this);
+        ImageView arrowView = new ImageView(activity);
         arrowView.setImageResource(R.mipmap.arrows);
         arrowView.setScaleType(ImageView.ScaleType.FIT_XY);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         rlBanner.addView(arrowView, params);
 
-        linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager = new LinearLayoutManager(activity);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvRecordTimeAxis.setLayoutManager(linearLayoutManager);
 
@@ -186,9 +238,9 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             }
         });
 
-        wndLayout = findViewById(R.id.wnd_layout);
+        wndLayout = view.findViewById(R.id.wnd_layout);
 
-        xmSeekBar = findViewById(R.id.xb_seek_to_record);
+        xmSeekBar = view.findViewById(R.id.xb_seek_to_record);
         xmSeekBar.getSeekBar().setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -267,27 +319,6 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             hideVideoListRadioBtnAndDeleteButton();
             return true; // Allow other touch events to propagate
         });
-
-        findViewById(R.id.btn_layout1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreference cookies = new SharedPreference(DevRecordActivity.this);
-                cookies.savePreviewPageTabSelection("real-tab");
-                finishAfterTransition();
-                overridePendingTransition(0, 0);
-            }
-        });
-        findViewById(R.id.btn_layout3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreference cookies = new SharedPreference(DevRecordActivity.this);
-                cookies.savePreviewPageTabSelection("message-tab");
-                finishAfterTransition();
-                overridePendingTransition(0, 0);
-            }
-        });;
-
-
     }
 
     // Helper method to check if touch is outside the RecyclerView
@@ -302,11 +333,11 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 y < location[1] || y > location[1] + view.getHeight();
     }
 
-    private void initData() {
-        Intent intent = getIntent();
-        recordType = intent.getIntExtra("recordType", PLAY_DEV_PLAYBACK);
+    private void initData(View view) {
+        //Intent intent = activity.getIntent();
+        /*recordType = intent.getIntExtra("recordType", PLAY_DEV_PLAYBACK);
         int chnId = intent.getIntExtra("chnId", 0);
-        searchTime = intent.getLongExtra("searchTime", 0L);
+        searchTime = intent.getLongExtra("searchTime", 0L);*/
         presenter.setChnId(chnId);
         calendarShow = Calendar.getInstance();
         if (searchTime != 0) {
@@ -314,34 +345,33 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
         presenter.setRecordType(recordType);
         recordFunAdapter = new RecordFunAdapter();
-        rvRecordFun.setLayoutManager(new GridLayoutManager(this, 4));
+        rvRecordFun.setLayoutManager(new GridLayoutManager(activity, 4));
         rvRecordFun.setAdapter(recordFunAdapter);
 
-        rvRecordList.setLayoutManager(new LinearLayoutManager(this));
+        rvRecordList.setLayoutManager(new LinearLayoutManager(activity));
         recordListAdapter = new RecordListAdapter();
         rvRecordList.setAdapter(recordListAdapter);
 
-        recordTimeAxisAdapter = new RecordTimeAxisAdapter(this,
+        recordTimeAxisAdapter = new RecordTimeAxisAdapter(activity.getContext(),
                 presenter.getRecordTimeList(),
                 screenWidth,
                 presenter.getShowCount(),
                 presenter.getTimeUnit());
         rvRecordTimeAxis.setAdapter(recordTimeAxisAdapter);
-        showWaitDialog();
-        presenter.initRecordPlayer((ViewGroup) findViewById(R.id.layoutPlayWnd), recordType);
+        activity.showWaitDialog();
+        presenter.initRecordPlayer((ViewGroup) activity.findViewById(R.id.layoutPlayWnd), recordType);
         presenter.searchRecordByFile(calendarShow);
-        presenter.searchRecordByTime(calendarShow);
 
-        showTitleDate();
+        //showTitleDate();
         screenOrientationManager = ScreenOrientationManager.getInstance();
     }
 
     private void showTitleDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         if (recordType == PLAY_CLOUD_PLAYBACK) {
-            //  titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.cloud_playback) + ")");
+            titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.cloud_playback) + ")");
         } else {
-            // titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.sd_playback) + ")");
+            titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.sd_playback) + ")");
         }
     }
 
@@ -352,7 +382,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByFileResult(boolean isSuccess) {
-        hideWaitDialog();
+        activity.hideWaitDialog();
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
@@ -367,7 +397,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByTimeResult(boolean isSuccess) {
-        hideWaitDialog();
+        activity.hideWaitDialog();
         recordListAdapter.notifyDataSetChanged();
         recordTimeAxisAdapter.notifyDataSetChanged();
         if (isSuccess) {
@@ -398,7 +428,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     @Override
     public void onPlayStateResult(int playState, int playSpeed) {
         if (playState == PlayerAttribute.E_STATE_PlAY) {
-            hideWaitDialog();
+            activity.hideWaitDialog();
             recordFunAdapter.changeBtnState(0, getString(R.string.playback_pause), true);
         } else if (playState == E_STATE_STOP
                 || playState == E_STATE_PAUSE
@@ -486,7 +516,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
 
         if (result instanceof String) {
-            XMPromptDlg.onShow(this, (String) result, null);
+            XMPromptDlg.onShow(activity, (String) result, null);
         } else {
 
 
@@ -506,9 +536,9 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 highlightedDates.add(CalendarDay.from(year, month, day)); // Jan 1, 2025
             }
 
-            CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+            CustomCalendarDialog dialog = new CustomCalendarDialog(activity, highlightedDates, selectedDate -> {
                 // Handle selected date
-                Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity.getContext(), "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 try {
                     Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
@@ -603,22 +633,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     @Override
     public void onDownloadState(int state, String filePath) {
         if (state == DOWNLOAD_STATE_FAILED) {
-            hideWaitDialog();
-            Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
+            activity.hideWaitDialog();
+            Toast.makeText(activity.getContext(), getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
-            Toast.makeText(this, getString(R.string.download_start), Toast.LENGTH_LONG).show();
-            hideWaitDialog();
+            Toast.makeText(activity.getContext(), getString(R.string.download_start), Toast.LENGTH_LONG).show();
+            activity.hideWaitDialog();
         } else if (state == DOWNLOAD_STATE_COMPLETE_ALL) {
-            Toast.makeText(this, getString(R.string.download_s), Toast.LENGTH_LONG).show();
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
-            hideWaitDialog();
+            Toast.makeText(activity.getContext(), getString(R.string.download_s), Toast.LENGTH_LONG).show();
+            activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
+            activity.hideWaitDialog();
         }
     }
 
     @Override
     public void onDownloadProgress(int progress) {
         String content = String.format(getString(R.string.download_progress), progress);
-        showWaitDialog(content);
+        activity.showWaitDialog(content);
     }
 
     private void dealWithTimeScrollEnd() {
@@ -635,7 +665,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                showWaitDialog();
+                activity.showWaitDialog();
                 int times = presenter.getPlayTimeByMinute() * 60 + presenter.getPlayTimeBySecond();
 
                 presenter.setPlayTimeBySecond(times % 60);
@@ -681,14 +711,14 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             presenter.searchRecordByTime(calendarShow);
             ToastUtils.showLong(getString(R.string.delete_s));
         } else {
-            hideWaitDialog();
+            activity.hideWaitDialog();
             ToastUtils.showLong(getString(R.string.delete_f) );
         }
     }
 
     @Override
     public Context getContext() {
-        return this;
+        return activity.getContext();
     }
 
     @Override
@@ -772,13 +802,13 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext())
+        public RecordListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new RecordListAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.adapter_record_list, parent, false));
         }
 
         @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecordListAdapter.ViewHolder holder, int position) {
             H264_DVR_FILE_DATA recordInfo = presenter.getRecordInfo(position);
             if (recordInfo != null) {
                 holder.lsiRecordInfo.setTitle(String.format("%s-%s",
@@ -859,10 +889,10 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
         private void startVideoDeleteWork() {
-            XMPromptDlg.onShow(DevRecordActivity.this, getString(R.string.is_sure_delete_cloud_video), new View.OnClickListener() {
+            XMPromptDlg.onShow(activity, getString(R.string.is_sure_delete_cloud_video), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showWaitDialog();
+                    activity.showWaitDialog();
                     presenter.stopPlay();
                     presenter.deleteVideo(0);
                 }
@@ -873,7 +903,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         public void setMultiSelectMode(boolean enabled) {
             isMultiSelectMode = enabled;
             // Trigger visibility toggle when an event occurs
-                recordFunAdapter.toggleLastItemVisibility(); // Show or hide the last item
+            recordFunAdapter.toggleLastItemVisibility(); // Show or hide the last item
 
             if (!enabled) {
                 selectedItems.clear(); // Clear selections when exiting multi-select mode
@@ -913,7 +943,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 lsiRecordInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        activity.showWaitDialog();
                         presenter.stopPlay();
                         presenter.startPlayRecord(getAdapterPosition());
                     }
@@ -921,7 +951,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 btnDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        activity.showWaitDialog();
                         presenter.downloadVideoByFile(getAdapterPosition());
                     }
                 });
@@ -966,30 +996,30 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 presenter.playSlow();
                 break;
             case 6://全屏
-                screenOrientationManager.landscapeScreen(this, true);
+                screenOrientationManager.landscapeScreen(activity, true);
                 break;
             case 7://切换录像类型
-                TextView textView = new TextView(this);
+                TextView textView = new TextView(activity);
                 textView.setText(getString(R.string.record_file_type) + ":");
-                Spinner spinner = new Spinner(this);
+                Spinner spinner = new Spinner(activity);
                 spinner.setBackgroundColor(Color.WHITE);
                 String[] data = {getString(R.string.record_file_all), getString(R.string.record_file_normal), getString(R.string.record_file_alarm),getString(R.string.EpitomeRecord)};
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_item, data);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner.setAdapter(adapter);
                 spinner.setSelection(presenter.getRecordFileType());
 
 
-                LinearLayout layout = new LinearLayout(this);
+                LinearLayout layout = new LinearLayout(activity);
                 layout.setBackgroundColor(Color.WHITE);
                 layout.addView(textView);
                 layout.addView(spinner);
-                Dialog dialog = XMPromptDlg.onShow(this,layout);
+                Dialog dialog = XMPromptDlg.onShow(activity,layout);
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position != presenter.getRecordFileType()) {
-                            showWaitDialog();
+                            activity.showWaitDialog();
                             presenter.setSearchRecordFileType(position);//position枚举对应的值 0：全部 1：普通 2：报警
                             presenter.searchRecordByFile(calendarShow);
                             presenter.searchRecordByTime(calendarShow);
@@ -1023,45 +1053,21 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
     }
-    @Override
-    public void onBackPressed() {
-        hideVideoListRadioBtnAndDeleteButton();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            screenOrientationManager.portraitScreen(this, true);
-        } else {
-            SharedPreference cookies = new SharedPreference(getApplicationContext());
-            cookies.savePreviewPageTabSelection("real-tab");
-            overridePendingTransition(0, 0);
-            finishAfterTransition();
-        }
-    }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         presenter.pausePlay();
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        presenter.rePlay();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        presenter.stopPlay();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         presenter.destroyPlay();
         if (screenOrientationManager != null) {
-            screenOrientationManager.release(this);
+            screenOrientationManager.release(activity);
         }
-        setResult(RESULT_OK);
+        activity.setResult(RESULT_OK);
     }
 
     @Override
@@ -1083,4 +1089,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
         super.onConfigurationChanged(newConfig);
     }
+
+    /*public void setArgumentsFromActivity(String key, String data) {
+        Log.d(getClass().getName(),"setArgumentsFromActivity > value " + value);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            int devId = bundle.getInt("devId");
+            int chnId = bundle.getInt("chnId");
+
+            // Use the data as needed
+            Log.d("DevRecordFragment", "Dev ID: " + devId + ", Chn ID: " + chnId);
+        }
+
+        presenter.setDevId(value);
+        Bundle args = new Bundle();
+        args.putString(key, value);
+        this.setArguments(args);
+    }*/
 }

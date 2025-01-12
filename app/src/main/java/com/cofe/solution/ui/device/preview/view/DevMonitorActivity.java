@@ -9,8 +9,10 @@ import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_MAN;
 import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_NORMAL;
 import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_WOMAN;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
@@ -19,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +30,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -51,6 +55,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -64,9 +69,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
+import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgFragment;
+import com.cofe.solution.ui.device.config.detecttrack.DetectTrackFragment;
+import com.cofe.solution.ui.device.record.view.DevRecordFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -282,8 +290,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     //联系家人(视频通话)
     //Contact family
-    private static final int FUN_CONTACT_FAMILY = 27;
 
+    private static final int FUN_CONTACT_FAMILY = 27;
     //APP变倍缩放
     //App zooming
     private static final int FUN_SHOW_APP_ZOOMING = 28;
@@ -332,12 +340,20 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     int playerWindowCount = 0;
     ImageView backArrowImg;
 
+    boolean mainVideoStarted = false;
+    boolean isVideoCaptureStart = false;
+    boolean isSoundCaptureStart = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_camera);
         checkUserLogin();
+
+        getWindow().setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition));
+        getWindow().setSharedElementExitTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition));
+
 
         // Initialize buttons and layouts
         btnLayout1 = findViewById(R.id.btn_layout1);
@@ -381,17 +397,25 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 //layout1.setVisibility(View.GONE);
                 //layout3.setVisibility(View.GONE);
                 //layout2.setVisibility(VISIBLE);
-                onFeatureClicked(FUN_PLAYBACK+"");
+                //loadRecordFragment(new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
+
+                turnToActivity1(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
+
+                //onFeatureClicked(FUN_PLAYBACK+"");
                 break;
             case 3:
-                layout3.setVisibility(View.VISIBLE);
-                layout1.setVisibility(View.GONE);
-                layout2.setVisibility(View.GONE);
-                btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
-                btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
-                presenter.getDevId();
-
+                if(mainVideoStarted){
+                    layout3.setVisibility(View.VISIBLE);
+                    layout1.setVisibility(View.GONE);
+                    layout2.setVisibility(View.GONE);
+                    btnLayout3.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background));
+                    btnLayout2.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
+                    btnLayout1.setBackground(ContextCompat.getDrawable(this, R.drawable.squaer_button_background_ubselected));
+                    presenter.getDevId();
+                    loadFragment();
+                } else {
+                    showToast(getString(R.string.please_wait_for_start_video_stram), Toast.LENGTH_SHORT);
+                }
                 //turnToActivity(DevAlarmMsgActivity.class);
                 break;
 
@@ -431,7 +455,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         });
 
         icon_motion_tracking.setOnClickListener(v -> {
-            onFeatureClicked(icon_motion_tracking.getTag().toString());
+            loadMoionFragment();
+            //onFeatureClicked(icon_motion_tracking.getTag().toString());
         });
 
         icon_ptz.setOnClickListener(v -> {
@@ -466,6 +491,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         battery.setOnClickListener(v -> {
             onFeatureClicked(battery.getTag().toString());
+        });
+        findViewById(R.id.iv_answer_call).setOnClickListener(v -> {
+            onFeatureClicked(findViewById(R.id.iv_answer_call).getTag().toString());
         });
 
         checkAOVBattery(false);
@@ -551,32 +579,40 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         dName = findViewById(R.id.device_name);
         mainButtonsLl = findViewById(R.id.main_buttons_ll);
 
-        cameraImg.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.camera_ll).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
             }
         });
-        videoImg.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.video_ll).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), true);
+                isVideoCaptureStart = (isVideoCaptureStart) ? false : true;
+                int image= (isVideoCaptureStart) ? R.drawable.active_video : R.drawable.video_icon ;
+                Glide.with(getApplicationContext()).load(image).into(videoImg);
+
+                dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
             }
         });
-        soundImg.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.sound_ll).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), true);
+                isSoundCaptureStart = (isSoundCaptureStart) ? false : true;
+                int image= (isSoundCaptureStart) ? R.drawable.speaker_disabled_icon : R.drawable.speaker_icon_1 ;
+                Glide.with(getApplicationContext()).load(image).into(soundImg);
+                dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), isSoundCaptureStart);
             }
         });
-        sdImag.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.sd_ll).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dealWithMonitorFunction(Integer.parseInt(sdImag.getTag().toString()), true);
             }
         });
 
-        microphoneImg.setOnClickListener(new OnClickListener() {
+        findViewById(R.id.microphone_ll).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 dealWithMonitorFunction(Integer.parseInt(microphoneImg.getTag().toString()), true);
@@ -903,6 +939,15 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     @Override
     protected void onResume() {
         super.onResume();
+        if(getApplicationContext()!=null) {
+            SharedPreference cookies = new SharedPreference(getApplicationContext());
+            if(cookies.retrievPreviewPageTabSelection().equals("real-tab")) {
+                showLayout(1);
+            } else if (cookies.retrievPreviewPageTabSelection().equals("message-tab")){
+                showLayout(3);
+            }
+        }
+        overridePendingTransition(0, 0);
         if (!isHomePress) {
             showWaitDialog();
             presenter.loginDev();
@@ -1285,10 +1330,28 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         if (state == E_STATE_SAVE_RECORD_FILE_S) {
             showToast(getString(R.string.record_s), Toast.LENGTH_LONG);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+            }
+
+
         } else if (state == E_STATE_SAVE_PIC_FILE_S) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+            }
             showToast(getString(R.string.capture_s), Toast.LENGTH_LONG);
         } else if (state == E_STATE_MEDIA_DISCONNECT) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+            }
             showToast(getString(R.string.media_disconnect), Toast.LENGTH_LONG);
+
         }
     }
 
@@ -1299,6 +1362,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             playWndLayout.showSingleWnd(presenter.getChnId(), false);
             presenter.splitScreen(playViews[1]);
         }
+
+        mainVideoStarted = true;
 
         //onFeatureClicked(""+FUN_APP_OBJ_EFFECT);
         try {
@@ -1679,17 +1744,10 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 break;
             case FUN_RECORD://视频剪切
                 if (isSelected) {
-                    presenter.stopRecord(presenter.getChnId());
-                } else {
                     presenter.startRecord(presenter.getChnId());
+                } else {
+                    presenter.stopRecord(presenter.getChnId());
                 }
-                Glide.with(this).
-                        load((isSelected)
-                                ? getResources().getDrawable(R.drawable.video_icon, null)
-                                : getResources().getDrawable( R.drawable.active_video,null)
-                        )
-                        .into(videoImg);
-
                 return true;
             case FUN_PTZ://云台控制
             {
@@ -1825,6 +1883,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
             break;
             case FUN_PLAYBACK://录像回放
+
                 turnToActivity(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
 
                 break;
@@ -2199,7 +2258,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             wndLayout.requestLayout();
             presenter.setPlayViewTouchable(0, true);
             SharedPreference cookies = new SharedPreference(getApplication());
-            cookies.retrievDevName();
             dName.setText(cookies.retrievDevName());
 
             //如果是假多目，横屏的时候需要更改画布
@@ -2618,9 +2676,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     public void onFeatureClicked(String featureName) {
         //Toast.makeText(this, "Feature clicked: " + featureName, Toast.LENGTH_SHORT).show();
         if(featureName.equals("battery")) {
+
             Intent i= new Intent(this, AovSettingActivity.class);
             i.putExtra("devId",presenter.getDevId());
             startActivity(i);
+            overridePendingTransition(0, 0);
 
         }  else {
             dealWithMonitorFunction(Integer.parseInt(featureName), true);
@@ -2666,8 +2726,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 Log.d("onFailed > ", " jsonName > "  +jsonName);
             }
         });
-        loadFragment();
-
     }
 
     private final SparseArray<Fragment> fragments = new SparseArray<>();
@@ -2749,6 +2807,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         View bottomSheetView = getLayoutInflater().inflate(R.layout.popup_layout, null);
         RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_RL);
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
         // Create a BottomSheetDialog
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -2803,28 +2863,93 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 bottomSheet.setAlpha(1 - (slideOffset * 0.3f));  // Adjust transparency if needed
             }
         });
-
-
         // Slowly animate the bottom sheet to expand to a specific height
-
-        // Show the Bottom Sheet
-
         // Show the Bottom Sheet
         bottomSheetDialog.show();
 
     }
 
     private void loadFragment() {
-        DevAlarmMsgFragment fragment = new DevAlarmMsgFragment();
+        DetectTrackFragment fragment = new DetectTrackFragment();
+        //DevRecordFragment fragment = new DevRecordFragment();
         fragment.setArgumentsFromActivity("devId", presenter.getDevId());
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
 
-        /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();*/
     }
+
+    void loadMoionFragment(){
+        DetectTrackFragment fragment = new DetectTrackFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(
+                R.anim.slide_up,  // Enter animation
+                R.anim.slide_down,  // Exit animation
+                R.anim.slide_up,   // Pop enter animation
+                R.anim.slide_up  // Pop exit animation
+        );
+        fragment.setArgumentsFromActivity("devId", presenter.getDevId());
+        transaction.replace(R.id.fragment_container1, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+    private void loadRecordFragment(Object[][] objects) {
+
+        Bundle bundle = new Bundle();
+
+        for (int i = 0; i < objects.length; i++) {
+            String key = (String) objects[i][0];
+            Object value = objects[i][1];
+
+            if (value instanceof Integer) {
+                bundle.putInt(key, (Integer) value);
+            } else if (value instanceof String) {
+                bundle.putString(key, (String) value);
+            } else if (value instanceof Boolean) {
+                bundle.putBoolean(key, (Boolean) value);
+            } else if (value instanceof Double) {
+                bundle.putDouble(key, (Double) value);
+            } else if (value instanceof Float) {
+                bundle.putFloat(key, (Float) value);
+            }
+        }
+        bundle.putString("devId",presenter.getDevId());
+        DevRecordFragment fragment = new DevRecordFragment();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit();
+
+    }
+
+
+    public void turnToActivity1(Class _class,Object[][] objects) {
+        Intent intent = new Intent(this,_class);
+        if (objects != null) {
+            for (int i = 0; i < objects.length; ++i) {
+                if (objects[i][1] instanceof Integer) {
+                    intent.putExtra((String) objects[i][0],(Integer) objects[i][1]);
+                }else if (objects[i][1] instanceof String) {
+                    intent.putExtra((String) objects[i][0],(String) objects[i][1]);
+                }else if (objects[i][1] instanceof Boolean) {
+                    intent.putExtra((String) objects[i][0],(Boolean) objects[i][1]);
+                }else if (objects[i][1] instanceof Double) {
+                    intent.putExtra((String) objects[i][0],(Double) objects[i][1]);
+                }else if (objects[i][1] instanceof Float) {
+                    intent.putExtra((String) objects[i][0],(Float) objects[i][1]);
+                }
+            }
+        }
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                this, findViewById(R.id.buttons_ll), "sharedElement");
+
+        if (presenter != null && !StringUtils.isStringNULL(presenter.getDevId())) {
+            intent.putExtra("devId",presenter.getDevId());
+        }
+        startActivity(intent,options.toBundle());
+    }
+
 
 }

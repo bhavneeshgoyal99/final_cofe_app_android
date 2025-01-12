@@ -96,4 +96,14 @@ public class SharedPreference {
     }
 
 
+    public void savePreviewPageTabSelection(String tabname) {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.putString("preview_page_tab",tabname);
+        editor.apply();
+    }
+    public String retrievPreviewPageTabSelection() {
+        return sharedPreference.getString("preview_page_tab","");
+    }
+
+
 }

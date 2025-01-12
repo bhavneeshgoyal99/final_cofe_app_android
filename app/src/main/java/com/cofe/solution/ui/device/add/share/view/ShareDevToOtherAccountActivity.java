@@ -100,8 +100,8 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
         saveToPhoneButton = findViewById(R.id.btn_save_to_phone);
 
 
-        String deviceNameText = "Device Name: " + xmDevInfo.getDevName();
-        String sharedFromText = "The device shared from : " + xmDevInfo.getDevId();
+        String deviceNameText = "Device Name: "  ;
+        String sharedFromText = "The device shared from : " ;
 
         // Set data to views
         deviceName.setText(deviceNameText);
@@ -219,7 +219,7 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initData() {
-        Bitmap bitmap = presenter.getShareDevQrCode(this);
+        Bitmap bitmap = presenter.getShareDevQrCode(this, xmDevInfo.getDevId());
         //ivQrCode.setImageBitmap(bitmap);
         qrCode.setImageBitmap(bitmap);
         getNext24Hr();

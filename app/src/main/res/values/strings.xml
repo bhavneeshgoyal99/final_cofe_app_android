@@ -984,5 +984,13 @@
     <string name="cancle">Cancel</string>
     <string name="tr_light_settings">TR Light Settings</string>
     <string name="tr_back_light_settings">TR Back Light Setting</string>
+    <string name="sync_date_time">Sync Date Time</string>
+    <string name="dev_time_sync_success">"Device date and time sync successfully "</string>
+    <string name="please_wait_for_start_video_stram">Please wait for start video stream</string>
+    <string name="failed_to_add_device">An unexpected error occurred while adding the device.</string>
+    <string name="qr_code_does_match_to_add_device"> QR  code does match to add device.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="time_sync">Confirm sync time</string>
 
 </resources>

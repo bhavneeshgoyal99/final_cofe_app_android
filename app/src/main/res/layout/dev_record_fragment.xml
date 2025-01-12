@@ -32,8 +32,6 @@
             app:layout_scrollFlags="scroll|enterAlways"
             android:elevation="0dp" />
     </com.google.android.material.appbar.AppBarLayout>
-
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,15 +45,15 @@
             android:orientation="vertical"
             android:background="@drawable/gradient_background"
             >
-           <TextView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:textColor="@color/black"
-               android:textSize="16dp"
-               android:layout_centerInParent="true"
-               android:id="@+id/no_play_back_txtv"
-               android:visibility="gone"
-               />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/no_play_back_txtv"
+                android:visibility="gone"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -67,15 +65,8 @@
                 <RelativeLayout
                     android:id="@+id/wnd_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="240dp"
                     android:background="#ff000000"
-                    >
-                <RelativeLayout
-                    android:id="@+id/wnd_inner_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:background="#ff000000"
-                    android:transitionName="sharedElement"
                     >
 
                     <FrameLayout
@@ -142,49 +133,6 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"/>
                 </RelativeLayout>
-                    <LinearLayout
-                        android:id="@+id/buttons_ll"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:transitionName="sharedElement"
-                        android:layout_below="@+id/wnd_inner_layout"
-                        >
-
-                        <Button
-                            android:id="@+id/btn_layout1"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="@string/realtime_text"
-                            android:background="@drawable/squaer_button_background"
-                            android:textColor="@android:color/black"
-                            />
-
-                        <Button
-                            android:id="@+id/btn_layout2"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="@string/playback"
-                            android:background="@drawable/squaer_button_background_ubselected"
-                            android:textColor="@android:color/black"/>
-
-                        <Button
-                            android:id="@+id/btn_layout3"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="@string/message"
-                            android:background="@drawable/squaer_button_background_ubselected"
-                            android:textColor="@android:color/black"
-                            />
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <!-- Button Group -->
 
                 <RadioGroup
                     android:id="@+id/rg_way_to_get_video"
@@ -241,6 +189,6 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

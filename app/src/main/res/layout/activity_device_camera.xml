@@ -23,6 +23,15 @@
             android:layout_below="@+id/layoutTop"
             android:background="#ff000000"
             >
+            <RelativeLayout
+                android:id="@+id/wnd_inner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:background="#ff000000"
+                android:transitionName="sharedElement"
+
+                >
+
 
             <com.xm.ui.media.MultiWinLayout
                 android:id="@+id/layoutPlayWnd"
@@ -74,6 +83,8 @@
                 android:visibility="gone"
                 uilib:subCount="7"
                 android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
 
         </RelativeLayout>
         <LinearLayout
@@ -177,61 +188,107 @@
                 android:padding="8dp"
                 android:background="@color/black">
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight=".02"
                     android:layout_height="24dp"
-                    android:src="@drawable/mic_icon"
-                    android:contentDescription="Microphone"
-                    android:layout_marginEnd="8dp"
-                    android:id="@+id/microphone"
-                    android:tag="5"
-                    />
+                    android:id="@+id/iv_answer_call_ll"
 
-                <ImageView
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:src="@drawable/call_icon"
+                        android:contentDescription="Call"
+                        android:layout_marginEnd="8dp"
+                        android:id="@+id/iv_answer_call"
+                        android:tag="27"
+                        />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight=".02"
                     android:layout_height="24dp"
-                    android:src="@drawable/speaker_icon_1"
-                    android:contentDescription="mute"
-                    android:layout_marginEnd="8dp"
-                    android:tag="0"
-                    android:id="@+id/sound"
-                    />
+                    android:id="@+id/microphone_ll"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:src="@drawable/mic_icon"
+                        android:contentDescription="Microphone"
+                        android:layout_marginEnd="8dp"
+                        android:id="@+id/microphone"
+                        android:tag="5"
+                        />
+                </LinearLayout>
 
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_weight=".02"
-                    android:layout_height="20dp"
-                    android:src="@drawable/video_icon"
-                    android:contentDescription="Speaker"
-                    android:layout_marginEnd="8dp"
-                    android:tag="2"
-                    android:id="@+id/video"
-                    />
-
-                <ImageView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight=".02"
                     android:layout_height="24dp"
-                    android:src="@drawable/camera_camer_1"
-                    android:contentDescription="Camera"
-                    android:layout_marginEnd="8dp"
-                    android:tag="1"
-                    android:id="@+id/camera"
-                    />
+                    android:id="@+id/sound_ll"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:src="@drawable/speaker_icon_1"
+                        android:contentDescription="mute"
+                        android:layout_marginEnd="8dp"
+                        android:tag="0"
+                        android:id="@+id/sound"
+                        />
+                </LinearLayout>
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight=".02"
                     android:layout_height="24dp"
-                    android:src="@drawable/sd_icon"
-                    android:contentDescription="UHD"
-                    android:id="@+id/sd"
-                    android:tag="5"
+                    android:id="@+id/video_ll"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:src="@drawable/video_icon"
+                        android:contentDescription="Speaker"
+                        android:layout_marginEnd="8dp"
+                        android:tag="2"
+                        android:id="@+id/video"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:id="@+id/camera_ll"
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:src="@drawable/camera_camer_1"
+                        android:contentDescription="Camera"
+                        android:layout_marginEnd="8dp"
+                        android:tag="1"
+                        android:id="@+id/camera"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight=".02"
+                    android:layout_height="24dp"
+                    android:id="@+id/sd_ll"
                     android:visibility="gone"
-
-                    />
+                    >
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="24dp"
+                        android:src="@drawable/sd_icon"
+                        android:contentDescription="UHD"
+                        android:id="@+id/sd"
+                        android:tag="5"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
 
@@ -256,14 +313,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/main_buttons_ll"
-
                 >
 
                 <!-- Button Group -->
                 <LinearLayout
+                    android:id="@+id/buttons_ll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:transitionName="sharedElement"
+
                     android:gravity="center">
 
                     <Button
@@ -315,7 +374,24 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:background="@color/layout2_background"
-                    android:visibility="visible">
+                    android:visibility="gone"
+                    >
+                    <RelativeLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        android:layout_below="@+id/layoutTop"
+                        android:background="#ff000000"
+                        >
+
+                        <com.xm.ui.media.MultiWinLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            uilib:NormalFrameBg="@drawable/wnd_margin_normal"
+                            uilib:SelectedFrameBg="@drawable/wnd_margin_normal"
+                            android:background="@color/wnd_cover_gray" />
+                        <!--多目Sensor切换-->
+                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -348,6 +424,12 @@
                 android:visibility="gone"/>
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/fragment_container1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
 
     </RelativeLayout>
 

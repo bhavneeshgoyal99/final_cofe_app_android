@@ -78,10 +78,10 @@
             >
 
             <ImageView
-                android:layout_width="36dp"
+                android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:src="@drawable/motion_icon"
-                android:contentDescription="Motion Tracking Icon" />
+                android:contentDescription="Motion Tracking Icon"
+                android:src="@drawable/motion_icon" />
 
             <TextView
                 android:layout_width="wrap_content"

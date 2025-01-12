@@ -2,9 +2,7 @@ package com.cofe.solution.base;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.cofe.solution.app.SDKDemoApplication;
 import com.xm.activity.base.XMBaseFragment;
@@ -22,7 +19,7 @@ import com.xm.ui.widget.XTitleBar;
 
 import java.util.Locale;
 
-public abstract class DemoBaseFragment<T extends XMBasePresenter> extends XMBaseFragment<T> {
+public abstract class DemoBaseBottomSheetFragment<T extends XMBasePresenter> extends XMBaseFragment<T> {
     public static final String androidDoc = "https://docs.jftech.com/docs?menusId=ab0ed73834f54368be3e375075e27fb2&siderId=45357c529496431590a7e3463b7cc520&lang=" + Locale.getDefault().getLanguage();
     protected XTitleBar titleBar;
 

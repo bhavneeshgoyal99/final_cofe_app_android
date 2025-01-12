@@ -107,7 +107,55 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
          * */
 
         String info = JSON.toJSONString(devShareQrCodeInfo);//注意：该数据建议要加密处理后再生成二维码
-        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_app);//获取logo
+        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher_monochrome_);//获取logo
+        System.out.println("encInfo:" + info);
+        Bitmap bitmap = null;
+        try {
+            bitmap = createQRCodeBitmap(info, logo, BarcodeFormat.QR_CODE, 600);//生成二维码
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
+    }
+
+    public Bitmap getShareDevQrCode(Context context, String devId) {
+        String loginUserId = FunSDK.GetFunStrAttr(LOGIN_USER_ID);
+        String pwd = FunSDK.DevGetLocalPwd(devId);
+        int devType = DevDataCenter.getInstance().getDevType(devId);
+        DevShareQrCodeInfo devShareQrCodeInfo = new DevShareQrCodeInfo();
+        devShareQrCodeInfo.setDevType(devType);//设备类型
+        devShareQrCodeInfo.setUserId(loginUserId);//账号登录userId
+        String loginName = FunSDK.DevGetLocalUserName(devId);//获取本地的设备登录密码
+        devShareQrCodeInfo.setPwd(pwd);//设置设备登录密码
+        devShareQrCodeInfo.setLoginName(TextUtils.isEmpty(loginName) ? "admin" : loginName); //设备设备登录名
+        devShareQrCodeInfo.setDevId(devId);//设备设备序列号
+        devShareQrCodeInfo.setShareTimes(System.currentTimeMillis() / 1000);//设置分享时间（该时间是用来在扫描二维码添加的时候判断是否过期了，具体的过期时长可自定义，比如30分钟）
+        String devToken = FunSDK.DevGetLocalEncToken(devId);//获取设备的登录Token（支持Token的设备才有）
+        if (!TextUtils.isEmpty(devToken)) {
+
+            devShareQrCodeInfo.setDevToken(devToken);//设置设备的登录Token
+        }
+
+        /**
+         * 如果要设置访问权限，可以调用以下方法
+         * devShareQrCodeInfo.setPermissions(“权限信息”)，这个权限信息自定义，比如
+         * {
+         * "DP_ModifyConfig": 0,//修改设备配置
+         * "DP_ModifyPwd": 0,//修改设备密码 暂不提供修改
+         * "DP_CloudServer": 0,//访问云服务 暂不提供修改
+         * "DP_Intercom": 1,//对讲
+         * "DP_PTZ": 1,//云台
+         * "DP_LocalStorage": 1,//本地存储
+         * "DP_ViewCloudVideo": 0,//查看云视频
+         * "DP_DeleteCloudVideo": 0,//删除云视频 暂不提供修改
+         * "DP_AlarmPush": 0,//推送（包括查看报警消息）
+         * "DP_DeleteAlarmInfo": 0//删除报警消息（包括图片）暂不提供修改
+         * }，该信息是透传的，生成二维码后扫描获取到该信息，直接解析就行；
+         * */
+
+        String info = JSON.toJSONString(devShareQrCodeInfo);//注意：该数据建议要加密处理后再生成二维码
+        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher_monochrome_);//获取logo
         System.out.println("encInfo:" + info);
         Bitmap bitmap = null;
         try {

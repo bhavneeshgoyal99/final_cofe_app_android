@@ -375,20 +375,28 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
                                     }
                                 }
+                            } else {
+                                Toast.makeText(this, R.string.qr_code_does_match_to_add_device, Toast.LENGTH_LONG).show();
+                                finish();
+
                             }
                             //f18cd13eafc94f5b3yyd,,,285409282,0,A9A0137601520001
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Toast.makeText(this, R.string.failed_to_add_device, Toast.LENGTH_LONG).show();
                     }
                 }
             } else {
+                Toast.makeText(this, R.string.qr_code_does_match_to_add_device, Toast.LENGTH_LONG).show();
                 finish();
             }
         } else {
+            Toast.makeText(this, R.string.qr_code_does_match_to_add_device, Toast.LENGTH_LONG).show();
             finish();
         }
     }
+
 
     @Override
     public void onAddDevResult(boolean isSuccess, int errorId) {
