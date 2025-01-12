@@ -582,6 +582,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         autoHideManager = new AutoHideManager();
         autoHideManager.addView(findViewById(R.id.ll_dev_state));
+        autoHideManager.addView(findViewById(R.id.top_nav_bar));
+        autoHideManager.addView(findViewById(R.id.side_setting_icon_rl));
+
         autoHideManager.show();
 
         // Initialize TabLayout and ViewPager2
