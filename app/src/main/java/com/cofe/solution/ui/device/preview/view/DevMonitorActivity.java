@@ -549,6 +549,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         openSetting = findViewById(R.id.settings_icon);
         backImage = findViewById(R.id.settings_icon);
         dName = findViewById(R.id.device_name);
+        SharedPreference cookies = new SharedPreference(getApplication());
+        dName.setText(cookies.retrievDevName());
+
         mainButtonsLl = findViewById(R.id.main_buttons_ll);
 
         cameraImg.setOnClickListener(new OnClickListener() {
@@ -2199,7 +2202,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             wndLayout.requestLayout();
             presenter.setPlayViewTouchable(0, true);
             SharedPreference cookies = new SharedPreference(getApplication());
-            cookies.retrievDevName();
             dName.setText(cookies.retrievDevName());
 
             //如果是假多目，横屏的时候需要更改画布
