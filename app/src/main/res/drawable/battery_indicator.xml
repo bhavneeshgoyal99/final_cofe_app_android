@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Battery Background -->
+    <item android:id="@android:id/background" android:drawable="@drawable/extra_without_charging" />
+
+    <!-- Battery Fill (Clipped) -->
+    <item android:id="@android:id/progress">
+        <clip
+            android:drawable="@drawable/battery_fill"
+            android:clipOrientation="horizontal"
+            android:scaleType="fitXY" />
+    </item>
+
+</layer-list>

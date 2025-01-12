@@ -21,6 +21,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.LayerDrawable;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +49,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +60,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -70,6 +74,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.cofe.solution.app.SDKDemoApplication;
+import com.cofe.solution.base.BatteryDrawable;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgFragment;
@@ -345,6 +350,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     boolean isVideoCaptureStart = false;
     boolean isSoundCaptureStart = false;
 
+    private BatteryDrawable batteryDrawable;
+    //com.rejowan.abv.ABV batteryIndicator;
+    ProgressBar batteryProgressBar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -372,6 +380,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         // Initialize default state
         showLayout(1);
+        batteryDrawable = new BatteryDrawable();
+        batteryProgressBar = findViewById(R.id.batteryProgressBar);
 
     }
     private void showLayout(int layoutNumber) {
@@ -537,6 +547,15 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         }
     }
     private void initView() {
+
+        /*//DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                getSupportActionBar().setHomeAsUpIndicator(batteryDrawable);
+            }
+        });*/
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.device_preview));
         titleBar.setRightBtnResource(R.mipmap.icon_setting_normal, R.mipmap.icon_setting_pressed);
@@ -1419,8 +1438,58 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         if (tvBatteryState.getVisibility() == View.GONE) {
             tvBatteryState.setVisibility(VISIBLE);
         }
+        tvBatteryState.setVisibility(View.GONE);
+
+        /*batteryIndicator.setChargeLevel(electCapacityBean.percent);
+
+        if (electCapacityBean.electable == 0) {
+            batteryIndicator.setCharging(false);
+        } else if(electCapacityBean.electable == 1) {
+            batteryIndicator.setCharging(true);
+        }  else if(electCapacityBean.electable == 2){
+            batteryIndicator.setCharging(false);
+        } else {
+            batteryIndicator.setChargeLevel(5);
+            batteryIndicator.setCharging(false);
+        }*/
+
+        //batteryDrawable.setBatteryLevel(electCapacityBean.percent);
+        updateBatteryColor(electCapacityBean.percent, electCapacityBean.electable);
 
         tvBatteryState.setText(String.format(getString(R.string.battery_state_show), electCapacityBean.percent, electCapacityBean.devStorageStatus, electCapacityBean.electable));
+    }
+    private void updateBatteryColor( int percentage, int chargeState) {
+        boolean isCharging = false;
+        if (chargeState == 0) {
+            isCharging = false;
+        } else if(chargeState == 1) {
+            isCharging = true;
+        }  else if(chargeState == 2){
+            isCharging = false;
+        } else {
+            isCharging = false;
+        }
+
+        LayerDrawable layerDrawable = (LayerDrawable) batteryProgressBar.getProgressDrawable();
+        if (percentage < 20) {
+            layerDrawable.findDrawableByLayerId(android.R.id.progress)
+                    .setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+        } else if (percentage < 50) {
+            layerDrawable.findDrawableByLayerId(android.R.id.progress)
+                    .setColorFilter(Color.YELLOW, android.graphics.PorterDuff.Mode.SRC_IN);
+        } else {
+            layerDrawable.findDrawableByLayerId(android.R.id.progress)
+                    .setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+
+        if (isCharging) {
+            // Show charging icon
+            batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator_charging));
+        } else {
+            // Hide charging icon
+            batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator));
+        }
+
     }
 
     /**
@@ -1435,8 +1504,23 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             if (tvWiFiState.getVisibility() == View.GONE) {
                 tvWiFiState.setVisibility(VISIBLE);
             }
-
+            tvWiFiState.setVisibility(View.GONE);
             tvWiFiState.setText(String.format(getString(R.string.wifi_state_show), wifiRouteInfo.getSignalLevel()));
+
+            ImageView wifiSignalView = findViewById(R.id.wifiSignalView);
+
+            // Simulate signal strength (Weak, Medium, Strong)
+            int signalStrength = wifiRouteInfo.getSignalLevel(); // Custom method to get WiFi signal strength
+
+            if (signalStrength < 2) {
+                wifiSignalView.setImageDrawable(getDrawable(R.drawable.wifi_fair));
+            } else if (signalStrength < 4) {
+                wifiSignalView.setImageDrawable(getDrawable(R.drawable.wifi_good));
+            } else {
+                wifiSignalView.setImageDrawable(getDrawable(R.drawable.wifi_strong));
+            }
+
+
         }
     }
 
@@ -1450,6 +1534,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         if (tvRate.getVisibility() == View.GONE) {
             tvRate.setVisibility(VISIBLE);
         }
+
+        Log.d("onVideoRateResult > "  ," value  > " +rate);
 
         tvRate.setText(rate);
     }

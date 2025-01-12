@@ -196,6 +196,7 @@
     <color name="layout1_background">#FFE1F5FE</color> <!-- Light Blue -->
     <color name="layout2_background">#FFF8E1F5</color> <!-- Light Pink -->
     <color name="layout3_background">#FFF1F8E9</color> <!-- Light Green -->
-    <color name="bg_color">#FFF1F8E9</color> <!-- Light Green -->
+    <color name="bg_color">#FFF1F8E9</color>
+    <color name="green">#47C54D</color> <!-- Light Green -->
 
 </resources>

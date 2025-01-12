@@ -1,20 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:uilib="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
     android:longClickable="true">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="visible"
         android:background="@drawable/gradient_background"
+        android:orientation="vertical"
         >
 
         <include
             android:id="@+id/layoutTop"
             layout="@layout/include_title_layout"/>
+
+        <RelativeLayout
+            android:id="@+id/ll_dev_state"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@color/black"
+            android:orientation="horizontal">
+            <!--<androidx.drawerlayout.widget.DrawerLayout
+                android:id="@+id/drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                &lt;!&ndash; Main Content &ndash;&gt;
+                <FrameLayout
+                    android:id="@+id/content_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                &lt;!&ndash; Navigation Drawer &ndash;&gt;
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start" />
+
+            </androidx.drawerlayout.widget.DrawerLayout>-->
+
+            <ProgressBar
+                android:id="@+id/batteryProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="30dp"
+                android:layout_height="15dp"
+                android:progressDrawable="@drawable/battery_indicator"
+                android:max="100"
+                android:progress="10"
+                android:layout_marginLeft="@dimen/half_of_normal_margin"
+                android:layout_marginTop="@dimen/half_of_normal_margin"
+                />
+            <ImageView
+                android:id="@+id/wifiSignalView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/half_of_normal_margin"
+                android:layout_marginTop="@dimen/half_of_normal_margin"
+                />
+
+            <TextView
+                android:id="@+id/tv_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/half_of_normal_margin"
+                />
+            <!--<com.rejowan.abv.ABV
+                android:id="@+id/abv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:abvNormalBgColor="@color/green"
+                app:abvNormalLevelColor="@color/green"
+                app:abvWarningBgColor="#FFCF96"
+                app:abvWarningLevelColor="#B71C1C"
+                app:abvCriticalBgColor="#F0AFAF"
+                app:abvCriticalLevelColor="#FF0E0E"
+                app:abvChargingBgColor="#00FFFFFF"
+                app:abvChargingLevelColor="#4DD86C"
+                app:abvChargeLevel="5"
+                app:abvWarningChargeLevel="30"
+                app:abvCriticalChargeLevel="10"
+                app:abvRadius="10"
+                app:abvBatteryOrientation="landscape"
+                app:abvSize="10"
+                app:abvChargingIcon="@drawable/ic_charge_abv"
+                app:abvWarningIcon="@drawable/ic_warning_abv"
+                android:layout_marginLeft="@dimen/spacing_large"
+                android:layout_marginTop="@dimen/half_of_normal_margin"
+                />-->
+
+
+            <TextView
+                android:id="@+id/tv_battery_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tv_wifi_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/wnd_layout"
@@ -40,11 +141,57 @@
                 uilib:NormalFrameBg="@drawable/wnd_margin_normal"
                 uilib:SelectedFrameBg="@drawable/wnd_margin_normal"
                 android:background="@color/wnd_cover_gray" />
-            <LinearLayout
+            <!--<LinearLayout
                 android:id="@+id/ll_dev_state"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                &lt;!&ndash;<androidx.drawerlayout.widget.DrawerLayout
+                    android:id="@+id/drawer_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    &lt;!&ndash; Main Content &ndash;&gt;
+                    <FrameLayout
+                        android:id="@+id/content_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    &lt;!&ndash; Navigation Drawer &ndash;&gt;
+                    <com.google.android.material.navigation.NavigationView
+                        android:id="@+id/nav_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start" />
+
+                </androidx.drawerlayout.widget.DrawerLayout>&ndash;&gt;
+
+                <com.rejowan.abv.ABV
+                    android:id="@+id/abv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:abvNormalBgColor="@color/green"
+                    app:abvNormalLevelColor="@color/green"
+                    app:abvWarningBgColor="#FFCF96"
+                    app:abvWarningLevelColor="#B71C1C"
+                    app:abvCriticalBgColor="#00FFFFFF"
+                    app:abvCriticalLevelColor="#B71C1C"
+                    app:abvChargingBgColor="#00FFFFFF"
+                    app:abvChargingLevelColor="#4DD86C"
+                    app:abvChargeLevel="5"
+                    app:abvWarningChargeLevel="30"
+                    app:abvCriticalChargeLevel="10"
+                    app:abvRadius="10"
+                    app:abvBatteryOrientation="landscape"
+                    app:abvSize="20"
+                    app:abvChargingIcon="@drawable/ic_charge_abv"
+                    app:abvWarningIcon="@drawable/ic_warning_abv"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginTop="@dimen/half_of_normal_margin"
+                    />
+
+
                 <TextView
                     android:id="@+id/tv_battery_state"
                     android:layout_width="wrap_content"
@@ -66,7 +213,7 @@
                     android:background="@color/black"
                     android:textColor="@color/white"
                     android:visibility="gone"/>
-            </LinearLayout>
+            </LinearLayout>-->
 
             <!--多目Sensor切换-->
             <com.xm.ui.widget.XMScaleSeekBar
@@ -85,98 +232,95 @@
                 android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
-
-        </RelativeLayout>
-        <LinearLayout
-            android:id="@+id/top_nav_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:visibility="visible"
-            >
-
-            <ImageButton
-                android:id="@+id/back_arrow_img"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/back_arrow_icon_white"
-                android:background="@android:color/transparent"
-                android:contentDescription="Back"
-                android:layout_marginEnd="8dp" />
-
-            <TextView
-                android:id="@+id/device_name"
+            <LinearLayout
+                android:id="@+id/top_nav_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="aov"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                />
-        </LinearLayout>
-        <!-- Settings Icon -->
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_alignParentRight="true"
-            >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="240dp"
-                android:layout_weight=".1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="visible"
                 >
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight=".04">
-                    <ImageButton
-                        android:id="@+id/settings_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/setting_icon_white"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Settings" />
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight=".03">
-                    <ImageButton
-                        android:id="@+id/rotate_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/mobile_rotate_white"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Rotate"
-                        android:layout_marginEnd="8dp" />
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight=".03">
-                    <ImageButton
-                        android:id="@+id/stobe_img"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/white_bulb_icon"
-                        android:background="@android:color/transparent"
-                        android:contentDescription="Rotate"
-                        android:layout_marginEnd="8dp"
-                        android:tag="23"
-                        />
-                </RelativeLayout>
+
+                <ImageButton
+                    android:id="@+id/back_arrow_img"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/back_arrow_icon_white"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Back"
+                    android:layout_marginEnd="8dp" />
+
+                <TextView
+                    android:id="@+id/device_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="aov"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    />
             </LinearLayout>
+            <!-- Settings Icon -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_alignParentRight="true"
+                >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="240dp"
+                    android:layout_weight=".1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    >
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".04">
+                        <ImageButton
+                            android:id="@+id/settings_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/setting_icon_white"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Settings" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".03">
+                        <ImageButton
+                            android:id="@+id/rotate_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/mobile_rotate_white"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Rotate"
+                            android:layout_marginEnd="8dp" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight=".03">
+                        <ImageButton
+                            android:id="@+id/stobe_img"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/white_bulb_icon"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="Rotate"
+                            android:layout_marginEnd="8dp"
+                            android:tag="23"
+                            />
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
         </RelativeLayout>
-
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_monitor_fun"
@@ -184,7 +328,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/wnd_layout"
             android:visibility="gone" />
-
 
 
         <LinearLayout
@@ -447,6 +590,6 @@
             android:layout_alignParentBottom="true"
             />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

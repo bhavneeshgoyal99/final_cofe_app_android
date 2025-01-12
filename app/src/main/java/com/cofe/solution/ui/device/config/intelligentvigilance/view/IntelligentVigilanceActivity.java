@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lib.SDKCONST;
@@ -59,6 +60,18 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
     }
 
     private void initView() {
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.intelligent_vigilance));
+
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.hunman_detect));
         titleBar.setRightBtnResource(R.mipmap.icon_save_normal,R.mipmap.icon_save_pressed);

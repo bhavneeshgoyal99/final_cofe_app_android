@@ -992,5 +992,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="time_sync">Confirm sync time</string>
+    <string name="stobe_alaram">Stobe Alarm</string>
 
 </resources>

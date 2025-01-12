@@ -110,7 +110,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     private void initView() {
         TextView titleTxtv = findViewById(R.id.toolbar_title);
-        titleTxtv.setText(getString(R.string.device_setting));
+        titleTxtv.setText(getString(R.string.stobe_alaram));
 
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
             @Override
