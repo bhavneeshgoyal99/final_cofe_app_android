@@ -382,7 +382,7 @@
                         android:focusable="true"
                         android:id="@+id/about_device_item"
                         android:layout_marginTop="2dp"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         >
 
                         <ImageView

@@ -1,5 +1,6 @@
 package com.cofe.solution.ui.device.config.about.view;
 
+import static android.view.View.VISIBLE;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_P2P;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_RPS;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_RTS;
@@ -9,6 +10,7 @@ import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_TRANSMIT;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,12 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.lib.ECONFIG;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.SysDevAbilityInfoBean;
+import com.lib.sdk.bean.SystemFunctionBean;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
+import com.manager.device.DeviceManager;
 import com.manager.sysability.SysAbilityManager;
 import com.utils.FileUtils;
 import com.utils.XUtils;
@@ -30,6 +35,7 @@ import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ItemSetLayout;
 import com.xm.ui.widget.ListSelectItem;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
@@ -74,6 +80,9 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     private static final int SYS_LOCAL_FILE_REQUEST_CODE = 0x08;
     private String firmwareType;//固件類型 默认是System（主控），Mcu（单片机）
 
+
+
+
     @Override
     public DevAboutPresenter getPresenter() {
         return new DevAboutPresenter(this);
@@ -99,14 +108,12 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
 
         devSnText = findViewById(R.id.textDeviceSN_1);
-        devModelText = findViewById(R.id.textDeviceModel_1);
         devHWVerText = findViewById(R.id.textDeviceHWVer_1);
         devSWVerText = findViewById(R.id.textDeviceSWVer_1);
         devPubDateText = findViewById(R.id.textDevicePubDate_1);
 
         devRunTimeText = findViewById(R.id.textDeviceRunTime_1);
-        devNatCodeText = findViewById(R.id.textDeviceNatCode_1);
-        devNatStatusText = findViewById(R.id.textDeviceNatStatus_1);
+        devNatCodeText = findViewById(R.id.textDeviceNetwork);
         devSNCodeImg = findViewById(R.id.imgDeviceQRCode_1);
         devUpdateText = findViewById(R.id.textDeviceUpgrade_1);
         defaltConfigBtn = findViewById(R.id.defealtconfig_1);
@@ -114,6 +121,8 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         //tvDevInfo = ((ItemSetLayout) findViewById(R.id.isl_device_info)).getMainLayout().findViewById(R.id.textDeviceNatCode_1);
 
         lsiDevUpgrade = findViewById(R.id.lsi_check_dev_upgrade);
+
+        presenter.getDevInfo("System");
 
         lsiDevUpgrade.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +179,13 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         if (StringUtils.isStringNULL(firmwareType)) {
             firmwareType = "System";
         }
+        presenter.setInterface(new DevAboutPresenter.DeviceAboutInterfce(){
 
+            @Override
+            public void receiveData(String data) {
+
+            }
+        });
         presenter.getDevInfo(firmwareType);
         presenter.getDevCapsAbility(this);
         Log.d("Dev About Page ","device id > " +presenter.getDevId() );
@@ -178,6 +193,8 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         if (xmDevInfo != null) {
             lsiDevPid.setRightText(StringUtils.isStringNULL(xmDevInfo.getPid()) ? "" : xmDevInfo.getPid());
         }
+
+        this.publishDeviceData();
     }
 
     @Override
@@ -187,9 +204,40 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
     @Override
     public void onUpdateView(String result) {
-        Log.d("DevAbout Activity","onUpdateView  result > " + result);
+        try{
+            JSONObject originalResult = new JSONObject(result);
+            JSONObject systemInfo = new JSONObject(originalResult.get("SystemInfo").toString());
 
-        //tvDevInfo.setText(result);
+            Log.d("DevAbout Activity","onUpdateView  result > 210 " + systemInfo.get("BuildTime") );
+
+            devSnText.setText(systemInfo.get("SerialNo").toString());
+            devSnText.setText("a***n");
+            devSWVerText.setText(systemInfo.get("SoftWareVersion").toString());
+            devSWVerText.setText(systemInfo.get("HardWare").toString());
+            devPubDateText.setText(systemInfo.get("BuildTime").toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    void publishDeviceData() {
+        DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
+            @Override
+            public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
+                Log.d("Device result " , " presenter.getDevId() > "  + result.getOriginalJson());
+
+                try {
+
+                }catch ( Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                Log.d("onFailed > ", " errorId > "  +errorId);
+                Log.d("onFailed > ", " jsonName > "  +jsonName);
+            }
+        });
     }
 
     @Override
@@ -290,17 +338,23 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     @Override
     public void onDevNetConnectMode(int netConnectType) {
         if (netConnectType == CONNECT_TYPE_P2P) {
-            lsiNetworkMode.setRightText("P2P");
+            devNatCodeText.setText("P2P");
+//            lsiNetworkMode.setRightText("P2P");
         } else if (netConnectType == CONNECT_TYPE_TRANSMIT) {
-            lsiNetworkMode.setRightText(getString(R.string.settings_about_transmit_mode));
+            devNatCodeText.setText(getString(R.string.settings_about_transmit_mode));
+//            lsiNetworkMode.setRightText(getString(R.string.settings_about_transmit_mode));
         } else if (netConnectType == CONNECT_TYPE_RPS) {
-            lsiNetworkMode.setRightText(FunSDK.TS("RPS"));
+            devNatCodeText.setText("RPS");
+//            lsiNetworkMode.setRightText(FunSDK.TS("RPS"));
         } else if (netConnectType == CONNECT_TYPE_RTS_P2P) {
-            lsiNetworkMode.setRightText(FunSDK.TS("RTS P2P"));
+            devNatCodeText.setText("RTS P2P");
+//            lsiNetworkMode.setRightText(FunSDK.TS("RTS P2P"));
         } else if (netConnectType == CONNECT_TYPE_RTS) {
-            lsiNetworkMode.setRightText(FunSDK.TS("RTS Proxy"));
+            devNatCodeText.setText("RTS Proxy");
+//            lsiNetworkMode.setRightText(FunSDK.TS("RTS Proxy"));
         } else {
-            lsiNetworkMode.setRightText("IP");
+            devNatCodeText.setText("IP");
+//            lsiNetworkMode.setRightText("IP");
         }
     }
 
@@ -328,4 +382,6 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
             }
         }
     }
+
+
 }

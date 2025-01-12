@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <!-- Toolbar -->
         <include
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -74,14 +74,15 @@
                     android:orientation="horizontal"
                     android:layout_weight="1"
                     >
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:layout_weight=".3"
                         android:text="SN"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp"/>
+                        android:textAlignment="viewStart"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -102,12 +103,11 @@
                     >
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
                         android:text="Device Login Name"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -126,12 +126,11 @@
                     android:layout_weight="1"
                     >
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
                         android:text="Device Version"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -150,37 +149,11 @@
                     android:orientation="horizontal"
                     >
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".3"
-                        android:text="Device Model"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".7"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"
-                        android:textColor="@android:color/darker_gray"
-                        android:id="@+id/textDeviceModel_1"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
                         android:text="Software Version"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -200,12 +173,11 @@
                     >
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:text="Device Published Date"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:text="Publish Date"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -225,12 +197,35 @@
                     >
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:text="Device Run Time"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:text="Timezone"
+                        android:textSize="14sp"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".7"
+                        android:textSize="14sp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@android:color/darker_gray"
+                        android:id="@+id/textDeviceTimezone"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:text="Device Time"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -250,12 +245,11 @@
                     >
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:text="Device Nat Code"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:text="Network"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
 
@@ -266,7 +260,7 @@
                         android:textSize="14sp"
                         android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
-                        android:id="@+id/textDeviceNatCode_1"/>
+                        android:id="@+id/textDeviceNetwork"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -274,14 +268,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
+
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:text="Device Nat Status"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:text="Manufacturing Method"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -289,7 +284,7 @@
                         android:textSize="14sp"
                         android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
-                        android:id="@+id/textDeviceNatStatus_1"/>
+                        android:id="@+id/textManufacturingMethod"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -299,12 +294,11 @@
                     >
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:text=" Device Upgrade"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
+                        android:text="Upgrade"
+                        android:textSize="14sp"
                         android:layout_marginTop="16dp" />
 
                     <TextView
@@ -316,32 +310,6 @@
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceUpgrade_1"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".3"
-                        android:text=" Device Default Config"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="16dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".7"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"
-                        android:textColor="@android:color/darker_gray"
-                        />
-            </LinearLayout>
 
                 <Button
                     android:id="@+id/defealtconfig_1"

@@ -36,6 +36,7 @@ import android.os.Environment;
 import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedReader;
@@ -77,6 +78,15 @@ public class DevAboutPresenter extends XMBasePresenter<DeviceManager>
     private String sysInfoExJson;
     private String firmwareType = "System";//升级类型 是主控还是锁板（单片机）
 
+    DeviceAboutInterfce dInterfce;
+    public interface DeviceAboutInterfce {
+        void receiveData(String data);
+    }
+
+    public void setInterface(DeviceAboutInterfce dInterfce) {
+        this.dInterfce = dInterfce;
+    }
+
     public DevAboutPresenter(DevAboutContract.IDevAboutView iDevAboutView) {
         this.iDevAboutView = iDevAboutView;
         userId = FunSDK.GetId(userId, this);
@@ -99,12 +109,15 @@ public class DevAboutPresenter extends XMBasePresenter<DeviceManager>
 
     @Override
     public void getDevInfo(String type) {
+        Log.d("ssadada", "xzczxczc");
         this.firmwareType = type;
         if (StringUtils.contrast(firmwareType, "System")) {
             //获取SystemInfo信息
             DevConfigInfo devConfigInfo = DevConfigInfo.create(new DevConfigManager.OnDevConfigResultListener() {
                 @Override
                 public void onSuccess(String devId, int msgId, Object result) {
+                    Log.d("Line:110", "DeviceResult" + result);
+
                     if (result instanceof String) {
                         iDevAboutView.onUpdateView((String) result);
                     } else {
@@ -133,30 +146,30 @@ public class DevAboutPresenter extends XMBasePresenter<DeviceManager>
             devConfigManager.getDevConfig(devConfigInfo);
         } else {
             //获取SystemInfoEx信息
-            DevConfigInfo devConfigInfo = DevConfigInfo.create(new DeviceManager.OnDevManagerListener() {
-                @Override
-                public void onSuccess(String devId, int msgId, Object result) {
-                    if (result instanceof String) {
-                        sysInfoExJson = (String) result;
-                        iDevAboutView.onUpdateView((String) result);
-                    } else {
-                        sysInfoExJson = JSON.toJSONString(result);
-                        iDevAboutView.onUpdateView(JSON.toJSONString(result));
-                    }
-
-                    checkDevUpgrade();
-                }
-
-                @Override
-                public void onFailed(String devId, int msgId, String s1, int errorId) {
-                    iDevAboutView.onUpdateView("数据获取失败：" + errorId);
-                }
-            });
-
-            devConfigInfo.setJsonName(JsonConfig.SYSTEM_EX_INFO);
-            devConfigInfo.setChnId(-1);
-            devConfigInfo.setCmdId(1020);
-            devConfigManager.setDevCmd(devConfigInfo);
+//            DevConfigInfo devConfigInfo = DevConfigInfo.create(new DeviceManager.OnDevManagerListener() {
+//                @Override
+//                public void onSuccess(String devId, int msgId, Object result) {
+//                    if (result instanceof String) {
+//                        sysInfoExJson = (String) result;
+//                        iDevAboutView.onUpdateView((String) result);
+//                    } else {
+//                        sysInfoExJson = JSON.toJSONString(result);
+//                        iDevAboutView.onUpdateView(JSON.toJSONString(result));
+//                    }
+//
+//                    checkDevUpgrade();
+//                }
+//
+//                @Override
+//                public void onFailed(String devId, int msgId, String s1, int errorId) {
+//                    iDevAboutView.onUpdateView("数据获取失败：" + errorId);
+//                }
+//            });
+//
+//            devConfigInfo.setJsonName(JsonConfig.SYSTEM_EX_INFO);
+//            devConfigInfo.setChnId(-1);
+//            devConfigInfo.setCmdId(1020);
+//            devConfigManager.setDevCmd(devConfigInfo);
         }
     }
 
