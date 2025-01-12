@@ -79,6 +79,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.gson.Gson;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.MsgContent;
@@ -634,9 +635,23 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             @Override
             public void onClick(View v) {
                 Intent i =new Intent (DevMonitorActivity.this, DeviceSetting.class);
+                XMDevInfo devInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
+                Gson gson = new Gson();
+                String personJson = gson.toJson(devInfo);
+
+                i.putExtra("dev", personJson);
                 startActivity(i);
             }
         });
+
+
+        findViewById(R.id.stobe_img).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFeatureClicked(findViewById(R.id.stobe_img).getTag().toString());
+            }
+        });
+
         // Set up the ViewPager2 Adapter
         viewPager.setAdapter(new DeviceViewPagerAdapter(this));
         historyTracker = new HistoryTracker();

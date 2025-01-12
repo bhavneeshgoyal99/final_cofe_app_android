@@ -119,14 +119,14 @@
         </LinearLayout>
         <!-- Settings Icon -->
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_alignParentRight="true"
             >
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="240dp"
                 android:layout_weight=".1"
                 android:gravity="center_vertical"
@@ -135,7 +135,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_weight=".05">
+                    android:layout_weight=".04">
                     <ImageButton
                         android:id="@+id/settings_icon"
                         android:layout_width="32dp"
@@ -147,7 +147,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_weight=".05">
+                    android:layout_weight=".03">
                     <ImageButton
                         android:id="@+id/rotate_icon"
                         android:layout_width="32dp"
@@ -156,6 +156,21 @@
                         android:background="@android:color/transparent"
                         android:contentDescription="Rotate"
                         android:layout_marginEnd="8dp" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight=".03">
+                    <ImageButton
+                        android:id="@+id/stobe_img"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/white_bulb_icon"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="Rotate"
+                        android:layout_marginEnd="8dp"
+                        android:tag="23"
+                        />
                 </RelativeLayout>
             </LinearLayout>
 

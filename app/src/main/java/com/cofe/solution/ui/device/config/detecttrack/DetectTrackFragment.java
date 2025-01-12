@@ -316,9 +316,6 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         monitorManager.startMonitor();
         allListviewData();
 
-       
-
-
     }
 
     @Override
