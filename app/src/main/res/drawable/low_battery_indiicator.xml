@@ -11,9 +11,8 @@
     <!-- Battery Fill (Progress Layer) -->
     <item android:id="@android:id/progress">
         <clip
-            android:drawable="@drawable/battery_fill"
+            android:drawable="@drawable/low_battery_fill"
             android:clipOrientation="horizontal"
             android:scaleType="fitXY" />
     </item>
 </layer-list>
-

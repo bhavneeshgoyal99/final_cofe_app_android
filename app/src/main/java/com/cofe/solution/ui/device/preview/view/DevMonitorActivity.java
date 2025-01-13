@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.media.MediaScannerConnection;
 import android.os.Build;
@@ -62,6 +64,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -360,14 +363,12 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     ProgressBar batteryProgressBar;
 
     Handler lowBatteryHandler;
-
+    int wndInnerRVOriginalHeight = 0;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_camera);
-        checkUserLogin();
-
         getWindow().setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition));
         getWindow().setSharedElementExitTransition(TransitionInflater.from(this).inflateTransition(R.transition.shared_element_transition));
 
@@ -390,6 +391,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         showLayout(1);
         batteryDrawable = new BatteryDrawable();
         batteryProgressBar = findViewById(R.id.batteryProgressBar);
+        initView();
 
     }
     private void showLayout(int layoutNumber) {
@@ -515,12 +517,12 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             onFeatureClicked(findViewById(R.id.iv_answer_call).getTag().toString());
         });
 
-        checkAOVBattery(false);
+        //checkAOVBattery(false);
 
     }
 
-    void checkUserLogin() {
 
+    void checkUserLogin() {
         if(DevDataCenter.getInstance().getAccountUserName()!=null) {
             if(DevDataCenter.getInstance().getAccessToken()==null) {
                 AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
@@ -528,8 +530,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                             @Override
                             public void onSuccess(int msgId) {
                                 Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
-                                initView();
-                                initData();
+                                checkAOVBattery(false);
 
                             }
 
@@ -545,14 +546,57 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                         });//LOGIN_BY_INTERNET（1）  Account login type
 
             } else {
-                initView();
-                initData();
+                checkAOVBattery(false);
             }
 
         } else {
-            initView();
-            initData();
+            checkAOVBattery(false);
         }
+    }
+
+    void checkAOVBattery(boolean isPreviewChange) {
+        DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
+            @Override
+            public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
+                Log.d("Device id " , " presenter.getDevId() > "  +presenter.getDevId());
+                Log.d("Device id " , " result.OtherFunction.AovMode > "  +result.OtherFunction.AovMode);
+                Log.d("Device id " , " result.OtherFunction.BatteryManager > "  +result.OtherFunction.BatteryManager);
+
+                try {
+
+                    if (result.OtherFunction.AovMode) {
+                        isAOVDevice =  result.OtherFunction.AovMode;
+                        battery.setVisibility(VISIBLE);
+                        batteryProgressBar.setVisibility(VISIBLE);
+                        changePlayViewSize();
+                        findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(isPreviewChange){
+                                    /*if(playerWindowCount==2) {
+                                        onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
+                                    }*/
+                                    //onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
+                                }
+
+                            }
+                        }, 3000);
+                    } else {
+                        isAOVDevice =  false;
+                    }
+                    initData();
+
+                }catch ( Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                Log.d("onFailed > ", " errorId > "  +errorId);
+                Log.d("onFailed > ", " jsonName > "  +jsonName);
+            }
+        });
     }
     private void initView() {
 
@@ -718,6 +762,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         SharedPreference cookies = new SharedPreference(getApplication());
         dName.setText(cookies.retrievDevName());
+        checkUserLogin();
+
         initSensorView();
     }
 
@@ -1412,12 +1458,16 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         mainVideoStarted = true;
 
-        //onFeatureClicked(""+FUN_APP_OBJ_EFFECT);
         try {
             monitorFunAdapter.changeBtnState(FUN_CHANGE_STREAM, presenter.getStreamType(attribute.getChnnel()) == SDKCONST.StreamType.Main);
-            if (!isLoadCompleteFirstTime) {
-                checkAOVBattery(true);
+            if (!isLoadCompleteFirstTime && isAOVDevice) {
+                onFeatureClicked(FUN_APP_OBJ_EFFECT+"");
+            } else{
+                ViewGroup.LayoutParams playWinLayoutParams = playWndLayout.getLayoutParams();
+                wndInnerRVOriginalHeight = playWinLayoutParams.height;
             }
+
+
             isLoadCompleteFirstTime = true;
         }catch ( Exception e){
             e.printStackTrace();
@@ -1480,43 +1530,63 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         } else {
             isCharging = false;
         }
+            batteryProgressBar.setProgress(percentage);
 
-        LayerDrawable layerDrawable = (LayerDrawable) batteryProgressBar.getProgressDrawable();
-        if (percentage < 20) {
-            layerDrawable.findDrawableByLayerId(android.R.id.progress)
-                    .setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
-        } else if (percentage < 50) {
-            layerDrawable.findDrawableByLayerId(android.R.id.progress)
-                    .setColorFilter(Color.YELLOW, android.graphics.PorterDuff.Mode.SRC_IN);
-        } else {
-            layerDrawable.findDrawableByLayerId(android.R.id.progress)
-                    .setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
-        }
-
-        if (isCharging) {
-            // Show charging icon
-            batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator_charging));
-        } else {
-            // Hide charging icon
-            batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator));
-            if(percentage < 20 ) {
-                showLowBatterDialog();
-                showLowBatterToast();
-            }
-            batteryProgressBar.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    findViewById(R.id.bt_txtv).setVisibility(VISIBLE);
-                    findViewById(R.id.bt_txtv).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            findViewById(R.id.bt_txtv).setVisibility(View.GONE);
-                        }
-                    }, 5000);
+            if (isCharging) {
+                // Show charging icon
+                batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator_charging));
+            } else {
+                // Hide charging icon
+                batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator));
+                // Get the progress layer from the drawable
+                LayerDrawable layerDrawable = (LayerDrawable) batteryProgressBar.getProgressDrawable();
+                Drawable progressLayer = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+                // Change color based on battery percentage
+                // percentage = 10;
+                if (percentage > 0 &&  percentage <= 20) {
+                    Log.d("under 10 " ,"percentage > "  +percentage);
+                    progressLayer.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                } else if (percentage <= 40) {
+                    progressLayer.setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
+                } else if (percentage > 40) {
+                    progressLayer.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                    //progressLayer.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                } else{
+                    Log.d("else is working under 10 " ,"percentage > "  +percentage);
+                    progressLayer.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
                 }
-            });
 
-        }
+                if(percentage < 20 ) {
+                    showLowBatterDialog();
+                    showLowBatterToast();
+                }
+
+            }
+        batteryProgressBar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.bt_txtv).setVisibility(VISIBLE);
+                findViewById(R.id.bt_txtv).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(R.id.bt_txtv).setVisibility(View.GONE);
+                    }
+                }, 5000);
+            }
+        });
+
+
+
+        /*LayerDrawable layerDrawable = (LayerDrawable) batteryProgressBar.getProgressDrawable();
+            Drawable progressLayer = layerDrawable.findDrawableByLayerId(android.R.id.progress);
+            if (percentage > 0 && percentage < 20) {
+                progressLayer.setColorFilter(Color.RED, android.graphics.PorterDuff.Mode.SRC_IN);
+            } else if (percentage > 21 && percentage < 50) {
+                progressLayer.setColorFilter(Color.YELLOW, android.graphics.PorterDuff.Mode.SRC_IN);
+            } else {
+                progressLayer.setColorFilter(Color.GREEN, android.graphics.PorterDuff.Mode.SRC_IN);
+            }*/
+
 
     }
 
@@ -2048,6 +2118,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 break;
             }
             case FUN_LANDSCAPE://全屏
+                changePlayViewSize();
                 screenOrientationManager.landscapeScreen(this, true);
                 break;
             case FUN_FULL_STREAM://满屏显示 视频画面按比例显示
@@ -2366,43 +2437,102 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
      */
     private void changePlayViewSize() {
         ViewGroup.LayoutParams layoutParams = wndLayout.getLayoutParams();
+        ViewGroup.LayoutParams playWinLayoutParams = playWndLayout.getLayoutParams();
         if (isOpenPointPtz || isShowAppMoreScreen) {
             layoutParams.height = XUtils.getScreenWidth(DevMonitorActivity.this) * 18 / 16;
+            playWinLayoutParams.height = layoutParams.height;
         } else {
             layoutParams.height = XUtils.getScreenWidth(DevMonitorActivity.this) * 9 / 16;
+            playWinLayoutParams.height = layoutParams.height;
         }
-
+        Log.d("changePlayViewSize > ",  "layoutParams.height >"+ layoutParams.height);
+        playWndLayout.setLayoutParams(playWinLayoutParams);
+        findViewById(R.id.wnd_inner_layout).setLayoutParams(playWinLayoutParams);
         wndLayout.setLayoutParams(layoutParams);
+        ViewGroup.LayoutParams layoutParams1 = wndLayout.getLayoutParams();
+        Log.d("changePlayViewSize after set > ",  "layoutParams1 .height >"+ layoutParams1.height);
+        wndInnerRVOriginalHeight = layoutParams.height;
+
         presenter.setPlayViewTouchable(0, false);
     }
+
+
+     void setheightOfMonitorPlayViewAccordingToOrientation(boolean isLandScape) {
+         int height;
+         ViewGroup.LayoutParams playWinLayoutParams = playWndLayout.getLayoutParams();
+         if(isLandScape) {
+             height = XUtils.getScreenHeight(DevMonitorActivity.this);
+         } else {
+             height = wndInnerRVOriginalHeight;
+         }
+
+         playWinLayoutParams.height = height;
+         playWndLayout.setLayoutParams(playWinLayoutParams);
+
+         findViewById(R.id.wnd_inner_layout).setLayoutParams(playWinLayoutParams);
+         ViewGroup.LayoutParams layoutParams1 = wndLayout.getLayoutParams();
+
+         Log.d("changePlayViewSize after set > ",  "layoutParams1 .height >"+ layoutParams1.height);
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏
             titleBar.setVisibility(View.GONE);
             rvMonitorFun.setVisibility(View.GONE);
-            portraitWidth = wndLayout.getWidth();
-            portraitHeight = wndLayout.getHeight();
-            ViewGroup.LayoutParams layoutParams = wndLayout.getLayoutParams();
+            portraitWidth = findViewById(R.id.wnd_inner_layout).getWidth();
+            portraitHeight = findViewById(R.id.wnd_inner_layout).getHeight();
+
+            ViewGroup.LayoutParams layoutParams = findViewById(R.id.wnd_inner_layout).getLayoutParams();
             layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            findViewById(R.id.wnd_inner_layout).setLayoutParams(layoutParams);
+            findViewById(R.id.wnd_inner_layout).requestLayout();
+            findViewById(R.id.wnd_inner_layout).invalidate();
+
+
+            ViewGroup.LayoutParams layoutParams1 = wndLayout.getLayoutParams();
+            layoutParams1.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams1.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            wndLayout.setLayoutParams(layoutParams1);
             wndLayout.requestLayout();
+            wndLayout.invalidate();
+
+
             presenter.setPlayViewTouchable(0, true);
             SharedPreference cookies = new SharedPreference(getApplication());
             dName.setText(cookies.retrievDevName());
 
+
             //如果是假多目，横屏的时候需要更改画布
-            if (isShowAppMoreScreen) {
+
+            if (isShowAppMoreScreen && isAOVDevice) {
                 playViews = playWndLayout.setViewCount(2, 2);
                 presenter.changePlayView(playViews);
             }
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {//竖屏
             //titleBar.setVisibility(VISIBLE);
             //rvMonitorFun.setVisibility(VISIBLE);
-            ViewGroup.LayoutParams layoutParams = wndLayout.getLayoutParams();
+            ViewGroup.LayoutParams layoutParams = findViewById(R.id.wnd_inner_layout).getLayoutParams();
             layoutParams.width = portraitWidth;
             layoutParams.height = portraitHeight;
+
+            findViewById(R.id.wnd_inner_layout).setLayoutParams(layoutParams);
+            findViewById(R.id.wnd_inner_layout).requestLayout();
+            findViewById(R.id.wnd_inner_layout).invalidate();
+
+            ViewGroup.LayoutParams layoutParams1 = wndLayout.getLayoutParams();
+            layoutParams1.width = portraitWidth;
+            layoutParams1.height = portraitHeight;
+
+            wndLayout.setLayoutParams(layoutParams1);
             wndLayout.requestLayout();
+            wndLayout.invalidate();
+
+
             //如果支持指哪看哪的功能，需要将预览画布的触摸事件设置成false，传递给上层控件
             DeviceManager.getInstance().getDevAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener() {
                 @Override
@@ -2419,7 +2549,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }, "OtherFunction", "SupportGunBallTwoSensorPtzLocate");
 
             //如果是假多目，横屏的时候需要更改画布
-            if (isShowAppMoreScreen) {
+            if (isShowAppMoreScreen && isAOVDevice) {
                 playViews = playWndLayout.setViewCount(2, 1);
                 presenter.changePlayView(playViews);
             }
@@ -2820,45 +2950,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     }
 
 
-    void checkAOVBattery(boolean isPreviewChange) {
-        DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
-            @Override
-            public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
-                Log.d("Device id " , " presenter.getDevId() > "  +presenter.getDevId());
-                Log.d("Device id " , " result.OtherFunction.AovMode > "  +result.OtherFunction.AovMode);
-                Log.d("Device id " , " result.OtherFunction.BatteryManager > "  +result.OtherFunction.BatteryManager);
-
-                try {
-                    if (result.OtherFunction.AovMode) {
-                        isAOVDevice =  result.OtherFunction.AovMode;
-                        battery.setVisibility(VISIBLE);
-                        findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(isPreviewChange){
-                                    /*if(playerWindowCount==2) {
-                                        onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
-                                    }*/
-                                    onFeatureClicked("" + FUN_APP_OBJ_EFFECT);
-                                }
-
-                            }
-                        }, 3000);
-                    } else {
-                        isAOVDevice =  false;
-                    }
-                }catch ( Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
-                Log.d("onFailed > ", " errorId > "  +errorId);
-                Log.d("onFailed > ", " jsonName > "  +jsonName);
-            }
-        });
-    }
 
     private final SparseArray<Fragment> fragments = new SparseArray<>();
 
