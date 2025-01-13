@@ -993,5 +993,6 @@
     <string name="no">No</string>
     <string name="time_sync">Confirm sync time</string>
     <string name="stobe_alaram">Stobe Alarm</string>
+    <string name="battery_low">Device battery is low. Either charge or change battery</string>
 
 </resources>

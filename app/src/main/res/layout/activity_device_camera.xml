@@ -56,6 +56,20 @@
                 android:layout_marginLeft="@dimen/half_of_normal_margin"
                 android:layout_marginTop="@dimen/half_of_normal_margin"
                 />
+
+            <TextView
+                android:id="@+id/bt_txtv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/batteryProgressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/button_margin"
+                android:layout_marginTop="@dimen/half_of_normal_margin"
+                android:background="@color/black"
+                android:text="@string/watch_time"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+
             <ImageView
                 android:id="@+id/wifiSignalView"
                 android:layout_width="wrap_content"
@@ -352,6 +366,7 @@
                     android:layout_weight=".02"
                     android:layout_height="24dp"
                     android:id="@+id/iv_answer_call_ll"
+                    android:visibility="gone"
 
                     >
                     <ImageView

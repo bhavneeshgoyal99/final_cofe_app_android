@@ -74,7 +74,6 @@
             android:orientation="vertical"
             android:gravity="center"
             android:tag="25"
-
             >
 
             <ImageView

@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.preview.view;
 
 import static android.view.View.VISIBLE;
+import static com.blankj.utilcode.util.ScreenUtils.getScreenWidth;
 import static com.manager.db.Define.LOGIN_NONE;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PlAY;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_PIC_FILE_S;
@@ -42,6 +43,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -161,9 +163,12 @@ import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_THREE_LENS;
 import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_TWO_LENS;
 import static com.cofe.solution.base.FunError.EE_DVR_ACCOUNT_PWD_NOT_VALID;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -353,6 +358,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     private BatteryDrawable batteryDrawable;
     //com.rejowan.abv.ABV batteryIndicator;
     ProgressBar batteryProgressBar;
+
+    Handler lowBatteryHandler;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1491,6 +1499,23 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         } else {
             // Hide charging icon
             batteryProgressBar.setProgressDrawable(getDrawable(R.drawable.battery_indicator));
+            if(percentage < 20 ) {
+                showLowBatterDialog();
+                showLowBatterToast();
+            }
+            batteryProgressBar.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    findViewById(R.id.bt_txtv).setVisibility(VISIBLE);
+                    findViewById(R.id.bt_txtv).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.bt_txtv).setVisibility(View.GONE);
+                        }
+                    }, 5000);
+                }
+            });
+
         }
 
     }
@@ -2807,6 +2832,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                     if (result.OtherFunction.AovMode) {
                         isAOVDevice =  result.OtherFunction.AovMode;
                         battery.setVisibility(VISIBLE);
+                        findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -3055,5 +3081,47 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         startActivity(intent,options.toBundle());
     }
 
+
+    void showLowBatterDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.time_sync_popup_layout);
+        dialog.setCancelable(false); // Prevent dismissal on outside touch
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = (int) (getScreenWidth() * 0.9);
+        dialog.getWindow().setAttributes(layoutParams);
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        // Get references to the buttons
+        Button btnYes = dialog.findViewById(R.id.btn_yes);
+        LinearLayout btnNoLl = dialog.findViewById(R.id.btn_no_ll);
+        TextView titleTxtv = dialog.findViewById(R.id.popup_title);
+        View devider = dialog.findViewById(R.id.devider);
+
+        btnNoLl.setVisibility(View.GONE);
+        devider.setVisibility(View.GONE);
+        titleTxtv.setText(getString(R.string.battery_low));
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // Show the dialog
+        dialog.show();
+    }
+    void showLowBatterToast(){
+        lowBatteryHandler = new Handler();
+        lowBatteryHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showToast(getString(R.string.battery_low), Toast.LENGTH_LONG);
+            }
+        }, 15000);
+    }
 
 }

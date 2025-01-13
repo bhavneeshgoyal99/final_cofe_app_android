@@ -41,6 +41,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
+        android:id="@+id/btn_no_ll"
         >
 
 
@@ -62,6 +63,8 @@
             android:background="@color/color_gray_light_open"
             android:layout_centerInParent="true"
             android:layout_margin="@dimen/half_of_normal_margin"
+            android:id="@+id/devider"
+            android:visibility="gone"
             />
 
         <RelativeLayout
@@ -73,7 +76,7 @@
 
             <Button
                 android:id="@+id/btn_yes"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:text="@string/ok"
