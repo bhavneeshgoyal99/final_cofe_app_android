@@ -313,15 +313,19 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     return false;
                 }
             });
-
+            XMDevInfo xmDevInfo = null;
+            if(getAdapterPosition()!=-1){
+                xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) data.get(getAdapterPosition()).get("devId"));
+            }
             lsiDevInfo = itemView.findViewById(R.id.lsi_dev_info);
             btnTurnToAlarmMsg = itemView.findViewById(R.id.btn_turn_to_alarm_msg);
+            XMDevInfo finalXmDevInfo2 = xmDevInfo;
             btnTurnToAlarmMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
                         int index = getAdapterPosition();
-                        onItemDevClickListener.onTurnToAlarmMsg(index);
+                        onItemDevClickListener.onTurnToAlarmMsg(index, finalXmDevInfo2);
                     }
                 }
             });
@@ -330,11 +334,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             btnTurnToAlarmMsg.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
             btnTurnToPushSet = itemView.findViewById(R.id.btn_turn_to_push_set);
+            XMDevInfo finalXmDevInfo = xmDevInfo;
             btnTurnToPushSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition());
+                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo);
                     }
                 }
             });
@@ -342,11 +347,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             btnTurnToPushSet.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
             btnTurnToCloudService = itemView.findViewById(R.id.btn_turn_to_cloud_service);
+            XMDevInfo finalXmDevInfo3 = xmDevInfo;
             btnTurnToCloudService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition());
+                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition(), finalXmDevInfo3);
                     }
                 }
             });
@@ -479,19 +485,21 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
              devNameTxtv  = itemView.findViewById(R.id.dev_name);;
              bannerImg  = itemView.findViewById(R.id.banner_img);;
 
+            XMDevInfo finalXmDevInfo1 = xmDevInfo;
             btnTurnToPushSet1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition());
+                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo1);
                     }
                 }
             });
+            XMDevInfo finalXmDevInfo4 = xmDevInfo;
             btnTurnToAlarmMsg1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToAlarmMsg(getAdapterPosition());
+                        onItemDevClickListener.onTurnToAlarmMsg(getAdapterPosition(), finalXmDevInfo4);
                     }
                 }
             });
@@ -502,11 +510,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     onItemDevClickListener.openSettingActivity(getAdapterPosition(),xmDevInfo );
                 }
             });
+            XMDevInfo finalXmDevInfo5 = xmDevInfo;
             btnTurnToCloudService1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition());
+                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition(), finalXmDevInfo5);
                     }
                 }
             });
@@ -527,7 +536,11 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     /*if (onItemDevClickListener != null) {
                         onItemDevClickListener.onShareDevManage(getAdapterPosition(), xmDevInfo);
                     }*/
-                        showPopupMenu(view.getContext() ,view, getAdapterPosition(),xmDevInfo);
+                    if(xmDevInfo.getDevState()!=0) {
+                        showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
+                    } else{
+                        Toast.makeText(openPopup.getContext(), openPopup.getContext().getString(R.string.dev_offline), Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -621,11 +634,11 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
 
         boolean onLongItemClick(int position, XMDevInfo xmDevInfo);
 
-        void onTurnToAlarmMsg(int position);
+        void onTurnToAlarmMsg(int position,XMDevInfo xmDevInfo);
 
-        void onTurnToCloudService(int position);
+        void onTurnToCloudService(int position, XMDevInfo xmDevInfo);
 
-        void onTurnToPushSet(int position);
+        void onTurnToPushSet(int position, XMDevInfo xmDevInfo);
 
         void onModifyDevName(int position, XMDevInfo xmDevInfo);
         void openSettingActivity(int position, XMDevInfo xmDevInfo);
@@ -761,7 +774,7 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         messageButton.setOnClickListener(v -> {
             popupWindow.dismiss();
             if (onItemDevClickListener != null) {
-                onItemDevClickListener.onTurnToPushSet(position);
+                onItemDevClickListener.onTurnToPushSet(position,xmDevInfo);
             }
         });
 

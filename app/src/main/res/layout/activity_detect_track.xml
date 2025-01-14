@@ -12,7 +12,7 @@
     >
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="300dp"
     android:id="@+id/parent_rl"
     >
 
@@ -219,6 +219,23 @@
                 android:layout_margin="@dimen/half_of_normal_padding"
                 android:visibility="gone"
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/half_of_normal_padding"
+                >
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_background"
+                    android:text="@string/demon_work"
+                    android:tag="21"
+                    android:id="@+id/demon_btn"
+                    />
+
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

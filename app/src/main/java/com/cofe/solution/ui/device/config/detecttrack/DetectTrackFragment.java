@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -60,6 +61,11 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     LinearLayout sensitivityLl;
     ListView watchTimeLv;
     ListView sensitivityLv;
+    ImageView closeImag;
+    private OnFragmentCallbackListener callbackListener;
+    public interface OnFragmentCallbackListener {
+        void onDemonButton(String data);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +79,6 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         }
 
 
-
         initView(view);
         initData();
         return view;
@@ -84,6 +89,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         super.onAttach(context);
         if (context instanceof Activity) {
             this.activity = (DevMonitorActivity) context;
+            callbackListener = (OnFragmentCallbackListener) context;
         } else {
             Log.d(context.toString() , " must be an instance of DevMonitorActivity");
         }
@@ -92,6 +98,8 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
 
     private void initView(View view) {
+        closeImag = view.findViewById(R.id.close_img);
+
         lsiEnable = view.findViewById(R.id.lsi_enable);
         watchtimeTxtv = view.findViewById(R.id.watchtime_txtv);
         watchTimeLl = view.findViewById(R.id.watch_time_ll);
@@ -184,6 +192,15 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                     }
                 }
         );
+
+        view.findViewById(R.id.demon_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (callbackListener != null) {
+                    callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString());
+                }
+            }
+        });
 
     }
 
@@ -442,6 +459,10 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             listView.startAnimation(slideDown);
 
         });
+    }
+
+    public void closeThisFragment(){
+        closeImag.performClick();
     }
 
     void allListviewData(){

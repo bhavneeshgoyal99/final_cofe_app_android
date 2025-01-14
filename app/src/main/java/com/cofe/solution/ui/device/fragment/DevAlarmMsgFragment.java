@@ -691,7 +691,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToAlarmMsg(int position) {// This is push messaging
+    public void onTurnToAlarmMsg(int position, XMDevInfo xmDevInfo) {// This is push messaging
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(DevAlarmMsgActivity.class);
@@ -704,7 +704,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToCloudService(int position) {
+    public void onTurnToCloudService(int position,  XMDevInfo xmDevInfo) {
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(CloudStateActivity.class);
@@ -732,7 +732,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToPushSet(int position) {
+    public void onTurnToPushSet(int position , XMDevInfo xmDevInfo) {
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(DevPushActivity.class);

@@ -190,6 +190,10 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
         }
     }
 
+    public void closeThisFragment(){
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

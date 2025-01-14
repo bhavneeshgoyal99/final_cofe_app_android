@@ -2,6 +2,7 @@ package com.cofe.solution.ui.device.preview.view;
 
 import static android.view.View.VISIBLE;
 import static com.blankj.utilcode.util.ScreenUtils.getScreenWidth;
+import static com.blankj.utilcode.util.StringUtils.getString;
 import static com.manager.db.Define.LOGIN_NONE;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_PlAY;
 import static com.manager.device.media.attribute.PlayerAttribute.E_STATE_SAVE_PIC_FILE_S;
@@ -181,7 +182,7 @@ import java.util.Locale;
  * The device preview interface allows control of playback, pause, stream switching, screenshot, recording, fullscreen, and information.
  * Save images and videos, engage in voice conversations, set presets, and control directions.
  */
-public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> implements DevMonitorContract.IDevMonitorView, OnClickListener, SensorChangeContract.ISensorChangeView, RealTimeFragment.OnFeatureClickListener  {
+public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> implements DevMonitorContract.IDevMonitorView, OnClickListener, SensorChangeContract.ISensorChangeView, RealTimeFragment.OnFeatureClickListener, DetectTrackFragment.OnFragmentCallbackListener   {
     private static final String TAG = "DevMonitorActivity";
     private MultiWinLayout playWndLayout;
     private RecyclerView rvMonitorFun;
@@ -364,6 +365,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     Handler lowBatteryHandler;
     int wndInnerRVOriginalHeight = 0;
+    BottomSheetDialog ptZBottomSheetDialog = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -481,6 +483,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         });
 
         icon_ptz.setOnClickListener(v -> {
+            DetectTrackFragment myFragment = (DetectTrackFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container1);
+            if (myFragment != null) {
+                myFragment.closeThisFragment();
+            }
+
             onFeatureClicked(icon_ptz.getTag().toString());
         });
 
@@ -1952,6 +1959,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 return true;
             case FUN_PTZ://云台控制
             {
+
                 PtzView contentLayout = (PtzView) LayoutInflater.from(this).inflate(R.layout.view_ptz, null);
                 if (presenter.isOnlyHorizontal() && !presenter.isOnlyVertically()) {
                     //Horizontal display
@@ -2292,6 +2300,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 break;
             case FUN_POINT://指哪看那
                 //如果支持指哪看哪的功能，需要将预览画布的触摸事件设置成false，传递给上层控件
+                //If you want to support any viewing function, you need to set the touch event of the preview
+                // canvas to false, pass it to the top layer control.
                 if (!isShowAppMoreScreen) {
                     isOpenPointPtz = !isOpenPointPtz;
                     if (isOpenPointPtz) {
@@ -3027,15 +3037,15 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     @SuppressLint("ClickableViewAccessibility")
     private void showBottomSheet(View viewToAdd) {
         // Inflate the bottom sheet layout
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.popup_layout, null);
+            View bottomSheetView = getLayoutInflater().inflate(R.layout.popup_layout, null);
         RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_RL);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Create a BottomSheetDialog
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
-        bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.getWindow().setDimAmount(0f);
+        ptZBottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
+        ptZBottomSheetDialog.setContentView(bottomSheetView);
+        ptZBottomSheetDialog.getWindow().setDimAmount(0f);
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -3088,7 +3098,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         });
         // Slowly animate the bottom sheet to expand to a specific height
         // Show the Bottom Sheet
-        bottomSheetDialog.show();
+        ptZBottomSheetDialog.show();
 
     }
 
@@ -3101,7 +3111,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     }
 
-    void loadMoionFragment(){
+    void loadMoionFragment() {
+        if (ptZBottomSheetDialog != null && ptZBottomSheetDialog.isShowing()) {
+            Log.d("BottomSheetCheck", "BottomSheetDialog is visible.");
+            ptZBottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
         DetectTrackFragment fragment = new DetectTrackFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(
@@ -3213,6 +3227,13 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 showToast(getString(R.string.battery_low), Toast.LENGTH_LONG);
             }
         }, 15000);
+    }
+
+
+    //called from motion fragment
+    @Override
+    public void onDemonButton(String featureNumber) {
+        onFeatureClicked(featureNumber);
     }
 
 }

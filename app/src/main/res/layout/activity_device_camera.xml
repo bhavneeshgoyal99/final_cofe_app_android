@@ -323,7 +323,7 @@
                         android:contentDescription="Microphone"
                         android:layout_marginEnd="8dp"
                         android:id="@+id/microphone"
-                        android:tag="29"
+                        android:tag="5"
                         />
                 </LinearLayout>
 
@@ -467,9 +467,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="visible">
-                    <include
-                        layout="@layout/fragment_real_time"
-                        />
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <include
+                            layout="@layout/fragment_real_time"
+                            />
+                    </androidx.core.widget.NestedScrollView>
                 </LinearLayout>
 
                 <!-- Layout 2 -->
@@ -530,13 +534,14 @@
                 android:visibility="gone"/>
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/fragment_container1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            />
+
 
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/fragment_container1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

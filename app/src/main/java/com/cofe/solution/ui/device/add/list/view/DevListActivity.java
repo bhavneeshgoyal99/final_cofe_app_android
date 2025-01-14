@@ -754,68 +754,82 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onItemClick(int position, XMDevInfo xmDevInfo) {
-        //判断是否为分享设备
-        SharedPreference cookies = new SharedPreference(getApplication());
-        cookies.saveDevName(xmDevInfo.getDevName());
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
 
-        if (xmDevInfo.isShareDev()) {
-            OtherShareDevUserBean otherShareDevUserBean = xmDevInfo.getOtherShareDevUserBean();
-            if (otherShareDevUserBean != null) {
-                int iShareState = otherShareDevUserBean.getShareState();
-                if (iShareState == SHARE_NOT_YET_ACCEPT) {
-                    XMPromptDlg.onShow(getContext(), getString(R.string.is_accept_share_dev), getString(R.string.reject_share), getString(R.string.accept_share), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            presenter.rejectShare(otherShareDevUserBean);
-                        }
-                    }, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            presenter.acceptShare(otherShareDevUserBean);
-                        }
-                    });
-                    return;
+
+        //判断是否为分享设备
+            SharedPreference cookies = new SharedPreference(getApplication());
+            cookies.saveDevName(xmDevInfo.getDevName());
+
+            if (xmDevInfo.isShareDev()) {
+                OtherShareDevUserBean otherShareDevUserBean = xmDevInfo.getOtherShareDevUserBean();
+                if (otherShareDevUserBean != null) {
+                    int iShareState = otherShareDevUserBean.getShareState();
+                    if (iShareState == SHARE_NOT_YET_ACCEPT) {
+                        XMPromptDlg.onShow(getContext(), getString(R.string.is_accept_share_dev), getString(R.string.reject_share), getString(R.string.accept_share), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                presenter.rejectShare(otherShareDevUserBean);
+                            }
+                        }, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                presenter.acceptShare(otherShareDevUserBean);
+                            }
+                        });
+                        return;
+                    }
                 }
             }
-        }
 
-        //判断设备是否在线
-        if (xmDevInfo.getDevState() != XMDevInfo.OFF_LINE) {
-            if (xmDevInfo.getDevState() == XMDevInfo.SLEEP_UNWAKE) {
-                showToast(getString(R.string.dev_unwake), Toast.LENGTH_LONG);
-                presenter.setDevId(xmDevInfo.getDevId());
-                turnToActivity(DevShadowConfigActivity.class);
-                return;
-            }
+            //判断设备是否在线
+            if (xmDevInfo.getDevState() != XMDevInfo.OFF_LINE) {
+                if (xmDevInfo.getDevState() == XMDevInfo.SLEEP_UNWAKE) {
+                    showToast(getString(R.string.dev_unwake), Toast.LENGTH_LONG);
+                    presenter.setDevId(xmDevInfo.getDevId());
+                    turnToActivity(DevShadowConfigActivity.class);
+                    return;
+                }
 
-            showWaitDialog(getString(R.string.get_channel_info));
-            String devId = presenter.getDevId(position);
-            presenter.setDevId(devId);
+                showWaitDialog(getString(R.string.get_channel_info));
+                String devId = presenter.getDevId(position);
+                presenter.setDevId(devId);
 
-            //低功耗设备不需要获取通道列表，直接跳转到预览页面
-            /*Low power devices do not need to get the list of channels and jump directly to the preview page*/
-            if (DevDataCenter.getInstance().isLowPowerDev(xmDevInfo.getDevType())) {
-                turnToActivity(DevMonitorActivity.class);
+                //低功耗设备不需要获取通道列表，直接跳转到预览页面
+                /*Low power devices do not need to get the list of channels and jump directly to the preview page*/
+                if (DevDataCenter.getInstance().isLowPowerDev(xmDevInfo.getDevType())) {
+                    turnToActivity(DevMonitorActivity.class);
+                } else {
+                    presenter.getChannelList();
+                }
             } else {
-                presenter.getChannelList();
+                showToast(FunSDK.TS(getString(R.string.dev_offline)), Toast.LENGTH_LONG);
+                presenter.setDevId(xmDevInfo.getDevId());
+                //turnToActivity(DevShadowConfigActivity.class);
             }
         } else {
-            showToast(FunSDK.TS(getString(R.string.dev_offline)), Toast.LENGTH_LONG);
-            presenter.setDevId(xmDevInfo.getDevId());
-            //turnToActivity(DevShadowConfigActivity.class);
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
 
     @Override
     public boolean onLongItemClick(final int position, XMDevInfo xmDevInfo) {
-        XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWaitDialog();
-                presenter.deleteDev(position);
-            }
-        }, null);
-        return false;
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
+
+            XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showWaitDialog();
+                    presenter.deleteDev(position);
+                }
+            }, null);
+            return false;
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+            return false;
+        }
     }
 
     /**
@@ -825,10 +839,17 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      * @param position
      */
     @Override
-    public void onTurnToAlarmMsg(int position) {// This is push messaging
-        String devId = presenter.getDevId(position);
-        presenter.setDevId(devId);
-        turnToActivity(DevAlarmMsgActivity.class);
+    public void onTurnToAlarmMsg(int position, XMDevInfo xmDevInfo) {// This is push messaging
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        
+        if(xmDevInfo.getDevState() !=0) {
+
+            String devId = presenter.getDevId(position);
+            presenter.setDevId(devId);
+            turnToActivity(DevAlarmMsgActivity.class);
+        } else {
+                showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -838,25 +859,37 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      * @param position
      */
     @Override
-    public void onTurnToCloudService(int position) {
-        String devId = presenter.getDevId(position);
-        presenter.setDevId(devId);
-        turnToActivity(CloudStateActivity.class);
+    public void onTurnToCloudService(int position, XMDevInfo xmDevInfo) {
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
+            String devId = presenter.getDevId(position);
+            presenter.setDevId(devId);
+            turnToActivity(CloudStateActivity.class);
+        } else {
+                showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     @Override
     public void openSettingActivity(int position, XMDevInfo xmDevInfo) {
-        String devId = presenter.getDevId(position);
-        presenter.setDevId(devId);
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
 
-        Gson gson = new Gson();
-        String personJson = gson.toJson(xmDevInfo);
+            String devId = presenter.getDevId(position);
+            presenter.setDevId(devId);
 
-        // Pass the JSON string to another activity via Intent
-        Intent intent = new Intent(this, DeviceSetting.class);
-        intent.putExtra("dev", personJson);
-        startActivity(intent);
-        //turnToActivity(DeviceSetting.class);
+            Gson gson = new Gson();
+            String personJson = gson.toJson(xmDevInfo);
+
+            // Pass the JSON string to another activity via Intent
+            Intent intent = new Intent(this, DeviceSetting.class);
+            intent.putExtra("dev", personJson);
+            startActivity(intent);
+            //turnToActivity(DeviceSetting.class);
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+
+        }
     }
 
     /**
@@ -866,12 +899,18 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      * @param position
      */
     @Override
-    public void onTurnToPushSet(int position) {
-        String devId = presenter.getDevId(position);
-        presenter.setDevId(devId);
-        turnToActivity(DevPushActivity.class);
-    }
+    public void onTurnToPushSet(int position, XMDevInfo xmDevInfo) {
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
 
+            String devId = presenter.getDevId(position);
+            presenter.setDevId(devId);
+            turnToActivity(DevPushActivity.class);
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+
+        }
+    }
     /**
      * 修改设备名
      *
@@ -880,12 +919,19 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onModifyDevName(int position, XMDevInfo xmDevInfo) {
-        XMPromptDlg.onShowEditDialog(this, getString(R.string.modify_dev_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
-            @Override
-            public void onResult(String devName) {
-                presenter.modifyDevNameFromServer(position, devName);
-            }
-        });
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
+
+            XMPromptDlg.onShowEditDialog(this, getString(R.string.modify_dev_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+                @Override
+                public void onResult(String devName) {
+                    presenter.modifyDevNameFromServer(position, devName);
+                }
+            });
+        }  else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+
+        }
     }
 
     /**
@@ -896,17 +942,24 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onShareDevManage(int position, XMDevInfo xmDevInfo) {
-        presenter.setDevId(xmDevInfo.getDevId());
-        Gson gson = new Gson();
-        String personJson = gson.toJson(xmDevInfo);
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
 
-        // Pass the JSON string to another activity via Intent
-        //Intent intent = new Intent(this, ShareFirstScren.class);
-        Intent intent = new Intent(this, ShareFirstScren.class);
-        intent.putExtra("dev", personJson);
-        startActivity(intent);
+            presenter.setDevId(xmDevInfo.getDevId());
+            Gson gson = new Gson();
+            String personJson = gson.toJson(xmDevInfo);
 
-        //turnToActivity(DevShareManageActivity.class);
+            // Pass the JSON string to another activity via Intent
+            //Intent intent = new Intent(this, ShareFirstScren.class);
+            Intent intent = new Intent(this, ShareFirstScren.class);
+            intent.putExtra("dev", personJson);
+            startActivity(intent);
+
+            //turnToActivity(DevShareManageActivity.class);
+        }   else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+
+        }
     }
 
     /**
@@ -917,41 +970,48 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToEditLocalDevUserPwd(int position, XMDevInfo xmDevInfo) {
-        View layout = LayoutInflater.from(this).inflate(R.layout.dialog_local_dev_user_pwd, null);
-        TextView tvDevId = layout.findViewById(R.id.tv_devid);
-        tvDevId.setText(xmDevInfo.getDevId());
-        EditText etDevUser = layout.findViewById(R.id.et_local_dev_user);
-        etDevUser.setText(xmDevInfo.getDevUserName());
-        EditText etDevPwd = layout.findViewById(R.id.et_local_dev_pwd);
-        etDevPwd.setText(xmDevInfo.getDevPassword());
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
 
-        Dialog dialog = XMPromptDlg.onShow(this, layout,
-                (int) (XUtils.getScreenWidth(this) * 0.8), 0, false, null);
+            View layout = LayoutInflater.from(this).inflate(R.layout.dialog_local_dev_user_pwd, null);
+            TextView tvDevId = layout.findViewById(R.id.tv_devid);
+            tvDevId.setText(xmDevInfo.getDevId());
+            EditText etDevUser = layout.findViewById(R.id.et_local_dev_user);
+            etDevUser.setText(xmDevInfo.getDevUserName());
+            EditText etDevPwd = layout.findViewById(R.id.et_local_dev_pwd);
+            etDevPwd.setText(xmDevInfo.getDevPassword());
 
-        dialog.show();
+            Dialog dialog = XMPromptDlg.onShow(this, layout,
+                    (int) (XUtils.getScreenWidth(this) * 0.8), 0, false, null);
 
-        Button btnOk = layout.findViewById(R.id.btn_ok);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String devUserName = etDevUser.getText().toString().trim();
-                String devPwd = etDevPwd.getText().toString().trim();
-                presenter.editLocalDevUserPwd(
-                        position,
-                        xmDevInfo.getDevId(),
-                        devUserName,
-                        devPwd);
-                dialog.dismiss();
-            }
-        });
+            dialog.show();
 
-        Button btnCancel = layout.findViewById(R.id.btn_cancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+            Button btnOk = layout.findViewById(R.id.btn_ok);
+            XMDevInfo finalXmDevInfo = xmDevInfo;
+            btnOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String devUserName = etDevUser.getText().toString().trim();
+                    String devPwd = etDevPwd.getText().toString().trim();
+                    presenter.editLocalDevUserPwd(
+                            position,
+                            finalXmDevInfo.getDevId(),
+                            devUserName,
+                            devPwd);
+                    dialog.dismiss();
+                }
+            });
+
+            Button btnCancel = layout.findViewById(R.id.btn_cancel);
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+        }   else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -962,7 +1022,12 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onWakeUpDev(int position, XMDevInfo xmDevInfo) {
-        presenter.wakeUpDev(position, xmDevInfo.getDevId());
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
+            presenter.wakeUpDev(position, xmDevInfo.getDevId());
+        }   else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -973,8 +1038,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToSdPlayback(int position, XMDevInfo xmDevInfo) {
-        presenter.setDevId(xmDevInfo.getDevId());
-        turnToActivity(DevRecordActivity.class);
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if (xmDevInfo.getDevState() != 0) {
+            presenter.setDevId(xmDevInfo.getDevId());
+            turnToActivity(DevRecordActivity.class);
+        }    else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -986,8 +1056,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToInterDevLinkage(int position, XMDevInfo xmDevInfo, Bundle bundle) {
-        presenter.setDevId(xmDevInfo.getDevId());
-        turnToActivity(InterDevLinkageActivity.class, "data", bundle);
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
+            presenter.setDevId(xmDevInfo.getDevId());
+            turnToActivity(InterDevLinkageActivity.class, "data", bundle);
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -998,8 +1073,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToDevAbility(int position, XMDevInfo xmDevInfo) {
-        presenter.setDevId(xmDevInfo.getDevId());
-        turnToActivity(XMDevAbilityActivity.class);
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
+            presenter.setDevId(xmDevInfo.getDevId());
+            turnToActivity(XMDevAbilityActivity.class);
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     /**
@@ -1010,7 +1090,12 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onToGetDevTokenFromServer(int position, XMDevInfo xmDevInfo) {
-        presenter.getDevTokenFromServer(xmDevInfo.getDevId());
+        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+        if(xmDevInfo.getDevState() !=0) {
+            presenter.getDevTokenFromServer(xmDevInfo.getDevId());
+        } else {
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+        }
     }
 
     @Override

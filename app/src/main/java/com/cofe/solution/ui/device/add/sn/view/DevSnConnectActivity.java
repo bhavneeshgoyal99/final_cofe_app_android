@@ -1,9 +1,11 @@
 package com.cofe.solution.ui.device.add.sn.view;
 
+import static com.blankj.utilcode.util.ScreenUtils.getScreenWidth;
 import static com.manager.account.share.ShareInfo.SHARE_ACCEPT;
 import static com.manager.db.Define.LOGIN_NONE;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -14,13 +16,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,12 +35,14 @@ import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
 import com.cofe.solution.ui.device.add.list.view.DevListActivity;
+import com.cofe.solution.ui.device.config.DeviceSetting;
 import com.lib.MsgContent;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.share.DevShareQrCodeInfo;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
 import com.manager.account.AccountManager;
 import com.manager.account.BaseAccountManager;
+import com.manager.account.XMAccountManager;
 import com.manager.account.share.ShareInfo;
 import com.manager.account.share.ShareManager;
 import com.manager.db.Define;
@@ -45,8 +52,10 @@ import com.manager.device.DeviceManager;
 import com.utils.XUtils;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.base.code.ErrorCodeManager;
+import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
+import com.xm.ui.widget.dialog.EditDialog;
 import com.xm.ui.widget.listselectitem.extra.adapter.ExtraSpinnerAdapter;
 import com.xm.ui.widget.listselectitem.extra.view.ExtraSpinner;
 
@@ -57,6 +66,11 @@ import com.cofe.solution.ui.device.add.FunDevType;
 import com.cofe.solution.ui.device.add.sn.listener.DevSnConnectContract;
 import com.cofe.solution.ui.device.add.sn.presenter.DevSnConnectPresenter;
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import io.reactivex.annotations.Nullable;
 
 /**
@@ -282,27 +296,33 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         if (requestCode == 1 && responseCode == RESULT_OK) {
             if (null != data) {
                 String result = data.getStringExtra("result");
+                Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
+
                 if (XUtils.isSn(result)) {
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(result);
                         devLoginBtn.performClick();
+                        Toast.makeText(DevSnConnectActivity.this, "result > called", Toast.LENGTH_SHORT).show();
 
                     }
                 } else if (result.startsWith("sn:")) {
                     String[] devInfos = result.split(";");
-                    devLoginBtn.performClick();
+                    //devLoginBtn.performClick();
+                    Toast.makeText(DevSnConnectActivity.this, "sn > called", Toast.LENGTH_SHORT).show();
 
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(devInfos[0].split(":")[1]);
-                        devLoginBtn.performClick();
+                        Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
+                        //devLoginBtn.performClick();
 
                     }
 
                     //设备登录Token
                     if (null != devLoginTokenEdit) {
                         devLoginTokenEdit.setText(devInfos[1].split(":")[1]);
+                        Toast.makeText(DevSnConnectActivity.this, "devLoginTokenEdit > called", Toast.LENGTH_SHORT).show();
                         devLoginBtn.performClick();
                     }
 
@@ -361,7 +381,8 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                             if (splitResults != null && splitResults.length >= 4) {
                                 if (null != devSNEdit) {
                                     devSNEdit.setText(splitResults[0]);
-                                    devLoginBtn.performClick();
+                                    Toast.makeText(DevSnConnectActivity.this, "splitResults.length > called", Toast.LENGTH_SHORT).show();
+                                    //devLoginBtn.performClick();
 
                                 }
 
@@ -371,6 +392,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                     if (DevDataCenter.getInstance().isLowPowerDev(devType)) {
                                         spDevType.setValue(21);//低功耗设备
                                         lsiDevType.setRightText(spDevType.getSelectedName());
+                                        Toast.makeText(DevSnConnectActivity.this, "isLowPowerDev.length > called", Toast.LENGTH_SHORT).show();
                                         devLoginBtn.performClick();
 
                                     }
@@ -403,7 +425,10 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         String errorMsg = isSuccess ? getString(R.string.add_s) : ErrorCodeManager.getSDKStrErrorByNO(errorId);
         Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
         if (isSuccess) {
-            DeviceManager.getInstance().modifyDevPwd(devSNEdit.getText().toString(), "admin", "123456", "123456", new DeviceManager.OnDevManagerListener() {
+
+            showDevNameDialog();
+
+            /*DeviceManager.getInstance().modifyDevPwd(devSNEdit.getText().toString(), "admin", "123456", "123456", new DeviceManager.OnDevManagerListener() {
                 @Override
                 public void onSuccess(String s, int i, Object o) {
                     Toast.makeText(DevSnConnectActivity.this, "Password changes successfully", Toast.LENGTH_SHORT).show();
@@ -411,13 +436,14 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
                 @Override
                 public void onFailed(String s, int i, String s1, int errorId) {
-                    finish();
+                    //finish();
                     Toast.makeText(DevSnConnectActivity.this, "Failed to change the password", Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
+            presenter.setDevId(devSNEdit.getText().toString());
+            presenter.setDevId(devSNEdit.getText().toString());
             presenter.setDevId(devSNEdit.getText().toString());
 
-            turnToActivity(DevMonitorActivity.class);
         } else {
             Toast.makeText(DevSnConnectActivity.this, "Device does not added to account", Toast.LENGTH_SHORT).show();
             finish();
@@ -473,6 +499,37 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         builder.create().show();
     }
 
+
+    void showDevNameDialog() {
+        XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(devSNEdit.getText().toString());
+        XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+            @Override
+            public void onResult(String devName) {
+                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener(){
+
+                    @Override
+                    public void onSuccess(int msgId) {
+                        turnToActivity(DevMonitorActivity.class);
+                        Toast.makeText(DevSnConnectActivity.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailed(int msgId, int errorId) {
+                         turnToActivity(DevMonitorActivity.class);
+
+                        Toast.makeText(DevSnConnectActivity.this, "Failed to changed device name", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                    }
+                });
+
+            }
+        });
+    }
 
     private void showSettingsRedirectPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
