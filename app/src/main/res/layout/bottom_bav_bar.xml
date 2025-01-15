@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    >
+    android:layout_alignParentBottom="true">
 
     <!-- Bottom White Bar -->
     <LinearLayout
@@ -11,25 +10,24 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:background="#ffffff"
+        android:orientation="horizontal"
         android:paddingTop="15dp"
         android:paddingBottom="10dp">
 
         <!-- Home Section -->
         <LinearLayout
+            android:id="@+id/home_ll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/home_ll">
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/home_icon"
-                />
+                android:src="@drawable/home_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,8 +49,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/cloud_alert_icon"
-                />
+                android:src="@drawable/cloud_alert_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -63,18 +60,17 @@
         </LinearLayout>
         <!-- Profile Section -->
         <LinearLayout
+            android:id="@+id/image_ll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/image_ll">
+            android:orientation="vertical">
 
             <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/image_icon"
-            />
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_image" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -85,30 +81,26 @@
         </LinearLayout>
         <!-- Profile Section -->
         <LinearLayout
+            android:id="@+id/logout_ll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/logout_ll"
-            >
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/user_avatar_icon"
-                />
+                android:src="@drawable/user_avatar_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logout"
                 android:textColor="#B3B3B3"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
 
 
 </RelativeLayout>

@@ -252,7 +252,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/cloud_upload_1"
+                            android:src="@drawable/ic_cloud"
                             android:contentDescription="Upload"
                             android:id="@+id/btn_turn_to_cloud_service1"
                             android:visibility="gone"
@@ -323,7 +323,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/share_icon1"
+                        android:src="@drawable/ic_share"
                         android:contentDescription="Share" />
 
                     <TextView
@@ -345,7 +345,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/message_chat"
+                        android:src="@drawable/ic_conversation"
                         android:contentDescription="Message" />
 
                     <TextView
@@ -367,7 +367,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/bell_slash_icon"
+                        android:src="@drawable/ic_mute"
                         android:contentDescription="Notification" />
 
                     <TextView
@@ -390,7 +390,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/settings_icon"
+                        android:src="@drawable/ic_setting"
                         android:contentDescription="Settings" />
 
                     <TextView
