@@ -994,6 +994,9 @@
     <string name="time_sync">Confirm sync time</string>
     <string name="stobe_alaram">Stobe Alarm</string>
     <string name="battery_low">Device battery is low. Either charge or change battery</string>
-    <string name="demon_work">Demon Work</string>
+    <string name="demon_work">Demon Point</string>
+    <string name="set_as_demon_point">Set As Demon Point</string>
+    <string name="search_record_failed_">The record file was not found</string>
+
 
 </resources>

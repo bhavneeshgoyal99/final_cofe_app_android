@@ -356,9 +356,10 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
-            noPlayBackTxtv.setText(getString(R.string.search_record_failed));
-            parentLL.setVisibility(View.GONE);
-            showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
+            noPlayBackTxtv.setText(getString(R.string.search_record_failed_));
+            rvRecordFun.setVisibility(View.GONE);
+            //parentLL.setVisibility(View.GONE);
+            showToast(getString(R.string.search_record_failed_), Toast.LENGTH_LONG);
         } else{
             noPlayBackTxtv.setVisibility(View.GONE);
             parentLL.setVisibility(View.VISIBLE);
@@ -385,8 +386,9 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
         } else {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
-            parentLL.setVisibility(View.GONE);
-            showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
+            rvRecordFun.setVisibility(View.GONE);
+            //parentLL.setVisibility(View.GONE);
+            showToast(getString(R.string.search_record_failed_), Toast.LENGTH_LONG);
         }
     }
 
@@ -516,7 +518,8 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date1);
                     noPlayBackTxtv.setVisibility(View.GONE);
-                    parentLL.setVisibility(View.GONE);
+
+                    //parentLL.setVisibility(View.GONE);
                     presenter.searchRecordByTime(calendarShow);
                 } catch (ParseException e) {
                     e.printStackTrace();

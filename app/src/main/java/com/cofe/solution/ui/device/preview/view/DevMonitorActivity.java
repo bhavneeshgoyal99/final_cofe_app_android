@@ -3124,7 +3124,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 R.anim.slide_up,   // Pop enter animation
                 R.anim.slide_up  // Pop exit animation
         );
-        fragment.setArgumentsFromActivity("devId", presenter.getDevId());
+        fragment.setArgumentsFromActivity("devId", presenter.getDevId(), isAOVDevice);
         transaction.replace(R.id.fragment_container1, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -3233,7 +3233,14 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     //called from motion fragment
     @Override
     public void onDemonButton(String featureNumber) {
+        onFeatureClicked(FUN_APP_OBJ_EFFECT+"");
         onFeatureClicked(featureNumber);
+    }
+
+    @Override
+    public void motionFramentClose() {
+        showWaitDialog();
+        onRestart();
     }
 
 }

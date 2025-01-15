@@ -536,6 +536,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     /*if (onItemDevClickListener != null) {
                         onItemDevClickListener.onShareDevManage(getAdapterPosition(), xmDevInfo);
                     }*/
+                    showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
+
                     if(xmDevInfo.getDevState()!=0) {
                         showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
                     } else{

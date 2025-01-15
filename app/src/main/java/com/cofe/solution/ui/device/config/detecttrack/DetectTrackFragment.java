@@ -16,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +33,8 @@ import com.cofe.solution.ui.adapter.CustomTractListViewAdapter;
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.google.gson.internal.LinkedTreeMap;
 import com.lib.SDKCONST;
+import com.manager.db.DevDataCenter;
+import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
 import com.manager.device.media.monitor.MonitorManager;
 import com.xm.ui.widget.ListSelectItem;
@@ -63,8 +66,12 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     ListView sensitivityLv;
     ImageView closeImag;
     private OnFragmentCallbackListener callbackListener;
+    boolean isDemonIsClicked =  false;
+    boolean isAovDevice =  false;
+
     public interface OnFragmentCallbackListener {
         void onDemonButton(String data);
+        void motionFramentClose();
     }
 
     @Override
@@ -179,6 +186,9 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                     @Override
                     public void onClick(View view) {
                         if (getView() != null) {
+                            if(isDemonIsClicked) {
+                                callbackListener.motionFramentClose();
+                            }
                             getView().animate()
                                     .translationY(getView().getHeight())
                                     .setDuration(300)
@@ -192,11 +202,24 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                     }
                 }
         );
+        Button demonBtn = view.findViewById(R.id.demon_btn);
 
+        if(isAovDevice){
+                demonBtn.setVisibility(VISIBLE);
+        } else {
+            demonBtn.setVisibility(GONE);
+        }
         view.findViewById(R.id.demon_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (callbackListener != null) {
+                    isDemonIsClicked = true;
+                    if(isDemonIsClicked) {
+                        demonBtn.setText(getString(R.string.set_as_demon_point));
+                    } else {
+                        isDemonIsClicked  = false;
+                        demonBtn.setText(getString(R.string.demon_work));
+                    }
                     callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString());
                 }
             }
@@ -378,8 +401,9 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         }
     }
 
-    public void setArgumentsFromActivity(String key, String value) {
+    public void setArgumentsFromActivity(String key, String value, boolean isAovDevice) {
         Log.d(getClass().getName(),"setArgumentsFromActivity > value " + value);
+        this.isAovDevice = isAovDevice;
         presenter.setDevId(value);
         Bundle args = new Bundle();
         args.putString(key, value);

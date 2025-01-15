@@ -296,33 +296,33 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         if (requestCode == 1 && responseCode == RESULT_OK) {
             if (null != data) {
                 String result = data.getStringExtra("result");
-                Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
 
                 if (XUtils.isSn(result)) {
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(result);
                         devLoginBtn.performClick();
-                        Toast.makeText(DevSnConnectActivity.this, "result > called", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DevSnConnectActivity.this, "result > called", Toast.LENGTH_SHORT).show();
 
                     }
                 } else if (result.startsWith("sn:")) {
                     String[] devInfos = result.split(";");
                     //devLoginBtn.performClick();
-                    Toast.makeText(DevSnConnectActivity.this, "sn > called", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(DevSnConnectActivity.this, "sn > called", Toast.LENGTH_SHORT).show();
 
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(devInfos[0].split(":")[1]);
-                        Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
-                        //devLoginBtn.performClick();
+                        //Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
+                        devLoginBtn.performClick();
 
                     }
 
                     //设备登录Token
                     if (null != devLoginTokenEdit) {
                         devLoginTokenEdit.setText(devInfos[1].split(":")[1]);
-                        Toast.makeText(DevSnConnectActivity.this, "devLoginTokenEdit > called", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(DevSnConnectActivity.this, "devLoginTokenEdit > called", Toast.LENGTH_SHORT).show();
                         devLoginBtn.performClick();
                     }
 
@@ -381,7 +381,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                             if (splitResults != null && splitResults.length >= 4) {
                                 if (null != devSNEdit) {
                                     devSNEdit.setText(splitResults[0]);
-                                    Toast.makeText(DevSnConnectActivity.this, "splitResults.length > called", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(DevSnConnectActivity.this, "splitResults.length > called", Toast.LENGTH_SHORT).show();
                                     //devLoginBtn.performClick();
 
                                 }
@@ -392,7 +392,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                     if (DevDataCenter.getInstance().isLowPowerDev(devType)) {
                                         spDevType.setValue(21);//低功耗设备
                                         lsiDevType.setRightText(spDevType.getSelectedName());
-                                        Toast.makeText(DevSnConnectActivity.this, "isLowPowerDev.length > called", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(DevSnConnectActivity.this, "isLowPowerDev.length > called", Toast.LENGTH_SHORT).show();
                                         devLoginBtn.performClick();
 
                                     }
@@ -407,6 +407,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(this, R.string.failed_to_add_device, Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 }
             } else {
