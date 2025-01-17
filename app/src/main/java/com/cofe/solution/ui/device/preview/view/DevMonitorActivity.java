@@ -581,7 +581,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                         battery.setVisibility(VISIBLE);
                         batteryProgressBar.setVisibility(VISIBLE);
                         changePlayViewSize();
-                        findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
+                        //findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -775,7 +775,6 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         mHomeClickReceiver = new MyHomeClickReceiver();
 
-        SharedPreference cookies = new SharedPreference(getApplication());
         dName.setText(cookies.retrievDevName());
         checkUserLogin();
 
@@ -1097,7 +1096,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         presenter.release();
 
         if (mHomeClickReceiver != null) {
-            unregisterReceiver(mHomeClickReceiver);
+            //unregisterReceiver(mHomeClickReceiver);
         }
         if(handler!=null){
             handler.removeCallbacks(null);
@@ -1532,7 +1531,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         //batteryDrawable.setBatteryLevel(electCapacityBean.percent);
         updateBatteryColor(electCapacityBean.percent, electCapacityBean.electable);
 
-        tvBatteryState.setText(String.format(getString(R.string.battery_state_show), electCapacityBean.percent, electCapacityBean.devStorageStatus, electCapacityBean.electable));
+        //tvBatteryState.setText(String.format(getString(R.string.battery_state_show), electCapacityBean.percent, electCapacityBean.devStorageStatus, electCapacityBean.electable));
     }
     private void updateBatteryColor( int percentage, int chargeState) {
         boolean isCharging = false;
@@ -1540,7 +1539,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             isCharging = false;
         } else if(chargeState == 1) {
             isCharging = true;
-        }  else if(chargeState == 2){
+        }  else if(chargeState == 2) {
             isCharging = false;
         } else {
             isCharging = false;

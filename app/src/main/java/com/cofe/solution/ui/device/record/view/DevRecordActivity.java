@@ -342,7 +342,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         findViewById(R.id.camera_ll).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
+                //dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
             }
         });
         findViewById(R.id.video_ll).setOnClickListener(new View.OnClickListener() {
@@ -352,17 +352,17 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 int image= (isVideoCaptureStart) ? R.drawable.active_video : R.drawable.video_icon ;
                 Glide.with(getApplicationContext()).load(image).into(videoImg);
 
-                dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
+                //dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
             }
         });
 
         findViewById(R.id.sound_ll).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSoundCaptureStart = (isSoundCaptureStart) ? false : true;
-                int image= (isSoundCaptureStart) ? R.drawable.speaker_disabled_icon : R.drawable.speaker_icon_1 ;
-                Glide.with(getApplicationContext()).load(image).into(soundImg);
-                dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), isSoundCaptureStart);
+                //isSoundCaptureStart = (isSoundCaptureStart) ? false : true;
+                //int image= (isSoundCaptureStart) ? R.drawable.speaker_disabled_icon : R.drawable.speaker_icon_1 ;
+                //Glide.with(getApplicationContext()).load(image).into(soundImg);
+                //dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), isSoundCaptureStart);
             }
         });
 

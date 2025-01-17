@@ -17,16 +17,17 @@ public class CustomTractListViewAdapter extends BaseAdapter {
     private final String[] items;
     private int selectedPosition = -1;  // Keeps track of the selected item
     private final OnItemClickListener listener;
-
+    String selectedalue;
     // Custom interface for click events
     public interface OnItemClickListener {
         void onItemClick(int position, String item);
     }
 
-    public CustomTractListViewAdapter(Context context, String[] items, OnItemClickListener listener) {
+    public CustomTractListViewAdapter(Context context, String[] items, String selectedalue, OnItemClickListener listener) {
         this.context = context;
         this.items = items;
         this.listener = listener;
+        this.selectedalue = selectedalue;
     }
 
     @Override
@@ -55,6 +56,9 @@ public class CustomTractListViewAdapter extends BaseAdapter {
 
         // Set the text for each item
         textItem.setText(items[position]);
+        if(selectedalue.equals(items[position])){
+            radioButton.setChecked(true);
+        }
 
         // Update the RadioButton state based on the selected position
         radioButton.setChecked(position == selectedPosition);

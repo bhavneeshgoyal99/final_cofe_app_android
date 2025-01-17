@@ -68,7 +68,14 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     private OnFragmentCallbackListener callbackListener;
     boolean isDemonIsClicked =  false;
     boolean isAovDevice =  false;
+    TextView sensitivtyValueTxtv ;
+    TextView watchValueTxtv;
 
+    String watchTimeValue;
+    String sensitiveValue;
+    CustomTractListViewAdapter sensitivtyAdapter;
+    CustomTractListViewAdapter listAdapter;
+    View view;
     public interface OnFragmentCallbackListener {
         void onDemonButton(String data, boolean isActive);
         void motionFramentClose();
@@ -77,7 +84,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.activity_detect_track, container, false);
+        View rootView = inflater.inflate(R.layout.activity_detect_track, container, false);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -85,10 +92,10 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             Log.d("DevRecordFragment", "Dev ID: " + presenter.getDevId());
         }
 
-
-        initView(view);
-        initData();
-        return view;
+        view =  rootView;
+        initView(rootView);
+        initData(rootView);
+        return rootView;
     }
 
     @Override
@@ -106,6 +113,8 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
     private void initView(View view) {
         closeImag = view.findViewById(R.id.close_img);
+        sensitivtyValueTxtv = view.findViewById(R.id.sensitivity_txtv);
+        watchValueTxtv = view.findViewById(R.id.watchtime_txtv);
 
         lsiEnable = view.findViewById(R.id.lsi_enable);
         watchtimeTxtv = view.findViewById(R.id.watchtime_txtv);
@@ -139,28 +148,19 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         lsiSensitivity = view.findViewById(R.id.lsi_sensitivity);
         isWatchTime = view.findViewById(R.id.lsi_watch_time);
 
-        watchTimeLl.setOnClickListener(new View.OnClickListener() {
+        /*watchTimeLl.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-                   lsiEnable.setVisibility(GONE);
-                   sensitivityLl.setVisibility(GONE);
-                   sensitivityLv.setVisibility(GONE);
-                   watchTimeLv.setVisibility(VISIBLE);
                }
            }
-        );
-        sensitivityLl.setOnClickListener(new View.OnClickListener() {
+        );*/
+        /*sensitivityLl.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-                   lsiEnable.setVisibility(GONE);
-                   sensitivityLl.setVisibility(VISIBLE);
-                   sensitivityLv.setVisibility(VISIBLE);
 
-                   watchTimeLl.setVisibility(GONE);
-                   watchTimeLv.setVisibility(GONE);
                }
            }
-        );
+        );*/
 
         spWatchTime = isWatchTime.getExtraSpinner();
         spSensitivity = lsiSensitivity.getExtraSpinner();
@@ -237,9 +237,54 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             }
         });
 
+        view.findViewById(R.id.watch_time_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(lsiEnable.getVisibility()== GONE) {
+                    lsiEnable.setVisibility(VISIBLE);
+                    watchTimeLl.setVisibility(VISIBLE);
+                    sensitivityLl.setVisibility(VISIBLE);
+
+                    watchTimeLv.setVisibility(GONE);
+                    sensitivityLv.setVisibility(GONE);
+                } else {
+                    lsiEnable.setVisibility(GONE);
+                    sensitivityLl.setVisibility(GONE);
+                    sensitivityLv.setVisibility(GONE);
+                    watchTimeLv.setVisibility(VISIBLE);
+                    watchTimeLl.setVisibility(VISIBLE);
+
+                }
+            }
+        });
+
+        view.findViewById(R.id.sensitivity_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(lsiEnable.getVisibility()== GONE) {
+
+                    lsiEnable.setVisibility(VISIBLE);
+                    watchTimeLl.setVisibility(VISIBLE);
+                    watchTimeLl.setVisibility(VISIBLE);
+
+                    watchTimeLv.setVisibility(GONE);
+                    sensitivityLv.setVisibility(GONE);
+
+                } else {
+                    lsiEnable.setVisibility(GONE);
+                    sensitivityLl.setVisibility(VISIBLE);
+                    sensitivityLv.setVisibility(VISIBLE);
+
+                    watchTimeLl.setVisibility(GONE);
+                    watchTimeLv.setVisibility(GONE);
+
+                }
+            }
+        });
+
     }
 
-    private void initData() {
+    private void initData(View view ) {
         spWatchTime.initData(new String[]{
                 "3s",
                 "5s",
@@ -263,94 +308,31 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             }
         });*/
 
-        String[] sesitivtyItems = new String[]{
-                getString(R.string.low),
-                getString(R.string.middle),
-                getString(R.string.high)
-        };
-
-        String[] items = new String[]{
-                "3s",
-                "5s",
-                "10s",
-                "15s",
-                "30s",
-                "60s",
-                "180s",
-                "300s",
-                "600s",
-                "900s",
-                "1800s"};
 
         // Set adapter
        /* ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, R.layout.detect_tract_list_items, R.id.text_item, items);
         listView.setAdapter(adapter);*/
 
         // List item click listener
-        CustomTractListViewAdapter listAdapter = new CustomTractListViewAdapter(activity, items, (position, item) -> {
-            Integer value = isWatchTimeHasMap.get(item);
-            Toast.makeText(activity.getApplicationContext(), "Clicked: " + item + " = " + value + " seconds", Toast.LENGTH_SHORT).show();
-
-            isWatchTime.setRightText(item);
-            dataMap.put("ReturnTime", value);
-            activity.showWaitDialog();
-            presenter.setDetectTrack();
-
-            lsiEnable.setVisibility(VISIBLE);
-            watchTimeLl.setVisibility(VISIBLE);
-            sensitivityLl.setVisibility(VISIBLE);
-
-            watchTimeLv.setVisibility(GONE);
-            sensitivityLv.setVisibility(GONE);
-
-            // Close the dialog
-        });
-        watchTimeLv.setAdapter(listAdapter);
-
-        CustomTractListViewAdapter sensitivtyAdapter = new CustomTractListViewAdapter(activity, sesitivtyItems, (position, item) -> {
-            Integer value = isWatchTimeHasMap.get(item);
-            Toast.makeText(activity.getApplicationContext(), "Clicked: " + item + " = " + value + " seconds", Toast.LENGTH_SHORT).show();
-
-            isWatchTime.setRightText(item);
-            dataMap.put("ReturnTime", value);
-            activity.showWaitDialog();
-            presenter.setDetectTrack();
-
-            lsiEnable.setVisibility(VISIBLE);
-
-            sensitivityLv.setVisibility(VISIBLE);
-            watchTimeLl.setVisibility(VISIBLE);
-            watchTimeLv.setVisibility(GONE);
-            sensitivityLv.setVisibility(GONE);
-
-            // Close the dialog
-        });
-        sensitivityLv.setAdapter(sensitivtyAdapter);
 
 
-
-        /*isWatchTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showListViewDialog();
-                //isWatchTime.toggleExtraView();
-            }
-        });*/
 
         spSensitivity.initData(new String[]{
                 getString(R.string.low),
                 getString(R.string.middle),
                 getString(R.string.high)}, new Integer[]{0, 1, 2});
-        spSensitivity.setOnExtraSpinnerItemListener(new ExtraSpinnerAdapter.OnExtraSpinnerItemListener() {
+        /*spSensitivity.setOnExtraSpinnerItemListener(new ExtraSpinnerAdapter.OnExtraSpinnerItemListener() {
             @Override
             public void onItemClick(int position, String key, Object value) {
                 lsiSensitivity.toggleExtraView(true);
-                lsiSensitivity.setRightText(key);
+                watchValueTxtv.setText(key);
                 dataMap.put("Sensitivity", value);
                 activity.showWaitDialog();
                 presenter.setDetectTrack();
             }
-        });
+        });*/
+
+
 
         lsiSensitivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -383,11 +365,17 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                 dataMap = resultMap;
 
                 lsiEnable.setRightImage(((Double) resultMap.get("Enable")).intValue());
-                spWatchTime.setValue(((Double) resultMap.get("ReturnTime")).intValue());
-                isWatchTime.setRightText(spWatchTime.getSelectedName());
-                spSensitivity.setValue(((Double) resultMap.get("Sensitivity")).intValue());
-                lsiSensitivity.setRightText(spSensitivity.getSelectedName());
+                watchTimeValue = resultMap.get("ReturnTime")+"";
+                watchTimeValue = watchTimeValue.replace(".0","");
+                watchValueTxtv.setText(watchTimeValue+"s");
+                sensitiveValue = resultMap.get("Sensitivity")+"";
+                //watchValueTxtv.setText(spWatchTime.getSelectedName()+"");
+                //spSensitivity.setValue(resultMap.get("Sensitivity")+"");
+                sensitivtyValueTxtv.setText(resultMap.get("Sensitivity")+"");
 
+                 //wathTimeValue =  resultMap.get("ReturnTime").toString();
+                 sensitiveValue = spSensitivity.getSelectedName();
+                settingUpAdaptr();
             }
         } else {
             showToast(getString(R.string.get_dev_config_failed) , Toast.LENGTH_LONG);
@@ -395,6 +383,68 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         }
     }
 
+
+    void settingUpAdaptr(){
+        String[] sesitivtyItems = new String[]{
+                getString(R.string.low),
+                getString(R.string.middle),
+                getString(R.string.high)
+        };
+
+        String[] items = new String[]{
+                "3s",
+                "5s",
+                "10s",
+                "15s",
+                "30s",
+                "60s",
+                "180s",
+                "300s",
+                "600s",
+                "900s",
+                "1800s"};
+
+        listAdapter = new CustomTractListViewAdapter(activity, items, watchTimeValue, (position, item) -> {
+            Integer value = isWatchTimeHasMap.get(item+"");
+            //Toast.makeText(activity.getApplicationContext(), "Clicked: " + item + " = " + value + " seconds", Toast.LENGTH_SHORT).show();
+            TextView iT = view.findViewById(R.id.watchtime_txtv);
+            iT.setText(item+"");
+
+            //isWatchTime.setRightText(item);
+            dataMap.put("ReturnTime", value);
+            activity.showWaitDialog();
+            presenter.setDetectTrack();
+
+            lsiEnable.setVisibility(VISIBLE);
+            watchTimeLl.setVisibility(VISIBLE);
+            sensitivityLl.setVisibility(VISIBLE);
+
+            watchTimeLv.setVisibility(GONE);
+            sensitivityLv.setVisibility(GONE);
+
+        });
+
+        sensitivtyAdapter = new CustomTractListViewAdapter(activity, sesitivtyItems, sensitiveValue, (position, item) -> {
+            sensitivtyValueTxtv.setText(item);
+
+            dataMap.put("Sensitivity", item);
+            activity.showWaitDialog();
+            presenter.setDetectTrack();
+
+            lsiEnable.setVisibility(VISIBLE);
+
+            sensitivityLv.setVisibility(VISIBLE);
+            watchTimeLl.setVisibility(VISIBLE);
+            watchTimeLv.setVisibility(GONE);
+            sensitivityLv.setVisibility(GONE);
+        });
+
+
+        sensitivityLv.setAdapter(sensitivtyAdapter);
+        watchTimeLv.setAdapter(listAdapter);
+
+
+    }
     @Override
     public void onSetDetectRackResult(boolean isSuccess, int errorId) {
         activity.hideWaitDialog();
@@ -452,7 +502,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         listView.setAdapter(adapter);*/
 
         // List item click listener
-        CustomTractListViewAdapter listAdapter = new CustomTractListViewAdapter(activity, items, (position, item) -> {
+        /*CustomTractListViewAdapter listAdapter = new CustomTractListViewAdapter(activity, items, (position, item) -> {
             Integer value = isWatchTimeHasMap.get(item);
             Toast.makeText(activity.getApplicationContext(), "Clicked: " + item + " = " + value + " seconds", Toast.LENGTH_SHORT).show();
 
@@ -467,7 +517,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         });
         listView.setAdapter(listAdapter);
         Log.d( getClass().getName(),"selectoin data "+ listAdapter.getSelectedItem());
-
+*/
         /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
