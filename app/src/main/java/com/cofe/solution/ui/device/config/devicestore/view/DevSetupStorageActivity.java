@@ -93,7 +93,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 XMPromptDlg.onShow(DevSetupStorageActivity.this, String.valueOf(R.string.device_setup_storage_format_tip), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        showProgress();
                         //格式化
                         presenter.formatStorage();
                     }
@@ -104,7 +104,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         //获取存储容量信息
         presenter.getStorageInfo();
         //获取存储配置
@@ -117,7 +117,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void getStorageDataSuccess(String totalSizeString, String remainSizeString, String videoPartSizeString, String picPartSizeString,boolean isShowPicPart) {
-        hideWaitDialog();
+        hideProgress();
         tvMemoryTotal.setText(totalSizeString);
         tvMemoryRemain.setText(remainSizeString);
         tvMemoryVideoPart.setText(videoPartSizeString);
@@ -134,7 +134,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void getStorageDataError(String errorString) {
-        hideWaitDialog();
+        hideProgress();
         showToast(errorString,Toast.LENGTH_LONG);
     }
 
@@ -143,7 +143,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void onFormatResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         showToast(isSuccess ? String.valueOf(R.string.device_setup_storage_format_success) : String.valueOf(R.string.device_setup_storage_format_failed),
                 Toast.LENGTH_LONG);
         finish();
@@ -171,12 +171,12 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 switch (checkedId) {
                     case com.cofe.solution.R.id.rb_sto_video_stop:
                         //存储满时：停止录像
-                        showWaitDialog();
+                        showProgress();
                         presenter.changeVideoFullState(true);
                         break;
                     case com.cofe.solution.R.id.rb_sto_video_cir:
                         //存储满时：循环录像
-                        showWaitDialog();
+                        showProgress();
                         presenter.changeVideoFullState(false);
                         break;
                     default:
@@ -192,7 +192,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void changeVideoFullStateResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         if(isSuccess){
             showToast(FunSDK.TS("Save_Success"),Toast.LENGTH_LONG);
         } else {

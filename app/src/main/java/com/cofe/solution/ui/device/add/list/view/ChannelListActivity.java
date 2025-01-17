@@ -10,7 +10,6 @@ import com.lib.sdk.struct.SDBDeviceInfo;
 import com.lib.sdk.struct.SDK_ChannelNameConfigAll;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import java.util.ArrayList;

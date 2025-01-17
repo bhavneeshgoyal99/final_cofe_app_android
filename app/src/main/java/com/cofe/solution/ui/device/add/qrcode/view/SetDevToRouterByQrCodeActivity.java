@@ -38,7 +38,6 @@ import com.manager.account.BaseAccountManager;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.utils.LogUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.base.code.ErrorCodeManager;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
@@ -266,7 +265,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
     public void onSetDevToRouterResult(boolean isSuccess, XMDevInfo xmDevInfo) {
         if (isSuccess) {
             showToast(getString(R.string.libfunsdk_set_dev_to_router_s), Toast.LENGTH_LONG);
-            showWaitDialog();
+            showProgress();
         }
     }
 
@@ -278,7 +277,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                hideWaitDialog();
+                hideProgress();
                 tvResult.setVisibility(View.VISIBLE);
                 findViewById(R.id.rl_show_qr_code).setVisibility(View.GONE);
 

@@ -101,7 +101,7 @@ public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter
             }).subscribeOn(Schedulers.newThread()).doOnSubscribe(new Consumer<Disposable>() {
                 @Override
                 public void accept(Disposable disposable) {
-                    showWaitDialog();
+                    showProgress();
                 }
             }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Object>() {
                 @Override
@@ -110,7 +110,7 @@ public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter
                         disposable.dispose();
                         disposable = null;
                     }
-                    hideWaitDialog();
+                    hideProgress();
                     if (result instanceof Integer && (Integer) result == 0) {
                         showToast(FunSDK.TS("Network_Error"), Toast.LENGTH_LONG);
                     } else {

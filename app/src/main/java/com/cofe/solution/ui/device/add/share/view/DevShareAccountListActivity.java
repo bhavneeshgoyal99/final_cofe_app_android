@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.lib.sdk.bean.share.MyShareUserInfoBean;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;

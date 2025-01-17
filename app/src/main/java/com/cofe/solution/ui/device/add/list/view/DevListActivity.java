@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.activity.lib.XMDevAbilityActivity;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.preview.view.DevActivity;
@@ -58,7 +59,6 @@ import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.config.PwdErrorManager;
 import com.utils.XUtils;
-import com.xm.activity.device.devset.ability.view.XMDevAbilityActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
 import com.xm.ui.widget.dialog.EditDialog;
@@ -389,7 +389,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         adapter = new DevListAdapter(getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
         listView.setAdapter(adapter);
         presenter.updateDevState();//Update the status of the list
@@ -597,7 +597,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
-        hideWaitDialog();
+        hideProgress();
 
         Bundle bundle = new Bundle();
         bundle.putString( "called", "onUpdateDevStateResult");
@@ -625,7 +625,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             showToast(getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
@@ -636,7 +636,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onDeleteDevResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
@@ -647,7 +647,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onAcceptDevResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.accept_share_s), Toast.LENGTH_LONG);
@@ -665,7 +665,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -683,7 +683,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         0, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+                                showProgress();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -693,7 +693,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+                                showProgress();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -745,7 +745,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 return;
             }
 
-            showWaitDialog(getString(R.string.get_channel_info));
+            showProgress(getString(R.string.get_channel_info));
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
 
@@ -753,6 +753,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             /*Low power devices do not need to get the list of channels and jump directly to the preview page*/
             if (DevDataCenter.getInstance().isLowPowerDev(xmDevInfo.getDevType())) {
                 turnToActivity(DevMonitorActivity.class);
+                hideProgress();
             } else {
                 presenter.getChannelList();
             }
@@ -768,7 +769,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                showProgress();
                 presenter.deleteDev(position);
             }
         }, null);

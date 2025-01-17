@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lib.sdk.bean.preset.ConfigGetPreset;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
@@ -64,7 +63,7 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
                 XMPromptDlg.onShowEditDialog(PresetListActivity.this, getString(R.string.modify_preset_name), presetName, new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String content) {
-                        showWaitDialog();
+                        showProgress();
                         //修改预置点名称
                         presenter.modifyPresetName(presetId, content);
                     }
@@ -76,7 +75,7 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
                 XMPromptDlg.onShow(PresetListActivity.this, getString(R.string.is_sure_to_delete_preset), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        showProgress();
                         //删除预置点
                         presenter.deletePreset(presetId);
                     }
@@ -89,26 +88,26 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
             }
         });
         rvChannelList.setAdapter(presetListAdapter);
-        showWaitDialog();
+        showProgress();
         presenter.updatePresetList();
     }
 
     @Override
     public void onGetPresetListResult(List<ConfigGetPreset> presetList) {
-        hideWaitDialog();
+        hideProgress();
         presetListAdapter.setData(presetList);
     }
 
     @Override
     public void onDeletePresetResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        hideProgress();
         showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
         presenter.updatePresetList();
     }
 
     @Override
     public void onModifyPresetNameResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        hideProgress();
         showToast(getString(R.string.modify_s), Toast.LENGTH_LONG);
         presenter.updatePresetList();
     }

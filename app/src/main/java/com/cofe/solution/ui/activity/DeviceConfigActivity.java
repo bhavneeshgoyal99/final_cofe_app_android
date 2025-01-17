@@ -7,8 +7,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.xm.activity.base.XMBaseActivity;
-import com.xm.activity.device.devset.ability.view.XMDevAbilityActivity;
+import com.cofe.solution.ui.activity.lib.XMDevAbilityActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
 

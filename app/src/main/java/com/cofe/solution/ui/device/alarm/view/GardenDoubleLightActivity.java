@@ -412,12 +412,12 @@ public class GardenDoubleLightActivity extends BaseConfigActivity<GardenDoubleLi
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        showProgress();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override

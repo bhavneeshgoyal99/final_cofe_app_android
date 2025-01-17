@@ -33,7 +33,6 @@ import com.lib.FunSDK;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.utils.XUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.rotateloadingview.LoadingView;
 

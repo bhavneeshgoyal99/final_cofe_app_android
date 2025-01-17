@@ -67,7 +67,7 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         devId = getIntent().getStringExtra("devId");
         presenter.setDevId(devId);
         if (getIntent() != null) {
@@ -208,12 +208,12 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        showProgress();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override

@@ -49,9 +49,13 @@ public class SDKDemoApplication extends Application {
     private LinkedHashMap<String, Activity> actMap;
     private XMFunSDKManager xmFunSDKManager;
     private AlarmTranslationIconBean alarmTranslationIconBean;
+
+    public static SDKDemoApplication instance;
     @Override
     public void onCreate() {
         super.onCreate();
+
+        instance = SDKDemoApplication.this;
         actMap = new LinkedHashMap<>();
         FirebaseApp.initializeApp(this);
 

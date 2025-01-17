@@ -886,7 +886,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
     public void onResume() {
         super.onResume();
         if (!isHomePress) {
-//            showWaitDialog();
+//            showProgress();
 //            presenter.loginDev();
         }
     }
@@ -968,7 +968,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-//                        showWaitDialog();
+//                        showProgress();
                         presenter.loginDev();
                     }
                 });
@@ -989,7 +989,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
     public void onGetDevAbilityResult(SystemFunctionBean systemFunctionBean, int errorId) {
         this.systemFunctionBean = systemFunctionBean;
         monitorFunList.clear();
-//        hideWaitDialog();
+//        hideProgress();
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("itemId", FUN_VOICE);
         hashMap.put("itemName", getString(R.string.device_setup_encode_audio));
@@ -1249,7 +1249,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-//                        showWaitDialog();
+//                        showProgress();
                         presenter.startMonitor(chnId);
                     }
                 });
@@ -1258,7 +1258,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 XMPromptDlg.onShowPasswordErrorDialog(activity, devInfo.getSdbDevInfo(), 0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-//                        showWaitDialog();
+//                        showProgress();
                         presenter.startMonitor(chnId);
                     }
                 }, false);
@@ -1699,7 +1699,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 break;
             }
             case FUN_PTZ_CALIBRATION://云台校正
-//                showWaitDialog();
+//                showProgress();
                 presenter.ptzCalibration();
                 break;
             case FUN_INTERCOM: //单向对讲，按下去说话，放开后听到设备端的声音，对话框消失后 对讲结束
@@ -1827,7 +1827,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 break;
             case FUN_CRUISE://巡航
             {
-//                showWaitDialog();
+//                showProgress();
                 presenter.getTour(presenter.getChnId());
                 break;
             }
@@ -1859,7 +1859,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                 presenter.capturePicFromDevAndToApp(presenter.getChnId());
                 break;
             case FUN_REAL_PLAY://实时预览实时性（局域网IP访问才生效）
-//                showWaitDialog();
+//                showProgress();
                 presenter.setRealTimeEnable(isSelected);
 
                 for (int k = 0; k < chnCount && k < playViews.length; ++k) {
@@ -1873,7 +1873,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                         for (int i = 0; i < chnCount && i < playViews.length; ++i) {
                             presenter.startMonitor(i);
                         }
-//                        hideWaitDialog();
+//                        hideProgress();
                     }
                 }, 1000);
                 return true;
@@ -2398,7 +2398,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
             showToast(getString(R.string.libfunsdk_operation_failed), Toast.LENGTH_LONG);
         }
 
-//        hideWaitDialog();
+//        hideProgress();
     }
 
     /**
@@ -2409,7 +2409,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
      */
     @Override
     public void onShowTour(List<TourBean> tourBeans, int errorId) {
-//        hideWaitDialog();
+//        hideProgress();
         if (errorId == 0) {
             LinearLayout contentLayout = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.view_criuse, null);
             BtnColorBK btnOne = contentLayout.findViewById(R.id.btn_keypad_1);
@@ -2580,7 +2580,7 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            showWaitDialog();
+            showProgress();
             presenter.loginDev();
         } else {
             activity.finish();

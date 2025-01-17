@@ -67,7 +67,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
         findViewById(R.id.btnWifiQuickSettingSimple).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWaitDialog();
+                showProgress();
                 String ssid = wifiSSIDEdit.getText().toString().trim();
                 String pwd = wifiPasswdEdit.getText().toString().trim();
                 if (StringUtils.isStringNULL(ssid)) {
@@ -121,12 +121,12 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
             wifiSSIDEdit.setText(curSSID);
         }
 
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override
     public void onAddDevResult(boolean isSuccess) {  //Callback after adding the device
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             turnToActivity(DevMonitorActivity.class);
         }
@@ -155,7 +155,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
 
     @Override
     public void onClick(View view) {
-        showWaitDialog();
+        showProgress();
         presenter.startQuickSetWiFi(wifiPasswdEdit.getText().toString().trim());
     }
 

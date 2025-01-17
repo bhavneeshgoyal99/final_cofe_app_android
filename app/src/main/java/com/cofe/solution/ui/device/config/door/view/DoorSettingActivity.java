@@ -3,7 +3,6 @@ package com.cofe.solution.ui.device.config.door.view;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
 import com.xm.ui.widget.listselectitem.extra.adapter.ExtraSpinnerAdapter;
@@ -115,14 +114,14 @@ public class DoorSettingActivity extends BaseConfigActivity<DoorSettingPresenter
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         presenter.updateCorridorMode();
         presenter.updateManageShutDown();
     }
 
     @Override
     public void onUpdateManageShutDownResult(boolean isSuccess,int sleepTime) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             initSleepView();
             spAutoSleep.setValue(sleepTime);
@@ -132,7 +131,7 @@ public class DoorSettingActivity extends BaseConfigActivity<DoorSettingPresenter
 
     @Override
     public void onUpdateCorridorModeResult(boolean isSuccess, int mode) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             initFlip();
             spFlip.setValue(mode);

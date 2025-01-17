@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 
 import com.basic.G;
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.dialog.DialogWaiting;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
@@ -38,7 +39,6 @@ import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
 import com.manager.device.config.PwdErrorManager;
 import com.utils.XMWifiManager;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
 
@@ -248,7 +248,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
             //startService(new Intent(this, DevPushService.class));
             finish();
         } else {
-            hideWaitDialog();
+            hideProgress();
             ErrorMapping errorMessage = new ErrorMapping();
             showToast(getString(R.string.user_register_login_fail) + ":" + errorMessage.getErrorMessage(presenter.getErrorId()), Toast.LENGTH_LONG);
 
@@ -262,7 +262,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
 
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -277,7 +277,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                 XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-                        showWaitDialog();
+                        showProgress();
                         presenter.loginByAP();
                     }
                 }, false);
@@ -305,7 +305,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
 
                 if (etPwd.getText().toString().trim().length() != 0 && etUserName.getText().toString().trim().length() != 0) {
                     try {
-                        showWaitDialog();
+                        showProgress();
                         presenter.loginByAccount(etUserName.getText().toString(), etPwd.getText().toString());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -399,7 +399,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                         }, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showWaitDialog();
+                                showProgress();
                                 presenter.loginByAP();
                             }
                         });

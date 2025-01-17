@@ -3,7 +3,6 @@ package com.cofe.solution.ui.device.config.idr.view;
 import android.os.Bundle;
 import android.view.View;
 
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;

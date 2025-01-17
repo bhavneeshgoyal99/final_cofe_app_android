@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.lib.EUIMSG;
 import com.lib.sdk.bean.StringUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import org.json.JSONObject;
@@ -246,7 +245,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        hideProgress();
         if (presenter.getErrorId() == 0) {
             switch (presenter.getMsgId()) {
                 case EUIMSG.SYS_FORGET_PWD_XM:
@@ -321,7 +320,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
             showToast(getString(R.string.user_forget_pwd_new_password_confirm_error), Toast.LENGTH_LONG);
             return;
         }
-        showWaitDialog();
+        showProgress();
 
         //通过邮箱修改密码
         if (byEmail) {
@@ -349,7 +348,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
         if (byEmail) {
             String email = emailEdit.getText().toString().trim();
             String verifyCode = verifyCodeEdit.getText().toString().trim();
-            showWaitDialog();
+            showProgress();
             if (!presenter.requestVerifyEmailCode(email, verifyCode)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }
@@ -360,7 +359,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
             if (!pattern.matcher(verifyCode).matches()) {
                 showToast(getString(R.string.user_forget_pwd_verify_code_format_erroe), Toast.LENGTH_LONG);
             } else {
-                showWaitDialog();
+                showProgress();
                 if (!presenter.requestVerifyPhoneCode(phone, verifyCode)) {
                     showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
                 }
@@ -378,7 +377,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
                 return;
             }
 
-            //showWaitDialog();
+            //showProgress();
             startCountdownTimer();
             /*if (!presenter.requestSendEmailCodeForResetPW(email)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
@@ -393,7 +392,7 @@ public class UserForgetPwdActivity extends DemoBaseActivity<UserForgetPwdPresent
                 return;
             }
 
-            showWaitDialog();
+            showProgress();
             if (!presenter.requestSendPhoneMsgForResetPW(phoneNum)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }

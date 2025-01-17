@@ -3,7 +3,6 @@ package com.cofe.solution.ui.device.browse.view;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import com.cofe.solution.R;

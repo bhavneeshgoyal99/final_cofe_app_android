@@ -47,7 +47,7 @@ public class DevModifyPwdActivity extends BaseConfigActivity<DevModifyPwdPresent
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                showProgress();
                 presenter.modifyDevPwd(etOldPwd.getText().toString().trim(),etNewPwd.getText().toString().trim());
             }
         });
@@ -59,7 +59,7 @@ public class DevModifyPwdActivity extends BaseConfigActivity<DevModifyPwdPresent
 
     @Override
     public void onUpdateView(String result) {
-        hideWaitDialog();
+        hideProgress();
         Toast.makeText(this,result,Toast.LENGTH_LONG).show();
     }
 }

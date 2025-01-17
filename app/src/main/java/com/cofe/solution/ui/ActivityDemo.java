@@ -13,43 +13,43 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.cofe.solution.ui.dialog.DialogWaiting;
 import com.xm.ui.widget.SpinnerSelectItem;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.cofe.solution.R;
-import com.cofe.solution.base.DialogWaitting;
 import com.cofe.solution.base.UIFactory;
 
 public class ActivityDemo extends FragmentActivity {
-	private DialogWaitting mWaitDialog = null;
+	private DialogWaiting mWaitDialog = null;
 	private Toast mToast = null;
 	
 	private View mNavRightView = null;
 	
-	public void showWaitDialog() {
+	public void showProgress() {
 		if ( null == mWaitDialog ) {
-			mWaitDialog = new DialogWaitting(this);
+			mWaitDialog = new DialogWaiting(this);
 		}
 		mWaitDialog.show();
 	}
 	
-	public void showWaitDialog(int resid) {
+	public void showProgress(int resid) {
 		if ( null == mWaitDialog ) {
-			mWaitDialog = new DialogWaitting(this);
+			mWaitDialog = new DialogWaiting(this);
 		}
 		mWaitDialog.show(resid);
 	}
 	
-	public void showWaitDialog(String text) {
+	public void showProgress(String text) {
 		if ( null == mWaitDialog ) {
-			mWaitDialog = new DialogWaitting(this);
+			mWaitDialog = new DialogWaiting(this);
 		}
 		mWaitDialog.show(text);
 	}
 	
-	public void hideWaitDialog() {
+	public void hideProgress() {
 		if ( null != mWaitDialog ) {
 			mWaitDialog.dismiss();
 		}

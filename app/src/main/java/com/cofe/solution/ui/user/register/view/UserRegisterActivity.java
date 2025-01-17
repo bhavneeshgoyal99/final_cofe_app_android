@@ -18,8 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.lib.EUIMSG;
-import com.xm.activity.base.XMBaseActivity;
-import com.xm.ui.widget.XTitleBar;
 
 import com.cofe.solution.R;
 import com.cofe.solution.base.DemoBaseActivity;
@@ -178,7 +176,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 showToast(getString(R.string.user_login_error_email), Toast.LENGTH_LONG);
                 return;
             }
-            showWaitDialog();
+            showProgress();
 
             if (!presenter.emailCode(emailStr)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
@@ -189,7 +187,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 showToast(getString(R.string.user_login_error_phone_number), Toast.LENGTH_LONG);
                 return;
             }
-            showWaitDialog();
+            showProgress();
 
             if (!presenter.phoneMsg(userName, phoneNum)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
@@ -247,7 +245,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 return;
             }
 
-            showWaitDialog();
+            showProgress();
             if (!presenter.registerEmail(userName, passWord, email, verifyCode)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }
@@ -268,7 +266,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 return;
             }
 
-            showWaitDialog();
+            showProgress();
             if (!presenter.registerPhone(userName, passWord, verifyCode, phoneNo)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }
@@ -321,7 +319,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        hideProgress();
         if (presenter.getErrorId() == 0) {
             switch (presenter.getMsgId()) { //Depending on the MsgId returned, different subsequent actions are processed
                 case EUIMSG.SYS_CHECK_USER_REGISTE:

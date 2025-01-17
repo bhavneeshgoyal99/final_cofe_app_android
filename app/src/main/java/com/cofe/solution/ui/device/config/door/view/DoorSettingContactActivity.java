@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
@@ -111,7 +110,7 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
                 XMPromptDlg.onShowEditDialog(DoorSettingContactActivity.this, getString(R.string.input_door_unlock_pwd), "", new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String password) {
-                        showWaitDialog();
+                        showProgress();
                         presenter.unlockDoor(password);
                     }
                 });
@@ -121,20 +120,20 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
         lsiUnlockByOneKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWaitDialog();
+                showProgress();
                 presenter.unlockDoorByOneKey();
             }
         });
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         presenter.updateDoorUserInfo();
     }
 
     @Override
     public void onUpdateDoorUserInfoResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         lsiUnlockByPwd.setEnable(isSuccess);
         lsiUnlockByFinger.setEnable(isSuccess);
         lsiUnlockByCard.setEnable(isSuccess);
@@ -142,7 +141,7 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
 
     @Override
     public void onUnlockDoorResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         showToast(isSuccess ? getString(R.string.unlock_s) : getString(R.string.unlock_f), Toast.LENGTH_LONG);
     }
 

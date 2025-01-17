@@ -9,7 +9,7 @@ import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
 import com.utils.XUtils;
-import com.xm.activity.base.XMBaseActivity;
+import com.cofe.solution.ui.activity.lib.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.widget.XMEditText;
 import com.xm.ui.widget.XTitleBar;

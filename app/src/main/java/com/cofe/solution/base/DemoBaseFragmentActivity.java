@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.cofe.solution.app.SDKDemoApplication;
-import com.xm.activity.base.XMBaseActivity;
+import com.cofe.solution.ui.activity.lib.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.widget.XTitleBar;
 

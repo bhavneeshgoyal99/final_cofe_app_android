@@ -3,7 +3,7 @@ package com.cofe.solution.ui;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.xm.activity.base.XMBaseActivity;
+import com.cofe.solution.ui.activity.lib.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 
 /**
