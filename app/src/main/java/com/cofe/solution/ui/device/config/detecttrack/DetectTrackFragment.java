@@ -70,7 +70,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     boolean isAovDevice =  false;
 
     public interface OnFragmentCallbackListener {
-        void onDemonButton(String data);
+        void onDemonButton(String data, boolean isActive);
         void motionFramentClose();
     }
 
@@ -134,6 +134,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                 presenter.setDetectTrack();
             }
         });
+        presenter.getDetectTrack();
 
         lsiSensitivity = view.findViewById(R.id.lsi_sensitivity);
         isWatchTime = view.findViewById(R.id.lsi_watch_time);
@@ -213,14 +214,25 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             @Override
             public void onClick(View view) {
                 if (callbackListener != null) {
-                    isDemonIsClicked = true;
-                    if(isDemonIsClicked) {
+                    /*if(isDemonIsClicked) {
                         demonBtn.setText(getString(R.string.set_as_demon_point));
+                        callbackListener.onDemonButton(29+"");
+                        view.findViewById(R.id.demon_btn).setTag(view.findViewById(R.id.demon_btn).getTag().toString());
                     } else {
                         isDemonIsClicked  = false;
                         demonBtn.setText(getString(R.string.demon_work));
+                        callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString());
+                        callbackListener.onDemonButton(29+"");
+                    }*/
+                    if(isDemonIsClicked == false) {
+                        isDemonIsClicked = true;
+                        callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString(), true);
+                        demonBtn.setText(getString(R.string.set_as_demon_point));
+                    } else {
+                        demonBtn.setText(getString(R.string.demon_work));
+                        isDemonIsClicked = false;
+                        callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString(), false);
                     }
-                    callbackListener.onDemonButton(view.findViewById(R.id.demon_btn).getTag().toString());
                 }
             }
         });
@@ -348,13 +360,13 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         });
 
         activity.showWaitDialog();
-        presenter.getDetectTrack();
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) playView.getLayoutParams();
         params.height = screenWidth * 9 / 16;
         monitorManager = DeviceManager.getInstance().createMonitorPlayer(playView, presenter.getDevId());
-        monitorManager.startMonitor();
+        //monitorManager.startMonitor();
         allListviewData();
+        presenter.getDetectTrack();
 
     }
 
@@ -369,11 +381,13 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         if (isSuccess) {
             if (resultMap != null) {
                 dataMap = resultMap;
-                //lsiEnable.setRightImage(((Double) resultMap.get("Enable")).intValue());
+
+                lsiEnable.setRightImage(((Double) resultMap.get("Enable")).intValue());
                 spWatchTime.setValue(((Double) resultMap.get("ReturnTime")).intValue());
                 isWatchTime.setRightText(spWatchTime.getSelectedName());
                 spSensitivity.setValue(((Double) resultMap.get("Sensitivity")).intValue());
                 lsiSensitivity.setRightText(spSensitivity.getSelectedName());
+
             }
         } else {
             showToast(getString(R.string.get_dev_config_failed) , Toast.LENGTH_LONG);

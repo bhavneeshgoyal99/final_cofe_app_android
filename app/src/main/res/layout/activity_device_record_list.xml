@@ -65,7 +65,7 @@
                 <RelativeLayout
                     android:id="@+id/wnd_inner_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="210dp"
                     android:background="#ff000000"
                     android:transitionName="sharedElement"
                     >
@@ -133,7 +133,124 @@
                         android:textColor="@color/white"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentEnd="true"/>
+
+
                 </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:background="@color/black"
+                        android:id="@+id/action_btn_ll"
+                        android:layout_below="@+id/wnd_inner_layout">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/iv_answer_call_ll"
+                            android:visibility="gone"
+
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="24dp"
+                                android:src="@drawable/call_icon"
+                                android:contentDescription="Call"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/iv_answer_call"
+                                android:tag="27"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/microphone_ll"
+                            android:visibility="gone"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="24dp"
+                                android:src="@drawable/mic_icon"
+                                android:contentDescription="Microphone"
+                                android:layout_marginEnd="8dp"
+                                android:id="@+id/microphone"
+                                android:tag="5"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/sound_ll"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="24dp"
+                                android:src="@drawable/speaker_icon_1"
+                                android:contentDescription="mute"
+                                android:layout_marginEnd="8dp"
+                                android:tag="0"
+                                android:id="@+id/sound"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/video_ll"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:src="@drawable/video_icon"
+                                android:contentDescription="Speaker"
+                                android:layout_marginEnd="8dp"
+                                android:tag="2"
+                                android:id="@+id/video"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/camera_ll"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="24dp"
+                                android:src="@drawable/camera_camer_1"
+                                android:contentDescription="Camera"
+                                android:layout_marginEnd="8dp"
+                                android:tag="1"
+                                android:id="@+id/camera"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight=".02"
+                            android:layout_height="24dp"
+                            android:id="@+id/sd_ll"
+                            android:visibility="gone"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="24dp"
+                                android:src="@drawable/sd_icon"
+                                android:contentDescription="UHD"
+                                android:id="@+id/sd"
+                                android:tag="5"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/buttons_ll"
                         android:layout_width="match_parent"
@@ -141,7 +258,7 @@
                         android:orientation="horizontal"
                         android:gravity="center"
                         android:transitionName="sharedElement"
-                        android:layout_below="@+id/wnd_inner_layout"
+                        android:layout_below="@+id/action_btn_ll"
                         >
 
                         <Button
@@ -203,7 +320,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_record_fun"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
 
                 <TextView

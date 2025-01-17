@@ -3,6 +3,7 @@ package com.cofe.solution.ui.device.add.list.presenter;
 import android.content.Intent;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -19,6 +20,7 @@ import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
 import com.lib.sdk.struct.SDBDeviceInfo;
 import com.lib.sdk.struct.SDK_ChannelNameConfigAll;
+import com.manager.XMFunSDKManager;
 import com.manager.account.AccountManager;
 import com.manager.account.BaseAccountManager;
 import com.manager.account.share.ShareInfo;
@@ -27,6 +29,7 @@ import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
 import com.utils.LogUtils;
+import com.utils.SignatureUtil;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.base.code.ErrorCodeManager;
 import com.xm.ui.dialog.XMPromptDlg;
@@ -167,6 +170,19 @@ public class DevListConnectPresenter extends XMBasePresenter<AccountManager> imp
         if (xmDevInfo != null && xmDevInfo.isShareDev()) {
             OtherShareDevUserBean otherShareDevUserBean = xmDevInfo.getOtherShareDevUserBean();
             curCancelShareId = otherShareDevUserBean.getShareId();
+            String uuid = XMFunSDKManager.getInstance().getAppUuid();
+            String appKey = XMFunSDKManager.getInstance().getAppKey();
+            String appSecret = XMFunSDKManager.getInstance().getAppSecret();
+            int movedCard = XMFunSDKManager.getInstance().getAppMovecard();
+
+            Log.d("otherShareDevUserBean >  to detete ", "otherShareDevUserBean > " +otherShareDevUserBean.getShareId());
+
+            Log.d("otherShareDevUserBean >  to detete ", "uuid > " + uuid);
+            Log.d("otherShareDevUserBean >  to detete ", "appKey > " + appKey);
+            Log.d("otherShareDevUserBean >  to detete ", "appSecret > " + appSecret);
+            Log.d("otherShareDevUserBean >  to detete ", "movedCard > " + movedCard);
+            Log.d("otherShareDevUserBean >  to detete ", "movedCard > " + movedCard);
+
             shareManager.rejectShare(otherShareDevUserBean);
         } else {
             //未使用AccountManager(包括XMAccountManager或LocalAccountManager)登录（包括账号登录和本地临时登录），只能将设备信息临时缓存，重启应用后无法查到设备信息。

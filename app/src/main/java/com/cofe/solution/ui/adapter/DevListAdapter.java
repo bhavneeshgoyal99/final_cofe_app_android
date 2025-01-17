@@ -190,8 +190,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                         strShareState = strShareState + "[" + context.getString(R.string.share_reject) + "]";
                     }
                 }
-                holder.dSharedStatustxtv.setText(strShareState);
-                holder.cloudInfoLl.setVisibility(View.GONE);;
+                holder.dSharedStatustxtv.setText("");
+                //holder.cloudInfoLl.setVisibility(View.GONE);;
                 holder.btnShareDev1.setVisibility(View.GONE);;
                 holder.btnTurnToPushSet1.setVisibility(View.GONE);
 
@@ -239,6 +239,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         holder.devNameTxtv.setText(devName);
         holder.status_txtv.setTag(DEV_STATE[(int) data.get(position).get("devState")]);
         holder.status_txtv.setText(DEV_STATE[(int) data.get(position).get("devState")]);
+
+        holder.openPopup.setVisibility(View.VISIBLE);
 
     }
 
@@ -529,6 +531,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     }
                 }
             });
+            openPopup.setVisibility(View.VISIBLE);
+
             openPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -536,7 +540,7 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     /*if (onItemDevClickListener != null) {
                         onItemDevClickListener.onShareDevManage(getAdapterPosition(), xmDevInfo);
                     }*/
-                    showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
+                    //showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
 
                     if(xmDevInfo.getDevState()!=0) {
                         showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
@@ -546,6 +550,7 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                 }
             });
 
+            openPopup.setVisibility(View.VISIBLE);
 
         }
     }

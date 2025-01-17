@@ -1,15 +1,20 @@
 package com.cofe.solution.ui.device.record.view;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.transition.ChangeBounds;
+import android.transition.Transition;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -32,11 +37,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.base.CustomCalendarDialog;
 import com.cofe.solution.base.SharedPreference;
 import com.lib.sdk.bean.StringUtils;
@@ -109,11 +117,47 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     private boolean isSeekTouchPlayProgress = false;
     LinearLayout parentLL;
     String selectedByuser;
+    int sharedWidth;
+    int sharedHeight;
+    ImageView microphoneImg,cameraImg, videoImg, soundImg;
+    boolean isVideoCaptureStart;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_record_list);
+
+
+        SharedPreference cookies = new SharedPreference(getApplicationContext());
+
+        getWindow().setSharedElementEnterTransition(null);
+        getWindow().setSharedElementReturnTransition(null);
+        postponeEnterTransition();
+        String widthHeight = cookies.retrievDevicePreviewHeightandWidth();
+
+        sharedWidth = Integer.parseInt(widthHeight.split(";;;")[0]);
+        sharedHeight = Integer.parseInt(widthHeight.split(";;;")[1]);
+        RelativeLayout wndInnerLayout = findViewById(R.id.wnd_inner_layout);
+        setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                sharedElements.put(names.get(0), wndInnerLayout);
+
+                // Resize shared element before transition
+                wndInnerLayout.getLayoutParams().width = sharedWidth;
+                wndInnerLayout.getLayoutParams().height = sharedHeight;
+                wndInnerLayout.requestLayout();
+            }
+        });
+
+        // Use ChangeBounds transition for smooth resizing
+       // Transition changeBounds = new ChangeBounds();
+        //changeBounds.setDuration(300);
+        //getWindow().setSharedElementEnterTransition(changeBounds);
+
+        // Start the transition after layout adjustments
+        wndInnerLayout.post(() -> startPostponedEnterTransition());
+
         initView();
         initData();
     }
@@ -151,6 +195,12 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         ((RadioButton) findViewById(R.id.rb_by_file)).setChecked(true);
         parentLL = findViewById(R.id.parent_ll);
         RelativeLayout rlBanner = findViewById(R.id.banner_rl);
+
+        microphoneImg = findViewById(R.id.microphone);
+        cameraImg = findViewById(R.id.camera);
+        videoImg= findViewById(R.id.video);
+        soundImg = findViewById(R.id.sound);
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         rvRecordTimeAxis = new XMRecyclerView(this, null);
@@ -288,6 +338,34 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         });;
 
 
+
+        findViewById(R.id.camera_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
+            }
+        });
+        findViewById(R.id.video_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isVideoCaptureStart = (isVideoCaptureStart) ? false : true;
+                int image= (isVideoCaptureStart) ? R.drawable.active_video : R.drawable.video_icon ;
+                Glide.with(getApplicationContext()).load(image).into(videoImg);
+
+                dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
+            }
+        });
+
+        findViewById(R.id.sound_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSoundCaptureStart = (isSoundCaptureStart) ? false : true;
+                int image= (isSoundCaptureStart) ? R.drawable.speaker_disabled_icon : R.drawable.speaker_icon_1 ;
+                Glide.with(getApplicationContext()).load(image).into(soundImg);
+                dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), isSoundCaptureStart);
+            }
+        });
+
     }
 
     // Helper method to check if touch is outside the RecyclerView
@@ -412,10 +490,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
         if (playState == E_STATE_SAVE_RECORD_FILE_S) {
-            showToast(getString(R.string.record_s), Toast.LENGTH_LONG);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+                showToast(getString(R.string.record_s), Toast.LENGTH_LONG);
+            }
+
             recordFunAdapter.changeBtnState(3, getString(R.string.cut_video), false);
         } else if (playState == E_STATE_SAVE_PIC_FILE_S) {
-            showToast(getString(R.string.capture_s), Toast.LENGTH_LONG);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+                showToast(getString(R.string.capture_s), Toast.LENGTH_LONG);
+            }
         }
     }
 

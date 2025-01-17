@@ -421,6 +421,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 //layout3.setVisibility(View.GONE);
                 //layout2.setVisibility(VISIBLE);
                 //loadRecordFragment(new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
+                SharedPreference cookies = new SharedPreference(getApplicationContext());
+                int width = wndLayout.getWidth();
+                int height = wndLayout.getHeight();
+                cookies.saveDevicePreviewHeightandWidth(width, height);
+                cookies.saveisDeviceAOV(isAOVDevice);
 
                 turnToActivity1(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
 
@@ -2092,8 +2097,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
             break;
             case FUN_PLAYBACK://录像回放
-
-                turnToActivity(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}});
+                SharedPreference cookies = new SharedPreference(getApplicationContext());
+                int width = wndLayout.getWidth();
+                int height = wndLayout.getHeight();
+                cookies.saveDevicePreviewHeightandWidth(width, height);
+                //turnToActivity(DevRecordActivity.class, new Object[][]{{"devId", presenter.getDevId()}, {"chnId", presenter.getChnId()}, {"height", height}, {"width", width}});
 
                 break;
             case FUN_CHANGE_STREAM://主副码流切换      The primary stream is clearer and the secondary stream is blurry
@@ -3232,9 +3240,15 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     //called from motion fragment
     @Override
-    public void onDemonButton(String featureNumber) {
-        onFeatureClicked(FUN_APP_OBJ_EFFECT+"");
-        onFeatureClicked(featureNumber);
+    public void onDemonButton(String featureNumber, boolean isActive) {
+        if(isActive) {
+            onFeatureClicked(FUN_APP_OBJ_EFFECT + "");
+            onFeatureClicked(featureNumber);
+        } else  {
+            onFeatureClicked(featureNumber);
+            onFeatureClicked(FUN_APP_OBJ_EFFECT + "");
+
+        }
     }
 
     @Override

@@ -680,6 +680,17 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     public void onDeleteDevResult(boolean isSuccess) {
         hideWaitDialog();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
+        if (presenter.getDevList() != null) {
+            if (presenter.getDevList().size() == 0) {
+                add_img.setVisibility(View.VISIBLE);
+                noDeviceContLl.setVisibility(View.VISIBLE);
+                textTxtv.setText(getString(R.string.add_dev));
+
+            } else {
+                noDeviceContLl.setVisibility(View.GONE);
+            }
+        }
+
         if (isSuccess) {
             showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
         } else {
@@ -816,7 +827,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public boolean onLongItemClick(final int position, XMDevInfo xmDevInfo) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        //if(xmDevInfo.getDevState() !=0) {
 
             XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
                 @Override
@@ -826,10 +837,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 }
             }, null);
             return false;
-        } else {
+        /*} else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
             return false;
-        }
+        }*/
     }
 
     /**
