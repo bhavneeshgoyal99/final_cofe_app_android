@@ -129,17 +129,17 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 	}
 	
 	private void loginDevice() {
-		showWaitDialog();
+		showProgress();
 
 		DeviceManager deviceManager = DeviceManager.getInstance();
 		deviceManager.loginDev(xmDevInfo.getDevId(), "admin", "", new DeviceManager.OnDevManagerListener() {
 			@Override
 			public void onSuccess(String s, int i, Object o) {
-			      hideWaitDialog();
+			      hideProgress();
 				}
 			@Override
 			public void onFailed(String s, int i, String s1, int i1) {
-				hideWaitDialog();
+				hideProgress();
 				showToast(R.string.user_register_login_fail);
 			}
 		});
@@ -199,7 +199,7 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 			{
 				if ( msg.arg1 == FunError.EE_OK ) {
 					// 设备登录成功
-					hideWaitDialog();
+					hideProgress();
 				} else {
 					// 设备登录失败
 					showToast(FunError.getErrorStr(msg.arg1));

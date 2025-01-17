@@ -191,7 +191,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         presenter.getDevAlarm();
     }
 
@@ -313,7 +313,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
                     findViewById(R.id.ll_dev_alarm_blind).setVisibility(View.GONE);
                 }
 
-                hideWaitDialog();
+                hideProgress();
                 break;
             default:
                 break;
@@ -322,7 +322,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
 
     @Override
     public void saveLossResult(int state) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getResources().getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -334,7 +334,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
 
     @Override
     public void savePirAlarmResult(int state) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getResources().getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -345,7 +345,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
 
     @Override
     public void saveMotionResult(int state) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getResources().getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -356,7 +356,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
 
     @Override
     public void saveBlindResult(int state) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getResources().getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -367,7 +367,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
 
     @Override
     public void saveHumanResult(int state) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getResources().getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -414,7 +414,7 @@ public class DevAlarmSetActivity extends BaseConfigActivity<DevAlarmSetPresenter
      * 去保存修改的数据
      */
     private void toSaveDevAlarm() {
-        showWaitDialog();
+        showProgress();
         setValues();
         presenter.saveLossDetect();
         presenter.saveMotionDetect();

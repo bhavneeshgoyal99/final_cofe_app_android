@@ -307,7 +307,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 presenter.getShowCount(),
                 presenter.getTimeUnit());
         rvRecordTimeAxis.setAdapter(recordTimeAxisAdapter);
-        showWaitDialog();
+        showProgress();
         presenter.initRecordPlayer((ViewGroup) findViewById(R.id.layoutPlayWnd), recordType);
         presenter.searchRecordByFile(calendarShow);
         presenter.searchRecordByTime(calendarShow);
@@ -332,7 +332,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByFileResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
@@ -346,7 +346,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByTimeResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         recordListAdapter.notifyDataSetChanged();
         recordTimeAxisAdapter.notifyDataSetChanged();
         if (isSuccess) {
@@ -377,7 +377,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     @Override
     public void onPlayStateResult(int playState, int playSpeed) {
         if (playState == PlayerAttribute.E_STATE_PlAY) {
-            hideWaitDialog();
+            hideProgress();
             recordFunAdapter.changeBtnState(0, getString(R.string.playback_pause), true);
         } else if (playState == E_STATE_STOP
                 || playState == E_STATE_PAUSE
@@ -582,22 +582,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     @Override
     public void onDownloadState(int state, String filePath) {
         if (state == DOWNLOAD_STATE_FAILED) {
-            hideWaitDialog();
+            hideProgress();
             Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
             Toast.makeText(this, getString(R.string.download_start), Toast.LENGTH_LONG).show();
-            hideWaitDialog();
+            hideProgress();
         } else if (state == DOWNLOAD_STATE_COMPLETE_ALL) {
             Toast.makeText(this, getString(R.string.download_s), Toast.LENGTH_LONG).show();
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
-            hideWaitDialog();
+            hideProgress();
         }
     }
 
     @Override
     public void onDownloadProgress(int progress) {
         String content = String.format(getString(R.string.download_progress), progress);
-        showWaitDialog(content);
+        showProgress(content);
     }
 
     private void dealWithTimeScrollEnd() {
@@ -614,7 +614,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                showWaitDialog();
+                showProgress();
                 int times = presenter.getPlayTimeByMinute() * 60 + presenter.getPlayTimeBySecond();
 
                 presenter.setPlayTimeBySecond(times % 60);
@@ -660,7 +660,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             presenter.searchRecordByTime(calendarShow);
             ToastUtils.showLong(getString(R.string.delete_s));
         } else {
-            hideWaitDialog();
+            hideProgress();
             ToastUtils.showLong(getString(R.string.delete_f) );
         }
     }
@@ -841,7 +841,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             XMPromptDlg.onShow(DevRecordActivity.this, getString(R.string.is_sure_delete_cloud_video), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showWaitDialog();
+                    showProgress();
                     presenter.stopPlay();
                     presenter.deleteVideo(0);
                 }
@@ -892,7 +892,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 lsiRecordInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        showProgress();
                         presenter.stopPlay();
                         presenter.startPlayRecord(getAdapterPosition());
                     }
@@ -900,7 +900,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 btnDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        showProgress();
                         presenter.downloadVideoByFile(getAdapterPosition());
                     }
                 });
@@ -968,7 +968,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position != presenter.getRecordFileType()) {
-                            showWaitDialog();
+                            showProgress();
                             presenter.setSearchRecordFileType(position);//position枚举对应的值 0：全部 1：普通 2：报警
                             presenter.searchRecordByFile(calendarShow);
                             presenter.searchRecordByTime(calendarShow);

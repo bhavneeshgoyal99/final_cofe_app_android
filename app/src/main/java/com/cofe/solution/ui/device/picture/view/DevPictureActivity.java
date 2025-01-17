@@ -36,7 +36,6 @@ import com.manager.image.BaseImageManager;
 import com.manager.image.DevImageManager;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.utils.XUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
@@ -143,7 +142,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        hideProgress();
 
         if(picListAdapter.getItemCount()<=0){
             noDataContLl.setVisibility(View.VISIBLE);
@@ -166,7 +165,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onDownloadResult(int state, String filePath) {
-        hideWaitDialog();
+        hideProgress();
         if (state == DOWNLOAD_STATE_FAILED) {
             Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
@@ -235,7 +234,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
                 public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                    showWaitDialog();
+                    showProgress();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
@@ -419,7 +418,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
                 lsiPicInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        showProgress();
                         presenter.downloadFile(getAdapterPosition());
                     }
                 });

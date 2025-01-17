@@ -43,7 +43,6 @@ import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
 import com.utils.XUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.base.code.ErrorCodeManager;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
@@ -321,7 +320,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                     return;
                                 }
 
-                                showWaitDialog();
+                                showProgress();
                                 devSNEdit.setText(devShareQrCodeInfo.getDevId());
                                 //扫描并添加分享设备
                                 ShareManager shareManager = ShareManager.getInstance(this);

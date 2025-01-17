@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.lib.FunSDK;
 import com.lib.sdk.struct.SDBDeviceInfo;
 import com.manager.db.XMDevInfo;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import java.util.ArrayList;
@@ -128,7 +127,7 @@ public class DevLanConnectActivity extends DemoBaseActivity<DevLanConnectPresent
 
     @Override
     public void onUpdateView() {   //Gets the callback for the list of LAN links
-        hideWaitDialog();
+        hideProgress();
         List<XMDevInfo> localDevList = presenter.getLanDevList();
         if (localDevList != null && !localDevList.isEmpty()) {
             List<String> devinfoList = new ArrayList<>();
@@ -172,7 +171,7 @@ public class DevLanConnectActivity extends DemoBaseActivity<DevLanConnectPresent
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         XMDevInfo xmDevInfo = presenter.getLanDevInfo(i);
         if (xmDevInfo != null) {
-            showWaitDialog();
+            showProgress();
             presenter.addDeviceToAccount(xmDevInfo); // Just click and it will be added to the current account
         }
     }

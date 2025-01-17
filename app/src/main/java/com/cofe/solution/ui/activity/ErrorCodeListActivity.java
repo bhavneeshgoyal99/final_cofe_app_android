@@ -2,7 +2,7 @@ package com.cofe.solution.ui.activity;
 
 import android.os.Bundle;
 
-import com.xm.activity.base.XMBaseActivity;
+import com.cofe.solution.ui.activity.lib.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 
 import com.cofe.solution.base.DemoBaseActivity;

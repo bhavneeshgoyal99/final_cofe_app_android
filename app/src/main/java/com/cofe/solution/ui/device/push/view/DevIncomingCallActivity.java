@@ -25,7 +25,6 @@ import com.manager.push.XMPushManager;
 import com.utils.BitmapUtils;
 import com.utils.LogUtils;
 import com.utils.TimeUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;

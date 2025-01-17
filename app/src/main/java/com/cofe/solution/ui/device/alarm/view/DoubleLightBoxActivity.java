@@ -145,7 +145,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
         String devId = getIntent().getStringExtra("devId");
         presenter.setDevId(devId);
         presenter.setChnId(-1);
-        showWaitDialog();
+        showProgress();
         presenter.getSystemFunction();
         initSmartAlarmDuration();
         initSmartAlarmListener();
@@ -344,12 +344,12 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        showProgress();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override
@@ -359,7 +359,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onUpdateView(boolean isSuccess, WhiteLightBean mWhiteLight) {
-        hideWaitDialog();
+        hideProgress();
         if (mWhiteLight != null) {
             if (WORK_MODE_AUTO.equals(mWhiteLight.getWorkMode())) {
                 mSpControlMode.setValue(0);
@@ -404,7 +404,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onSaveResult(boolean isSuccess) {
-        hideWaitDialog();
+        hideProgress();
         if (!isSuccess) {
             Toast.makeText(DoubleLightBoxActivity.this, getString(R.string.set_dev_config_failed), Toast.LENGTH_SHORT).show();
         } else {
@@ -480,7 +480,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
      * 保存声光报警配置
      */
     private void saveConfig() {
-        showWaitDialog();
+        showProgress();
         presenter.saveAlarmByVoiceLightConfig();
     }
 

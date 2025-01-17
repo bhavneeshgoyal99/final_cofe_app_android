@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.lib.sdk.bean.ConfigJsonNameLink;
 import com.lib.sdk.bean.JsonConfig;
 import com.lib.sdk.bean.StringUtils;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 import com.xm.ui.widget.searchbar.adapter.SearchBarAdapter;
 import com.xm.ui.widget.searchbar.adapter.SearchResultAdapter;

@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lib.SDKCONST;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
 

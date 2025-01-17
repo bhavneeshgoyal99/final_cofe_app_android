@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.manager.device.media.MediaManager;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
 
@@ -71,7 +70,7 @@ public class CloudStateActivity extends DemoBaseActivity<CloudStatePresenter> im
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         presenter.updateCloudState(this);
     }
 
@@ -82,7 +81,7 @@ public class CloudStateActivity extends DemoBaseActivity<CloudStatePresenter> im
 
     @Override
     public void onUpdateCloudStateResult(int state,String result) {
-        hideWaitDialog();
+        hideProgress();
         lsiCloudStorage.setRightText(result);
     }
 }

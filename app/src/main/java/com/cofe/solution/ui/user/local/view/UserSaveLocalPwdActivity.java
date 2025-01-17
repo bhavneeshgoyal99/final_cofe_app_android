@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import com.cofe.solution.R;

@@ -190,15 +190,15 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
     }
     public void getConfigBack(boolean getConfigBack) {
         if (getConfigBack) {
-            hideWaitDialog();
+            hideProgress();
         } else {
-            showWaitDialog();
+            showProgress();
         }
     }
 
 
     public void saveSuccess(boolean saveSuccess) {
-        hideWaitDialog();
+        hideProgress();
         if (saveSuccess) {
             Toast.makeText(this, FunSDK.TS("Save_Success"), Toast.LENGTH_SHORT).show();
         }
@@ -233,7 +233,7 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
     }
 
     public void saveConfig() {
-        showWaitDialog();
+        showProgress();
         presenter.setAovWorkModel();
     }
     @Override
@@ -322,7 +322,7 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
     }
 
     public void initData() {
-        showWaitDialog();
+        showProgress();
         devId = getIntent().getStringExtra("devId");
         presenter.setDevId(devId);
         presenter.getDevBattery(this);
@@ -338,12 +338,12 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        showProgress();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        hideProgress();
     }
 
 

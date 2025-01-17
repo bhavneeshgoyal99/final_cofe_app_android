@@ -82,7 +82,7 @@ public class DevShadowConfigActivity extends BaseConfigActivity<DevShadowConfigP
                     return;
                 }
 
-                showWaitDialog();
+                showProgress();
                 isReceiveConfigContent.setLeftTitle(fieldName);
                 Gson gson = new Gson();
                 HashMap hashMap = gson.fromJson(etReceiveConfigContent.getText().toString(), HashMap.class);
@@ -98,7 +98,7 @@ public class DevShadowConfigActivity extends BaseConfigActivity<DevShadowConfigP
                     return;
                 }
 
-                showWaitDialog();
+                showProgress();
                 isReceiveConfigContent.setLeftTitle(fieldName);
                 presenter.getConfig(fieldName);
                 etSendConfigContent.setText(fieldName);
@@ -130,12 +130,12 @@ public class DevShadowConfigActivity extends BaseConfigActivity<DevShadowConfigP
     @Override
     public void onSendDataResult(String result) {
         ToastUtils.showLong(result);
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override
     public void onReceiveDataResult(String state, String result) {
-        hideWaitDialog();
+        hideProgress();
         showToast(state, Toast.LENGTH_LONG);
 
         HashMap hashMap = JSON.parseObject(result,HashMap.class);

@@ -266,7 +266,7 @@ public class DevBluetoothListActivity extends DemoBaseActivity<DevBluetoothConne
      */
     @Override
     public void onConnectDebBleResult(String mac, int resultCode) {
-        hideWaitDialog();
+        hideProgress();
         if (resultCode == REQUEST_SUCCESS) {
             ToastUtils.showLong(R.string.connect_ble_success);
             XMPromptDlg.onShow(this, "请选择是否进行WiFi配网，还是直接蓝牙交互？", "蓝牙交互", "WiFi配网", new View.OnClickListener() {
@@ -432,7 +432,7 @@ public class DevBluetoothListActivity extends DemoBaseActivity<DevBluetoothConne
 
                         //如果设备支持Token的话，需要获取设备特征码
                         if (!StringUtils.isStringNULL(xmDevInfo.getDevToken())) {
-                            showWaitDialog();
+                            showProgress();
                             presenter.getCloudCryNum(xmDevInfo);
                         }
 
@@ -468,7 +468,7 @@ public class DevBluetoothListActivity extends DemoBaseActivity<DevBluetoothConne
 
     @Override
     public void onAddDevResult(XMDevInfo xmDevInfo, boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        hideProgress();
         if (!isSuccess) {
             if (errorId != -99992) {
                 showToast(getString(R.string.Add_Dev_Failed) , Toast.LENGTH_LONG);

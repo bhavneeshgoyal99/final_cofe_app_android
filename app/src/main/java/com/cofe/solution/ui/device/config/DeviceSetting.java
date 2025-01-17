@@ -294,7 +294,7 @@ public class DeviceSetting extends AppCompatActivity  implements  DevListConnect
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-        //hideWaitDialog();
+        //hideProgress();
         if (isSuccess) {
             //Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
 

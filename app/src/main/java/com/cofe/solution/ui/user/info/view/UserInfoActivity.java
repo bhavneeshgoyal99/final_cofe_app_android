@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.manager.db.DevDataCenter;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
 import com.cofe.solution.R;
@@ -62,14 +61,14 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
 
     private void initData() {
         if (DevDataCenter.getInstance().isLoginByAccount()) {
-            showWaitDialog();
+            showProgress();
             findViewById(R.id.layout_user_Info).setVisibility(View.VISIBLE);
             tryToGetUserInfo();
         }
     }
 
     private void tryToGetUserInfo() {
-        showWaitDialog();
+        showProgress();
         if (!presenter.getInfo()) {
             showToast(getString(R.string.user_info_not_login), Toast.LENGTH_LONG);
             finish();
@@ -92,7 +91,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     /*获取用户信息并更新数据至界面*/
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        hideProgress();
         if (presenter != null) {
             tvUserId.setText(presenter.getUserId());
             tvUserName.setText(presenter.getUserName());
@@ -120,7 +119,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_user_logout) {
-            showWaitDialog();
+            showProgress();
             tryToLogout();
         }
     }

@@ -27,7 +27,6 @@ import com.manager.account.AccountManager;
 import com.manager.account.BaseAccountManager;
 import com.manager.account.XMAccountManager;
 import com.manager.db.DevDataCenter;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
 

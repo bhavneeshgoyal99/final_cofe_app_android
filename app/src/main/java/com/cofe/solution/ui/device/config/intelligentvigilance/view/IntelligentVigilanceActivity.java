@@ -72,7 +72,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
         titleBar.setRightTvClick(new XTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick() {
-                showWaitDialog();
+                showProgress();
                 presenter.saveHumanDetect();
             }
         });
@@ -137,7 +137,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
     }
 
     private void initData() {
-        showWaitDialog();
+        showProgress();
         presenter.updateHumanDetectAbility();
     }
 
@@ -167,7 +167,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
 
     @Override
     public void updateHumanDetectResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             lsiSwitch.setRightImage(presenter.isHumanDetectEnable() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
         }else {
@@ -178,7 +178,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
 
     @Override
     public void saveHumanDetectResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        hideProgress();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_LONG);
         }else {

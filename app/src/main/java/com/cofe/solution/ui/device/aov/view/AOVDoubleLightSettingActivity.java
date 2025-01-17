@@ -137,12 +137,12 @@ public class AOVDoubleLightSettingActivity extends BaseConfigActivity<AOVDoubleL
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        showProgress();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        hideProgress();
     }
 
     @Override

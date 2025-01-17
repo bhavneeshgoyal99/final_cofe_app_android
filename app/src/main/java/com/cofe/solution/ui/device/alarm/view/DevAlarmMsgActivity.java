@@ -39,7 +39,6 @@ import com.manager.image.BaseImageManager;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
@@ -108,7 +107,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
         alarmMsgAdapter = new AlarmMsgAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(alarmMsgAdapter);
-        showWaitDialog();
+        showProgress();
         presenter.searchAlarmMsg();
     }
 
@@ -130,7 +129,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                             @Override
                             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                                showWaitDialog();
+                                showProgress();
                                 selectedByuser = year +"-"+month+"-"+dayOfMonth;
 
                                 Calendar calendar = Calendar.getInstance();
@@ -165,7 +164,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        hideProgress();
         if (presenter.getAlarmInfoSize() <= 0) {
             showToast("No alarm notifications found", Toast.LENGTH_LONG);
             noDataContLl.setVisibility(View.VISIBLE);
@@ -193,7 +192,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
 
     @Override
     public void onShowPicResult(boolean isSuccess, Bitmap bitmap) { // Download picture display
-        hideWaitDialog();
+        hideProgress();
         showToast(isSuccess ? "Image download successful" : "Image download failed", Toast.LENGTH_LONG);
         if (isSuccess && bitmap != null) {
             ImageView imageView = new ImageView(this);

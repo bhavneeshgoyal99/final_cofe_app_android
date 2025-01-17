@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.share.SearchUserInfoBean;
 import com.manager.db.XMDevInfo;
-import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
 
