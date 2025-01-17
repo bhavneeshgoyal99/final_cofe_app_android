@@ -121,7 +121,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/share_icon1" />
+                            android:src="@drawable/ic_share" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/sd_black_icon" />
+                            android:src="@drawable/ic_micro_sd_card" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -184,7 +184,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/settings_configuration_icon" />
+                            android:src="@drawable/ic_setting" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -212,7 +212,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/bell_slash_icon" />
+                            android:src="@drawable/ic_mute" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -237,7 +237,7 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/cloud_upload_icon" />
+                            android:src="@drawable/ic_cloud" />
 
                         <TextView
                             android:layout_width="wrap_content"

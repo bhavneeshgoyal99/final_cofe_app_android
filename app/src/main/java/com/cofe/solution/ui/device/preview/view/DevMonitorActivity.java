@@ -664,6 +664,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         openSetting = findViewById(R.id.settings_icon);
         backImage = findViewById(R.id.settings_icon);
         dName = findViewById(R.id.device_name);
+        SharedPreference cookies = new SharedPreference(getApplication());
+        dName.setText(cookies.retrievDevName());
+
         mainButtonsLl = findViewById(R.id.main_buttons_ll);
 
         findViewById(R.id.camera_ll).setOnClickListener(new OnClickListener() {
