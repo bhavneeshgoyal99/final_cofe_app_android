@@ -129,7 +129,7 @@
                         android:id="@+id/settings_icon"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/setting_icon_white"
+                        android:src="@drawable/ic_default"
                         android:background="@android:color/transparent"
                         android:contentDescription="Settings" />
                 </RelativeLayout>
