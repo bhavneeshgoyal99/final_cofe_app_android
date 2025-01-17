@@ -59,7 +59,6 @@ public class DialogWaiting {
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
-
     }
 
     public boolean isShowing() {
