@@ -22,6 +22,7 @@ public class DialogWaiting {
     String messge = "";
     Context context;
 
+    
     public DialogWaiting(Context context) {
         this.context = context;
         className = context.getClass().getName();
@@ -58,7 +59,7 @@ public class DialogWaiting {
         if (dialog.isShowing()) {
             dialog.dismiss();
         }
-        
+
     }
 
     public boolean isShowing() {
