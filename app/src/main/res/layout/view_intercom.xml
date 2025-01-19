@@ -16,7 +16,8 @@
         uilib:ItemTitleColor="@color/default_normal_text_color"
         uilib:ItemTitleSize="@dimen/normal_text_size"
         uilib:RightClickable="false"
-        uilib:Title="Two-way Intercom" />
+        uilib:Title="Two-way Intercom"
+        android:visibility="gone"/>
 
     <!-- Broadcast Intercom -->
     <com.xm.ui.widget.ListSelectItem
@@ -28,7 +29,8 @@
         uilib:ItemTitleColor="@color/default_normal_text_color"
         uilib:ItemTitleSize="@dimen/normal_text_size"
         uilib:RightClickable="false"
-        uilib:Title="@string/talk_broadcast" />
+        uilib:Title="@string/talk_broadcast"
+        />
 
     <!-- Voice Change Selection -->
     <com.xm.ui.widget.ListSelectItem

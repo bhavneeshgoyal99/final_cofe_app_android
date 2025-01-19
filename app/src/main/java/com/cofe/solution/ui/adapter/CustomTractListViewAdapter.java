@@ -20,7 +20,7 @@ public class CustomTractListViewAdapter extends BaseAdapter {
     String selectedalue;
     // Custom interface for click events
     public interface OnItemClickListener {
-        void onItemClick(int position, String item);
+           void onItemClick(int position, String item);
     }
 
     public CustomTractListViewAdapter(Context context, String[] items, String selectedalue, OnItemClickListener listener) {

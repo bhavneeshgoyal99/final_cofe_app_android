@@ -108,14 +108,14 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
 
                             @Override
                             public void onFailed(int msgId, int errorId) {
-                                if (DevDataCenter.getInstance().isLoginByAccount()) {
+                                /*if (DevDataCenter.getInstance().isLoginByAccount()) {
                                     initPush();
                                     initAlarmInfo();
                                     Toast.makeText(getApplicationContext(), R.string.start_push_service, Toast.LENGTH_LONG).show();
-                                } else {
+                                } else {*/
                                     stopSelf();
                                     System.out.println(getString(R.string.start_push_service_error_tips));
-                                }
+                                /*}*/
 
                             }
 
@@ -171,6 +171,9 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
     /**
      * 用URL初始化报警消息订阅
      * 使用Url初始化报警推送,主要修改: appType设置”Third:url”
+     *
+     * Subscribe to URL initialization alert message
+     *  UseUrl initialization alert, main modification: appType setting”Third:url”
      */
     private void initPushByUrl() {
         xmPushManager = new XMPushManager(xmPushLinkResult);

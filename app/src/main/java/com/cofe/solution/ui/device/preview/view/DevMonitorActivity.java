@@ -81,6 +81,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.base.BatteryDrawable;
+import com.cofe.solution.base.CustomBottomSheet;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgFragment;
@@ -358,6 +359,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     boolean mainVideoStarted = false;
     boolean isVideoCaptureStart = false;
     boolean isSoundCaptureStart = false;
+    boolean isFunInterCallActive = false;
 
     private BatteryDrawable batteryDrawable;
     //com.rejowan.abv.ABV batteryIndicator;
@@ -366,6 +368,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     Handler lowBatteryHandler;
     int wndInnerRVOriginalHeight = 0;
     BottomSheetDialog ptZBottomSheetDialog = null;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -2028,6 +2032,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                                         //当前对讲开启中，则需要关闭对讲
                                         presenter.stopIntercom(presenter.getChnId());// Pause the intercom in the middle of a conversation
                                         rippleButton.clearState();
+                                        isFunInterCallActive = false;
                                     } else {
                                         //当前对讲未开启，则需要开启对讲 (如果设备的通道数(chnCount)大于1，比如NVR设备的话，那么要使用通道对讲)
                                         boolean isTalkBroadcast = lsiTalkBroadcast.getRightValue() == SDKCONST.Switch.Open;
@@ -2035,6 +2040,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                                         rippleButton.setUpGestureEnable(false);
                                         //对讲开启的时候，视频伴音会随之关闭
                                         monitorFunAdapter.changeBtnState(FUN_VOICE, false);
+                                        isFunInterCallActive = true;
                                     }
 
                                 } else {
@@ -2044,12 +2050,15 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                                     rippleButton.setUpGestureEnable(true);
                                     //对讲开启的时候，视频伴音会随之关闭
                                     monitorFunAdapter.changeBtnState(FUN_VOICE, false);
+                                    isFunInterCallActive = true;
+
                                 }
                                 break;
                             case MotionEvent.ACTION_UP:
                             case MotionEvent.ACTION_CANCEL:
                                 if (lsiDoubleTalkSwitch.getRightValue() == SDKCONST.Switch.Close) {
                                     presenter.stopSingleIntercomAndHear(presenter.getChnId());
+                                    isFunInterCallActive = false;
                                 }
                                 break;
                             default:
@@ -2069,6 +2078,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                             rippleButton.setTabText(getString(R.string.long_press_open_one_way_talk));
                         }
 
+                        isFunInterCallActive = false;
                         presenter.stopIntercom(presenter.getChnId());
                     }
                 });
@@ -2090,12 +2100,16 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                     }
                 });
 
-                XMPromptDlg.onShow(this, layout, true, new DialogInterface.OnDismissListener() {
+                /*XMPromptDlg.onShow(this, layout, true, new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        presenter.stopIntercom(presenter.getChnId());
+                       // presenter.stopIntercom(presenter.getChnId());
                     }
-                });
+                });*/
+
+                lsiDoubleTalkSwitch.performClick();
+                showAudioCallPopup(layout);
+
             }
             break;
             case FUN_PLAYBACK://录像回放
@@ -3196,6 +3210,24 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         startActivity(intent,options.toBundle());
     }
 
+    /**
+     * Create and show the BottomSheet*
+     * Your layout containing the buttons
+     * Your custom bottom sheet view
+     */
+    void showAudioCallPopup(View microphoneView){
+        LinearLayout actionLayout = findViewById(R.id.main_buttons_ll);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.custom_bottom_sheet, null);
+        RelativeLayout parentRv = bottomSheetView.findViewById(R.id.parent_rl);
+        parentRv.addView(microphoneView);
+
+        CustomBottomSheet bottomSheet = new CustomBottomSheet(this, bottomSheetView, actionLayout);
+        bottomSheet.setPersistent(isFunInterCallActive);
+        bottomSheet.show();
+
+    }
+
+    // camera volume icon change
 
     void showLowBatterDialog() {
         Dialog dialog = new Dialog(this);

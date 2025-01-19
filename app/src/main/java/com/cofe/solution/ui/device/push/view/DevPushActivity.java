@@ -186,7 +186,7 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
             }
         });
 
-        //devAlarmInfoManager.searchAlarmInfoAll(presenter.getDevId(),presenter.getChnId());
+        devAlarmInfoManager.searchAlarmInfoAll(presenter.getDevId(),presenter.getChnId());
         final Calendar startDate = Calendar.getInstance();
         startDate.set(2020, Calendar.JANUARY, 10);
         final Calendar stopDate = Calendar.getInstance();

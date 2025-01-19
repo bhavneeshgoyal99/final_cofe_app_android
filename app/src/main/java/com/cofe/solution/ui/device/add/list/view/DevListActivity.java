@@ -42,6 +42,7 @@ import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.preview.view.DevActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.Firebase;
@@ -118,6 +119,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     LinearLayout logoutLl;
     int onUpdateCount = 0;
     int onUppdateDevStateCount  = 0;
+
+    LoaderDialog loaderDialog;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +134,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void initView() {
+        loaderDialog = new LoaderDialog(this);
+        loaderDialog.setMessage("Please wait...");
+
+
         /*titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.set_list));
         //titleBar.setRightTitleText(getString(R.string.share_dev_list));
@@ -378,7 +387,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted
                 enablePushNotifications();
-                startService(new Intent(this, DevPushService.class));
 
             } else {
                 // Permission denied
@@ -431,7 +439,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage("");
+
+        //showWaitDialog();
         adapter = new DevListAdapter(getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
         listView.setAdapter(adapter);
         presenter.updateDevState();//Update the status of the list
@@ -639,7 +649,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
-        hideWaitDialog();
+        //hideWaitDialog();
+        loaderDialog.dismiss();
 
         Bundle bundle = new Bundle();
         bundle.putString( "called", "onUpdateDevStateResult");
@@ -737,7 +748,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         0, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+                                loaderDialog.setMessage("");
+
+
+                                //showWaitDialog();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -747,7 +761,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-                                showWaitDialog();
+                                loaderDialog.setMessage("");
+
+                                //showWaitDialog();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -802,8 +818,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     turnToActivity(DevShadowConfigActivity.class);
                     return;
                 }
+                loaderDialog.setMessage("");
 
-                showWaitDialog(getString(R.string.get_channel_info));
+
+                //showWaitDialog(getString(R.string.get_channel_info));
                 String devId = presenter.getDevId(position);
                 presenter.setDevId(devId);
 
@@ -1154,6 +1172,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     private void enablePushNotifications() {
         Toast.makeText(this, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
+        startService(new Intent(this, DevPushService.class));
+
     }
 
     @Override
