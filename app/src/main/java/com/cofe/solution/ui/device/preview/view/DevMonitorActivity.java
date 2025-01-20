@@ -336,6 +336,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     ImageView sdImag;
     ImageView microphoneImg, rotateScreen,openSetting,backImage;
     TextView dName;
+    TextView tvRecordingTime;
     ActivityResultLauncher<Intent> resultLauncher;
     Boolean isPlayBackOpen = false;
     String devId;
@@ -369,6 +370,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     int wndInnerRVOriginalHeight = 0;
     BottomSheetDialog ptZBottomSheetDialog = null;
 
+    private Handler handler_record = new Handler();
+    private int seconds = 0;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -387,6 +391,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         layout1 = findViewById(R.id.layout1);
         layout2 = findViewById(R.id.layout2);
         layout3 = findViewById(R.id.layout3);
+
+        tvRecordingTime=findViewById(R.id.tvRecordingTime);
 
         // Set up button click listeners
         btnLayout1.setOnClickListener(v -> showLayout(1));
@@ -685,6 +691,17 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 isVideoCaptureStart = (isVideoCaptureStart) ? false : true;
                 int image= (isVideoCaptureStart) ? R.drawable.active_video : R.drawable.video_icon ;
                 Glide.with(getApplicationContext()).load(image).into(videoImg);
+                if (isVideoCaptureStart)
+                {
+                    tvRecordingTime.setVisibility(VISIBLE);
+                    seconds = 0; // Reset timer
+                    handler_record.post(timerRunnable); // Start timer
+                }
+                else{
+                    tvRecordingTime.setVisibility(View.GONE);
+                    handler_record.removeCallbacks(timerRunnable); // Stop timer
+                    tvRecordingTime.setText("00:00"); // Reset timer display
+                }
 
                 dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
             }
@@ -1107,6 +1124,10 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             handler =  null;
         }
 
+        if (handler_record != null) {
+            handler_record.removeCallbacks(null); // Clear all callbacks
+            handler_record=null;
+        }
     }
 
     @Override
@@ -3290,5 +3311,17 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         showWaitDialog();
         onRestart();
     }
+
+    private Runnable timerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            int minutes = seconds / 60;
+            int secs = seconds % 60;
+            String time = String.format("%02d:%02d", minutes, secs);
+            tvRecordingTime.setText(time);
+            seconds++;
+            handler_record.postDelayed(this, 1000); // Update every second
+        }
+    };
 
 }
