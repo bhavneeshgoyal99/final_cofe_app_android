@@ -337,6 +337,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     ImageView microphoneImg, rotateScreen,openSetting,backImage;
     TextView dName;
     TextView tvRecordingTime;
+    RelativeLayout rlRecordingTime;
     ActivityResultLauncher<Intent> resultLauncher;
     Boolean isPlayBackOpen = false;
     String devId;
@@ -393,6 +394,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         layout3 = findViewById(R.id.layout3);
 
         tvRecordingTime=findViewById(R.id.tvRecordingTime);
+        rlRecordingTime=findViewById(R.id.rlRecordingTime);
 
         // Set up button click listeners
         btnLayout1.setOnClickListener(v -> showLayout(1));
@@ -693,12 +695,12 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 Glide.with(getApplicationContext()).load(image).into(videoImg);
                 if (isVideoCaptureStart)
                 {
-                    tvRecordingTime.setVisibility(VISIBLE);
+                    rlRecordingTime.setVisibility(VISIBLE);
                     seconds = 0; // Reset timer
                     handler_record.post(timerRunnable); // Start timer
                 }
                 else{
-                    tvRecordingTime.setVisibility(View.GONE);
+                    rlRecordingTime.setVisibility(View.GONE);
                     handler_record.removeCallbacks(timerRunnable); // Stop timer
                     tvRecordingTime.setText("00:00"); // Reset timer display
                 }
