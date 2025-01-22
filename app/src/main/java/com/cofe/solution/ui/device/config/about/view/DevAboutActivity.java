@@ -1,5 +1,8 @@
 package com.cofe.solution.ui.device.config.about.view;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
 import static android.view.View.VISIBLE;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_P2P;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_RPS;
@@ -7,10 +10,15 @@ import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_RTS;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_RTS_P2P;
 import static com.lib.sdk.bean.SystemInfoBean.CONNECT_TYPE_TRANSMIT;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,7 +27,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.alibaba.fastjson.JSON;
+
 import com.lib.ECONFIG;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
@@ -55,6 +68,10 @@ import io.reactivex.annotations.Nullable;
  */
 public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> implements DevAboutContract.IDevAboutView, View.OnClickListener {
     private TextView devSnText = null;
+    private int FILE_PICKER_REQUEST_CODE = 101;
+    private int MANAGE_STORAGE_PERMISSION_CODE = 2296;
+    private int PERMISSION_REQUEST_CODE = 102;
+
     private TextView devModelText = null;
     private TextView devHWVerText = null;
     private TextView devSWVerText = null;
@@ -64,6 +81,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     private TextView devNatCodeText = null;
     private TextView devNatStatusText = null;
     private ImageView devSNCodeImg = null;
+    private ImageView updateFromStorage = null;
     private TextView devUpdateText = null;
     private ListSelectItem lsiDevUpgrade;
     private ListSelectItem lsiDevPid;//设备PID信息
@@ -79,8 +97,6 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     private boolean isLocalUpgrade;//是否为本地升级
     private static final int SYS_LOCAL_FILE_REQUEST_CODE = 0x08;
     private String firmwareType;//固件類型 默认是System（主控），Mcu（单片机）
-
-
 
 
     @Override
@@ -99,6 +115,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     }
 
     private void initView() {
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.device_system_info));
         titleBar.setLeftClick(this);
@@ -117,7 +134,9 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         devSNCodeImg = findViewById(R.id.imgDeviceQRCode_1);
         devUpdateText = findViewById(R.id.textDeviceUpgrade_1);
         defaltConfigBtn = findViewById(R.id.defealtconfig_1);
+        updateFromStorage = findViewById(R.id.updateFromStorage);
         defaltConfigBtn.setOnClickListener(this);
+
         //tvDevInfo = ((ItemSetLayout) findViewById(R.id.isl_device_info)).getMainLayout().findViewById(R.id.textDeviceNatCode_1);
 
         lsiDevUpgrade = findViewById(R.id.lsi_check_dev_upgrade);
@@ -132,6 +151,14 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                 } else {
                     showToast(getString(R.string.already_latest), Toast.LENGTH_LONG);
                 }
+            }
+        });
+        updateFromStorage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    openStorage();
+
             }
         });
 
@@ -179,16 +206,17 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         if (StringUtils.isStringNULL(firmwareType)) {
             firmwareType = "System";
         }
-        presenter.setInterface(new DevAboutPresenter.DeviceAboutInterfce(){
+        presenter.setInterface(new DevAboutPresenter.DeviceAboutInterfce() {
 
             @Override
             public void receiveData(String data) {
+                Log.d("receiveData", "receiveData " + data);
 
             }
         });
         presenter.getDevInfo(firmwareType);
         presenter.getDevCapsAbility(this);
-        Log.d("Dev About Page ","device id > " +presenter.getDevId() );
+        Log.d("Dev About Page ", "device id > " + presenter.getDevId());
         XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
         if (xmDevInfo != null) {
             lsiDevPid.setRightText(StringUtils.isStringNULL(xmDevInfo.getPid()) ? "" : xmDevInfo.getPid());
@@ -204,18 +232,18 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
     @Override
     public void onUpdateView(String result) {
-        try{
+        try {
             JSONObject originalResult = new JSONObject(result);
             JSONObject systemInfo = new JSONObject(originalResult.get("SystemInfo").toString());
 
-            Log.d("DevAbout Activity","onUpdateView  result > 210 " + systemInfo.get("BuildTime") );
+            Log.d("DevAbout Activity", "onUpdateView  result > 210 " + systemInfo.get("BuildTime"));
 
             devSnText.setText(systemInfo.get("SerialNo").toString());
             devSnText.setText("a***n");
             devSWVerText.setText(systemInfo.get("SoftWareVersion").toString());
             devSWVerText.setText(systemInfo.get("HardWare").toString());
             devPubDateText.setText(systemInfo.get("BuildTime").toString());
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -224,18 +252,19 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         DeviceManager.getInstance().getDevAllAbility(presenter.getDevId(), new DeviceManager.OnDevManagerListener<SystemFunctionBean>() {
             @Override
             public void onSuccess(String devId, int operationType, SystemFunctionBean result) {
-                Log.d("Device result " , " presenter.getDevId() > "  + result.getOriginalJson());
+                Log.d("Device result ", " presenter.getDevId() > " + result.getOriginalJson());
 
                 try {
 
-                }catch ( Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailed(String devId, int msgId, String jsonName, int errorId) {
-                Log.d("onFailed > ", " errorId > "  +errorId);
-                Log.d("onFailed > ", " jsonName > "  +jsonName);
+                Log.d("onFailed > ", " errorId > " + errorId);
+                Log.d("onFailed > ", " jsonName > " + jsonName);
             }
         });
     }
@@ -294,13 +323,13 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     @Override
     public void syncDevTimeZoneResult(boolean isSuccess, int errorId) {
         hideWaitDialog();
-        showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed) , Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed), Toast.LENGTH_LONG);
     }
 
     @Override
     public void syncDevTimeResult(boolean isSuccess, int errorId) {
         hideWaitDialog();
-        showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed) , Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed), Toast.LENGTH_LONG);
     }
 
     @Override
@@ -327,10 +356,10 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     @Override
     public void onDevUpgradeFailed(int errorId) {
         //如果升级失败了，提示失败原因，然后重新检测升级
-        XMPromptDlg.onShow(this, FunSDK.TS("TR_download_failure_click") , new View.OnClickListener() {
+        XMPromptDlg.onShow(this, FunSDK.TS("TR_download_failure_click"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // finish();
+                // finish();
             }
         });
     }
@@ -381,7 +410,161 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
             }
         }
+        if (requestCode == FILE_PICKER_REQUEST_CODE) {
+            if (resultCode == RESULT_OK && data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    String filePath = presenter.saveFileFromUri(this, uri);
+                   // showFirmwarePrompt(filePath); // Your custom method to handle the file
+                }
+            }
+        }
+        if (requestCode == MANAGE_STORAGE_PERMISSION_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    Toast.makeText(this, "Storage permission granted!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
 
+    private void openStorage() {
+        if (checkPermission()) {
+            // Permission granted, open file picker
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*"); // Specify MIME type as needed
+            startActivityForResult(intent, FILE_PICKER_REQUEST_CODE);
+        } else {
+            // Request necessary permissions
+            requestPermission();
+        }
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For Android 11 and above, request MANAGE_EXTERNAL_STORAGE permission
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                startActivityForResult(intent, MANAGE_STORAGE_PERMISSION_CODE);
+            } catch (Exception e) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivityForResult(intent, MANAGE_STORAGE_PERMISSION_CODE);
+            }
+        } else {
+            // For Android 10 and below, request READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE permissions
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    }, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0) {
+                boolean readGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                boolean writeGranted = grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED;
+
+                if (readGranted && writeGranted) {
+                    Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show();
+                    openStorage(); // Open file picker after permissions are granted
+                } else {
+                    Toast.makeText(this, "Storage permissions are required!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void showFirmwarePrompt(String filePath) {
+        XMPromptDlg.onShow(
+                this,
+                getString(R.string.please_sel_firmware_type),
+                getString(R.string.main_control),
+                getString(R.string.mcu),
+                view -> presenter.startDevLocalUpgrade(firmwareType, filePath),
+                view -> presenter.startDevLocalUpgrade(firmwareType, filePath)
+        );
+    }
+
+//    private void openStorage() {
+//        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("*/*"); // Specify a MIME type if needed, e.g., "application/pdf"
+//        startActivityForResult(intent, FILE_PICKER_REQUEST_CODE);
+//    }
+//
+//    private boolean checkPermission() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            return Environment.isExternalStorageManager();
+//        } else {
+//            int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+//            int writePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//            return readPermission == PackageManager.PERMISSION_GRANTED && writePermission == PackageManager.PERMISSION_GRANTED;
+//        }
+//    }
+//
+//    private void requestPermission() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            try {
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+//                intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+//                startActivityForResult(intent, MANAGE_STORAGE_PERMISSION_CODE);
+//            } catch (Exception e) {
+//                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+//                startActivityForResult(intent, MANAGE_STORAGE_PERMISSION_CODE);
+//            }
+//        } else {
+//            // Below Android 11
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{
+//                            Manifest.permission.READ_EXTERNAL_STORAGE,
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+//                    }, PERMISSION_REQUEST_CODE);
+//        }
+//    }
+//
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0) {
+//                boolean readGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+//                boolean writeGranted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+//                if (readGranted && writeGranted) {
+//                    Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(this, "Storage permissions are required!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }
+//    }
+//    private void showFirmwarePrompt(String filePath) {
+//        XMPromptDlg.onShow(
+//                this,
+//                getString(R.string.please_sel_firmware_type),
+//                getString(R.string.main_control),
+//                getString(R.string.mcu),
+//                view -> presenter.startDevLocalUpgrade(firmwareType, filePath),
+//                view -> presenter.startDevLocalUpgrade(firmwareType, filePath)
+//        );
+//    }
 }
