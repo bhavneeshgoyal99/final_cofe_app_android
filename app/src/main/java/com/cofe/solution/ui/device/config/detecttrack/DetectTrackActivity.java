@@ -47,7 +47,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
         lsiEnable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 int enable = lsiEnable.getRightValue() == SDKCONST.Switch.Open ? SDKCONST.Switch.Close : SDKCONST.Switch.Open;
                 lsiEnable.setRightImage(enable);
                 dataMap.put("Enable", enable);
@@ -73,7 +73,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
         findViewById(R.id.btn_set_watch_preset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.setWatchPreset();
             }
         });
@@ -106,7 +106,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
                 lsiWatchTime.toggleExtraView(true);
                 lsiWatchTime.setRightText(key);
                 dataMap.put("ReturnTime", value);
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.setDetectTrack();
             }
         });
@@ -127,7 +127,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
                 lsiSensitivity.toggleExtraView(true);
                 lsiSensitivity.setRightText(key);
                 dataMap.put("Sensitivity", value);
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.setDetectTrack();
             }
         });
@@ -138,7 +138,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
             }
         });
 
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.getDetectTrack();
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) playView.getLayoutParams();
@@ -154,7 +154,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
 
     @Override
     public void onGetDetectTrackResult(boolean isSuccess, LinkedTreeMap<String, Object> resultMap, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             if (resultMap != null) {
                 dataMap = resultMap;
@@ -172,7 +172,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
 
     @Override
     public void onSetDetectRackResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_LONG);
         } else {
@@ -182,7 +182,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
 
     @Override
     public void onSetWatchPresetResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.libfunsdk_operation_success), Toast.LENGTH_LONG);
         } else {

@@ -395,12 +395,12 @@ public class AovBatteryManagerActivity extends BaseConfigActivity<AovBatteryMana
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        loaderDialog.setMessage();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
     }
 
 

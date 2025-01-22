@@ -128,7 +128,7 @@ public class DevLanConnectActivity extends DemoBaseActivity<DevLanConnectPresent
 
     @Override
     public void onUpdateView() {   //Gets the callback for the list of LAN links
-        hideWaitDialog();
+        loaderDialog.dismiss();
         List<XMDevInfo> localDevList = presenter.getLanDevList();
         if (localDevList != null && !localDevList.isEmpty()) {
             List<String> devinfoList = new ArrayList<>();
@@ -172,7 +172,7 @@ public class DevLanConnectActivity extends DemoBaseActivity<DevLanConnectPresent
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         XMDevInfo xmDevInfo = presenter.getLanDevInfo(i);
         if (xmDevInfo != null) {
-            showWaitDialog();
+            loaderDialog.setMessage();
             presenter.addDeviceToAccount(xmDevInfo); // Just click and it will be added to the current account
         }
     }

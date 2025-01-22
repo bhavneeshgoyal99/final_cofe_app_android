@@ -266,7 +266,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
     public void onSetDevToRouterResult(boolean isSuccess, XMDevInfo xmDevInfo) {
         if (isSuccess) {
             showToast(getString(R.string.libfunsdk_set_dev_to_router_s), Toast.LENGTH_LONG);
-            showWaitDialog();
+            loaderDialog.setMessage();
         }
     }
 
@@ -278,7 +278,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                hideWaitDialog();
+                loaderDialog.dismiss();
                 tvResult.setVisibility(View.VISIBLE);
                 findViewById(R.id.rl_show_qr_code).setVisibility(View.GONE);
 

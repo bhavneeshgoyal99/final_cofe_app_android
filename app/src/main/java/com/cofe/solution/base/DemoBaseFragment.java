@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cofe.solution.app.SDKDemoApplication;
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.xm.activity.base.XMBaseFragment;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.widget.XTitleBar;
@@ -33,6 +34,7 @@ public abstract class DemoBaseFragment<T extends XMBasePresenter> extends XMBase
         if (titleBar != null) {
             titleBar.setBottomTip(getClass().getName());
         }
+
         return view;
     }
 

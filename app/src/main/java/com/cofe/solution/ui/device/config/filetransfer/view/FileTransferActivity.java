@@ -104,7 +104,7 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
         btnUploadVoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.uploadData();
             }
         });
@@ -129,7 +129,7 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
                 XMPromptDlg.onShowEditDialog(FileTransferActivity.this, getString(R.string.input_context), "", new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String content) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.textToAudio(content, TTSManager.VOICE_TYPE.Male);
                     }
                 });
@@ -138,13 +138,13 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.checkSupport();
     }
 
     @Override
     public void onSupportResult(boolean isSupport) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSupport) {
             rvVoiceList.setVisibility(View.VISIBLE);
         }
@@ -180,7 +180,7 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
      */
     @Override
     public void onTransformationResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (errorId == -2) {
             showToast(getString(R.string.file_size_exceed_max_size), Toast.LENGTH_LONG);
             return;
@@ -237,7 +237,7 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
      * 上传文件结束回调
      */
     public void onUploadEndResult() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(getString(R.string.upload_s), Toast.LENGTH_LONG);
         if (rvVoiceList.getVisibility() == View.VISIBLE) {
             presenter.getAudioFileList();
@@ -251,7 +251,7 @@ public class FileTransferActivity extends BaseConfigActivity<FileTransferPresent
      * @param errorId   失败错误码
      */
     public void onPlayDevVoiceResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.play_success) : getString(R.string.play_failed) , Toast.LENGTH_LONG);
     }
 

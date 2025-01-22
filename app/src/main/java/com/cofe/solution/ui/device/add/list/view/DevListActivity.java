@@ -107,6 +107,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         XTitleBar.OnRightClickListener,
         DevListAdapter.OnItemDevClickListener {
 
+    private static final int REQUEST_AUDIO_PERMISSION = 555;
     int CAMERA_PERMISSION_REQEST_CODE = 111;
     int WRITE_EXTERNAL_STORAGE = 333;
     int NOTIFICATION_PERMISSION_REQUEST_CODE = 222;
@@ -119,9 +120,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     LinearLayout logoutLl;
     int onUpdateCount = 0;
     int onUppdateDevStateCount  = 0;
-
     LoaderDialog loaderDialog;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -231,6 +230,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         appBarLayout.setElevation(0);
         appBarLayout.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         checkPushNotificationPermission();
+        microPhoneRecordPermission();
 
         logoutLl = findViewById(R.id.logout_ll);
 
@@ -309,11 +309,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void checkExternalStoragePermission(){
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
                     checkSelfPermission(Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED) {
-
                 showPermissionExplanationPopup("WRITE EXTERNAL STORAGE", " Require to save the screenshot and videos from  device to your mobile phone. Please grant the permission to proceed.");
             }
         } else {
@@ -327,7 +325,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     private void showPermissionExplanationPopup(String permissionName,String message) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("permissionName Permission Required")
+        builder.setTitle( permissionName +" Permission Required")
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Accept", (dialog, which) -> {
@@ -408,6 +406,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     showSettingsRedirectPopup("Write External Storage");
                 }
             }
+        } else if(requestCode == REQUEST_AUDIO_PERMISSION ){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                    Toast.makeText(this, "Permission is required to start Intercome and video calling service.", Toast.LENGTH_SHORT).show();
+                } else {
+                    showSettingsRedirectPopup("Record Audio");
+                }
+            }
         }
 
     }
@@ -439,9 +447,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
 
     private void initData() {
-        loaderDialog.setMessage("");
+        loaderDialog.setMessage();
 
-        //showWaitDialog();
+        //loaderDialog.setMessage();
         adapter = new DevListAdapter(getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
         listView.setAdapter(adapter);
         presenter.updateDevState();//Update the status of the list
@@ -649,7 +657,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
-        //hideWaitDialog();
+        //loaderDialog.dismiss();
         loaderDialog.dismiss();
 
         Bundle bundle = new Bundle();
@@ -678,7 +686,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
@@ -689,7 +697,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onDeleteDevResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (presenter.getDevList() != null) {
             if (presenter.getDevList().size() == 0) {
@@ -711,7 +719,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     @Override
     public void onAcceptDevResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.accept_share_s), Toast.LENGTH_LONG);
@@ -729,7 +737,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -751,7 +759,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                 loaderDialog.setMessage("");
 
 
-                                //showWaitDialog();
+                                //loaderDialog.setMessage();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -763,7 +771,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                             public void onSendMsg(int msgId) {
                                 loaderDialog.setMessage("");
 
-                                //showWaitDialog();
+                                //loaderDialog.setMessage();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -821,7 +829,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 loaderDialog.setMessage("");
 
 
-                //showWaitDialog(getString(R.string.get_channel_info));
+                //loaderDialog.setMessage(getString(R.string.get_channel_info));
                 String devId = presenter.getDevId(position);
                 presenter.setDevId(devId);
 
@@ -850,7 +858,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                     presenter.deleteDev(position);
                 }
             }, null);
@@ -1165,6 +1173,20 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             } else {
                 // Show permission explanation popup
                 showPermissionExplanationPopup("Push Notification ","This app needs your permission to send push notifications. Please grant the permission to stay updated.");
+            }
+        }
+    }
+
+
+    void microPhoneRecordPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        DevListActivity.this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        REQUEST_AUDIO_PERMISSION
+                );
+
             }
         }
     }

@@ -54,7 +54,7 @@ public class DevAdvanceActivity extends BaseConfigActivity<DevAdvancePresenter> 
         titleBar.setRightIvClick(new XTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick() {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.saveGPIO();
             }
         });
@@ -78,7 +78,7 @@ public class DevAdvanceActivity extends BaseConfigActivity<DevAdvancePresenter> 
         btnModifyOSD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 XMPromptDlg.onShowEditDialog(DevAdvanceActivity.this, getString(R.string.modify_dev_name_osd),"", new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String devName) {
@@ -133,7 +133,7 @@ public class DevAdvanceActivity extends BaseConfigActivity<DevAdvancePresenter> 
 
     @Override
     public void onSaveGPIOResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed), Toast.LENGTH_LONG);
     }
 
@@ -144,7 +144,7 @@ public class DevAdvanceActivity extends BaseConfigActivity<DevAdvancePresenter> 
      */
     @Override
     public void onModifyDevNameOsd(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.libfunsdk_operation_success) : getString(R.string.libfunsdk_operation_failed) , Toast.LENGTH_LONG);
     }
 }

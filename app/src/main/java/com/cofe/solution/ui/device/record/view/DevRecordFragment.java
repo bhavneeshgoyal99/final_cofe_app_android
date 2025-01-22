@@ -358,7 +358,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
                 presenter.getShowCount(),
                 presenter.getTimeUnit());
         rvRecordTimeAxis.setAdapter(recordTimeAxisAdapter);
-        activity.showWaitDialog();
+        activity.loaderDialog.setMessage();
         presenter.initRecordPlayer((ViewGroup) activity.findViewById(R.id.layoutPlayWnd), recordType);
         presenter.searchRecordByFile(calendarShow);
 
@@ -382,7 +382,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByFileResult(boolean isSuccess) {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
@@ -397,7 +397,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByTimeResult(boolean isSuccess) {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         recordListAdapter.notifyDataSetChanged();
         recordTimeAxisAdapter.notifyDataSetChanged();
         if (isSuccess) {
@@ -428,7 +428,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
     @Override
     public void onPlayStateResult(int playState, int playSpeed) {
         if (playState == PlayerAttribute.E_STATE_PlAY) {
-            activity.hideWaitDialog();
+            activity.loaderDialog.dismiss();
             recordFunAdapter.changeBtnState(0, getString(R.string.playback_pause), true);
         } else if (playState == E_STATE_STOP
                 || playState == E_STATE_PAUSE
@@ -633,22 +633,22 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
     @Override
     public void onDownloadState(int state, String filePath) {
         if (state == DOWNLOAD_STATE_FAILED) {
-            activity.hideWaitDialog();
+            activity.loaderDialog.dismiss();
             Toast.makeText(activity.getContext(), getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
             Toast.makeText(activity.getContext(), getString(R.string.download_start), Toast.LENGTH_LONG).show();
-            activity.hideWaitDialog();
+            activity.loaderDialog.dismiss();
         } else if (state == DOWNLOAD_STATE_COMPLETE_ALL) {
             Toast.makeText(activity.getContext(), getString(R.string.download_s), Toast.LENGTH_LONG).show();
             activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
-            activity.hideWaitDialog();
+            activity.loaderDialog.dismiss();
         }
     }
 
     @Override
     public void onDownloadProgress(int progress) {
         String content = String.format(getString(R.string.download_progress), progress);
-        activity.showWaitDialog(content);
+        activity.loaderDialog.setMessage(content);
     }
 
     private void dealWithTimeScrollEnd() {
@@ -665,7 +665,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 int times = presenter.getPlayTimeByMinute() * 60 + presenter.getPlayTimeBySecond();
 
                 presenter.setPlayTimeBySecond(times % 60);
@@ -711,7 +711,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
             presenter.searchRecordByTime(calendarShow);
             ToastUtils.showLong(getString(R.string.delete_s));
         } else {
-            activity.hideWaitDialog();
+            activity.loaderDialog.dismiss();
             ToastUtils.showLong(getString(R.string.delete_f) );
         }
     }
@@ -892,7 +892,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
             XMPromptDlg.onShow(activity, getString(R.string.is_sure_delete_cloud_video), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.showWaitDialog();
+                    activity.loaderDialog.setMessage();
                     presenter.stopPlay();
                     presenter.deleteVideo(0);
                 }
@@ -943,7 +943,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
                 lsiRecordInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        activity.showWaitDialog();
+                        activity.loaderDialog.setMessage();
                         presenter.stopPlay();
                         presenter.startPlayRecord(getAdapterPosition());
                     }
@@ -951,7 +951,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
                 btnDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        activity.showWaitDialog();
+                        activity.loaderDialog.setMessage();
                         presenter.downloadVideoByFile(getAdapterPosition());
                     }
                 });
@@ -1019,7 +1019,7 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position != presenter.getRecordFileType()) {
-                            activity.showWaitDialog();
+                            activity.loaderDialog.setMessage();
                             presenter.setSearchRecordFileType(position);//position枚举对应的值 0：全部 1：普通 2：报警
                             presenter.searchRecordByFile(calendarShow);
                             presenter.searchRecordByTime(calendarShow);

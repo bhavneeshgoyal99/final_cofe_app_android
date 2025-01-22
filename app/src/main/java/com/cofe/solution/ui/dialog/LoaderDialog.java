@@ -13,6 +13,7 @@ public class LoaderDialog {
     private Dialog dialog;
     private TextView tvMessage;
     Context context;
+    String message;
     public LoaderDialog(Context context) {
         this.context = context;
         dialog = new Dialog(context);
@@ -34,6 +35,11 @@ public class LoaderDialog {
                 .into(gifLoader);
     }
 
+    public void setMessage() {
+        message = context.getString(R.string.loading);
+        tvMessage.setText(message);
+        show();
+    }
     public void setMessage(String message) {
         if(message.equals("")) {
             message = context.getString(R.string.loading);

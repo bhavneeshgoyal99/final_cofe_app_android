@@ -410,7 +410,7 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="24dp"
-                        android:src="@drawable/speaker_icon_1"
+                        android:src="@drawable/speaker_disabled_icon"
                         android:contentDescription="mute"
                         android:layout_marginEnd="8dp"
                         android:tag="0"
@@ -457,7 +457,8 @@
                     android:layout_weight=".02"
                     android:layout_height="24dp"
                     android:id="@+id/sd_ll"
-                    android:visibility="gone"
+                    android:visibility="visible"
+                    android:tag="7"
                     >
                     <ImageView
                         android:layout_width="match_parent"
@@ -465,7 +466,18 @@
                         android:src="@drawable/sd_icon"
                         android:contentDescription="UHD"
                         android:id="@+id/sd"
-                        android:tag="5"
+                        android:tag="7"
+                        android:visibility="gone"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="UHD"
+                        android:textStyle="bold"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:id="@+id/sd_txt"
                         />
                 </LinearLayout>
             </LinearLayout>

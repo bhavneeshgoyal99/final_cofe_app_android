@@ -341,7 +341,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                     return;
                                 }
 
-                                showWaitDialog();
+                                loaderDialog.setMessage();
                                 devSNEdit.setText(devShareQrCodeInfo.getDevId());
                                 //扫描并添加分享设备
                                 ShareManager shareManager = ShareManager.getInstance(this);

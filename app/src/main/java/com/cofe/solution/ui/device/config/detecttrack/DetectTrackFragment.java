@@ -136,7 +136,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         lsiEnable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 int enable = lsiEnable.getRightValue() == SDKCONST.Switch.Open ? SDKCONST.Switch.Close : SDKCONST.Switch.Open;
                 lsiEnable.setRightImage(enable);
                 dataMap.put("Enable", enable);
@@ -169,7 +169,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
         view.findViewById(R.id.btn_set_watch_preset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 presenter.setWatchPreset();
             }
         });
@@ -303,7 +303,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                 isWatchTime.toggleExtraView(true);
                 isWatchTime.setRightText(key);
                 dataMap.put("ReturnTime", value);
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 presenter.setDetectTrack();
             }
         });*/
@@ -327,7 +327,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
                 lsiSensitivity.toggleExtraView(true);
                 watchValueTxtv.setText(key);
                 dataMap.put("Sensitivity", value);
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 presenter.setDetectTrack();
             }
         });*/
@@ -341,7 +341,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             }
         });
 
-        activity.showWaitDialog();
+        activity.loaderDialog.setMessage();
 
         ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) playView.getLayoutParams();
         params.height = screenWidth * 9 / 16;
@@ -359,7 +359,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
     @Override
     public void onGetDetectTrackResult(boolean isSuccess, LinkedTreeMap<String, Object> resultMap, int errorId) {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         if (isSuccess) {
             if (resultMap != null) {
                 dataMap = resultMap;
@@ -412,7 +412,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
             //isWatchTime.setRightText(item);
             dataMap.put("ReturnTime", value);
-            activity.showWaitDialog();
+            activity.loaderDialog.setMessage();
             presenter.setDetectTrack();
 
             lsiEnable.setVisibility(VISIBLE);
@@ -428,7 +428,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             sensitivtyValueTxtv.setText(item);
 
             dataMap.put("Sensitivity", item);
-            activity.showWaitDialog();
+            activity.loaderDialog.setMessage();
             presenter.setDetectTrack();
 
             lsiEnable.setVisibility(VISIBLE);
@@ -447,7 +447,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
     }
     @Override
     public void onSetDetectRackResult(boolean isSuccess, int errorId) {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_LONG);
         } else {
@@ -457,7 +457,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
     @Override
     public void onSetWatchPresetResult(boolean isSuccess, int errorId) {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.libfunsdk_operation_success), Toast.LENGTH_LONG);
         } else {
@@ -508,7 +508,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
             isWatchTime.setRightText(item);
             dataMap.put("ReturnTime", value);
-            activity.showWaitDialog();
+            activity.loaderDialog.setMessage();
             presenter.setDetectTrack();
             dialog.dismiss();
 
@@ -530,7 +530,7 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
 
                 isWatchTime.setRightText(selectedItem);
                 dataMap.put("ReturnTime", isWatchTimeHasMap.get(selectedItem));
-                activity.showWaitDialog();
+                activity.loaderDialog.setMessage();
                 presenter.setDetectTrack();
                 dialog.dismiss();
             }

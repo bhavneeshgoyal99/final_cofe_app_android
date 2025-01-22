@@ -998,6 +998,7 @@
     <string name="set_as_demon_point">Set As Demon Point</string>
     <string name="search_record_failed_">The record file was not found</string>
     <string name="loading">Loading....</string>
+    <string name="voice_change_selection">Voice Change Selection</string>
 
 
 </resources>

@@ -123,6 +123,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openDeviceNameSettings(View anchorView, Boolean isPsasword) {
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
@@ -156,28 +157,23 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
 
     private void openPasswordManagementSettings(View anchorView) {
-
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         // Inflate the custom popup layout
         View popupView = LayoutInflater.from(anchorView.getContext())
                 .inflate(R.layout.edit_device_name, null);
 
-        // Create the PopupWindow
         PopupWindow popupWindow = new PopupWindow(
                 popupView,
                 (int) (anchorView.getContext().getResources().getDisplayMetrics().widthPixels * 0.8), // 80% of screen width
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
-        // Set focusable so the popup will close when touched outside
         popupWindow.setFocusable(true);
 
-        // Dim the background
         setDimBackground((Activity) anchorView.getContext(), 0.5f);
 
-        // Add a dismiss listener to restore the background
         popupWindow.setOnDismissListener(() -> setDimBackground((Activity) anchorView.getContext(), 1f));
 
-        // Show the popup at the center of the screen
         View rootView = ((Activity) anchorView.getContext()).getWindow().getDecorView().getRootView();
         popupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
         TextView label = popupView.findViewById(R.id.popup_label);
@@ -228,8 +224,8 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openLanguageSettings() {
-        //Toast.makeText(this, "Language Settings clicked", Toast.LENGTH_SHORT).show();
-        // Add navigation logic
+
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent intent = new Intent();
         intent.setClass(DeviceSetting.this, DeviceConfigActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
@@ -237,6 +233,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openBatteryManagementSettings(View v) {
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent i= new Intent(this, AovSettingActivity.class);
         i.putExtra("devId",xmDevInfo.getDevId());
         startActivity(i);
@@ -245,6 +242,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     private void openWorkingModeSettings() {
         //Toast.makeText(this, "Working Mode Settings clicked", Toast.LENGTH_SHORT).show();
 
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent i= new Intent(this, AovSettingActivity.class);
         i.putExtra("devId",xmDevInfo.getDevId());
         i.putExtra("working",xmDevInfo.getDevId());
@@ -255,6 +253,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     private void openSmartAlarmSettings() {
         //Toast.makeText(this, "Smart Alarm clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent intent = new Intent(this, DevAlarmSetActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
@@ -273,7 +272,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openAboutDeviceSettings() {
-
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent intent = new Intent(this, DevAboutActivity.class);
         intent.putExtra("firmwareType", "Mcu");
         intent.putExtra("devId", xmDevInfo.getDevId());
@@ -281,12 +280,14 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openPushNotificatioNSetting() {
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Intent intent = new Intent(DeviceSetting.this, DevPushActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
     }
      void openAdvanceSetting() {
-        Intent intent = new Intent(DeviceSetting.this, DevAdvanceActivity.class);
+         if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+         Intent intent = new Intent(DeviceSetting.this, DevAdvanceActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
     }
@@ -303,7 +304,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-        //hideWaitDialog();
+        //loaderDialog.dismiss();
         if (isSuccess) {
             //Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
 
@@ -331,6 +332,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     public void syncDateTimeDevice() {
+        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.time_sync_popup_layout);
         dialog.setCancelable(false); // Prevent dismissal on outside touch
@@ -350,19 +352,19 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                showWaitDialog();
+                loaderDialog.setMessage();
                 Calendar calendar = Calendar.getInstance(Locale.getDefault());
                 String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(calendar.getTime());
                 getManager().syncDevTime(xmDevInfo.getDevId(), time, new DeviceManager.OnDevManagerListener() {
                     @Override
                     public void onSuccess(String devId, int operationType, Object result) {
-                        hideWaitDialog();
+                        loaderDialog.dismiss();
                         showToast(getString(R.string.dev_time_sync_success), Toast.LENGTH_SHORT);
                     }
 
                     @Override
                     public void onFailed(String devId, int msgId, String jsonName, int errorId) {
-                        hideWaitDialog();
+                        loaderDialog.dismiss();
                     }
                 });
 

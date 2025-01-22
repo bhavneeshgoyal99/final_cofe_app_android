@@ -81,12 +81,12 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        loaderDialog.setMessage();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
     }
 
     @Override

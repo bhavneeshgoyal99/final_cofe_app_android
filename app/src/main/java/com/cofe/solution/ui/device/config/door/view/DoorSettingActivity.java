@@ -115,14 +115,14 @@ public class DoorSettingActivity extends BaseConfigActivity<DoorSettingPresenter
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.updateCorridorMode();
         presenter.updateManageShutDown();
     }
 
     @Override
     public void onUpdateManageShutDownResult(boolean isSuccess,int sleepTime) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             initSleepView();
             spAutoSleep.setValue(sleepTime);
@@ -132,7 +132,7 @@ public class DoorSettingActivity extends BaseConfigActivity<DoorSettingPresenter
 
     @Override
     public void onUpdateCorridorModeResult(boolean isSuccess, int mode) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             initFlip();
             spFlip.setValue(mode);

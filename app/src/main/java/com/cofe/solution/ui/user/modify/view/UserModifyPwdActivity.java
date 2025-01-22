@@ -76,14 +76,14 @@ public class UserModifyPwdActivity extends DemoBaseActivity<UserModifyPwdPresent
     public void onUpdateView() {
         if (presenter.getErrorId() == 0) {
             if (presenter.getReturnData() == null) {
-                hideWaitDialog();
+                loaderDialog.dismiss();
                 showToast(getString(R.string.user_change_password_sucess), Toast.LENGTH_LONG);
                 finish();
             } else {
                 onCheckPasswSuccess(presenter.getReturnData());
             }
         } else {
-            hideWaitDialog();
+            loaderDialog.dismiss();
             onCheckPasswFailed(presenter.getErrorId());
         }
     }
@@ -110,7 +110,7 @@ public class UserModifyPwdActivity extends DemoBaseActivity<UserModifyPwdPresent
             showToast(getString(R.string.user_change_password_error_passwnotequal), Toast.LENGTH_LONG);
             return;
         }
-        showWaitDialog();
+        loaderDialog.setMessage();
 
         if (!presenter.changePwd(userName, oldPwd, newPwd)) {
             showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);

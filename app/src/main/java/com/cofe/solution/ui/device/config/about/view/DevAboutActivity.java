@@ -144,7 +144,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         lsiSyncDevTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.syncDevTime();
             }
         });
@@ -153,7 +153,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         lsiSyncDevTimeZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.syncDevTimeZone();
             }
         });
@@ -245,13 +245,13 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
     @Override
     public void syncDevTimeZoneResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed) , Toast.LENGTH_LONG);
     }
 
     @Override
     public void syncDevTimeResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.set_dev_config_success) : getString(R.string.set_dev_config_failed) , Toast.LENGTH_LONG);
     }
 
