@@ -219,7 +219,8 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initData() {
-        Bitmap bitmap = presenter.getShareDevQrCode(this, xmDevInfo.getDevId());
+        presenter.setDevId(xmDevInfo.getDevId());
+        Bitmap bitmap = presenter.getShareDevQrCode(this);
         //ivQrCode.setImageBitmap(bitmap);
         qrCode.setImageBitmap(bitmap);
         getNext24Hr();

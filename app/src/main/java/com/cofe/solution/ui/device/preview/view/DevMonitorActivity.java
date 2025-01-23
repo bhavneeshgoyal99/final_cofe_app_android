@@ -387,6 +387,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
     private Handler handler_record = new Handler();
     private int seconds = 0;
+    RelativeLayout fullViewRl;
+    RelativeLayout parentRl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -693,6 +695,10 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         openSetting = findViewById(R.id.settings_icon);
         backImage = findViewById(R.id.settings_icon);
         dName = findViewById(R.id.device_name);
+        fullViewRl = findViewById(R.id.full_rl_view);
+        parentRl = findViewById(R.id.parent_rl);
+
+
         SharedPreference cookies = new SharedPreference(getApplication());
         dName.setText(cookies.retrievDevName());
 
@@ -918,7 +924,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         ListView lv =  intercomeLayout.findViewById(R.id.lv_voice_change);
         ListSelectItem lsiChooseVoice = intercomeLayout.findViewById(R.id.lsi_choose_voice);
         TextView voiceTitleTxtv = intercomeLayout.findViewById(R.id.voice_title_txtv);
-        TextView voiceSelectedValueTxtv = intercomeLayout.findViewById(R.id.voice_title_value_txtv);
+        ImageView rightArrowimg = intercomeLayout.findViewById(R.id.right_arrow_img);
+        //TextView voiceSelectedValueTxtv = intercomeLayout.findViewById(R.id.voice_title_value_txtv);
 
         ArrayAdapter arrayAdapter = new ArrayAdapter(this, R.layout.itemlistview, R.id.itemTextView, voiDataList);
         lv.setAdapter(arrayAdapter);
@@ -927,7 +934,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = voiDataList[position];
                 lsiChooseVoice.setRightText(selectedItem);
-                voiceSelectedValueTxtv.setText(selectedItem);
+                //voiceSelectedValueTxtv.setText(selectedItem);
                 presenter.setSpeakerType(presenter.getChnId(), position);
 
                 //Toast.makeText(getApplicationContext(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
@@ -938,12 +945,14 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                     aboveLl.setVisibility(View.GONE);
                     lsiChooseVoice.setVisibility(View.GONE);
                     rippleButton.setVisibility(View.GONE);
+                    rightArrowimg.setVisibility(View.GONE);
                 } else{
                     lv.setVisibility(View.GONE);
                     voiceTitleTxtv.setVisibility(View.GONE);
                     aboveLl.setVisibility(VISIBLE);
                     lsiChooseVoice.setVisibility(VISIBLE);
                     rippleButton.setVisibility(VISIBLE);
+                    rightArrowimg.setVisibility(VISIBLE);
                 }
             }
         });
@@ -959,41 +968,20 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                     aboveLl.setVisibility(View.GONE);
                     lsiChooseVoice.setVisibility(View.GONE);
                     rippleButton.setVisibility(View.GONE);
-
+                    rightArrowimg.setVisibility(View.GONE);
                 } else{
                     voiceTitleTxtv.setVisibility(View.GONE);
                     lv.setVisibility(View.GONE);
                     aboveLl.setVisibility(VISIBLE);
                     lsiChooseVoice.setVisibility(VISIBLE);
                     rippleButton.setVisibility(VISIBLE);
-
-                }
-                //lsiChooseVoice.toggleExtraView();
-            }
-        });
-        intercomeLayout.findViewById(R.id.voice_change_ll).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isVoiceCick[0] =  (isVoiceCick[0]) ? false  : true;
-                if(isVoiceCick[0]) {
-                    lv.setVisibility(VISIBLE);
-                    voiceTitleTxtv.setVisibility(VISIBLE);
-                    aboveLl.setVisibility(View.GONE);
-                    lsiChooseVoice.setVisibility(View.GONE);
-                    rippleButton.setVisibility(View.GONE);
-
-                } else{
-                    voiceTitleTxtv.setVisibility(View.GONE);
-                    lv.setVisibility(View.GONE);
-                    aboveLl.setVisibility(VISIBLE);
-                    lsiChooseVoice.setVisibility(VISIBLE);
-                    rippleButton.setVisibility(VISIBLE);
-
+                    rightArrowimg.setVisibility(VISIBLE);
                 }
                 //lsiChooseVoice.toggleExtraView();
             }
         });
 
+        lsiChooseVoice.setRightText(voiDataList[ presenter.getStreamType(presenter.getChnId())] +"");
         lsiChooseVoice.setOnExtraSpinnerItemListener(new ExtraSpinnerAdapter.OnExtraSpinnerItemListener<Integer>() {
             @Override
             public void onItemClick(int position, String key, Integer value) {
@@ -1721,12 +1709,23 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 wndInnerRVOriginalHeight = playWinLayoutParams.height;
             }
 
+            // pole,  doge, trump
+
 
             isLoadCompleteFirstTime = true;
-        }catch ( Exception e){
+        } catch ( Exception e){
             e.printStackTrace();
             recreate();
         }
+        loaderDialog.setMessage();
+        fullViewRl.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fullViewRl.setVisibility(View.GONE);
+                parentRl.setVisibility(VISIBLE);
+                loaderDialog.dismiss();
+            }
+        }, 3000);
 
     }
 
@@ -1770,6 +1769,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
 
         //batteryDrawable.setBatteryLevel(electCapacityBean.percent);
         updateBatteryColor(electCapacityBean.percent, electCapacityBean.electable);
+        Log.d(getClass().getName(), "electCapacityBean.devStorageStatus >" +electCapacityBean.devStorageStatus);
 
         //tvBatteryState.setText(String.format(getString(R.string.battery_state_show), electCapacityBean.percent, electCapacityBean.devStorageStatus, electCapacityBean.electable));
     }
@@ -2189,9 +2189,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         switch (itemId) {
             case FUN_VOICE://开启和关闭音频
                 if (isSelected) {
-                    presenter.closeVoice(presenter.getChnId());
-                } else {
                     presenter.openVoice(presenter.getChnId());
+                } else {
+                    presenter.closeVoice(presenter.getChnId());
                 }
                 return true;
             case FUN_CAPTURE://视频抓图

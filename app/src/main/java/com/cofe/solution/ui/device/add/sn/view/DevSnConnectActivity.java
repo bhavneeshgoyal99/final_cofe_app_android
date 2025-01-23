@@ -351,6 +351,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                         devShareQrCodeInfo.getLoginName(),
                                         devShareQrCodeInfo.getPwd(),
                                         devShareQrCodeInfo.getDevType(),
+
                                         devShareQrCodeInfo.getPermissions());
                                 shareManager.addShareManagerListener(new ShareManager.OnShareManagerListener() {
                                     @Override
@@ -372,6 +373,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
                                         } else {
                                             Toast.makeText(DevSnConnectActivity.this, R.string.add_share_qr_code_error, Toast.LENGTH_LONG).show();
+                                            finish();
                                         }
                                     }
                                 });

@@ -197,7 +197,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
         editor = getSharedPreferences("data", MODE_PRIVATE).edit();
         SharedPreference cookies =  new SharedPreference(getContext());
         if(cookies.retrievLoginStatus() !=1) {
-            btnlogin.performClick();
+           // btnlogin.performClick();
         }
 
     }

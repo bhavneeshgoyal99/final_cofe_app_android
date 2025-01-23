@@ -364,7 +364,17 @@ public class DetectTrackFragment extends DemoBaseFragment<DetectTrackPresenter> 
             if (resultMap != null) {
                 dataMap = resultMap;
 
-                lsiEnable.setRightImage(((Double) resultMap.get("Enable")).intValue());
+                boolean isChecked = false;
+
+                if (resultMap.get("Enable") instanceof Boolean) {
+                    isChecked = (Boolean) resultMap.get("Enable");
+                } else if (resultMap.get("Enable") instanceof Number) {
+                    isChecked = ((Number) resultMap.get("Enable")).doubleValue() == 1.0;
+                } else if (resultMap.get("Enable") instanceof String) {
+                    isChecked = resultMap.get("Enable").toString().equalsIgnoreCase("true") || resultMap.get("Enable").toString().equals("1.0");
+                }
+
+                lsiEnable.setRightImage( (isChecked)? 1:0);
                 watchTimeValue = resultMap.get("ReturnTime")+"";
                 watchTimeValue = watchTimeValue.replace(".0","");
                 watchValueTxtv.setText(watchTimeValue+"s");

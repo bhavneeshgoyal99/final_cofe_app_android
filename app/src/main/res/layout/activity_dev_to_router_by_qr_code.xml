@@ -162,28 +162,28 @@
 
             </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_result_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="16dp"
-                    android:text="@string/qr_code_network_configuration_prompt"                    android:textColor="@color/colorAccent"
-                    android:background="@drawable/button_background"
-                    android:visibility="gone"
-                    />
+            <TextView
+                android:id="@+id/tv_result_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="16dp"
+                android:text="@string/qr_code_network_configuration_prompt"                    android:textColor="@color/colorAccent"
+                android:background="@drawable/button_background"
+                android:visibility="gone"
+                />
 
-                <Button
-                    android:id="@+id/cancle_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_margin="16dp"
-                    android:text="@string/cancle"
-                    android:textColor="@color/colorAccent"
-                    android:background="@drawable/button_background"
-                    android:layout_marginBottom="?actionBarSize"
-                    />
+            <Button
+                android:id="@+id/cancle_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:text="@string/cancle"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/button_background"
+                android:layout_marginBottom="?actionBarSize"
+                />
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
