@@ -833,6 +833,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         checkUserLogin();
 
         intercomeBottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
+       // intercomeBottomSheetDialog = new BottomSheetDialog(this);
 
         // intercome work
         LinearLayout actionLayout = findViewById(R.id.main_buttons_ll);
@@ -3466,10 +3467,16 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     }
 
     void showIntercomBottomSheetDialog() {
+        /*if (intercomeBottomSheetDialog.getWindow() != null) {
+            intercomeBottomSheetDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }*/
+        showAudioCallPopup(intercomeLayout);
         intercomeBottomSheetDialog.show();
         intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_EXPANDED); // Show
 
     }
+
+
 
     // camera volume icon change
 
