@@ -42,7 +42,7 @@
                     android:layout_marginStart="20dp"
 
                     android:text="Alert tone"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <Switch
 
@@ -73,7 +73,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="Device Name"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -116,7 +116,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/image_flip_left_right"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <Switch
 
@@ -147,7 +147,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/image_flip_up_down"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <Switch
 
@@ -179,7 +179,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/language"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -223,7 +223,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/day_night_switchover_sensitivity"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -267,7 +267,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/speaker_volume"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -326,7 +326,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/day_night_switchover_sensitivity"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -356,8 +356,8 @@
                 android:layout_height="2dp"
                 android:background="@color/gray_transparent" />
 
-            <ProgressBar
-                android:id="@+id/pb_waiting"
+            <SeekBar
+                
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -401,7 +401,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:text="@string/speaker_volume"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     style="@style/textGraysmall"
@@ -431,8 +431,8 @@
                 android:layout_height="2dp"
                 android:background="@color/gray_transparent" />
 
-            <ProgressBar
-                android:id="@+id/pb_waiting"
+            <!--<ProgressBar
+                android:id="@+id/pbSpeaker"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -441,7 +441,92 @@
                 android:max="100"
                 android:progress="20"
 
-                android:visibility="visible" />
+                android:visibility="visible" />-->
+
+            <SeekBar
+                android:id="@+id/seekBarSpeaker"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="5dp"
+                android:max="100"
+                android:progress="20"
+
+            android:visibility="visible" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/solid_white_10"
+            android:orientation="vertical">
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/language"
+                    android:textSize="12sp" />
+
+                <TextView
+                    style="@style/textGraysmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/ivright4"
+                    android:text="english"
+                    android:textSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/ivright4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/right_icon_1" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+            
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvLanguage"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
 
 
         </LinearLayout>

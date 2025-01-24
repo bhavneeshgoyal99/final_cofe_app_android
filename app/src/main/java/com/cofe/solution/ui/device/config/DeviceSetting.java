@@ -28,6 +28,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.basic.G;
+import com.cofe.solution.ui.activity.BasicSettingsActivity;
+import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.activity.DeviceConfigActivity;
 import com.cofe.solution.ui.activity.DeviceConfigPresenter;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
@@ -69,8 +71,11 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_setting);
-        TextView titleTxtv = findViewById(R.id.toolbar_title);
+       // setContentView(R.layout.activity_device_setting);
+        setContentView(R.layout.activity_device_settings_2);
+        //TextView titleTxtv = findViewById(R.id.toolbar_title);
+        // set by simran as header is different
+        TextView titleTxtv = findViewById(R.id.tvTitleHeader);
         titleTxtv.setText(getString(R.string.device_setting));
 
 
@@ -105,6 +110,10 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         findViewById(R.id.push_device_item).setOnClickListener(v -> openPushNotificatioNSetting());
         findViewById(R.id.advanced_device_item).setOnClickListener(v -> openAdvanceSetting());
         findViewById(R.id.date_device_item).setOnClickListener(v -> syncDateTimeDevice());
+        findViewById(R.id.rlBasicSettings).setOnClickListener(v -> {
+            Intent intent = new Intent(DeviceSetting.this, BasicSettingsActivity.class);
+            startActivity(intent);
+        });
         dTxtv = findViewById(R.id.dname_txtv);
         try {
             dTxtv.setText(xmDevInfo.getDevName());

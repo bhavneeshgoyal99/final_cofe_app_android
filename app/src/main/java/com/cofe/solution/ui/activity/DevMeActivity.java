@@ -45,8 +45,8 @@ public class DevMeActivity extends AppCompatActivity {
         ivBasicSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DevMeActivity.this, BasicSettingsActivity.class);
-                startActivity(intent);
+                /*Intent intent = new Intent(DevMeActivity.this, BasicSettingsActivity.class);
+                startActivity(intent);*/
             }
         });
 

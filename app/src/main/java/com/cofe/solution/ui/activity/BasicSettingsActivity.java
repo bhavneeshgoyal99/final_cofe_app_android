@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cofe.solution.R;
+import com.cofe.solution.ui.adapter.LanguageAdapter;
 
 public class BasicSettingsActivity extends AppCompatActivity {
 
@@ -22,9 +25,11 @@ public class BasicSettingsActivity extends AppCompatActivity {
     RelativeLayout rlDayNightSwitchOverSens;
     RelativeLayout rlSpeakerVolume;
     RelativeLayout rlLanguage;
+    RecyclerView rvLanguage;
     LinearLayout llDayNightSwitchesSensitivity;
     LinearLayout llBasicSettings;
     LinearLayout llSpeakerVolume;
+    LinearLayout llLanguage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,13 @@ public class BasicSettingsActivity extends AppCompatActivity {
         rlSpeakerVolume = findViewById(R.id.rlSpeakerVolume);
         llSpeakerVolume = findViewById(R.id.llSpeakerVolume);
         rlLanguage = findViewById(R.id.rlLanguage);
+        rvLanguage = findViewById(R.id.rvLanguage);
+        llLanguage = findViewById(R.id.llLanguage);
         tvTitleHeader.setText("Basic Settings");
+
+
+        rvLanguage.setLayoutManager(new LinearLayoutManager(this));
+        rvLanguage.setAdapter(new LanguageAdapter(BasicSettingsActivity.this));
 
         rlDayNightSwitchOverSens.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +63,8 @@ public class BasicSettingsActivity extends AppCompatActivity {
                 llDayNightSwitchesSensitivity.setVisibility(View.VISIBLE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.GONE);
+                llLanguage.setVisibility(View.GONE);
+
             }
         });
         rlSpeakerVolume.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +73,8 @@ public class BasicSettingsActivity extends AppCompatActivity {
                 llDayNightSwitchesSensitivity.setVisibility(View.GONE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.VISIBLE);
+                llLanguage.setVisibility(View.GONE);
+
             }
         });
 
@@ -69,6 +84,7 @@ public class BasicSettingsActivity extends AppCompatActivity {
                 llDayNightSwitchesSensitivity.setVisibility(View.GONE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.GONE);
+                llLanguage.setVisibility(View.VISIBLE);
             }
         });
     }

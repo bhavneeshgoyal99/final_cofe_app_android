@@ -12,11 +12,16 @@
         android:id="@+id/headerDeviceSettings"
         layout="@layout/common_header" />
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
-        android:layout_margin="10dp"
+android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
 
@@ -28,6 +33,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rlBasicSettings"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -51,7 +57,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivSettings"
                     android:text="@string/basic_settings"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/ivRigh2"
@@ -70,8 +76,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:background="@color/gray_transparent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="16dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/language_item"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="16dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Language"
+                    android:textSize="16sp"
+                    android:textColor="#333333" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="English"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:layout_marginRight="20dp"
+                    />
+            </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/password_management_item"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -85,7 +127,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/ic_password_management" />
 
 
                 <TextView
@@ -95,7 +137,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivPasswordManagement"
                     android:text="@string/password_manager"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -133,7 +175,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/storage" />
 
 
                 <TextView
@@ -143,7 +185,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivStorageManagement"
                     android:text="@string/storage_management"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -176,7 +218,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/icon_record" />
 
 
                 <TextView
@@ -186,7 +228,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivRecordingSettings"
                     android:text="@string/recording_settings"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -210,6 +252,8 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/smart_alarm_item"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -223,7 +267,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/alert_icon" />
 
 
                 <TextView
@@ -233,7 +277,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivSmartAlaram"
                     android:text="@string/smart_alarm"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -266,7 +310,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/wifi_black" />
 
 
                 <TextView
@@ -275,8 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivNetWorkSettings"
-                    android:text="@string/recording_settings"
-                    android:textSize="10sp" />
+                    android:text="Network settings"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -301,6 +345,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/cloud_storage_item"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -314,7 +359,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/ic_cloud" />
 
 
                 <TextView
@@ -324,7 +369,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivCloudStorage"
                     android:text="@string/cloud_storage"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_toStartOf="@+id/ivCloud"
@@ -381,10 +426,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/solid_white_10"
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/advanced_device_item"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -398,7 +445,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/advance_settings" />
 
 
                 <TextView
@@ -408,7 +455,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivAdvancedSettings"
                     android:text="@string/advanced_settings"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -428,6 +475,7 @@
                 android:background="@color/gray_transparent" />
 
             <RelativeLayout
+                android:id="@+id/add_to_desktop_item"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -441,7 +489,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/ic_add_desktop" />
 
 
                 <TextView
@@ -451,7 +499,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivAddToDesktop"
                     android:text="@string/add_to_desktop"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -471,6 +519,8 @@
 
 
             <RelativeLayout
+                android:id="@+id/about_device_item"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -484,7 +534,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/setting_icon" />
+                    android:src="@drawable/about" />
 
 
                 <TextView
@@ -494,7 +544,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivAboutDevice"
                     android:text="@string/about_device"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_toStartOf="@+id/ivright"
@@ -518,11 +568,246 @@
 
 
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+
+
+            <RelativeLayout
+                android:id="@+id/device_name_item"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <ImageView
+                    android:id="@+id/ivDeviceName"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_device" />
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ivDeviceName"
+                    android:text="Device Name"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/dname_txtv"
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:text="aov"
+                    android:textSize="10sp"/>
+
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+
+
+            <RelativeLayout
+                android:id="@+id/battery_management_item"
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <ImageView
+                    android:id="@+id/ivBattery"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/battery" />
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ivBattery"
+                    android:text="Battery Management"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/right_icon_1" />
+
+
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+
+
+            <RelativeLayout
+                android:id="@+id/working_mode_item"
+
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <ImageView
+                    android:id="@+id/ivWorkMode"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/setting_icon" />
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ivWorkMode"
+                    android:text="Working Mode"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/right_icon_1" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+
+
+            <RelativeLayout
+                android:id="@+id/push_device_item"
+
+
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <ImageView
+                    android:id="@+id/ivPushNoti"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/setting_icon" />
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ivPushNoti"
+                    android:text="Push Notification"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/right_icon_1" />
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/gray_transparent" />
+
+
+            <RelativeLayout
+                android:id="@+id/date_device_item"
+
+
+
+
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+
+                <ImageView
+                    android:id="@+id/ivDateDevice"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/setting_icon" />
+
+
+                <TextView
+                    style="@style/user_info_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/ivDateDevice"
+                    android:text="@string/sync_date_time"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/right_icon_1" />
+
+
+            </RelativeLayout>
 
 
         </LinearLayout>
 
     </LinearLayout>
+    </ScrollView>
 
 
 
