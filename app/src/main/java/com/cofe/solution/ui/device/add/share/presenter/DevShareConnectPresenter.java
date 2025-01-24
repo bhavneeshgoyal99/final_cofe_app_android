@@ -26,9 +26,13 @@ import com.utils.ParseUrlUtils;
 import com.utils.XUtils;
 import com.xm.activity.base.XMBasePresenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 
 import static com.lib.EFUN_ATTR.LOGIN_USER_ID;
@@ -43,6 +47,8 @@ import android.graphics.Matrix;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.checkerframework.checker.units.qual.A;
+
 /**
  * 分享的设备界面,显示相关的列表菜单
  * The shared device interface displays the relevant list menu
@@ -51,12 +57,62 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
 
     private DevShareConnectContract.IDevShareConnectView iDevShareConnectView;
     private List<SearchUserInfoBean> userQueryBeans;
-
+    String finalPermissions;
+    ArrayList<String> permissionList = new ArrayList<>();
     public DevShareConnectPresenter(DevShareConnectContract.IDevShareConnectView iDevShareConnectView) {
         this.iDevShareConnectView = iDevShareConnectView;
         manager = ShareManager.getInstance(iDevShareConnectView.getContext());
         manager.init();
         manager.addShareManagerListener(this);
+    }
+
+    /**
+     *         List<String> allPermissions = Arrays.asList(
+     *                 "DP_ModifyConfig", "DP_ModifyPwd", "DP_CloudServer", "DP_Intercom",
+     *                 "DP_PTZ", "DP_LocalStorage", "DP_ViewCloudVideo", "DP_DeleteCloudVideo",
+     *                 "DP_AlarmPush", "DP_DeleteAlarmInfo"
+     *         );
+     * @param permissionList
+     */
+    public void setPermissionList(ArrayList<String> permissionList){
+        this.permissionList = permissionList;
+
+        Map<String, String> keywordToPermissionMap = new HashMap<>();
+        keywordToPermissionMap.put("Change Device Config", "DP_ModifyConfig");
+        keywordToPermissionMap.put("Cloud Video", "DP_ViewCloudVideo");
+        keywordToPermissionMap.put("Intercom", "DP_Intercom");
+        keywordToPermissionMap.put("PTZ", "DP_PTZ");
+        keywordToPermissionMap.put("Local Storage", "DP_LocalStorage");
+        keywordToPermissionMap.put("Push", "DP_AlarmPush");
+
+        Map<String, Integer> permissionMap = new HashMap<>();
+        for (String key : keywordToPermissionMap.values()) {
+            permissionMap.put(key, 0);
+        }
+
+
+        for (String item : permissionList) {
+            if (keywordToPermissionMap.containsKey(item)) {
+                String permissionKey = keywordToPermissionMap.get(item);
+                permissionMap.put(permissionKey, 1);
+            }
+        }
+        for(String key : permissionMap.keySet()) {
+            if (key.contains("cloud")) {
+                if (permissionMap.get(key) == 1) {
+                    permissionMap.put("DP_DeleteCloudVideo",1);
+                    permissionMap.put("DP_CloudServer",1);
+                }
+            } else if (key.contains("alarm")) {
+                if (permissionMap.get(key) == 1) {
+                    permissionMap.put("DP_DeleteAlarmInfo",1);
+                }
+            }
+        }
+        // Convert to JSON String
+        finalPermissions = new org.json.JSONObject(permissionMap).toString();
+        System.out.println("Final JSON: " +  finalPermissions );
+
     }
 
 
@@ -90,8 +146,8 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
         if (!TextUtils.isEmpty(devToken)) {
             devShareQrCodeInfo.setDevToken(devToken);//设置设备的登录Token
         }
-        String permissionValue =         "{\"DP_ModifyConfig\": 1,\"DP_ModifyPwd\": 1,\"DP_CloudServer\": 1,\"DP_Intercom\": 1,\"DP_PTZ\": 1,\"DP_LocalStorage\": 1,\"DP_ViewCloudVideo\": 1,\"DP_DeleteCloudVideo\": 1,\"DP_AlarmPush\": 1,\"DP_DeleteAlarmInfo\": 1}";
-        devShareQrCodeInfo.setPermissions(permissionValue);
+        //String permissionValue =         "{\"DP_ModifyConfig\": 1,\"DP_ModifyPwd\": 1,\"DP_CloudServer\": 1,\"DP_Intercom\": 1,\"DP_PTZ\": 1,\"DP_LocalStorage\": 1,\"DP_ViewCloudVideo\": 1,\"DP_DeleteCloudVideo\": 1,\"DP_AlarmPush\": 1,\"DP_DeleteAlarmInfo\": 1}";
+        devShareQrCodeInfo.setPermissions(finalPermissions);
         /**
          * 如果要设置访问权限，可以调用以下方法
          * devShareQrCodeInfo.setPermissions(“权限信息”)，这个权限信息自定义，比如
@@ -113,7 +169,7 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
         Log.d("share Generate QR code Share  ","QR code data "  + info);
         Log.d("share Generate QR code Share  ","QR code data devId"  + devShareQrCodeInfo.getDevId());
 
-        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_app);//获取logo
+        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher_);//获取logo
         System.out.println("encInfo:" + info);
         Bitmap bitmap = null;
         try {

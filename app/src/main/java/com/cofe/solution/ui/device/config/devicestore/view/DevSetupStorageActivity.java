@@ -104,6 +104,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     }
 
     private void initData() {
+        presenter.setDevId(getIntent().getStringExtra("devId"));
         loaderDialog.setMessage();
         //获取存储容量信息
         presenter.getStorageInfo();
@@ -198,6 +199,5 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
         } else {
             showToast(FunSDK.TS("Save_Failed"),Toast.LENGTH_LONG);
         }
-
     }
 }

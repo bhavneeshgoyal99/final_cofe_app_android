@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.cofe.solution.ui.device.config.about.presenter.DevAboutPresenter;
 import com.cofe.solution.ui.device.config.about.view.DevAboutActivity;
 import com.cofe.solution.ui.device.config.advance.view.DevAdvanceActivity;
 import com.cofe.solution.ui.device.config.alarmconfig.view.DevAlarmSetActivity;
+import com.cofe.solution.ui.device.config.devicestore.view.DevSetupStorageActivity;
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.cofe.solution.ui.device.push.view.DevPushActivity;
 import com.google.gson.Gson;
@@ -70,6 +72,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_setting);
+        loaderDialog.setMessage();
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.device_setting));
 
@@ -92,6 +95,21 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
             }
         });
 
+        DevDataCenter.getInstance().isSupportSDsupportRecord(xmDevInfo.getDevId(),new DeviceManager.OnDevManagerListener(){
+            @Override
+            public void onSuccess(String devId, int operationType, Object result) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > success");
+                loaderDialog.dismiss();
+                findViewById(R.id.sd_item_ll).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > failed");
+                findViewById(R.id.sd_item_ll).setVisibility(View.GONE);
+                loaderDialog.dismiss();
+            }
+        });
         // Set OnClickListeners for each item
         findViewById(R.id.device_name_item).setOnClickListener(v -> openDeviceNameSettings(v, false));
         findViewById(R.id.password_management_item).setOnClickListener(v -> openPasswordManagementSettings(v));
@@ -99,6 +117,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         findViewById(R.id.battery_management_item).setOnClickListener(v -> openBatteryManagementSettings(v));
         findViewById(R.id.working_mode_item).setOnClickListener(v -> openWorkingModeSettings());
         findViewById(R.id.smart_alarm_item).setOnClickListener(v -> openSmartAlarmSettings());
+        findViewById(R.id.sd_item_ll).setOnClickListener(v -> openStorageSettings());
         findViewById(R.id.cloud_storage_item).setOnClickListener(v -> openCloudStorageSettings());
         findViewById(R.id.add_to_desktop_item).setOnClickListener(v -> openAddToDesktopSettings());
         findViewById(R.id.about_device_item).setOnClickListener(v -> openAboutDeviceSettings());
@@ -260,6 +279,13 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
     }
 
+    private void openStorageSettings() {
+        Intent intent = new Intent(getApplicationContext(), DevSetupStorageActivity.class);
+        intent.putExtra("devId", xmDevInfo.getDevId());
+        startActivity(intent);
+
+
+    }
     private void openCloudStorageSettings() {
         //Toast.makeText(this, "Cloud Storage clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic

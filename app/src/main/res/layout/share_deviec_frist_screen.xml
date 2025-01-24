@@ -62,12 +62,14 @@
                     android:padding="@dimen/half_of_normal_margin"
                     />
 
-                <Switch
-                    android:id="@+id/share_all_toggle"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/toggle_checkboxes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/half_of_normal_margin"
-                    />
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="16sp"/>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,12 +79,19 @@
                 android:paddingTop="@dimen/half_of_normal_margin"
                 android:orientation="vertical"
                 >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:paddingTop="@dimen/button_margin"
+                    android:visibility="gone"
                     >
                     <LinearLayout
                         android:layout_width="0dp"
@@ -167,6 +176,7 @@
                     android:layout_weight="1"
                     android:background="@color/white"
                     android:paddingTop="@dimen/button_margin"
+                    android:visibility="gone"
                     >
 
 

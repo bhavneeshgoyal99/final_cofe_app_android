@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import com.cofe.solution.R;
 import com.cofe.solution.base.DemoBaseActivity;
@@ -54,7 +55,7 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
     private ImageView deviceIcon, qrCode;
     private Button shareButton, saveToPhoneButton;
     XMDevInfo xmDevInfo;
-
+    ArrayList<String> permissionList;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +78,7 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
             Gson gson = new Gson();
             xmDevInfo = gson.fromJson(personJson, XMDevInfo.class);
         }
-
+        permissionList = getIntent().getStringArrayListExtra("permission");
         etShareAccount = findViewById(R.id.et_search_bar_input);
         lsiShareAccountInfo = findViewById(R.id.lsi_share_account);
 
@@ -111,7 +112,6 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
         // Set up button click listeners
         shareButton.setOnClickListener(view -> shareDeviceDetails());
         saveToPhoneButton.setOnClickListener(view -> saveQRCodeToPhone());
-
 
         initData();
     }
@@ -219,6 +219,7 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initData() {
+        presenter.setPermissionList(permissionList);
         presenter.setDevId(xmDevInfo.getDevId());
         Bitmap bitmap = presenter.getShareDevQrCode(this);
         //ivQrCode.setImageBitmap(bitmap);
