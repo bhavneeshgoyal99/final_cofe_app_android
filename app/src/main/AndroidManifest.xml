@@ -40,13 +40,14 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
-
-
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:name=".app.SDKDemoApplication"
@@ -56,6 +57,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoTitleBar"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.activity.BasicSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AccountInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.DevMeActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.device.preview.view.MainActivity"
             android:exported="false" />

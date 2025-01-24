@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.preview.view.DevActivity;
@@ -261,11 +262,22 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         });
 
+
         LinearLayout imageLl = findViewById(R.id.image_ll);
         imageLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
                 turnToActivity(DevPictureActivity.class);
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+               // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(DevListActivity.this, DevMeActivity.class);
+                startActivity(intent);
             }
         });
 
