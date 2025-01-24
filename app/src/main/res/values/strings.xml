@@ -1030,6 +1030,8 @@
     <string name="language">Language</string>
     <string name="day_night_switchover_sensitivity">Day/Night switchover sensitivity</string>
     <string name="speaker_volume">Speaker Volume</string>
+    <string name="storage_capacity">Storage Capacity</string>
+    <string name="format">Format</string>
 
 
 </resources>

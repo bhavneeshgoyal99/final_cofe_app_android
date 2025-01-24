@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,9 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      * 视频分区总容量
      */
     private TextView tvMemoryVideoPart;
+    private TextView tvTitleHeader;
+    private ImageView back_button;
+    private View viewImage;
     /**
      * 格式化
      */
@@ -77,9 +81,21 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.device_setup_storage));
-        titleBar.setLeftClick(this);
+       // titleBar = findViewById(R.id.layoutTop);
+       // titleBar.setTitleText(getString(R.string.device_setup_storage));
+       // titleBar.setLeftClick(this);
+        tvTitleHeader=findViewById(R.id.tvTitleHeader);
+        viewImage=findViewById(R.id.viewImage);
+        back_button=findViewById(R.id.back_button);
+        tvTitleHeader.setText(getString(R.string.device_setup_storage));
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         tvMemoryTotal = findViewById(R.id.tv_dev_set_memory_total);
         tvMemoryRemain = findViewById(R.id.tv_dev_set_memory_remain);
         tvMemoryPicPart = findViewById(R.id.tv_sto_img_part);
@@ -124,8 +140,10 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
         tvMemoryPicPart.setText(picPartSizeString);
         if(isShowPicPart){
             rlMemoryPicPart.setVisibility(View.VISIBLE);
+            viewImage.setVisibility(View.VISIBLE);
         } else {
             rlMemoryPicPart.setVisibility(View.GONE);
+            viewImage.setVisibility(View.GONE);
         }
     }
 
