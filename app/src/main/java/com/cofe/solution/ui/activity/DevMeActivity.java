@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,10 @@ public class DevMeActivity extends AppCompatActivity {
 
     ImageView ivProfileImage;
     ImageView ivBasicSettings;
+    RelativeLayout rlAbout;
+    RelativeLayout rlPermissionSettings;
+    RelativeLayout rlTools;
+    RelativeLayout rlSharingManagement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,10 @@ public class DevMeActivity extends AppCompatActivity {
     private void initUis() {
         ivProfileImage = findViewById(R.id.ivProfileImage);
         ivBasicSettings = findViewById(R.id.ivBasicSettings);
+        rlPermissionSettings = findViewById(R.id.rlPermissionSettings);
+        rlSharingManagement = findViewById(R.id.rlSharingManagement);
+        rlTools = findViewById(R.id.rlTools);
+        rlAbout = findViewById(R.id.rlAbout);
 
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +56,34 @@ public class DevMeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /*Intent intent = new Intent(DevMeActivity.this, BasicSettingsActivity.class);
                 startActivity(intent);*/
+            }
+        });
+        rlAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DevMeActivity.this, MeAboutAcitivity.class);
+                startActivity(intent);
+            }
+        });
+        rlPermissionSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DevMeActivity.this, MePermissionSettingsAcitivity.class);
+                startActivity(intent);
+            }
+        });
+        rlTools.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DevMeActivity.this, METoolsActivity.class);
+                startActivity(intent);
+            }
+        });
+        rlSharingManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DevMeActivity.this, MeSharingManagement.class);
+                startActivity(intent);
             }
         });
 

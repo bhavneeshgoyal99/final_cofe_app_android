@@ -75,6 +75,7 @@ dependencies {
     implementation files('libs\\pinyin4j-2.5.0.jar')
 
 
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
@@ -134,5 +135,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
+    implementation "com.makeramen:roundedimageview:2.3.0"
 
 }

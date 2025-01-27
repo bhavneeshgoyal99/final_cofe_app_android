@@ -58,6 +58,18 @@
         android:theme="@style/AppTheme.NoTitleBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activity.MeSharingManagement"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.METoolsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MePermissionSettingsAcitivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MeAboutAcitivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.BasicSettingsActivity"
             android:exported="false" />
         <activity

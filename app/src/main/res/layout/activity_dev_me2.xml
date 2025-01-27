@@ -308,6 +308,8 @@ android:layout_marginStart="10dp"
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlSharingManagement"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
@@ -382,6 +384,8 @@ android:layout_marginStart="10dp"
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rlTools"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
@@ -419,6 +423,8 @@ android:layout_marginStart="10dp"
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rlPermissionSettings"
+
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
@@ -465,6 +471,7 @@ android:layout_marginStart="10dp"
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rlAbout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
