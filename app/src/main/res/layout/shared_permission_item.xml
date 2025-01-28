@@ -14,7 +14,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:scaleX="0.7"
-        android:scaleY="0.7"/>
+        android:scaleY="0.7"
+        android:clickable="false"
+        />
 
     <!-- ImageView at the Center -->
     <ImageView

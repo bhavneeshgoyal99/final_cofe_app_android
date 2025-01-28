@@ -71,6 +71,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -389,7 +390,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     private int seconds = 0;
     RelativeLayout fullViewRl;
     RelativeLayout parentRl;
-
+    View audioBottomSheetView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -832,7 +833,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
         dName.setText(cookies.retrievDevName());
         checkUserLogin();
 
-        intercomeBottomSheetDialog = new BottomSheetDialog(this, R.style.CustomBottomSheetDialog);
+        intercomeBottomSheetDialog = new BottomSheetDialog(this, R.style.AudioCustomBottomSheetDialog);
 
         // intercome work
         LinearLayout actionLayout = findViewById(R.id.main_buttons_ll);
@@ -1710,20 +1711,19 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
 
             // pole,  doge, trump
-
-
             isLoadCompleteFirstTime = true;
         } catch ( Exception e){
             e.printStackTrace();
+            finish();
             recreate();
         }
-        loaderDialog.setMessage();
+        //loaderDialog.setMessage();
+        findViewById(R.id.llActions).setVisibility(VISIBLE);
         fullViewRl.postDelayed(new Runnable() {
             @Override
             public void run() {
-                fullViewRl.setVisibility(View.GONE);
                 parentRl.setVisibility(VISIBLE);
-                loaderDialog.dismiss();
+                //loaderDialog.dismiss();
             }
         }, 3000);
 
@@ -3370,11 +3370,11 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             audioDialog.safeShow();
         }*/
 
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.custom_bottom_sheet, null);
-        RelativeLayout parentLL = bottomSheetView.findViewById(R.id.parent_rl);
+        audioBottomSheetView = getLayoutInflater().inflate(R.layout.custom_bottom_sheet, null);
+        RelativeLayout parentLL = audioBottomSheetView.findViewById(R.id.parent_rl);
 
         // Create a BottomSheetDialog
-        intercomeBottomSheetDialog.setContentView(bottomSheetView);
+        intercomeBottomSheetDialog.setContentView(audioBottomSheetView);
         intercomeBottomSheetDialog.getWindow().setDimAmount(0f);
         intercomeBottomSheetDialog.setCanceledOnTouchOutside(false);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -3382,36 +3382,20 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
         try {
-            ((ViewGroup)viewToAdd.getParent().getParent()).removeView((ViewGroup)viewToAdd.getParent());
-            parentLL.removeView(viewToAdd);
-            parentLL.addView(viewToAdd, layoutParams);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            ((ViewGroup)viewToAdd.getParent().getParent()).removeView((ViewGroup)viewToAdd.getParent());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        try {
-            if(viewToAdd.getParent() != null) {
-                ((ViewGroup)viewToAdd.getParent()).removeView(viewToAdd); // <- fix
+            if (viewToAdd.getParent() != null) {
+                ((ViewGroup) viewToAdd.getParent()).removeView(viewToAdd);
             }
-            parentLL.removeView(viewToAdd);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        try {
             parentLL.addView(viewToAdd, layoutParams);
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        intercomeBottomSheetInfoBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+        intercomeBottomSheetInfoBehavior = BottomSheetBehavior.from((View) audioBottomSheetView.getParent());
 
         viewToAdd.setOnTouchListener((v, event) -> {
-            intercomeBottomSheetInfoBehavior.setDraggable(true);  // Re-enable dragging
+            //intercomeBottomSheetInfoBehavior.setDraggable(true);  // Re-enable dragging
             return false;
         });
 
@@ -3449,26 +3433,33 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 // Control the slide-down speed
-                bottomSheet.setAlpha(1 - (slideOffset * 0.3f));  // Adjust transparency if needed
+                //bottomSheet.setAlpha(1 - (slideOffset * 0.3f));  // Adjust transparency if needed
             }
         });
         intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        bottomSheetView.findViewById(R.id.cancle_button).setOnClickListener(new OnClickListener() {
+        audioBottomSheetView.findViewById(R.id.cancle_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*intercomeBottomSheetInfoBehavior.setHideable(true);
                 intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
-                new Handler().postDelayed(() -> intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_HIDDEN), 900);
-                intercomeBottomSheetDialog.hide();
+                intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                //intercomeBottomSheetDialog.hide();
             }
         });
 
     }
 
     void showIntercomBottomSheetDialog() {
+        if (intercomeBottomSheetDialog.isShowing()) {
+            return;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getFragments().size() > 0) {
+            return;
+        }
         intercomeBottomSheetDialog.show();
-        intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_EXPANDED); // Show
-
+        audioBottomSheetView.setVisibility(View.VISIBLE);
+        intercomeBottomSheetInfoBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     // camera volume icon change

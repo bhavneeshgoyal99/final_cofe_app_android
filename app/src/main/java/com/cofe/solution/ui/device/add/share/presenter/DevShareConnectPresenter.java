@@ -72,6 +72,15 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
      *                 "DP_PTZ", "DP_LocalStorage", "DP_ViewCloudVideo", "DP_DeleteCloudVideo",
      *                 "DP_AlarmPush", "DP_DeleteAlarmInfo"
      *         );
+     *
+     *         {
+     *         "DP_ModifyConfig":1,
+     *         "DP_ModifyPwd":1,"DP_ViewCloudVideo":1,
+     *         "DP_DeleteCloudVideo":1,"DP_LocalStorage":1,"DP_CloudServer":1,
+     *         "DP_AlarmPush":1,
+     *         "DP_Intercom":1,"DP_PTZ":1,
+     *         "DP_DeleteAlarmInfo":1
+     *         }
      * @param permissionList
      */
     public void setPermissionList(ArrayList<String> permissionList){
@@ -97,18 +106,44 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
                 permissionMap.put(permissionKey, 1);
             }
         }
+        boolean cloudPermission =  false;
+        boolean pushPermission =  false;
+        boolean ConfigPermission =  false;
         for(String key : permissionMap.keySet()) {
-            if (key.contains("cloud")) {
+            if (key.contains("DP_ViewCloudVideo")) {
                 if (permissionMap.get(key) == 1) {
-                    permissionMap.put("DP_DeleteCloudVideo",1);
-                    permissionMap.put("DP_CloudServer",1);
+                    cloudPermission = true;
                 }
-            } else if (key.contains("alarm")) {
+            } else if (key.contains("DP_AlarmPush")) {
                 if (permissionMap.get(key) == 1) {
-                    permissionMap.put("DP_DeleteAlarmInfo",1);
+                    pushPermission = true;
+                }
+            } else if (key.contains("DP_ModifyConfig")) {
+                if (permissionMap.get(key) == 1) {
+                    ConfigPermission = true;
                 }
             }
         }
+        if(ConfigPermission){
+            permissionMap.put("DP_ModifyPwd",1);
+        } else{
+            permissionMap.put("DP_ModifyPwd",0);
+        }
+
+        if(pushPermission){
+            permissionMap.put("DP_DeleteAlarmInfo",1);
+        } else{
+            permissionMap.put("DP_DeleteAlarmInfo",0);
+        }
+
+        if(cloudPermission){
+            permissionMap.put("DP_DeleteCloudVideo",1);
+            permissionMap.put("DP_CloudServer",1);
+        } else{
+            permissionMap.put("DP_DeleteCloudVideo",0);
+            permissionMap.put("DP_CloudServer",0);
+        }
+
         // Convert to JSON String
         finalPermissions = new org.json.JSONObject(permissionMap).toString();
         System.out.println("Final JSON: " +  finalPermissions );

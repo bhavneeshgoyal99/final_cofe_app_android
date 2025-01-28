@@ -106,11 +106,12 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
             @Override
             public void onFailed(String devId, int msgId, String jsonName, int errorId) {
                 Log.d(getClass().getName(), "isSupportSDsupportRecord > failed");
-                findViewById(R.id.sd_item_ll).setVisibility(View.GONE);
+                //findViewById(R.id.sd_item_ll).setVisibility(View.GONE);
                 loaderDialog.dismiss();
             }
         });
         // Set OnClickListeners for each item
+        findViewById(R.id.sd_item_ll).setVisibility(View.VISIBLE);
         findViewById(R.id.device_name_item).setOnClickListener(v -> openDeviceNameSettings(v, false));
         findViewById(R.id.password_management_item).setOnClickListener(v -> openPasswordManagementSettings(v));
         findViewById(R.id.language_item).setOnClickListener(v -> openLanguageSettings());

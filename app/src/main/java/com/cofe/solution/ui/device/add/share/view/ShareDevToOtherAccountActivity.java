@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -79,6 +80,8 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
             xmDevInfo = gson.fromJson(personJson, XMDevInfo.class);
         }
         permissionList = getIntent().getStringArrayListExtra("permission");
+        Log.d( getClass().getName(), "permissionEnabled > "  + permissionList);
+
         etShareAccount = findViewById(R.id.et_search_bar_input);
         lsiShareAccountInfo = findViewById(R.id.lsi_share_account);
 

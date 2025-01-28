@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.config.devicestore.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import com.lib.FunSDK;
 import com.lib.sdk.bean.GeneralInfoBean;
 import com.lib.sdk.bean.JsonConfig;
 import com.lib.sdk.bean.StorageInfoBean;
+import com.manager.db.DevDataCenter;
+import com.manager.device.DeviceManager;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
 
@@ -106,10 +109,29 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     private void initData() {
         presenter.setDevId(getIntent().getStringExtra("devId"));
         loaderDialog.setMessage();
-        //获取存储容量信息
         presenter.getStorageInfo();
         //获取存储配置
         presenter.getStorageConfig();
+
+        DevDataCenter.getInstance().isSupportSDsupportRecord(presenter.getDevId(),new DeviceManager.OnDevManagerListener(){
+            @Override
+            public void onSuccess(String devId, int operationType, Object result) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > success");
+                //获取存储容量信息
+                //presenter.getStorageInfo();
+                //获取存储配置
+                //presenter.getStorageConfig();
+
+            }
+
+            @Override
+            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > failed");
+                //findViewById(R.id.sd_item_ll).setVisibility(View.GONE);
+              //  findViewById(R.id.no_data_rl).setVisibility(View.VISIBLE);
+                //loaderDialog.dismiss();
+            }
+        });
     }
 
 
@@ -128,6 +150,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
         } else {
             rlMemoryPicPart.setVisibility(View.GONE);
         }
+        findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+
     }
 
     /**
@@ -136,6 +160,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     @Override
     public void getStorageDataError(String errorString) {
         loaderDialog.dismiss();
+        //findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+        findViewById(R.id.no_data_rl).setVisibility(View.VISIBLE);
         showToast(errorString,Toast.LENGTH_LONG);
     }
 
@@ -186,6 +212,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 }
             }
         });
+       // findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+        loaderDialog.dismiss();
     }
 
     /**

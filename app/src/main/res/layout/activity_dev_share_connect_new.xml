@@ -22,7 +22,7 @@
 
         <include
             android:id="@+id/layoutTop"
-            layout="@layout/titlebar_with_arrow"
+            layout="@layout/common_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -47,14 +47,20 @@
             android:gravity="center_horizontal"
             android:layout_marginLeft="@dimen/half_of_normal_margin"
             >
+
             <LinearLayout
+                android:id="@+id/password_management_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/half_of_normal_margin"
+                android:paddingTop="@dimen/button_margin"
                 android:paddingBottom="@dimen/button_margin"
-
+                android:background="@color/white"
+                android:paddingLeft="@dimen/half_of_normal_margin"
+                android:paddingRight="@dimen/half_of_normal_margin"
                 >
+
+
+
 
                 <TextView
                     android:id="@+id/tvDeviceName"
@@ -72,41 +78,59 @@
                     android:layout_height="wrap_content"
                     android:layout_weight=".6"
                     android:hint="aov rahul 1"
-                    android:gravity="right"/>
+                    android:gravity="left"/>
+
+
             </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:background="@drawable/rounder_corner"
+                android:layout_marginTop="4dp"
+                android:paddingBottom="@dimen/half_of_normal_margin"
                 >
-                <TextView
-                    android:id="@+id/tvShareReceiver"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".3"
-                    android:text="Share Receiver"
-                    android:textSize="16sp"
-                />
 
-                <EditText
-                    android:id="@+id/et_search_bar_input_1"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".4"
-                    android:background="@drawable/edit_text_background"
-                    android:padding="8dp"
-                    android:hint="Enter email" />
+                    android:paddingTop="@dimen/button_margin"
+                    android:paddingBottom="@dimen/button_margin"
+                    android:paddingLeft="@dimen/half_of_normal_margin"
+                    android:paddingRight="@dimen/half_of_normal_margin"
+                    android:layout_marginTop="4dp"
+                    >
+                    <TextView
+                        android:id="@+id/tvShareReceiver"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:text="Share Receiver"
+                        android:textSize="16sp"
+                    />
 
+                    <EditText
+                        android:id="@+id/et_search_bar_input_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".6"
+                        android:background="@drawable/edit_text_background"
+                        android:padding="8dp"
+                        android:hint="Enter email" />
+
+                </LinearLayout>
                 <Button
                     android:id="@+id/btnSearch"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".3"
                     android:backgroundTint="@color/colorAccent"
                     android:textColor="#FFFFFF"
                     android:onClick="onSearchAccount"
                     android:text="Search" />
             </LinearLayout>
+
             <com.xm.ui.widget.ListSelectItem
                 android:id="@+id/lsi_share_account"
                 android:layout_width="match_parent"
@@ -118,7 +142,10 @@
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:ItemTitleSize="@dimen/normal_text_size"
                 uilib:Tip=""
-                uilib:Title="" />
+                uilib:Title=""
+                android:layout_marginTop="@dimen/button_margin"
+                android:background="@drawable/rounder_corner"
+                />
 
 
             <TextView

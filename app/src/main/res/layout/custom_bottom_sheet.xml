@@ -20,6 +20,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:id="@+id/parent_rl"
         android:layout_marginTop="@dimen/button_margin"
         android:layout_below="@+id/cancle_button"

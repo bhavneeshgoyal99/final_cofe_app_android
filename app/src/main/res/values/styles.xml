@@ -137,9 +137,26 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AudioCustomBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <!-- Make the bottom sheet background transparent -->
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+    </style>
+
+    <style name="AudioCustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <!-- Remove the default background -->
+        <item name="android:background">@android:color/white</item>
+    </style>
+
     <style name="BottomSheetDialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
+    <style name="textGraysmall">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextGray</item>
+        <item name="android:textSize">10sp</item>
+
+    </style>
 </resources>

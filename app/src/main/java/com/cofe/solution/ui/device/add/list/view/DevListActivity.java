@@ -96,7 +96,7 @@ import static com.manager.account.share.ShareInfo.SHARE_NOT_YET_ACCEPT;
 import static com.manager.db.Define.LOGIN_BY_LOCAL;
 import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
 
-
+//com.connect.cofeonline.smart
 /**
  * 设备界面,显示相关的列表菜单
  * Device interface, showing the relevant list menu
@@ -106,6 +106,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         implements DevListConnectContract.IDevListConnectView,
         XTitleBar.OnRightClickListener,
         DevListAdapter.OnItemDevClickListener {
+
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
 
     private static final int REQUEST_AUDIO_PERMISSION = 555;
     int CAMERA_PERMISSION_REQEST_CODE = 111;
@@ -383,9 +385,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         } else if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted
                 enablePushNotifications();
-
             } else {
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
@@ -414,6 +414,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     Toast.makeText(this, "Permission is required to start Intercome and video calling service.", Toast.LENGTH_SHORT).show();
                 } else {
                     showSettingsRedirectPopup("Record Audio");
+                }
+            }
+        } else if(requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                stratPushNotificationService();
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)) {
+                    Toast.makeText(this, "Serivice Permission Require to start push notification.", Toast.LENGTH_SHORT).show();
+                } else {
+                    showSettingsRedirectPopup("Push Notification");
                 }
             }
         }
@@ -778,6 +788,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             } else if (resultId < 0) {
                 showToast(getString(R.string.login_dev_failed) + resultId, Toast.LENGTH_LONG);
                 //turnToActivity(DevMonitorActivity.class);
+
             }
         }
     }
@@ -1162,13 +1173,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             // Notifications are auto-enabled for Android 12 and below
             enablePushNotifications();
-            startService(new Intent(this, DevPushService.class));
 
         } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 // Permission already granted
                 enablePushNotifications();
-                startService(new Intent(this, DevPushService.class));
 
             } else {
                 // Show permission explanation popup
@@ -1194,8 +1203,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     private void enablePushNotifications() {
         Toast.makeText(this, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
-        startService(new Intent(this, DevPushService.class));
+        //startService(new Intent(this, DevPushService.class));
 
+        checkForgroundServicePermission();
     }
 
     @Override
@@ -1228,5 +1238,31 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         }
         super.onResume();
+    }
+
+    void checkForgroundServicePermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API 33+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS},
+                        REQUEST_NOTIFICATION_PERMISSION);
+            } else{
+                stratPushNotificationService();
+            }
+        } else{
+            stratPushNotificationService();
+        }
+    }
+
+    void stratPushNotificationService(){
+        Intent serviceIntent = new Intent(this, DevPushService.class);
+        startService(serviceIntent);
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent); // Required for Android O and above
+        } else {
+            startService(serviceIntent);
+        }*/
     }
 }

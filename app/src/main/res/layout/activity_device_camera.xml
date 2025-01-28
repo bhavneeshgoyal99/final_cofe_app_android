@@ -8,7 +8,7 @@
     android:background="@drawable/gradient_background"
     android:longClickable="true"
     android:id="@+id/parent_rl"
-    android:visibility="gone">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -395,7 +395,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/rv_monitor_fun"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
             <!-- Action Buttons -->
             <LinearLayout
@@ -676,6 +678,7 @@
         android:clickable="true"
         android:focusable="true"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         />
 
 

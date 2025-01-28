@@ -1,576 +1,814 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@color/gray_transparent"
+    android:orientation="vertical">
 
-    <!-- AppBarLayout for the Toolbar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <include
+        android:id="@+id/headerDeviceSettings"
+        layout="@layout/common_header" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        app:liftOnScroll="false"
-        app:elevation="0dp"
-        android:translationZ="0.1dp"
-        android:stateListAnimator="@null"
-
-        >
-
-        <!-- Title Bar -->
-        <include
-            android:id="@+id/toolbar_cont"
-            layout="@layout/titlebar_with_arrow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            />
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Content Section -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:fillViewport="true"
-        android:paddingBottom="70dp"
-        android:layout_margin="@dimen/half_of_normal_margin"
-        >
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingVertical="16dp"
-                >
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/solid_white_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/rlBasicSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_setting_24x24" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivSettings"
+                        android:text="@string/basic_settings"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/ivRigh2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="@dimen/half_of_normal_margin"
-                    android:background="@drawable/rounder_corner"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Device Name"
-                            android:textSize="16sp"
-                            android:textColor="#333333"
-                            android:id="@+id/device_name_item"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="aov"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            android:id="@+id/dname_txtv"
-                            />
-                    </LinearLayout
-                        >
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-                    <!-- Password Management Item -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/password_management_item"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Password Management"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                    </LinearLayout>
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="@dimen/half_of_normal_margin"
-                    android:background="@drawable/rounder_corner"
-
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/language_item"
-                        android:visibility="gone"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Language"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="English"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/battery_management_item"
-                        android:background="@drawable/rounder_corner"
-
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Battery Management"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/working_mode_item"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Working Mode"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E0E0E0" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="@dimen/half_of_normal_margin"
-                    android:background="@drawable/rounder_corner"
+                    android:orientation="horizontal"
+                    android:paddingVertical="16dp"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/language_item"
+                    android:visibility="gone"
                     >
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/sd_item_ll"
-                        android:layout_marginTop="2dp">
+                        android:layout_weight="1"
+                        android:text="Language"
+                        android:textSize="16sp"
+                        android:textColor="#333333" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/sd_storage_management"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/smart_alarm_item"
-                        android:layout_marginTop="2dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Smart Alarm"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:background="@color/white"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/cloud_storage_item"
-                        android:layout_marginTop="2dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp"
-                            />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Cloud Storage"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=">"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:visibility="gone"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:background="@color/white"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/add_to_desktop_item"
-                        android:layout_marginTop="2dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Add To Desktop"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=">"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/about_device_item"
-                        android:layout_marginTop="2dp"
-                        android:visibility="gone"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="About Device"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=">"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:visibility="gone"
+                        android:text="English"
+                        android:textSize="14sp"
+                        android:textColor="#888888"
+                        android:layout_marginRight="20dp"
                         />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/push_device_item"
-                        android:layout_marginTop="2dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Push Notification"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:visibility="visible"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/date_device_item"
-                        android:layout_marginTop="2dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/sync_date_time"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/right_icon_1"
-                            android:textSize="15sp"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:visibility="gone"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingVertical="16dp"
-                        android:gravity="center_vertical"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:id="@+id/advanced_device_item"
-                        android:layout_marginTop="2dp"
-                        android:visibility="gone"
-                        >
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="16dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Advance Setting"
-                            android:textSize="16sp"
-                            android:textColor="#333333" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=">"
-                            android:textSize="14sp"
-                            android:textColor="#888888"
-                            android:layout_marginRight="20dp"
-                            />
-                    </LinearLayout>
-
                 </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-    <include
-        layout="@layout/bottom_bav_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <RelativeLayout
+                    android:id="@+id/password_management_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivPasswordManagement"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_password_management" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivPasswordManagement"
+                        android:text="@string/password_manager"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/solid_white_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/sd_item_ll"
+                    >
+
+
+                    <ImageView
+                        android:id="@+id/ivStorageManagement"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_micro_sd_card" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivStorageManagement"
+                        android:text="@string/storage_management"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivRecordingSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/icon_record" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivRecordingSettings"
+                        android:text="@string/recording_settings"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/solid_white_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/smart_alarm_item"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivSmartAlaram"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/alert_icon" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivSmartAlaram"
+                        android:text="@string/smart_alarm"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivNetWorkSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/wifi_black_icon" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivNetWorkSettings"
+                        android:text="Network settings"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/solid_white_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/cloud_storage_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivCloudStorage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_cloud" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivCloudStorage"
+                        android:text="@string/cloud_storage"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_toStartOf="@+id/ivCloud"
+                        style="@style/textGraysmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/not_activated"
+                        android:textSize="10sp" />
+
+                    <ImageView
+                        android:id="@+id/ivCloud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="@string/more_services"
+                        android:textColor="@color/red"
+                        android:textSize="12sp" />
+
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/solid_white_10"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/advanced_device_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivAdvancedSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/advance_settings" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivAdvancedSettings"
+                        android:text="@string/advanced_settings"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+                <RelativeLayout
+                    android:id="@+id/add_to_desktop_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivAddToDesktop"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_add_desktop" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivAddToDesktop"
+                        android:text="@string/add_to_desktop"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/about_device_item"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivAboutDevice"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/about" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivAboutDevice"
+                        android:text="@string/about_device"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:layout_toStartOf="@+id/ivright"
+                        style="@style/textGraysmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/updates_available"
+                        android:textSize="10sp" />
+
+                    <ImageView
+                        android:id="@+id/ivright"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/device_name_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivDeviceName"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_device" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivDeviceName"
+                        android:text="Device Name"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/dname_txtv"
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:text="aov"
+                        android:textSize="10sp"/>
+
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/battery_management_item"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivBattery"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/battery_icon_alarm" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivBattery"
+                        android:text="Battery Management"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/working_mode_item"
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivWorkMode"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_setting_24x24" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivWorkMode"
+                        android:text="Working Mode"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/push_device_item"
+
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivPushNoti"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_setting_24x24" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivPushNoti"
+                        android:text="Push Notification"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/gray_transparent" />
+
+
+                <RelativeLayout
+                    android:id="@+id/date_device_item"
+
+
+
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+
+                    <ImageView
+                        android:id="@+id/ivDateDevice"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_setting_24x24" />
+
+
+                    <TextView
+                        style="@style/user_info_normal_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/ivDateDevice"
+                        android:text="@string/sync_date_time"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/right_icon_1" />
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+</LinearLayout>

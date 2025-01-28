@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,15 +141,10 @@ public class ShareFirstScren extends AppCompatActivity {
         Gson gson = new Gson();
         String personJson = gson.toJson(xmDevInfo);
         List<Integer> checkedPositions = adapter.getCheckedItems();
-        ArrayList<String> permissionEnabled =  new ArrayList<>();
-
-        for (int i = 0; i < checkedPositions.size(); i++) {
-            permissionEnabled.add(itemList.get(checkedPositions.get(i)));
-        }
 
         Intent intent = new Intent(this, ShareDevToOtherAccountActivity.class);
         intent.putExtra("dev", personJson);
-        intent.putStringArrayListExtra("permission", permissionEnabled);
+        intent.putStringArrayListExtra("permission", getActivePermissionList());
         startActivity(intent);
     }
 
@@ -158,7 +154,20 @@ public class ShareFirstScren extends AppCompatActivity {
 
         Intent intent = new Intent(this, NewShareDevToOtherAccountActivity.class);
         intent.putExtra("dev", personJson);
+        intent.putStringArrayListExtra("permission", getActivePermissionList());
         startActivity(intent);
 
+    }
+
+    ArrayList<String> getActivePermissionList(){
+        List<Integer> checkedPositions = adapter.getCheckedItems();
+        ArrayList<String> permissionEnabled =  new ArrayList<>();
+
+        for (int i = 0; i < checkedPositions.size(); i++) {
+            permissionEnabled.add(itemList.get(checkedPositions.get(i)));
+        }
+        Log.d( getClass().getName(), "permissionEnabled > "  + permissionEnabled);
+
+        return permissionEnabled;
     }
 }

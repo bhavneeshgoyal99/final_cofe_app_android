@@ -21,7 +21,7 @@ public class ShareDevicePermissionGridAdapter extends RecyclerView.Adapter<Share
     private final Context context;
     private final List<String> itemList;
     private final List<Boolean> checkedState;
-    private boolean isCheckboxVisible = false; // Initially hidden
+    private boolean isCheckboxVisible = true; // Initially hidden
     private List<Integer> itemDrawableList;
 
     public ShareDevicePermissionGridAdapter(Context context, List<String> itemList, List<Integer> itemDrawableList) {
@@ -45,31 +45,60 @@ public class ShareDevicePermissionGridAdapter extends RecyclerView.Adapter<Share
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String itemText = itemList.get(position);
+        String itemText = itemList.get(holder. getAdapterPosition());
         holder.textView.setText(itemText);
-        Glide.with(holder.imageView.getContext()).load(itemDrawableList.get(position)).into(holder.imageView);
+        Glide.with(holder.imageView.getContext()).load(itemDrawableList.get(holder. getAdapterPosition())).into(holder.imageView);
 
         // Set checkbox state and visibility
-        holder.checkBox.setChecked(checkedState.get(position));
         holder.checkBox.setVisibility(isCheckboxVisible ? View.VISIBLE : View.GONE);
+        holder.checkBox.setChecked(checkedState.get(holder. getAdapterPosition()));
 
         // Handle long press to show all checkboxes but only check the long-pressed item
         holder.parentRl.setOnLongClickListener(view -> {
             isCheckboxVisible = true;
+
             for (int i = 0; i < checkedState.size(); i++) {
                 if(checkedState.get(i)!= true) {
                     checkedState.set(i, false);
                 }
             }
-            checkedState.set(position, true);
+            checkedState.set(holder. getAdapterPosition(), true);
             notifyDataSetChanged();
             return true;
         });
 
-        // Handle checkbox clicks
-        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            checkedState.set(position, isChecked);
+        holder.parentRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isCheckboxVisible) {
+                    if (checkedState.get(holder.getAdapterPosition())) {
+                        checkedState.set(holder.getAdapterPosition(), false);
+                        holder.checkBox.setChecked(false);
+                    }  else{
+                        checkedState.set(holder.getAdapterPosition(), true);
+                        holder.checkBox.setChecked(true);
+                    }
+                } else {
+
+                    if (checkedState.get(holder.getAdapterPosition())) {
+                        checkedState.set(holder.getAdapterPosition(), false);
+                    }
+                    holder.checkBox.setChecked(false);
+                }
+            }
         });
+
+            holder.checkBox.setOnTouchListener((v, event) -> true); // Consumes the touch event
+            holder.checkBox.setOnClickListener(v -> {}); // Prevents state change
+
+            holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                //buttonView.setChecked(!isChecked); // Revert back to original state
+            });
+
+        // Handle checkbox clicks
+        /*holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkedState.set(holder. getAdapterPosition(), isChecked);
+        });*/
     }
 
     @Override

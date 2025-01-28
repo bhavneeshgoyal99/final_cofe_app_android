@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 
 import com.basic.G;
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
@@ -48,10 +49,7 @@ import com.cofe.solution.base.ErrorMapping;
 import com.cofe.solution.ui.activity.MainActivity;
 import com.cofe.solution.ui.device.add.list.view.ChannelListActivity;
 import com.cofe.solution.ui.device.add.list.view.DevListActivity;
-import com.cofe.solution.ui.device.config.intelligentvigilance.alert.view.AlertSetActivity;
 import com.cofe.solution.ui.device.config.intelligentvigilance.view.IntelligentVigilanceActivity;
-import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
-import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.user.forget.view.UserForgetPwdActivity;
 import com.cofe.solution.ui.user.login.listener.UserLoginContract;
 import com.cofe.solution.ui.user.login.presenter.UserLoginPresenter;
