@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.TaskInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.basic.G;
+import com.cofe.solution.ui.activity.AudioVideoSettings;
 import com.cofe.solution.ui.activity.BasicSettingsActivity;
 import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.activity.DeviceConfigActivity;
@@ -99,6 +102,9 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
         // Set OnClickListeners for each item
         findViewById(R.id.device_name_item).setOnClickListener(v -> openDeviceNameSettings(v, false));
+
+        // just replace this with showModifyNameDialog()
+       // findViewById(R.id.device_name_item).setOnClickListener(v -> showModifyNameDialog());
         findViewById(R.id.password_management_item).setOnClickListener(v -> openPasswordManagementSettings(v));
         findViewById(R.id.language_item).setOnClickListener(v -> openLanguageSettings());
         findViewById(R.id.battery_management_item).setOnClickListener(v -> openBatteryManagementSettings(v));
@@ -112,6 +118,11 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         findViewById(R.id.date_device_item).setOnClickListener(v -> syncDateTimeDevice());
         findViewById(R.id.rlBasicSettings).setOnClickListener(v -> {
             Intent intent = new Intent(DeviceSetting.this, BasicSettingsActivity.class);
+            startActivity(intent);
+        });
+        // go to audio video settings page
+        findViewById(R.id.rlAudioVideo).setOnClickListener(v -> {
+            Intent intent = new Intent(DeviceSetting.this, AudioVideoSettings.class);
             startActivity(intent);
         });
         dTxtv = findViewById(R.id.dname_txtv);
@@ -394,5 +405,40 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     @Override
     public Context getContext() {
         return null;
+    }
+
+// modify name dialog
+    private void showModifyNameDialog() {
+        // Create and configure the dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_modify_device_name);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        // Find views in the custom layout
+
+        TextView tvCancel = dialog.findViewById(R.id.tvCancel);
+
+
+        // Set up click listeners
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+            }
+        });
+
+        // Adjust the dialog width and apply margins
+        if (dialog.getWindow() != null) {
+            int margin = (int) (20 * getResources().getDisplayMetrics().density); // Convert 20dp to pixels
+            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            params.width = getResources().getDisplayMetrics().widthPixels - (2 * margin);
+            dialog.getWindow().setAttributes(params);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+        // Show the dialog
+        dialog.show();
     }
 }

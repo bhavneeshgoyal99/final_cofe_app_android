@@ -9,14 +9,15 @@
 
     <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageView1"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/logo_app_"
-       android:layout_centerVertical="true"
-        app:riv_corner_radius="10dip"
+        app:riv_oval="true"
+        android:layout_centerVertical="true"
+
         app:riv_mutate_background="true"
-         />
+        />
     <LinearLayout
         android:layout_toEndOf="@+id/imageView1"
         android:layout_width="wrap_content"
@@ -32,7 +33,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="876756 *****jh7"
+            android:text="az*****jh7"
             android:textColor="@color/colorTextBlack"
             android:textSize="@dimen/font_small" />
         <TextView
@@ -42,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="Shared with 1 user"
+            android:text="Agreed"
             android:textColor="@color/colorTextBlack"
             android:textSize="10dp" />
 

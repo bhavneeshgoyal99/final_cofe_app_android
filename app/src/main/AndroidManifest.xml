@@ -58,6 +58,12 @@
         android:theme="@style/AppTheme.NoTitleBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activity.AudioVideoSettings"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MySharedUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.MeSharingManagement"
             android:exported="false" />
         <activity

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/layout3_background"
+    android:background="@color/gray_transparent"
     android:orientation="vertical"
 
     tools:context=".ui.activity.MeSharingManagement">
@@ -29,10 +29,11 @@
             android:background="@drawable/solid_white_10">
 
             <TextView
+                android:id="@+id/tvMySharing"
                 style="@style/user_info_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+android:textColor="@color/demo_title"
                 android:layout_centerInParent="true"
                 android:text="My Sharing"
                 android:textSize="14sp"
@@ -49,6 +50,8 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tvFromSharing"
+
                 style="@style/user_info_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,7 +72,7 @@
         android:id="@+id/llMySharing"
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:orientation="vertical"
         android:visibility="visible"
@@ -95,7 +98,7 @@
     <LinearLayout
         android:id="@+id/llFromSharedDevice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:visibility="gone"
         android:orientation="vertical"
@@ -112,6 +115,7 @@
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFromSharedDevice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/solid_white_20"
+
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Modify Device Name"
+        android:textColor="@color/black"
+
+
+        android:textSize="@dimen/font_normal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Enter Device Name(2 to 32 characters)"
+        android:textColor="@color/black"
+
+
+        android:textSize="@dimen/font_small" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+
+        android:background="@drawable/edit_background_theme">
+
+        <EditText
+            android:id="@+id/etDeviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/ivCancel"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Cafista"
+            android:textAlignment="center"
+            android:textSize="@dimen/font_normal" />
+
+        <ImageView
+            android:id="@+id/ivCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/cancle_circle" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/bg_gray" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_operation"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+
+            />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+
+            android:background="@color/bg_gray" />
+
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+
+            android:text="Ok"
+            android:textAllCaps="false"
+
+
+            android:textColor="@color/theme" />
+    </LinearLayout>
+</LinearLayout>

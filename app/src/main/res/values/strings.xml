@@ -1032,6 +1032,12 @@
     <string name="speaker_volume">Speaker Volume</string>
     <string name="storage_capacity">Storage Capacity</string>
     <string name="format">Format</string>
+    <string name="change_permission">Change permission</string>
+    <string name="cancel_sharing">Cancel Sharing</string>
+    <string name="video_flip_up_down">Video Flip Up-Down</string>
+    <string name="video_left_right_mirror">Video Left-Right Mirror</string>
+    <string name="full_duplex_voice_intercom">Full Duplex Voice intercom</string>
+    <string name="audio_amp_video_setttings"><![CDATA[Audio & Video Setttings]]></string>
 
 
 </resources>
