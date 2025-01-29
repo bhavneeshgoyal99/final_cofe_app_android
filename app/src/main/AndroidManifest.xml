@@ -58,6 +58,24 @@
         android:theme="@style/AppTheme.NoTitleBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activity.BulletCamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AlarmLinkageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AlarmPeriodActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.IntelligentDetectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SmartAlarmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.PTZSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.AudioVideoSettings"
             android:exported="false" />
         <activity

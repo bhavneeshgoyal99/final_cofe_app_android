@@ -1038,6 +1038,17 @@
     <string name="video_left_right_mirror">Video Left-Right Mirror</string>
     <string name="full_duplex_voice_intercom">Full Duplex Voice intercom</string>
     <string name="audio_amp_video_setttings"><![CDATA[Audio & Video Setttings]]></string>
+    <string name="ptz_settings">PTZ Settings</string>
+    <string name="low_speed">Low Speed</string>
+    <string name="medium_speed">Medium Speed</string>
+    <string name="high_speed">High Speed</string>
+    <string name="ptz_speed">PTZ Speed</string>
+    <string name="dnd">DND</string>
+    <string name="dnd_is_turned_on_your_mobile_phone_will_receive_alarm_messages_silently">DND is turned on.Your Mobile phone will receive alarm messages silently.</string>
+    <string name="push_the_notification_message_of_the_device_to_your_wechat_account">Push the notification message of the device to your WeChat account.</string>
+    <string name="intelligent_detection">Intelligent detection</string>
+    <string name="alarm_linkage">Alarm Linkage</string>
+    <string name="display_intelligent_trajectory">Display Intelligent trajectory</string>
 
 
 </resources>

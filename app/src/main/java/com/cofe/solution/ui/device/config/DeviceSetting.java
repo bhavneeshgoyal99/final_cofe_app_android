@@ -35,6 +35,8 @@ import com.cofe.solution.ui.activity.BasicSettingsActivity;
 import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.activity.DeviceConfigActivity;
 import com.cofe.solution.ui.activity.DeviceConfigPresenter;
+import com.cofe.solution.ui.activity.PTZSettingsActivity;
+import com.cofe.solution.ui.activity.SmartAlarmActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.config.about.presenter.DevAboutPresenter;
 import com.cofe.solution.ui.device.config.about.view.DevAboutActivity;
@@ -123,6 +125,11 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         // go to audio video settings page
         findViewById(R.id.rlAudioVideo).setOnClickListener(v -> {
             Intent intent = new Intent(DeviceSetting.this, AudioVideoSettings.class);
+            startActivity(intent);
+        });
+        // go to PTZ settings page
+        findViewById(R.id.rlPTZSettings).setOnClickListener(v -> {
+            Intent intent = new Intent(DeviceSetting.this, PTZSettingsActivity.class);
             startActivity(intent);
         });
         dTxtv = findViewById(R.id.dname_txtv);
@@ -275,8 +282,14 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     private void openSmartAlarmSettings() {
         //Toast.makeText(this, "Smart Alarm clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
-        Intent intent = new Intent(this, DevAlarmSetActivity.class);
+       /* Intent intent = new Intent(this, DevAlarmSetActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
+        startActivity(intent);*/
+
+
+        // just open here a new activity
+        Intent intent = new Intent(this, SmartAlarmActivity.class);
+        //intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
 
     }
