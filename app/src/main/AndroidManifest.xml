@@ -48,6 +48,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
 
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
 
     <application
@@ -313,11 +315,19 @@
             android:exported="false"/>-->
 
 
-        <service
+        <!--<service
             android:name=".ui.device.push.view.DevPushService"
             android:enabled="true"
             android:persistent="true"
-            android:stopWithTask="false" />
+            android:stopWithTask="false" />-->
+
+        <!--<service
+            android:name=".ui.device.push.view.DevPushService"
+            android:enabled="true"
+            android:foregroundServiceType="dataSync"
+            android:stopWithTask="false"
+            android:exported="false"/>-->
+
 
         <activity
             android:name=".ui.device.config.simpleconfig.view.ConfigNameSelActivity"
@@ -425,6 +435,16 @@
             android:screenOrientation="portrait" />
         <receiver android:name=".utils.ServiceRestartReceiver" android:enabled="true" android:exported="false"/>
 
+        <receiver android:name=".utils.PushReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".ui.device.push.view.DevPushService"
+            android:enabled="true"
+            android:exported="false"
+           android:foregroundServiceType="dataSync"/>
     </application>
 
 </manifest>

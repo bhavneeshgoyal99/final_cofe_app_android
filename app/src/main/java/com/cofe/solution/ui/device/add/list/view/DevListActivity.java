@@ -1,7 +1,9 @@
 package com.cofe.solution.ui.device.add.list.view;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +38,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
+import com.blankj.utilcode.util.ServiceUtils;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
@@ -44,6 +52,8 @@ import com.cofe.solution.ui.device.preview.view.DevActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
+import com.cofe.solution.utils.PushReceiver;
+import com.cofe.solution.utils.PushWorker;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.Firebase;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -66,6 +76,7 @@ import com.xm.ui.widget.dialog.EditDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import com.cofe.solution.R;
 import com.cofe.solution.base.CurvedBottomNavigationView;
@@ -644,6 +655,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                     textTxtv.setText(getString(R.string.add_dev));
 
                                 } else {
+                                    if(getIntent().getStringExtra("devId")!=null){
+                                        //turnToActivity(DevMonitorActivity.class);
+                                    }
                                     noDeviceContLl.setVisibility(View.GONE);
                                 }
                             }
@@ -1255,14 +1269,55 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
-    void stratPushNotificationService(){
-        Intent serviceIntent = new Intent(this, DevPushService.class);
-        startService(serviceIntent);
+    void stratPushNotificationService() {
+       /* Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+        startActivity(intent);*/
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Intent serviceIntent = new Intent(this, DevPushService.class);
+        //getContext().startService(serviceIntent);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent); // Required for Android O and above
         } else {
             startService(serviceIntent);
-        }*/
+        }
+
+        // Check if Service is Running
+        boolean isRunning = ServiceUtils.isServiceRunning(DevPushService.class);
+        if (isRunning) {
+            Toast.makeText(this, "Background Service is Running", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Background Service is NOT Running", Toast.LENGTH_LONG).show();
+        }
+        scheduleAlarm();
+    }
+
+    private void scheduleAlarm() {
+        /*AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, PushReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        // Schedule the alarm every 10 minutes
+        long intervalMillis = 10 * 60 * 1000;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), intervalMillis, pendingIntent);*/
+
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+                PushWorker.class,
+                15, TimeUnit.MINUTES
+        )
+                .setConstraints(
+                        new Constraints.Builder()
+                                .setRequiresBatteryNotLow(true)
+                                .build()
+                )
+                .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(
+                "PushWorker",
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest // This should now match the required type
+        );
+
     }
 }

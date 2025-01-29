@@ -44,6 +44,7 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dev_push);
+        loaderDialog.show();
 
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
             // titleBar.setRightTitleText(getString(R.string.clear_dev_list));

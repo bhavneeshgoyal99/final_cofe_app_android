@@ -2,7 +2,9 @@ package com.cofe.solution.ui.device.push.view;
 
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,8 +15,13 @@ import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,6 +36,7 @@ import com.cofe.solution.R;
 import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.ui.activity.SplashScreen;
 import com.cofe.solution.ui.entity.AlarmTranslationIconBean;
+import com.cofe.solution.utils.BatteryOptimizationHelper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lib.Mps.SMCInitInfo;
@@ -68,6 +76,8 @@ import java.util.Map;
 public class DevPushService extends Service implements DevAlarmInfoManager.OnAlarmInfoListener {
     private XMPushManager xmPushManager;
     private DevAlarmInfoManager devAlarmInfoManager;
+    Runnable runnable = null;
+    Handler handler;
 
     @Nullable
     @Override
@@ -78,6 +88,42 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
     @Override
     public void onCreate() {
         super.onCreate();
+        new Thread(() -> BatteryOptimizationHelper.checkAndRequestBatteryOptimization(this)).start();
+        handler=  new Handler();
+        Log.d("service is created now" , "Service onCreate called");
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "push_channel",
+                    "Push Notifications",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+
+            Notification notification = new NotificationCompat.Builder(this, "push_channel")
+                    .setContentTitle("Push Service")
+                    .setContentText("started...")
+                    .setSmallIcon(R.drawable.ic_launcher_)
+                    .build();
+
+            startForeground(1, notification);
+
+            /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14 (API 34)
+                startForeground(1, notification, FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            } else {
+                startForeground(1, notification);
+            }*/
+
+            // Delay stopping foreground to allow the service to start properly
+            //new Handler(Looper.getMainLooper()).postDelayed(() -> stopForeground(STOP_FOREGROUND_REMOVE), 3000);
+
+            //new Handler(Looper.getMainLooper()).postDelayed(() -> stopForeground(true), 3000);
+        }
+
         if (DevDataCenter.getInstance().isLoginByAccount()) {
             initPush();
             initAlarmInfo();
@@ -86,6 +132,21 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
             stopSelf();
             System.out.println(getString(R.string.start_push_service_error_tips));
         }
+        Handler handler1=  new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                //Toast.makeText(getApplicationContext(), "Service is running", Toast.LENGTH_SHORT).show();
+                Log.d("service" , "Service is running");
+                handler1.postDelayed(this, 5000); // Repeat every 5 seconds
+            }
+        };
+        handler1.postDelayed(runnable, 5000);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
     }
 
     /**
@@ -233,6 +294,7 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
             startActivity(intent);
         }
         Intent intent = new Intent(this, SplashScreen.class);
+        intent.putExtra("devId",devId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
@@ -331,6 +393,16 @@ public class DevPushService extends Service implements DevAlarmInfoManager.OnAla
                     alarmTranslationIconBean.getLanguageInfo().put(lanKey, alarmLanIconInfoHashMap);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("servie" , "Service is end  ondestroy ");
+        if (handler != null && runnable != null) {
+            Log.d("servie" , "Service is end  ondestroy ");
+            handler.removeCallbacks(runnable);
         }
     }
 }
