@@ -1,22 +1,20 @@
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:elevation="4dp"
-    >
+    android:padding="8dp">
 
     <!-- Back Button -->
     <ImageButton
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/back_arrow_icon"
+        android:layout_gravity="center_vertical"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="back_button"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone"/>
+        android:src="@drawable/back_arrow_icon"
+        android:visibility="gone" />
 
 
     <!-- Title -->
@@ -26,47 +24,52 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:text="Title"
-        android:textSize="@dimen/font_large"
         android:textColor="@color/black"
-        android:textStyle="normal"
-        />
+        android:textSize="@dimen/font_large"
+        android:textStyle="normal" />
 
-    <!-- Menu Icon -->
     <ImageButton
         android:id="@+id/menu_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/plus_circle_icon"
+        android:layout_gravity="center_vertical|end"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="menu_icon"
+        android:padding="10dp"
+        android:src="@drawable/plus_circle_icon" />
+
+    <!-- Menu Icon -->
+    <ImageButton
+        android:id="@+id/ibThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginLeft="@dimen/btn_text"
-        android:layout_marginRight="@dimen/half_of_normal_margin"
-        />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="menu_icon"
+        android:padding="10dp"
+        android:src="@drawable/cancle_circle" />
 
 
     <ImageButton
         android:id="@+id/support_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_setting"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="menu_icon"
         android:layout_gravity="center_vertical|end"
         android:layout_marginLeft="@dimen/btn_text"
-        android:visibility="gone"
-        />
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="menu_icon"
+        android:src="@drawable/ic_setting"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/thumbnail_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/stack_icon"
+        android:layout_gravity="center_vertical|end"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="menu_icon"
-        android:layout_gravity="center_vertical|end"
-        android:visibility="gone"
-        />
+        android:src="@drawable/stack_icon"
+        android:visibility="gone" />
 
 
 </androidx.appcompat.widget.Toolbar>

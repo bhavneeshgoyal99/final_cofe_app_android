@@ -25,6 +25,7 @@ public class AlarmPeriodActivity extends AppCompatActivity {
     RelativeLayout rlCustomAlarm;
     RelativeLayout rlOtherAlarm;
     RecyclerView rvCustomAlarm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,17 +35,15 @@ public class AlarmPeriodActivity extends AppCompatActivity {
         initUis();
     }
 
-    private void initUis()
-    {
-        tvTitleHeader=findViewById(R.id.tvTitleHeader);
-        back_button=findViewById(R.id.back_button);
-        rlCustomAlarm=findViewById(R.id.rlCustomAlarm);
-        rvCustomAlarm=findViewById(R.id.rvCustomAlarm);
-        rlOtherAlarm=findViewById(R.id.rlOtherAlarm);
+    private void initUis() {
+        tvTitleHeader = findViewById(R.id.tvTitleHeader);
+        back_button = findViewById(R.id.back_button);
+        rlCustomAlarm = findViewById(R.id.rlCustomAlarm);
+        rvCustomAlarm = findViewById(R.id.rvCustomAlarm);
+        rlOtherAlarm = findViewById(R.id.rlOtherAlarm);
 
         rvCustomAlarm.setLayoutManager(new LinearLayoutManager(this));
-rvCustomAlarm.setAdapter(new CustomAlarmAdapter(this));
-
+        rvCustomAlarm.setAdapter(new CustomAlarmAdapter(this));
 
 
         tvTitleHeader.setText("Alarm Period");
@@ -60,17 +59,13 @@ rvCustomAlarm.setAdapter(new CustomAlarmAdapter(this));
             public void onClick(View view) {
                 rvCustomAlarm.setVisibility(View.VISIBLE);
             }
-        });rlOtherAlarm.setOnClickListener(new View.OnClickListener() {
+        });
+        rlOtherAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rvCustomAlarm.setVisibility(View.GONE);
             }
         });
-
-
-
-
-
 
 
     }

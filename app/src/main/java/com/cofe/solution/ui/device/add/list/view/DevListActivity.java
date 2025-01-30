@@ -1,21 +1,27 @@
 package com.cofe.solution.ui.device.add.list.view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
 import android.widget.Button;
@@ -24,6 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -90,6 +98,7 @@ import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.cofe.solution.ui.device.push.view.DevPushActivity;
 import com.cofe.solution.ui.device.record.view.DevRecordActivity;
 import com.cofe.solution.ui.widget.DividerItemDecoration;
+
 import io.reactivex.annotations.Nullable;
 
 import static com.google.gson.internal.$Gson$Types.arrayOf;
@@ -119,7 +128,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     ImageView add_img;
     LinearLayout logoutLl;
     int onUpdateCount = 0;
-    int onUppdateDevStateCount  = 0;
+    int onUppdateDevStateCount = 0;
 
     LoaderDialog loaderDialog;
 
@@ -151,14 +160,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         add_img = findViewById(R.id.add_img);
         //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
-           // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
-            if(DevDataCenter.getInstance().getAccountUserName()!=null) {
-                if(DevDataCenter.getInstance().getAccessToken()==null) {
+            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+            if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                if (DevDataCenter.getInstance().getAccessToken() == null) {
                     AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
                             new BaseAccountManager.OnAccountManagerListener() {
                                 @Override
                                 public void onSuccess(int msgId) {
-                                    Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                    Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
 
                                 }
 
@@ -181,8 +190,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
 
         listView = findViewById(R.id.listViewDevice);
-        noDeviceContLl  = findViewById(R.id.no_device_cont_ll);
-        textTxtv =  findViewById(R.id.text_txtv);
+        noDeviceContLl = findViewById(R.id.no_device_cont_ll);
+        textTxtv = findViewById(R.id.text_txtv);
         LinearLayoutManager llManager = new LinearLayoutManager(this);
         listView.setLayoutManager(llManager);
 
@@ -200,17 +209,26 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         noDeviceContLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i =  new Intent(DevListActivity.this, AddNewDeviceActivity.class);
+                Intent i = new Intent(DevListActivity.this, AddNewDeviceActivity.class);
                 startActivity(i);
             }
         });
         refreshTitle();
 
         ImageButton menuIcon = findViewById(R.id.menu_icon);
+        ImageButton ibThumbnail = findViewById(R.id.ibThumbnail);
         menuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopupMenu(v); // Show menu popup
+            }
+        });
+
+        ibThumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThumbnailsPopupMenu(ibThumbnail);
+                //showPopupMenu(v); // Show menu popup
             }
         });
 
@@ -240,8 +258,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             public void onClick(View view) {// Account logout
 
                 XMAccountManager.getInstance().logout();
-                if(XMAccountManager.getInstance().getUserName()==null) {
-                    SharedPreference cookies =  new SharedPreference(getContext());
+                if (XMAccountManager.getInstance().getUserName() == null) {
+                    SharedPreference cookies = new SharedPreference(getContext());
                     cookies.saveLoginStatus(1);
 
                     Intent intent = new Intent(DevListActivity.this, UserLoginActivity.class);
@@ -275,13 +293,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         meLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { // Account logout
-               // turnToActivity(DevMeActivity.class);
+                // turnToActivity(DevMeActivity.class);
                 Intent intent = new Intent(DevListActivity.this, DevMeActivity.class);
                 startActivity(intent);
             }
         });
 
-        SharedPreference cookies =  new SharedPreference(getContext());
+        SharedPreference cookies = new SharedPreference(getContext());
         cookies.saveLoginStatus(0);
         checkExternalStoragePermission();
     }
@@ -294,7 +312,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.option1:
-                        Intent i =  new Intent(DevListActivity.this, AddNewDeviceActivity.class);
+                        Intent i = new Intent(DevListActivity.this, AddNewDeviceActivity.class);
                         startActivity(i);
                         return true;
                     case R.id.option2:
@@ -320,7 +338,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
-    private void checkExternalStoragePermission(){
+    private void checkExternalStoragePermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
@@ -336,19 +354,19 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
     }
 
-    private void showPermissionExplanationPopup(String permissionName,String message) {
+    private void showPermissionExplanationPopup(String permissionName, String message) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("permissionName Permission Required")
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("Accept", (dialog, which) -> {
-                    if(permissionName.equals("Camera")) {
+                    if (permissionName.equals("Camera")) {
                         // Request camera permission
                         // Request camera permission
                         ActivityCompat.requestPermissions(DevListActivity.this,
                                 new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQEST_CODE);
-                    } else if(permissionName.equals("WRITE EXTERNAL STORAGE")) {
+                    } else if (permissionName.equals("WRITE EXTERNAL STORAGE")) {
                         // Request camera permission
                         // Request camera permission
                         ActivityCompat.requestPermissions(DevListActivity.this,
@@ -358,9 +376,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                 Manifest.permission.READ_MEDIA_VIDEO
                         }, WRITE_EXTERNAL_STORAGE);
 
-                    }
-
-                    else {
+                    } else {
                         // Request camera permission
                         ActivityCompat.requestPermissions(
                                 DevListActivity.this,
@@ -426,8 +442,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     private void showSettingsRedirectPopup(String permisonName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(permisonName+ " Permission Required")
-                .setMessage(permisonName +" permission is permanently denied. Please enable it in the app settings.")
+        builder.setTitle(permisonName + " Permission Required")
+                .setMessage(permisonName + " permission is permanently denied. Please enable it in the app settings.")
                 .setCancelable(false)
                 .setPositiveButton("Open Settings", (dialog, which) -> openAppSettings())
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -437,7 +453,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     private void openCamera() {
         Toast.makeText(this, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
-        Intent j =  new Intent(DevListActivity.this, DevSnConnectActivity.class);
+        Intent j = new Intent(DevListActivity.this, DevSnConnectActivity.class);
         startActivity(j);
     }
 
@@ -496,24 +512,24 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     protected void onRestart() {
         super.onRestart();
         if (adapter != null) {
-            if(presenter!=null) {
+            if (presenter != null) {
                 Bundle bundle = new Bundle();
-                bundle.putString( "called", "onRestart");
+                bundle.putString("called", "onRestart");
                 bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
-                bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
-                bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
+                bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName() != null) ? DevDataCenter.getInstance().getAccountUserName() : "blank");
+                bundle.putString("token", (DevDataCenter.getInstance().getAccessToken() != null) ? DevDataCenter.getInstance().getAccessToken() : "blank");
                 bundle.putInt("device", presenter.getDevList().size());
                 FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
-                if(DevDataCenter.getInstance().getAccountUserName()!=null) {
-                    if(DevDataCenter.getInstance().getAccessToken()==null) {
+                if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                    if (DevDataCenter.getInstance().getAccessToken() == null) {
                         AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
                                 new BaseAccountManager.OnAccountManagerListener() {
                                     @Override
                                     public void onSuccess(int msgId) {
-                                        Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                        Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
                                         if (presenter.getDevList() != null) {
                                             if (presenter.getDevList().size() > 0) {
                                                 if (noDeviceContLl != null) {
@@ -559,11 +575,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 }
 
 
-
             }
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         }
     }
+
     boolean initDataCalled = false;
 
     @Override
@@ -571,11 +587,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         slRefresh.setRefreshing(false);
 
         Bundle bundle = new Bundle();
-        bundle.putString( "called", "onUpdateDevListView");
+        bundle.putString("called", "onUpdateDevListView");
         bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
-        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
-        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
-        bundle.putInt("device", (presenter!=null)?presenter.getDevList().size():0);
+        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName() != null) ? DevDataCenter.getInstance().getAccountUserName() : "blank");
+        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken() != null) ? DevDataCenter.getInstance().getAccessToken() : "blank");
+        bundle.putInt("device", (presenter != null) ? presenter.getDevList().size() : 0);
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -585,8 +601,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         Log.d("user Data", "Access Token > " + DevDataCenter.getInstance().getAccessToken());
 
 
-        if(onUppdateDevStateCount<1) {
-            onUppdateDevStateCount  = onUppdateDevStateCount+1;
+        if (onUppdateDevStateCount < 1) {
+            onUppdateDevStateCount = onUppdateDevStateCount + 1;
             if (!DevDataCenter.getInstance().isLoginByAccount()) {
                 // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
                 if (DevDataCenter.getInstance().getAccountUserName() != null) {
@@ -596,7 +612,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                     @Override
                                     public void onSuccess(int msgId) {
                                         Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
-                                        if(!initDataCalled) {
+                                        if (!initDataCalled) {
                                             initData();
                                             initDataCalled = true;
                                         } else {
@@ -627,7 +643,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                 });
 
                     } else {
-                        if(!initDataCalled) {
+                        if (!initDataCalled) {
                             initData();
                             initDataCalled = true;
                         } else {
@@ -655,7 +671,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
 
 
-
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
     }
 
@@ -665,11 +680,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         loaderDialog.dismiss();
 
         Bundle bundle = new Bundle();
-        bundle.putString( "called", "onUpdateDevStateResult");
+        bundle.putString("called", "onUpdateDevStateResult");
         bundle.putBoolean("userLogged", DevDataCenter.getInstance().isLoginByAccount());
-        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName()!=null)?DevDataCenter.getInstance().getAccountUserName():"blank");
-        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken()!=null)?DevDataCenter.getInstance().getAccessToken():"blank");
-        bundle.putInt("device", (presenter!=null)?presenter.getDevList().size():0);
+        bundle.putString("username", (DevDataCenter.getInstance().getAccountUserName() != null) ? DevDataCenter.getInstance().getAccountUserName() : "blank");
+        bundle.putString("token", (DevDataCenter.getInstance().getAccessToken() != null) ? DevDataCenter.getInstance().getAccessToken() : "blank");
+        bundle.putInt("device", (presenter != null) ? presenter.getDevList().size() : 0);
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -677,8 +692,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (isSuccess) {
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         }
-        if(presenter.getDevList()!=null) {
-            if(presenter.getDevList().size()==0) {
+        if (presenter.getDevList() != null) {
+            if (presenter.getDevList().size() == 0) {
                 add_img.setVisibility(View.VISIBLE);
                 noDeviceContLl.setVisibility(View.VISIBLE);
             } else {
@@ -794,10 +809,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onItemClick(int position, XMDevInfo xmDevInfo) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        if (xmDevInfo.getDevState() != 0) {
 
 
-        //判断是否为分享设备
+            //判断是否为分享设备
             SharedPreference cookies = new SharedPreference(getApplication());
             cookies.saveDevName(xmDevInfo.getDevName());
 
@@ -859,14 +874,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
         //if(xmDevInfo.getDevState() !=0) {
 
-            XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showWaitDialog();
-                    presenter.deleteDev(position);
-                }
-            }, null);
-            return false;
+        XMPromptDlg.onShow(this, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showWaitDialog();
+                presenter.deleteDev(position);
+            }
+        }, null);
+        return false;
         /*} else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
             return false;
@@ -882,14 +897,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onTurnToAlarmMsg(int position, XMDevInfo xmDevInfo) {// This is push messaging
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        
-        if(xmDevInfo.getDevState() !=0) {
+
+        if (xmDevInfo.getDevState() != 0) {
 
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
             turnToActivity(DevAlarmMsgActivity.class);
         } else {
-                showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
 
@@ -902,12 +917,12 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onTurnToCloudService(int position, XMDevInfo xmDevInfo) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        if (xmDevInfo.getDevState() != 0) {
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
             turnToActivity(CloudStateActivity.class);
         } else {
-                showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
+            showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
 
@@ -952,6 +967,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
         }
     }
+
     /**
      * 修改设备名
      *
@@ -969,7 +985,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     presenter.modifyDevNameFromServer(position, devName);
                 }
             });
-        }  else {
+        } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
 
         }
@@ -997,7 +1013,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             startActivity(intent);
 
             //turnToActivity(DevShareManageActivity.class);
-        }   else {
+        } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
 
         }
@@ -1050,7 +1066,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     dialog.dismiss();
                 }
             });
-        }   else {
+        } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
@@ -1066,7 +1082,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
         if (xmDevInfo.getDevState() != 0) {
             presenter.wakeUpDev(position, xmDevInfo.getDevId());
-        }   else {
+        } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
@@ -1083,7 +1099,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (xmDevInfo.getDevState() != 0) {
             presenter.setDevId(xmDevInfo.getDevId());
             turnToActivity(DevRecordActivity.class);
-        }    else {
+        } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
         }
     }
@@ -1098,7 +1114,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onTurnToInterDevLinkage(int position, XMDevInfo xmDevInfo, Bundle bundle) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        if (xmDevInfo.getDevState() != 0) {
             presenter.setDevId(xmDevInfo.getDevId());
             turnToActivity(InterDevLinkageActivity.class, "data", bundle);
         } else {
@@ -1115,7 +1131,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onTurnToDevAbility(int position, XMDevInfo xmDevInfo) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        if (xmDevInfo.getDevState() != 0) {
             presenter.setDevId(xmDevInfo.getDevId());
             turnToActivity(XMDevAbilityActivity.class);
         } else {
@@ -1132,7 +1148,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onToGetDevTokenFromServer(int position, XMDevInfo xmDevInfo) {
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
-        if(xmDevInfo.getDevState() !=0) {
+        if (xmDevInfo.getDevState() != 0) {
             presenter.getDevTokenFromServer(xmDevInfo.getDevId());
         } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
@@ -1176,7 +1192,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
             } else {
                 // Show permission explanation popup
-                showPermissionExplanationPopup("Push Notification ","This app needs your permission to send push notifications. Please grant the permission to stay updated.");
+                showPermissionExplanationPopup("Push Notification ", "This app needs your permission to send push notifications. Please grant the permission to stay updated.");
             }
         }
     }
@@ -1189,7 +1205,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
 
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
             // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
@@ -1219,4 +1235,54 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         }
         super.onResume();
     }
+
+    // popu menu for thumnails
+    public void showThumbnailsPopupMenu(View anchorView) {
+
+        // Inflate the popup layout
+        LayoutInflater inflater = LayoutInflater.from(anchorView.getContext());
+        View popupView = inflater.inflate(R.layout.popup_thumbnails, null);
+
+        LinearLayout llThumbnails = popupView.findViewById(R.id.llThumbnails);
+        LinearLayout llDefault = popupView.findViewById(R.id.llDefault);
+
+
+        // Create a PopupWindow
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                600-20,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        llThumbnails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                //LinearLayoutManager llManager = new LinearLayoutManager(this);
+                listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                adapter.notifyDataSetChanged();
+            }
+        });
+        llDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+                LinearLayoutManager llManager = new LinearLayoutManager(DevListActivity.this);
+                listView.setLayoutManager(llManager);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        // Moves arrow above popup content
+        // Set the background to ensure shadow visibility
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+// Show the popup
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setElevation(50);
+        }
+        // Show popup below the anchor with slight offset
+        popupWindow.showAsDropDown(anchorView);
+    }
+
+
 }

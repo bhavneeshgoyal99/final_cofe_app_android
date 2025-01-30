@@ -2,10 +2,14 @@ package com.cofe.solution.ui.device.picture.view;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +24,7 @@ import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,11 +78,24 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
     LinearLayout noDataContLl;
     TextView noDatTextv;
     String selectedByuser;
+
+    // simran declaration of variables
+    TextView tvTitleHeader;
+    ImageView back_button;
+    ImageView ivEdit;
+    TextView tvAllDevice;
+    TextView tvAllDates;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_picture_list);
+
+
+
+        // method call written by simran
+        initUis();
+
 
         findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
         noDataContLl = findViewById(R.id.no_data_cont_ll);
@@ -115,6 +133,134 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
         rvDevPic.setLayoutManager(new LinearLayoutManager(this));
 
         initData();
+    }
+
+    // first method called written by simran
+    private void initUis()
+    {
+        tvTitleHeader = findViewById(R.id.tvTitleHeader);
+        back_button = findViewById(R.id.back_button);
+        ivEdit = findViewById(R.id.ivEdit);
+        tvAllDevice = findViewById(R.id.tvAllDevice);
+        tvAllDates = findViewById(R.id.tvAllDates);
+
+        ivEdit.setVisibility(View.VISIBLE);
+        tvTitleHeader.setText("Album");
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tvAllDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                showAllDevicePopupMenu(tvAllDevice);
+            }
+        });
+        tvAllDates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the current drawable from the TextView
+
+                showCalenderPopupMenu(tvAllDates);
+            }
+        });
+
+
+    }
+
+
+    // method to show popup for all devices
+    public void showAllDevicePopupMenu(View anchorView) {
+        // Inflate the popup layout
+        LayoutInflater inflater = LayoutInflater.from(anchorView.getContext());
+        View popupView = inflater.inflate(R.layout.popup_menu_all_device, null);
+
+        // Create a PopupWindow
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                true
+        );
+        // Get the right margin value (in pixels or dp converted to pixels)
+        int rightMargin = 50; // Adjust this value as per your needs
+
+        LinearLayout llPopupMain=popupView.findViewById(R.id.llPopupMain);
+        llPopupMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // Moves arrow above popup content
+        // Set the background to ensure shadow visibility
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+// Show the popup
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setElevation(50);
+        }
+        // Get the screen height and calculate the height below the anchor view
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int location[] = new int[2];
+        anchorView.getLocationOnScreen(location);
+        int anchorY = location[1]; // Y position of the anchor view
+
+        int availableHeight = screenHeight - anchorY; // Space remaining below the anchor
+
+        // Set the popup height to available space below the anchor
+        popupWindow.setHeight(availableHeight);
+        // Show popup below the anchor with slight offset
+        popupWindow.showAsDropDown(anchorView);
+    }
+
+    public void showCalenderPopupMenu(View anchorView) {
+        // Inflate the popup layout
+        LayoutInflater inflater = LayoutInflater.from(anchorView.getContext());
+        View popupView = inflater.inflate(R.layout.popup_calender, null);
+
+        // Create a PopupWindow
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                true
+        );
+        // Get the right margin value (in pixels or dp converted to pixels)
+        int rightMargin = 50; // Adjust this value as per your needs
+
+        LinearLayout llPopup=popupView.findViewById(R.id.llPopup);
+        llPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        // Moves arrow above popup content
+        // Set the background to ensure shadow visibility
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+// Show the popup
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setElevation(50);
+        }
+        // Get the screen height and calculate the height below the anchor view
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int location[] = new int[2];
+        anchorView.getLocationOnScreen(location);
+        int anchorY = location[1]; // Y position of the anchor view
+
+        int availableHeight = screenHeight - anchorY; // Space remaining below the anchor
+
+        // Set the popup height to available space below the anchor
+        popupWindow.setHeight(availableHeight);
+        // Show popup below the anchor with slight offset
+        popupWindow.showAsDropDown(anchorView);
     }
 
     private void initData() {
