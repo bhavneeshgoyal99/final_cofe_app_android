@@ -60,6 +60,7 @@ import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.cofe.solution.ui.device.record.adapter.RecordTimeAxisAdapter;
 import com.cofe.solution.ui.device.record.listener.DevRecordContract;
 import com.cofe.solution.ui.device.record.presenter.DevRecordPresenter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lib.MsgContent;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
@@ -121,10 +122,20 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
 
     private DevMonitorActivity activity;
     int chnId;
+    View rootView;
+    FloatingActionButton fab;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.dev_record_fragment, container, false);
+        rootView = view;
+
+        fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            presenter.searchMediaFileCalendar(searchMonthCalendar);
+        });
+        fab.bringToFront();
+        Log.d("FAB_STATUS", "FAB visibility: " + fab.getVisibility());
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -189,6 +200,18 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
             }
         });
 
+        fab.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                // FAB is attached to window (visible)
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                // Re-add the FAB if it's removed
+                ((ViewGroup) view.findViewById(android.R.id.content)).addView(fab);
+            }
+        });
 
         /*titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.app_name));
@@ -1107,4 +1130,13 @@ public class DevRecordFragment extends DemoBaseFragment<DevRecordPresenter> impl
         args.putString(key, value);
         this.setArguments(args);
     }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FloatingActionButton fab = rootView.findViewById(R.id.fab);
+        if (fab.getParent() == null) {
+            ((ViewGroup) rootView.findViewById(android.R.id.content)).addView(fab);
+        }
+    }
 }

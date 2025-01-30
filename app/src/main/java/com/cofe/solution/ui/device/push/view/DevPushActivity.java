@@ -2,10 +2,12 @@ package com.cofe.solution.ui.device.push.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.lib.MsgContent;
@@ -40,11 +42,14 @@ import java.util.List;
  */
 public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implements DevPushContract.IDevPushView {
     private ListSelectItem lsiPushSwitch;
+    Handler handler;
+    Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dev_push);
         loaderDialog.show();
+        handler = new Handler();
 
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
             // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
@@ -108,13 +113,28 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
         lsiPushSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loaderDialog.show();
                 lsiPushSwitch.setRightImage(lsiPushSwitch.getRightValue() == SDKCONST.Switch.Open
                         ? SDKCONST.Switch.Close : SDKCONST.Switch.Open);
+                String response ="";
                 if (lsiPushSwitch.getRightValue() == SDKCONST.Switch.Open) {
+                    response = getString(R.string.push_notification_started_for_this_device);
                     presenter.openPush();
                 }else {
+                    response = getString(R.string.push_setting_end);
+
                     presenter.closePush();
                 }
+                String finalResponse = response;
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), finalResponse, Toast.LENGTH_LONG).show();
+                        loaderDialog.dismiss();
+                    }
+                };
+                handler.postDelayed(runnable, 3000);
+
             }
         });
         XMPushManager manager = new XMPushManager(new XMPushManager.OnXMPushLinkListener(){
@@ -201,17 +221,19 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
 
     }
 
-    private void initData() {
-        lsiPushSwitch.setRightImage(presenter.isPushOpen() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
-    }
-
     @Override
     public DevPushPresenter getPresenter() {
         return new DevPushPresenter(this);
     }
 
+    private void initData() {
+        lsiPushSwitch.setRightImage(presenter.isPushOpen() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
+    }
+
+
     @Override
     public void onPushStateResult(boolean isPushOpen) {
+        loaderDialog.dismiss();
         lsiPushSwitch.setRightImage(isPushOpen ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
     }
 }

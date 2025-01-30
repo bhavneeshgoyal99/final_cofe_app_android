@@ -1015,6 +1015,8 @@
     <string name="about_device">About Device</string>
     <string name="updates_available">Update Available</string>
     <string name="storage_error_text">SD card not present or Storage does not support.</string>
+    <string name="push_notification_started_for_this_device">Push notification started for this device</string>
+    <string name="push_setting_end">Push notification setting disable for this device.</string>
 
 
 </resources>

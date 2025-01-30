@@ -47,6 +47,7 @@ import com.bumptech.glide.Glide;
 import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.base.CustomCalendarDialog;
 import com.cofe.solution.base.SharedPreference;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.ScreenOrientationManager;
@@ -121,12 +122,30 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     int sharedHeight;
     ImageView microphoneImg,cameraImg, videoImg, soundImg;
     boolean isVideoCaptureStart;
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_record_list);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            presenter.searchMediaFileCalendar(searchMonthCalendar);
+        });
+        fab.bringToFront();
+        fab.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                // FAB is attached to window (visible)
+            }
 
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                // Re-add the FAB if it's removed
+                //((ViewGroup) findViewById(android.R.id.content)).addView(fab);
+            }
+        });
 
         SharedPreference cookies = new SharedPreference(getApplicationContext());
 
