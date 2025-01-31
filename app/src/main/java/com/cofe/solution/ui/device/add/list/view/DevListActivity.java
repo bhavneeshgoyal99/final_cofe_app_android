@@ -1,14 +1,12 @@
 package com.cofe.solution.ui.device.add.list.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -16,8 +14,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,11 +27,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
@@ -49,12 +43,10 @@ import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
-import com.cofe.solution.ui.device.preview.view.DevActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.firebase.Firebase;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.lib.EFUN_ERROR;
@@ -77,17 +69,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.cofe.solution.R;
-import com.cofe.solution.base.CurvedBottomNavigationView;
 import com.cofe.solution.base.DemoBaseActivity;
 import com.cofe.solution.ui.adapter.DevListAdapter;
 import com.cofe.solution.ui.device.add.AddNewDeviceActivity;
 import com.cofe.solution.ui.device.add.list.listener.DevListConnectContract;
 import com.cofe.solution.ui.device.add.list.presenter.DevListConnectPresenter;
-import com.cofe.solution.ui.device.add.qrcode.view.SetDevToRouterByQrCodeActivity;
 import com.cofe.solution.ui.device.add.share.ShareFirstScren;
-import com.cofe.solution.ui.device.add.share.view.DevShareManageActivity;
 import com.cofe.solution.ui.device.add.share.view.ShareDevListActivity;
-import com.cofe.solution.ui.device.add.share.view.ShareDevToOtherAccountActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.cloud.view.CloudStateActivity;
 import com.cofe.solution.ui.device.config.DeviceSetting;
@@ -97,11 +85,9 @@ import com.cofe.solution.ui.device.config.simpleconfig.view.DevSimpleConfigActiv
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.cofe.solution.ui.device.push.view.DevPushActivity;
 import com.cofe.solution.ui.device.record.view.DevRecordActivity;
-import com.cofe.solution.ui.widget.DividerItemDecoration;
 
 import io.reactivex.annotations.Nullable;
 
-import static com.google.gson.internal.$Gson$Types.arrayOf;
 import static com.manager.account.share.ShareInfo.SHARE_NOT_YET_ACCEPT;
 import static com.manager.db.Define.LOGIN_BY_LOCAL;
 import static com.xm.ui.dialog.PasswordErrorDlg.INPUT_TYPE_DEV_USER_PWD;
@@ -130,7 +116,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     int onUpdateCount = 0;
     int onUppdateDevStateCount = 0;
 
+    boolean isGridLayout = false; // Default is Linear
+
     LoaderDialog loaderDialog;
+
+    // simran declare
+    int popup_state = 0;
+    String thumbnails_text = "Thumbnail Mode";
 
 
     @Override
@@ -1245,32 +1237,114 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
         LinearLayout llThumbnails = popupView.findViewById(R.id.llThumbnails);
         LinearLayout llDefault = popupView.findViewById(R.id.llDefault);
+        LinearLayout llOnline = popupView.findViewById(R.id.llOnline);
+        LinearLayout llPopupThumbnails = popupView.findViewById(R.id.llPopupThumbnails);
+        TextView tvOnlineOffline = popupView.findViewById(R.id.tvOnlineOffline);
+        TextView tvDefault = popupView.findViewById(R.id.tvDefault);
+        TextView tvThumbnails = popupView.findViewById(R.id.tvThumbnails);
 
 
         // Create a PopupWindow
         PopupWindow popupWindow = new PopupWindow(
                 popupView,
-                600-20,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT ,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 true
         );
+
+        RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
+
+        if (currentLayoutManager instanceof GridLayoutManager) {
+            tvThumbnails.setText("Large Image View");
+
+
+        } else {
+            tvThumbnails.setText("Thumbnail Mode");
+
+        }
+        // popup_state 0 means default 1 means thumbnails and 2 means online offline
+        if (popup_state == 0) {
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+            tvDefault.setTextColor(getResources().getColor(R.color.theme));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+        }
+        /*else if (popup_state == 1) {
+
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+            tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+
+        }*/
+        else if (popup_state == 2) {
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.theme));
+            tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+        }
 
         llThumbnails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popupWindow.dismiss();
+                popup_state = 1;
+               /* tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+                tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+*/
+                RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
                 //LinearLayoutManager llManager = new LinearLayoutManager(this);
-                listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
-                adapter.notifyDataSetChanged();
+                // listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                //adapter.notifyDataSetChanged();
+
+                if (currentLayoutManager instanceof GridLayoutManager) {
+                    tvThumbnails.setText("Thumbnail mode");
+
+                    // Switch to LinearLayoutManager
+                    listView.setLayoutManager(new LinearLayoutManager(DevListActivity.this));
+                    isGridLayout = false;
+                } else {
+                    tvThumbnails.setText("Large Image View");
+                    // Switch to GridLayoutManager with 2 columns
+                    listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                    isGridLayout = true;
+                }
+               // adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
+                popupWindow.dismiss();
             }
         });
+        llPopupThumbnails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                popupWindow.dismiss();
+            }
+        });
+
+        llOnline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup_state = 2;
+
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+
+                tvOnlineOffline.setTextColor(getResources().getColor(R.color.theme));
+                tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+                filterDeviceList(1); // Show only online devices
+                popupWindow.dismiss();
+            }
+        });
+
         llDefault.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                popup_state = 0;
+
+                tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+                tvDefault.setTextColor(getResources().getColor(R.color.theme));
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
                 popupWindow.dismiss();
-                LinearLayoutManager llManager = new LinearLayoutManager(DevListActivity.this);
-                listView.setLayoutManager(llManager);
-                adapter.notifyDataSetChanged();
+                // LinearLayoutManager llManager = new LinearLayoutManager(DevListActivity.this);
+                // listView.setLayoutManager(llManager);
+                adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
+                // adapter.notifyDataSetChanged();
             }
         });
         // Moves arrow above popup content
@@ -1278,10 +1352,39 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 // Show the popup
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            popupWindow.setElevation(50);
+            popupWindow.setElevation(20);
         }
+
+       /* // Get the screen height and calculate the height below the anchor view
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int location[] = new int[2];
+        anchorView.getLocationOnScreen(location);
+        int anchorY = location[1]; // Y position of the anchor view
+
+        int availableHeight = screenHeight - anchorY; // Space remaining below the anchor
+
+        // Set the popup height to available space below the anchor
+        popupWindow.setHeight(availableHeight);*/
         // Show popup below the anchor with slight offset
         popupWindow.showAsDropDown(anchorView);
+    }
+
+
+    // simran Method to filter the list based on Online/Offline state
+    private void filterDeviceList(int state) {
+        ArrayList<HashMap<String, Object>> filteredList = new ArrayList<>();
+
+        for (HashMap<String, Object> device : presenter.getDevList()) {
+            int devState = (int) device.get("devState"); // Get device state
+            Log.d("SIMRAN", String.valueOf(devState));
+
+            if (devState == 1 || devState == 0) {
+                filteredList.add(device);
+            }
+        }
+
+        // Update existing adapter with new filtered data
+        adapter.setData(filteredList);
     }
 
 

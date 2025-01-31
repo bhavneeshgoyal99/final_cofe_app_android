@@ -211,11 +211,15 @@
                     android:text=""
                     android:textSize="16sp"
                     android:textColor="#000000"
+                    android:maxLines="1"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/llInfo"
                     android:layout_marginBottom="8dp"
                     android:id="@+id/dev_name"
                     />
 
                 <LinearLayout
+                    android:id="@+id/llInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -223,9 +227,10 @@
                     >
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#000000"
                         android:layout_marginBottom="8dp"
                         android:id="@+id/is_shared_device_txtv"
@@ -276,17 +281,28 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#CCCCCC"
+
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
 
-                <ImageView
+             <!--   <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/demo_image"
                     android:contentDescription="Device Thumbnail"
                     android:id="@+id/banner_img"
+                    />
+-->
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/banner_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/demo_image"
+                    android:layout_centerVertical="true"
+                    app:riv_corner_radius="10dip"
+                    app:riv_mutate_background="true"
                     />
 
                 <!-- Sleep Badge -->
@@ -305,6 +321,7 @@
 
             <!-- Action Buttons -->
             <LinearLayout
+                android:id="@+id/llbottomIcons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

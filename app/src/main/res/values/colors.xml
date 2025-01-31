@@ -7,6 +7,7 @@
     <color name="item_pressed">#80888888</color>
     <color name="passw_strong">#24DC55</color>
     <color name="demo_title">#ff0d0d0d</color>
+    <color name="other_black">#ff101010</color>
     <color name="grey">#808080</color>
     <color name="theme">#2c8dfa</color>
     <color name="color_gray_light_open">#D7D7D7</color>
@@ -29,6 +30,7 @@
     <color name="black">#000000</color>
     <color name="black_opac_60">#99000000</color>
     <color name="black_opac_40">#66000000</color>
+    <color name="black_opac_10">#1A000000</color>
     <color name="gray_e5e5e5">#e5e5e5</color>
     <color name="gray_424242">#424242</color>
     <color name="gray_line">#D0D0D0</color>
