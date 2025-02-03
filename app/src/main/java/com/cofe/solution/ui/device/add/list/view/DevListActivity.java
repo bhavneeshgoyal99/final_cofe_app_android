@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
 import android.widget.Button;
@@ -26,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -47,11 +51,14 @@ import androidx.work.WorkRequest;
 import com.blankj.utilcode.util.ServiceUtils;
 import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
+import com.cofe.solution.ui.device.config.imageconfig.view.DevCameraSetActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.preview.view.DevActivity;
+import com.cofe.solution.ui.device.preview.view.DiplicateDevMonitoActivty;
 import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
+import com.cofe.solution.ui.user.modify.view.DevMeActivity;
 import com.cofe.solution.utils.PushReceiver;
 import com.cofe.solution.utils.PushWorker;
 import com.google.android.material.appbar.AppBarLayout;
@@ -118,6 +125,13 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         XTitleBar.OnRightClickListener,
         DevListAdapter.OnItemDevClickListener {
 
+    boolean isGridLayout = false; // Default is Linear
+    // simran declare
+
+    int popup_state = 0;
+
+    String thumbnails_text = "Thumbnail Mode";
+
     private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
 
     private static final int REQUEST_AUDIO_PERMISSION = 555;
@@ -148,6 +162,23 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     private void initView() {
         loaderDialog = new LoaderDialog(this);
         loaderDialog.setMessage("Please wait...");
+        ImageButton ibThumbnail = findViewById(R.id.ibThumbnail);
+        ibThumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThumbnailsPopupMenu(ibThumbnail);
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+                // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(DevListActivity.this, DevMeActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         /*titleBar = findViewById(R.id.layoutTop);
@@ -309,6 +340,155 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         });
         popupMenu.show();
 
+    }
+
+    // popu menu for thumnails
+
+    public void showThumbnailsPopupMenu(View anchorView) {
+        // Inflate the popup layout
+        LayoutInflater inflater = LayoutInflater.from(anchorView.getContext());
+        View popupView = inflater.inflate(R.layout.popup_thumbnails, null);
+        LinearLayout llThumbnails = popupView.findViewById(R.id.llThumbnails);
+        LinearLayout llDefault = popupView.findViewById(R.id.llDefault);
+        LinearLayout llOnline = popupView.findViewById(R.id.llOnline);
+        LinearLayout llPopupThumbnails = popupView.findViewById(R.id.llPopupThumbnails);
+        TextView tvOnlineOffline = popupView.findViewById(R.id.tvOnlineOffline);
+        TextView tvDefault = popupView.findViewById(R.id.tvDefault);
+        TextView tvThumbnails = popupView.findViewById(R.id.tvThumbnails);
+        // Create a PopupWindow
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT ,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                true
+        );
+
+        RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
+
+        if (currentLayoutManager instanceof GridLayoutManager) {
+            tvThumbnails.setText("Large Image View");
+        } else {
+            tvThumbnails.setText("Thumbnail Mode");
+        }
+        // popup_state 0 means default 1 means thumbnails and 2 means online offline
+        if (popup_state == 0) {
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+            tvDefault.setTextColor(getResources().getColor(R.color.theme));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+        }
+
+        /*else if (popup_state == 1) {
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+            tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+        }*/
+        else if (popup_state == 2) {
+            tvOnlineOffline.setTextColor(getResources().getColor(R.color.theme));
+            tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+            tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+        }
+
+        llThumbnails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup_state = 1;
+               /* tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+                tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+                */
+
+                RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
+                //LinearLayoutManager llManager = new LinearLayoutManager(this);
+                // listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                //adapter.notifyDataSetChanged();
+                if (currentLayoutManager instanceof GridLayoutManager) {
+                    tvThumbnails.setText("Thumbnail mode");
+                    // Switch to LinearLayoutManager
+                    listView.setLayoutManager(new LinearLayoutManager(DevListActivity.this));
+                    isGridLayout = false;
+                } else {
+                    tvThumbnails.setText("Large Image View");
+                    // Switch to GridLayoutManager with 2 columns
+                    listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                    isGridLayout = true;
+                }
+                // adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
+                popupWindow.dismiss();
+            }
+        });
+
+        llPopupThumbnails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+
+        llOnline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup_state = 2;
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+                tvOnlineOffline.setTextColor(getResources().getColor(R.color.theme));
+                tvDefault.setTextColor(getResources().getColor(R.color.other_black));
+                filterDeviceList(1); // Show only online devices
+                popupWindow.dismiss();
+            }
+        });
+
+        llDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup_state = 0;
+                tvOnlineOffline.setTextColor(getResources().getColor(R.color.other_black));
+                tvDefault.setTextColor(getResources().getColor(R.color.theme));
+                tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
+                popupWindow.dismiss();
+                // LinearLayoutManager llManager = new LinearLayoutManager(DevListActivity.this);
+                // listView.setLayoutManager(llManager);
+                adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
+                // adapter.notifyDataSetChanged();
+            }
+
+        });
+        // Moves arrow above popup content
+        // Set the background to ensure shadow visibility
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+// Show the popup
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            popupWindow.setElevation(20);
+        }
+
+       /* // Get the screen height and calculate the height below the anchor view
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        int location[] = new int[2];
+        anchorView.getLocationOnScreen(location);
+        int anchorY = location[1]; // Y position of the anchor view
+        int availableHeight = screenHeight - anchorY; // Space remaining below the anchor
+        // Set the popup height to available space below the anchor
+        popupWindow.setHeight(availableHeight);*/
+        // Show popup below the anchor with slight offset
+        popupWindow.showAsDropDown(anchorView);
+
+    }
+
+
+
+
+
+    // simran Method to filter the list based on Online/Offline state
+
+    private void filterDeviceList(int state) {
+        ArrayList<HashMap<String, Object>> filteredList = new ArrayList<>();
+        for (HashMap<String, Object> device : presenter.getDevList()) {
+            int devState = (int) device.get("devState"); // Get device state
+            Log.d("SIMRAN", String.valueOf(devState));
+            if (devState == 1 || devState == 0) {
+                filteredList.add(device);
+            }
+        }
+        // Update existing adapter with new filtered data
+        adapter.setData(filteredList);
     }
 
     private void checkCameraPermission() {
@@ -861,7 +1041,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 //低功耗设备不需要获取通道列表，直接跳转到预览页面
                 /*Low power devices do not need to get the list of channels and jump directly to the preview page*/
                 if (DevDataCenter.getInstance().isLowPowerDev(xmDevInfo.getDevType())) {
-                    turnToActivity(DevMonitorActivity.class);
+
+                    presenter.setDevId(xmDevInfo.getDevId());
+                    turnToActivity(DiplicateDevMonitoActivty.class);
+                    //turnToActivity(DevCameraSetActivity.class);
                 } else {
                     presenter.getChannelList();
                 }

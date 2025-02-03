@@ -68,6 +68,7 @@ public class ChannelListActivity extends DemoBaseActivity<ChannelListPresenter> 
         channelListAdapter = new ChannelListAdapter(this);
         rvChannelList.setAdapter(channelListAdapter);
         XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
+
         if (xmDevInfo != null) {
             SDBDeviceInfo sdbDeviceInfo = xmDevInfo.getSdbDevInfo();
             if (sdbDeviceInfo != null) {
@@ -80,9 +81,9 @@ public class ChannelListActivity extends DemoBaseActivity<ChannelListPresenter> 
                         if (info != null) {
                             channelName += "(" + G.ToString(info) + ")";
                         }
-                        /*if(channelInfos.nChnCount-1 == i ) {
+                        if(channelInfos.nChnCount-1 == i ) {
                             turnToActivityLocal(DevMonitorActivity.class,new Object[][]{{"chnId",i},{"chnCount",channelListAdapter.getItemCount()}});
-                        }*/
+                        }
                         channelList.add(channelName);
                     }
                     channelListAdapter.setData(channelList);

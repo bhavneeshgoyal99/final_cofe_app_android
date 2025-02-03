@@ -22,7 +22,7 @@
             uilib:ItemTitleSize="@dimen/normal_text_size"
             uilib:RightClickable="false"
             uilib:Title="Two-way Intercom"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <!-- Broadcast Intercom -->
         <com.xm.ui.widget.ListSelectItem

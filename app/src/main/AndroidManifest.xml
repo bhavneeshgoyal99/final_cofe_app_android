@@ -152,6 +152,21 @@
             android:name=".ui.user.modify.view.UserModifyPwdActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.user.modify.view.DevMeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.modify.view.MePermissionSettingsAcitivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.modify.view.METoolsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.modify.view.AppAboutAcitivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.modify.view.MeSharingManagement"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
@@ -187,6 +202,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.device.preview.view.DevMonitorActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.device.preview.view.DiplicateDevMonitoActivty"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

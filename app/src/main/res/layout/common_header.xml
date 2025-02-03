@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/back_button"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@null"
@@ -21,5 +20,19 @@
         android:layout_centerInParent="true"
         android:textSize="@dimen/font_normal"
         android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/ivEdit"
+
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:contentDescription="@null"
+        android:layout_centerVertical="true"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/pencil_edit_icon"/>
 
 </RelativeLayout>

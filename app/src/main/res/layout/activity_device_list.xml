@@ -1,93 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
-    android:id="@+id/parent_rl">
-
-    <!-- AppBarLayout for the Toolbar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        app:elevation="0dp"
-        app:liftOnScroll="false"
-        android:translationZ="0.1dp"
-        android:stateListAnimator="@null">
-
-        <!-- Top Title Layout -->
-        <include
-            android:id="@+id/layoutTop"
-            layout="@layout/include_title_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:visibility="gone"/>
-
-        <!-- Toolbar -->
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/new_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:elevation="0dp" />
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/gradient_background" android:id="@+id/parent_rl">
+    <!--  AppBarLayout for the Toolbar  -->
+    <com.google.android.material.appbar.AppBarLayout android:id="@+id/appBarLayout" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="#00FFFFFF" app:elevation="0dp" app:liftOnScroll="false" android:translationZ="0.1dp" android:stateListAnimator="@null">
+        <!--  Top Title Layout  -->
+        <include android:id="@+id/layoutTop" layout="@layout/include_title_layout" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_scrollFlags="scroll|enterAlways" android:visibility="gone"/>
+        <!--  Toolbar  -->
+        <include android:id="@+id/toolbar" layout="@layout/new_toolbar" android:layout_width="match_parent" android:layout_height="wrap_content" app:layout_scrollFlags="scroll|enterAlways" android:elevation="0dp"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- SwipeRefreshLayout with RecyclerView -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/sl_refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listViewDevice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="70dp"
-            android:scrollbars="none" />
+    <!--  SwipeRefreshLayout with RecyclerView  -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/sl_refresh" android:layout_width="match_parent" android:layout_height="match_parent" app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/listViewDevice" android:layout_width="match_parent" android:layout_height="match_parent" android:paddingBottom="70dp" android:scrollbars="none"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <!-- No Device Container -->
-    <LinearLayout
-        android:id="@+id/no_device_cont_ll"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        >
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/plus_circle_icon"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:id="@+id/add_img"
-            />
-
-        <TextView
-            android:id="@+id/text_txtv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_new_dev"
-            android:textSize="@dimen/middle_text_size"
-            android:layout_marginTop="30dp"
-            android:textStyle="bold"
-            android:gravity="center" />
+    <!--  No Device Container  -->
+    <LinearLayout android:id="@+id/no_device_cont_ll" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:visibility="gone">
+        <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/plus_circle_icon" android:layout_gravity="center" android:visibility="gone" android:id="@+id/add_img"/>
+        <TextView android:id="@+id/text_txtv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/add_new_dev" android:textSize="@dimen/middle_text_size" android:layout_marginTop="30dp" android:textStyle="bold" android:gravity="center"/>
     </LinearLayout>
-
-    <!-- Bottom Navigation Bar -->
-    <include
-        layout="@layout/bottom_bav_bar"
+    <!--  Bottom Navigation Bar  -->
+    <include layout="@layout/bottom_bav_bar"
         android:id="@+id/bottom_nav_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
+        android:layout_gravity="bottom"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -82,6 +82,7 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_setup_camera);
+
         initView();
         initData();
     }
@@ -222,12 +223,15 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
         switch (view.getId()) {
             case R.id.btn_dev_set_camera_flip:
                 btnFlip.setSelected(!btnFlip.isSelected());
+                tryToSaveConfig();
                 break;
             case R.id.btn_dev_set_camera_mirror:
                 btnMirror.setSelected(!btnMirror.isSelected());
+                tryToSaveConfig();
                 break;
             case R.id.btn_dev_set_camera_BLCMode:
                 btnBLCMode.setSelected(!btnBLCMode.isSelected());
+                tryToSaveConfig();
                 break;
             default:
                 break;

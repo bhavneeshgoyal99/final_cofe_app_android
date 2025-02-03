@@ -123,15 +123,42 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     ImageView microphoneImg,cameraImg, videoImg, soundImg;
     boolean isVideoCaptureStart;
     FloatingActionButton fab;
-
+    CustomCalendarDialog cCdialog;
+    HashSet<CalendarDay> highlightedDates;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_record_list);
+        loaderDialog.show();
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            presenter.searchMediaFileCalendar(searchMonthCalendar);
+            loaderDialog.show();
+
+            Log.d(getClass().getName(), "highlightedDates > "  +highlightedDates);
+            cCdialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+                // Handle selected date
+              //  Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                try {
+                    Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
+                    selectedByuser = selectedDate.getDate().toString();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date1);
+                    noPlayBackTxtv.setVisibility(View.GONE);
+
+                    //parentLL.setVisibility(View.GONE);
+                    //presenter.searchRecordByTime(calendar);
+                    presenter.searchRecordByTime(calendar);
+                    presenter.searchRecordByFile(calendar);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+            cCdialog.show();
         });
         fab.bringToFront();
         fab.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -168,15 +195,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 wndInnerLayout.requestLayout();
             }
         });
-
-        // Use ChangeBounds transition for smooth resizing
-       // Transition changeBounds = new ChangeBounds();
-        //changeBounds.setDuration(300);
-        //getWindow().setSharedElementEnterTransition(changeBounds);
-
-        // Start the transition after layout adjustments
         wndInnerLayout.post(() -> startPostponedEnterTransition());
-
         initView();
         initData();
     }
@@ -199,14 +218,6 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 presenter.searchMediaFileCalendar(searchMonthCalendar);
             }
         });
-
-
-        /*titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.app_name));
-        titleBar.setRightBtnResource(R.mipmap.icon_date, R.mipmap.icon_date);
-        titleBar.setLeftClick(this);
-        titleBar.setRightIvClick(this);
-        titleBar.setBottomTip(DevRecordActivity.class.getName());*/
 
         rvRecordList = findViewById(R.id.rv_records);
         rvRecordFun = findViewById(R.id.rv_record_fun);
@@ -428,6 +439,8 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         presenter.initRecordPlayer((ViewGroup) findViewById(R.id.layoutPlayWnd), recordType);
         presenter.searchRecordByFile(calendarShow);
         presenter.searchRecordByTime(calendarShow);
+        presenter.searchMediaFileCalendar(searchMonthCalendar);
+
 
         showTitleDate();
         screenOrientationManager = ScreenOrientationManager.getInstance();
@@ -487,6 +500,9 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             //parentLL.setVisibility(View.GONE);
             showToast(getString(R.string.search_record_failed_), Toast.LENGTH_LONG);
         }
+
+
+
     }
 
     /**
@@ -593,19 +609,14 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchCalendarResult(boolean isSuccess, Object result) {
-
-
-
+        Log.d("onSearchCalendarResult ","called isSuccess > "   + isSuccess );
         if (result instanceof String) {
             XMPromptDlg.onShow(this, (String) result, null);
         } else {
-
-
             Log.d("recordDateMap ","====================================== "  );
 
-
             HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
-            HashSet<CalendarDay> highlightedDates = new HashSet<>();
+            highlightedDates = new HashSet<>();
 
             for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
                 Log.d("recordDateMap ","recordDateMap looping > "  +info.getKey());
@@ -616,10 +627,11 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
                 highlightedDates.add(CalendarDay.from(year, month, day)); // Jan 1, 2025
             }
+            Log.d(getClass().getName(), "after aded data highlightedDates > "  +highlightedDates);
 
-            CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+            cCdialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
                 // Handle selected date
-                Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 try {
                     Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
@@ -629,86 +641,15 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     noPlayBackTxtv.setVisibility(View.GONE);
 
                     //parentLL.setVisibility(View.GONE);
-                    presenter.searchRecordByTime(calendarShow);
+                    //presenter.searchRecordByTime(calendar);
+                    //presenter.searchRecordByTime(calendarShow);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
 
             });
-            dialog.show();
-            /*HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
-            List recordDateList = new ArrayList();
-            HashMap<String, Object> itemMap;
-            for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
-                itemMap = new HashMap<>();
-                itemMap.put("date", info.getKey());
-                recordDateList.add(itemMap);
-            }
-            SimpleAdapter simpleAdapter = new SimpleAdapter(this, recordDateList,
-                    R.layout.adapter_date_list,
-                    new String[]{"date"}, new int[]{R.id.tv_date});
-
-            View layout = LayoutInflater.from(this).inflate(R.layout.dialog_date, null);
-            Dialog dialog = XMPromptDlg.onShow(this, layout);
-
-            TextView tvTitle = layout.findViewById(R.id.tv_title);
-            tvTitle.setText(getString(R.string.month) + ":" + (searchMonthCalendar.get(Calendar.MONTH) + 1));
-
-            ListView listView = layout.findViewById(R.id.lv_date);
-            listView.setAdapter(simpleAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    HashMap<String, Object> itemData = (HashMap<String, Object>) simpleAdapter.getItem(i);
-                    String date = (String) itemData.get("date");
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-                        calendarShow = Calendar.getInstance();
-                        calendarShow.setTime(dateFormat.parse(date));
-                        presenter.searchRecordByTime(calendarShow);
-                        presenter.searchRecordByFile(calendarShow);
-                        showTitleDate();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    dialog.dismiss();
-                }
-            });
-
-            //取消 Cancel
-            Button btnCancel = layout.findViewById(R.id.btn_cancel);
-            btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            //上个月 last month
-            Button btnLastMonth = layout.findViewById(R.id.btn_pre_month);
-            btnLastMonth.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchMonthCalendar.add(Calendar.MONTH, -1);
-                    presenter.searchMediaFileCalendar(searchMonthCalendar);
-                    dialog.dismiss();
-                }
-            });
-
-            //下个月 next month
-            Button btnNextMonth = layout.findViewById(R.id.btn_next_month);
-            btnNextMonth.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchMonthCalendar.add(Calendar.MONTH, 1);
-                    presenter.searchMediaFileCalendar(searchMonthCalendar);
-                    dialog.dismiss();
-                }
-            });*/
-
+           // cCdialog.show();
         }
     }
 
@@ -1135,6 +1076,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
     }
+
     @Override
     public void onBackPressed() {
         hideVideoListRadioBtnAndDeleteButton();

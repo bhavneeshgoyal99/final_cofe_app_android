@@ -79,6 +79,7 @@ public class DetectTrackActivity extends BaseConfigActivity<DetectTrackPresenter
         });
 
         PtzView ptzView = findViewById(R.id.ptz_view);
+
         ptzView.setOnPtzViewListener(new PtzView.OnPtzViewListener() {
             @Override
             public void onPtzDirection(int direction, boolean stop) {

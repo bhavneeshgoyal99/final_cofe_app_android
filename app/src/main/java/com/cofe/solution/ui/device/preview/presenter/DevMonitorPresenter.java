@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.preview.presenter;
 
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -435,6 +436,7 @@ public class DevMonitorPresenter extends XMBasePresenter<DeviceManager> implemen
             mediaManager = monitorManagers.get(chnId);
         }
 
+        //设置设备列表缩略图保存路径，必须要在视频出图之前调用,传入的路径建议使用私有目录，如果使用外部存储的话，在Android 11及以上系统上需要MANAGE_EXTERNAL_STORAGE这个权限
 //        mediaManager.setSaveThumbnailPath(SDKDemoApplication.PATH_PHOTO_TEMP);
         //设置媒体播放监听（包括播放状态回调、实时码流、时间戳回调等）
         mediaManager.setOnMediaManagerListener(this);
@@ -840,11 +842,13 @@ public class DevMonitorPresenter extends XMBasePresenter<DeviceManager> implemen
      */
     @Override
     public void startDoubleIntercom(int chnId, boolean isTalkBroadcast) {
+        //chnId = 0;
         if (!monitorManagers.containsKey(chnId)) {
             return;
         }
 
         MonitorManager mediaManager = monitorManagers.get(chnId);
+        Log.d("startDoubleIntercom " ,"mediaManager > " +mediaManager);
         if (mediaManager != null) {
             //设置对讲类型，是针对设备对讲还是通道对讲，IPC设备默认选择设备对讲，NVR设备可以选择设备或者通道前端对讲
             // Set the intercom type, whether it is for device intercom or channel intercom. IPC devices default to device intercom, while NVR devices can choose device or channel front-end intercom
@@ -1500,6 +1504,8 @@ public class DevMonitorPresenter extends XMBasePresenter<DeviceManager> implemen
      */
     @Override
     public void onVideoBufferEnd(PlayerAttribute attribute, MsgContent ex) {
+        Log.d("monitor presenter", "onVideoBufferEnd called");
+
         videoRatio = attribute.getVideoScale();
         iDevMonitorView.onVideoBufferEnd(attribute, ex);
     }
@@ -1761,4 +1767,3 @@ public class DevMonitorPresenter extends XMBasePresenter<DeviceManager> implemen
         return gson.toJson(playViewMap);
     }
 }
-
