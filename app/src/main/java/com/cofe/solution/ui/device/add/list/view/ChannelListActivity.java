@@ -45,7 +45,7 @@ public class ChannelListActivity extends DemoBaseActivity<ChannelListPresenter> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_list);
-        loaderDialog.setMessage("THIS IS CHANNEL LIST");
+       // loaderDialog.setMessage("THIS IS CHANNEL LIST");
         initView();
         initData();
     }
@@ -80,9 +80,9 @@ public class ChannelListActivity extends DemoBaseActivity<ChannelListPresenter> 
                         if (info != null) {
                             channelName += "(" + G.ToString(info) + ")";
                         }
-                        /*if(channelInfos.nChnCount-1 == i ) {
+                        if(channelInfos.nChnCount-1 == i ) {
                             turnToActivityLocal(DevMonitorActivity.class,new Object[][]{{"chnId",i},{"chnCount",channelListAdapter.getItemCount()}});
-                        }*/
+                        }
                         channelList.add(channelName);
                     }
                     channelListAdapter.setData(channelList);
