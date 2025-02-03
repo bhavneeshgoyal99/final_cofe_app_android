@@ -117,6 +117,8 @@ public class NewShareDevToOtherAccountActivity extends DemoBaseActivity<DevShare
 
     @Override
     public DevShareConnectPresenter getPresenter() {
+        //presenter.setDevId("RAHUL BLANK");
+
         return new DevShareConnectPresenter(this);
     }
 

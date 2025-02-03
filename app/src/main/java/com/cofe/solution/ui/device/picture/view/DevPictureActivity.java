@@ -143,7 +143,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
 
         if(picListAdapter.getItemCount()<=0){
             noDataContLl.setVisibility(View.VISIBLE);
@@ -166,7 +166,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onDownloadResult(int state, String filePath) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (state == DOWNLOAD_STATE_FAILED) {
             Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
@@ -235,7 +235,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
                 public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
@@ -419,7 +419,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
                 lsiPicInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.downloadFile(getAdapterPosition());
                     }
                 });

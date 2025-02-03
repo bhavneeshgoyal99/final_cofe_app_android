@@ -23,9 +23,9 @@ public class CameraLinkInitActivity extends DemoBaseActivity<CameraLinkInitPrese
     @Override
     public void showWaitDlgShow(boolean show) {
         if(show){
-            showWaitDialog();
+            loaderDialog.setMessage();
         }else {
-            hideWaitDialog();
+            loaderDialog.dismiss();
         }
     }
 

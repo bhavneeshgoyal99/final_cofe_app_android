@@ -62,14 +62,14 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
 
     private void initData() {
         if (DevDataCenter.getInstance().isLoginByAccount()) {
-            showWaitDialog();
+            loaderDialog.setMessage();
             findViewById(R.id.layout_user_Info).setVisibility(View.VISIBLE);
             tryToGetUserInfo();
         }
     }
 
     private void tryToGetUserInfo() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         if (!presenter.getInfo()) {
             showToast(getString(R.string.user_info_not_login), Toast.LENGTH_LONG);
             finish();
@@ -92,7 +92,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     /*获取用户信息并更新数据至界面*/
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (presenter != null) {
             tvUserId.setText(presenter.getUserId());
             tvUserName.setText(presenter.getUserName());
@@ -120,7 +120,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.btn_user_logout) {
-            showWaitDialog();
+            loaderDialog.setMessage();
             tryToLogout();
         }
     }

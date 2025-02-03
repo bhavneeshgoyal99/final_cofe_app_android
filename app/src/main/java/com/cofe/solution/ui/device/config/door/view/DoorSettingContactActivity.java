@@ -111,7 +111,7 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
                 XMPromptDlg.onShowEditDialog(DoorSettingContactActivity.this, getString(R.string.input_door_unlock_pwd), "", new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String password) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.unlockDoor(password);
                     }
                 });
@@ -121,20 +121,20 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
         lsiUnlockByOneKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.unlockDoorByOneKey();
             }
         });
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.updateDoorUserInfo();
     }
 
     @Override
     public void onUpdateDoorUserInfoResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         lsiUnlockByPwd.setEnable(isSuccess);
         lsiUnlockByFinger.setEnable(isSuccess);
         lsiUnlockByCard.setEnable(isSuccess);
@@ -142,7 +142,7 @@ public class DoorSettingContactActivity extends BaseConfigActivity<DoorSettingCo
 
     @Override
     public void onUnlockDoorResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? getString(R.string.unlock_s) : getString(R.string.unlock_f), Toast.LENGTH_LONG);
     }
 

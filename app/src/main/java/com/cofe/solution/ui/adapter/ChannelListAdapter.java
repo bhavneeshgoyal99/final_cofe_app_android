@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.xm.ui.widget.ListSelectItem;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class ChannelListAdapter extends RecyclerView.Adapter<ChannelListAdapter.
     @Override
     public void onBindViewHolder(ChannelListAdapter.ViewHolder holder, int position) {
         holder.lsiChannelName.setTitle(channelInfo.get(position));
+        if(channelInfo.size()-1 == position ) {
+                onItemChannelClickListener.onItemClick(holder.getAbsoluteAdapterPosition());
+        }
     }
 
     @Override
@@ -69,6 +73,7 @@ public class ChannelListAdapter extends RecyclerView.Adapter<ChannelListAdapter.
                     return false;
                 }
             });
+
             lsiChannelName = itemView.findViewById(R.id.lsi_channel_name);
         }
     }

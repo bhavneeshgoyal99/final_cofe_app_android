@@ -71,7 +71,7 @@ public class CloudStateActivity extends DemoBaseActivity<CloudStatePresenter> im
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.updateCloudState(this);
     }
 
@@ -82,7 +82,7 @@ public class CloudStateActivity extends DemoBaseActivity<CloudStatePresenter> im
 
     @Override
     public void onUpdateCloudStateResult(int state,String result) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         lsiCloudStorage.setRightText(result);
     }
 }

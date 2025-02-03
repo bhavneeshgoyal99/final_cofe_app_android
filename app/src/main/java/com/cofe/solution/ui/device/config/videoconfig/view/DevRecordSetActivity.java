@@ -311,7 +311,7 @@ public class DevRecordSetActivity extends BaseConfigActivity<DevRecordSetPresent
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.getRecordInfo();
     }
 
@@ -478,7 +478,7 @@ public class DevRecordSetActivity extends BaseConfigActivity<DevRecordSetPresent
      * 去保存配置
      */
     private void tryToSaveConfig() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         mMain.setmPreRecord(sbMainPreRecord.getProgress());
         mMain.setmPacketLength(sbMainPacketLength.getProgress());
         mMain.setmRecordMode(defValues[spMainMode.getSelectedItemPosition()]);
@@ -548,7 +548,7 @@ public class DevRecordSetActivity extends BaseConfigActivity<DevRecordSetPresent
      */
     private void allLoaded() {
         if (mMain.getState() != DevConfigState.DEV_CONFIG_UNLOAD && mSub.getState() != DevConfigState.DEV_CONFIG_UNLOAD) {
-            hideWaitDialog();
+            loaderDialog.dismiss();
         }
     }
 }

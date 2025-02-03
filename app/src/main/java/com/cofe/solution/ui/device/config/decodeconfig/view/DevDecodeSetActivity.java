@@ -145,7 +145,7 @@ public class DevDecodeSetActivity extends BaseConfigActivity<DevDecodeSetPresent
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         initMinSubRes();
         presenter.getDevEncodeInfo();
         presenter.getDevEncodeCapability();
@@ -174,7 +174,7 @@ public class DevDecodeSetActivity extends BaseConfigActivity<DevDecodeSetPresent
 
     @Override
     public void onGetEncodeConfigResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (!isSuccess) {
             showToast(getString(R.string.get_dev_config_failed) , Toast.LENGTH_SHORT);
             finish();
@@ -422,7 +422,7 @@ public class DevDecodeSetActivity extends BaseConfigActivity<DevDecodeSetPresent
 
     @Override
     public void onSaveResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -449,7 +449,7 @@ public class DevDecodeSetActivity extends BaseConfigActivity<DevDecodeSetPresent
             simplifyEncodeBean.ExtraFormat.VideoEnable = spSubVideo.isSelected();
             simplifyEncodeBean.ExtraFormat.AudioEnable = spSubVoice.isSelected();
 
-            showWaitDialog();
+            loaderDialog.setMessage();
             presenter.setDevEncodeInfo();
         }
     }

@@ -91,7 +91,6 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
                     @Override
                     public void onSuccess(int msgId) {
                         Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
-
                     }
 
                     @Override
@@ -109,6 +108,8 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
 
         TextView titleTxtv = view.findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.push_msg));
+        titleTxtv.setVisibility(View.GONE);
+        view.findViewById(R.id.back_button).setVisibility(View.GONE);
         view.findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +122,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
         recyclerView = view.findViewById(R.id.rv_alarm_info);
 
         view.findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.cal_img).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
@@ -151,7 +152,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
         alarmMsgAdapter = new AlarmMsgAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(activity.getContext()));
         recyclerView.setAdapter(alarmMsgAdapter);
-        activity.showWaitDialog();
+        activity.loaderDialog.setMessage();
         presenter.searchAlarmMsg();
     }
 
@@ -173,7 +174,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
                         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                             @Override
                             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                                activity.showWaitDialog();
+                                activity.loaderDialog.setMessage();
                                 selectedByuser = year +"-"+month+"-"+dayOfMonth;
 
                                 Calendar calendar = Calendar.getInstance();
@@ -208,7 +209,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
 
     @Override
     public void onUpdateView() {
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         if (presenter.getAlarmInfoSize() <= 0) {
             showToast("No alarm notifications found", Toast.LENGTH_LONG);
             noDataContLl.setVisibility(View.VISIBLE);
@@ -236,7 +237,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
 
     @Override
     public void onShowPicResult(boolean isSuccess, Bitmap bitmap) { // Download picture display
-        activity.hideWaitDialog();
+        activity.loaderDialog.dismiss();
         showToast(isSuccess ? "Image download successful" : "Image download failed", Toast.LENGTH_LONG);
         if (isSuccess && bitmap != null) {
             ImageView imageView = new ImageView(activity.getContext());

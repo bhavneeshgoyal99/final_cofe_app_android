@@ -64,7 +64,7 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
                 XMPromptDlg.onShowEditDialog(PresetListActivity.this, getString(R.string.modify_preset_name), presetName, new EditDialog.OnEditContentListener() {
                     @Override
                     public void onResult(String content) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         //修改预置点名称
                         presenter.modifyPresetName(presetId, content);
                     }
@@ -76,7 +76,7 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
                 XMPromptDlg.onShow(PresetListActivity.this, getString(R.string.is_sure_to_delete_preset), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         //删除预置点
                         presenter.deletePreset(presetId);
                     }
@@ -89,26 +89,26 @@ public class PresetListActivity extends DemoBaseActivity<PresetListPresenter> im
             }
         });
         rvChannelList.setAdapter(presetListAdapter);
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.updatePresetList();
     }
 
     @Override
     public void onGetPresetListResult(List<ConfigGetPreset> presetList) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         presetListAdapter.setData(presetList);
     }
 
     @Override
     public void onDeletePresetResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
         presenter.updatePresetList();
     }
 
     @Override
     public void onModifyPresetNameResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(getString(R.string.modify_s), Toast.LENGTH_LONG);
         presenter.updatePresetList();
     }

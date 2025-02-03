@@ -50,7 +50,7 @@ public class InterDevLinkageActivity extends DemoBaseActivity<InterDevLinkagePre
         btnDisassociate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.unlinkDev();
             }
         });
@@ -77,7 +77,7 @@ public class InterDevLinkageActivity extends DemoBaseActivity<InterDevLinkagePre
         XMPromptDlg.onShow(this, getString(R.string.is_sure_link_dev), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.linkDev(supportLinkDevList.get(position));
             }
         }, null);
@@ -96,7 +96,7 @@ public class InterDevLinkageActivity extends DemoBaseActivity<InterDevLinkagePre
 
     @Override
     public void onInterDevLinkResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.inter_dev_linked_s), Toast.LENGTH_LONG);
         } else {
@@ -106,7 +106,7 @@ public class InterDevLinkageActivity extends DemoBaseActivity<InterDevLinkagePre
 
     @Override
     public void onInterDevUnlinkResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.inter_dev_unlinked_s), Toast.LENGTH_LONG);
         } else {
