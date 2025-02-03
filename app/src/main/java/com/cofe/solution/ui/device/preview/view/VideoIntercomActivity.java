@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.hardware.camera2.CameraCharacteristics;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.Message;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.blankj.utilcode.util.PermissionUtils;
 import com.constant.SDKLogConstant;
+import com.lib.MsgContent;
+import com.manager.account.AccountManager;
+import com.manager.account.BaseAccountManager;
+import com.manager.db.DevDataCenter;
 import com.utils.LogUtils;
 import com.xm.MoreClickManager;
 import com.xm.activity.base.XMBasePresenter;
@@ -81,8 +87,41 @@ public class VideoIntercomActivity extends DemoBaseActivity<VideoIntercomPresent
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        initView();
-        VideoIntercomActivityPermissionsDispatcher.initDataWithPermissionCheck(this);
+
+        if(DevDataCenter.getInstance().getAccountUserName()!=null) {
+            if(DevDataCenter.getInstance().getAccessToken()==null) {
+                AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                        new BaseAccountManager.OnAccountManagerListener() {
+                            @Override
+                            public void onSuccess(int msgId) {
+                                Log.d("VideoIntercomActivity Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                initView();
+                                VideoIntercomActivityPermissionsDispatcher.initDataWithPermissionCheck(VideoIntercomActivity.this);
+                            }
+
+                            @Override
+                            public void onFailed(int msgId, int errorId) {
+                                Log.d("VideoIntercomActivity Login faile","d tried uising API" );
+                                    finish();
+
+                            }
+
+                            @Override
+                            public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                            }
+                        });//LOGIN_BY_INTERNET（1）  Account login type
+
+            } else {
+                initView();
+                VideoIntercomActivityPermissionsDispatcher.initDataWithPermissionCheck(this);
+            }
+
+        } else {
+            initView();
+            VideoIntercomActivityPermissionsDispatcher.initDataWithPermissionCheck(this);
+        }
+
     }
 
     private void initView() {
@@ -95,6 +134,7 @@ public class VideoIntercomActivity extends DemoBaseActivity<VideoIntercomPresent
         cameraTypeSwitch = findViewById(R.id.iv_change_camera_type);
         tvMicTip = findViewById(R.id.tv_mic);
         tvCameraTypeTip = findViewById(R.id.tv_interval_camera);
+
         cameraStateSwitch = findViewById(R.id.iv_camera_state);
         tvCameraStateTip = findViewById(R.id.tv_camera_state);
         soundSwitch = findViewById(R.id.iv_sound);
@@ -111,7 +151,11 @@ public class VideoIntercomActivity extends DemoBaseActivity<VideoIntercomPresent
         closeIntercom.setOnClickListener(this);
         micSwitch.setOnClickListener(this);
         cameraTypeSwitch.setOnClickListener(this);
-        cameraStateSwitch.setOnClickListener(this);
+        try {
+            cameraStateSwitch.setOnClickListener(this);
+        } catch (Exception e) {
+            Log.e("GIF_ERROR", "Failed to load GIF", e);
+        }
         soundSwitch.setOnClickListener(this);
     }
 
@@ -172,17 +216,21 @@ public class VideoIntercomActivity extends DemoBaseActivity<VideoIntercomPresent
 
     private void openOrCloseCamera(boolean isOpen) {
         if (presenter != null) {
-            if (isOpen) {
-                presenter.openCamera();
-                cameraStateSwitch.setImageResource(R.mipmap.ic_income_call_camera_opening);
-                tvCameraStateTip.setText(R.string.dev_income_call_camera_has_closed);
-            } else {
-                isCurCameraVideoRecording = false;
-                presenter.closeCamera();
-                rlCameraCloseLayout.setVisibility(View.VISIBLE);
-                cameraPreview.setVisibility(View.GONE);
-                cameraStateSwitch.setImageResource(R.mipmap.ic_income_call_camera_unopen);
-                tvCameraStateTip.setText(R.string.dev_income_call_camera_has_closed);
+            try {
+                if (isOpen) {
+                    presenter.openCamera();
+                    cameraStateSwitch.setImageResource(R.mipmap.ic_income_call_camera_opening);
+                    tvCameraStateTip.setText(R.string.dev_income_call_camera_has_closed);
+                } else {
+                    isCurCameraVideoRecording = false;
+                    presenter.closeCamera();
+                    rlCameraCloseLayout.setVisibility(View.VISIBLE);
+                    cameraPreview.setVisibility(View.GONE);
+                    cameraStateSwitch.setImageResource(R.mipmap.ic_income_call_camera_unopen);
+                    tvCameraStateTip.setText(R.string.dev_income_call_camera_has_closed);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

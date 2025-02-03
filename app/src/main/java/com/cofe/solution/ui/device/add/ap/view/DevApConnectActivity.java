@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.lib.FunSDK;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
@@ -38,11 +39,14 @@ import permissions.dispatcher.RuntimePermissions;
 @RuntimePermissions
 public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter> implements DevApConnectContract.IDevApConnectView {
     private Disposable disposable;
+    LoaderDialog loaderDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dev_ap_connect);
+        loaderDialog = new LoaderDialog(this);
+
 
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setLeftClick(this);
@@ -101,7 +105,7 @@ public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter
             }).subscribeOn(Schedulers.newThread()).doOnSubscribe(new Consumer<Disposable>() {
                 @Override
                 public void accept(Disposable disposable) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                 }
             }).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<Object>() {
                 @Override
@@ -110,7 +114,7 @@ public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter
                         disposable.dispose();
                         disposable = null;
                     }
-                    hideWaitDialog();
+                    loaderDialog.dismiss();
                     if (result instanceof Integer && (Integer) result == 0) {
                         showToast(FunSDK.TS("Network_Error"), Toast.LENGTH_LONG);
                     } else {

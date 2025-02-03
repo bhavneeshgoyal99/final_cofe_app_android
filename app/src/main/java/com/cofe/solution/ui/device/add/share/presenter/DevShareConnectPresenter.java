@@ -1,6 +1,9 @@
 package com.cofe.solution.ui.device.add.share.presenter;
 
+
 import com.alibaba.fastjson.JSON;
+import com.cofe.solution.R;
+import com.cofe.solution.ui.device.add.share.listener.DevShareConnectContract;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -23,12 +26,14 @@ import com.utils.ParseUrlUtils;
 import com.utils.XUtils;
 import com.xm.activity.base.XMBasePresenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
-import com.cofe.solution.R;
-import com.cofe.solution.ui.device.add.share.listener.DevShareConnectContract;
 
 import static com.lib.EFUN_ATTR.LOGIN_USER_ID;
 import static com.lib.sdk.bean.share.DevShareQrCodeInfo.APP_DOWNLOAD_URL;
@@ -40,6 +45,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.text.TextUtils;
+import android.util.Log;
+
+import org.checkerframework.checker.units.qual.A;
 
 /**
  * 分享的设备界面,显示相关的列表菜单
@@ -49,12 +57,97 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
 
     private DevShareConnectContract.IDevShareConnectView iDevShareConnectView;
     private List<SearchUserInfoBean> userQueryBeans;
-
+    String finalPermissions;
+    ArrayList<String> permissionList = new ArrayList<>();
     public DevShareConnectPresenter(DevShareConnectContract.IDevShareConnectView iDevShareConnectView) {
         this.iDevShareConnectView = iDevShareConnectView;
         manager = ShareManager.getInstance(iDevShareConnectView.getContext());
         manager.init();
         manager.addShareManagerListener(this);
+    }
+
+    /**
+     *         List<String> allPermissions = Arrays.asList(
+     *                 "DP_ModifyConfig", "DP_ModifyPwd", "DP_CloudServer", "DP_Intercom",
+     *                 "DP_PTZ", "DP_LocalStorage", "DP_ViewCloudVideo", "DP_DeleteCloudVideo",
+     *                 "DP_AlarmPush", "DP_DeleteAlarmInfo"
+     *         );
+     *
+     *         {
+     *         "DP_ModifyConfig":1,
+     *         "DP_ModifyPwd":1,"DP_ViewCloudVideo":1,
+     *         "DP_DeleteCloudVideo":1,"DP_LocalStorage":1,"DP_CloudServer":1,
+     *         "DP_AlarmPush":1,
+     *         "DP_Intercom":1,"DP_PTZ":1,
+     *         "DP_DeleteAlarmInfo":1
+     *         }
+     * @param permissionList
+     */
+    public void setPermissionList(ArrayList<String> permissionList){
+        this.permissionList = permissionList;
+
+        Map<String, String> keywordToPermissionMap = new HashMap<>();
+        keywordToPermissionMap.put("Change Device Config", "DP_ModifyConfig");
+        keywordToPermissionMap.put("Cloud Video", "DP_ViewCloudVideo");
+        keywordToPermissionMap.put("Intercom", "DP_Intercom");
+        keywordToPermissionMap.put("PTZ", "DP_PTZ");
+        keywordToPermissionMap.put("Local Storage", "DP_LocalStorage");
+        keywordToPermissionMap.put("Push", "DP_AlarmPush");
+
+        Map<String, Integer> permissionMap = new HashMap<>();
+        for (String key : keywordToPermissionMap.values()) {
+            permissionMap.put(key, 0);
+        }
+
+
+        for (String item : permissionList) {
+            if (keywordToPermissionMap.containsKey(item)) {
+                String permissionKey = keywordToPermissionMap.get(item);
+                permissionMap.put(permissionKey, 1);
+            }
+        }
+        boolean cloudPermission =  false;
+        boolean pushPermission =  false;
+        boolean ConfigPermission =  false;
+        for(String key : permissionMap.keySet()) {
+            if (key.contains("DP_ViewCloudVideo")) {
+                if (permissionMap.get(key) == 1) {
+                    cloudPermission = true;
+                }
+            } else if (key.contains("DP_AlarmPush")) {
+                if (permissionMap.get(key) == 1) {
+                    pushPermission = true;
+                }
+            } else if (key.contains("DP_ModifyConfig")) {
+                if (permissionMap.get(key) == 1) {
+                    ConfigPermission = true;
+                }
+            }
+        }
+        if(ConfigPermission){
+            permissionMap.put("DP_ModifyPwd",1);
+        } else{
+            permissionMap.put("DP_ModifyPwd",0);
+        }
+
+        if(pushPermission){
+            permissionMap.put("DP_DeleteAlarmInfo",1);
+        } else{
+            permissionMap.put("DP_DeleteAlarmInfo",0);
+        }
+
+        if(cloudPermission){
+            permissionMap.put("DP_DeleteCloudVideo",1);
+            permissionMap.put("DP_CloudServer",1);
+        } else{
+            permissionMap.put("DP_DeleteCloudVideo",0);
+            permissionMap.put("DP_CloudServer",0);
+        }
+
+        // Convert to JSON String
+        finalPermissions = new org.json.JSONObject(permissionMap).toString();
+        System.out.println("Final JSON: " +  finalPermissions );
+
     }
 
 
@@ -80,15 +173,16 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
         devShareQrCodeInfo.setDevType(devType);//设备类型
         devShareQrCodeInfo.setUserId(loginUserId);//账号登录userId
         String loginName = FunSDK.DevGetLocalUserName(getDevId());//获取本地的设备登录密码
+        devShareQrCodeInfo.setDevId(getDevId());//设置设备登录密码
         devShareQrCodeInfo.setPwd(pwd);//设置设备登录密码
         devShareQrCodeInfo.setLoginName(TextUtils.isEmpty(loginName) ? "admin" : loginName); //设备设备登录名
-        devShareQrCodeInfo.setDevId(getDevId());//设备设备序列号
         devShareQrCodeInfo.setShareTimes(System.currentTimeMillis() / 1000);//设置分享时间（该时间是用来在扫描二维码添加的时候判断是否过期了，具体的过期时长可自定义，比如30分钟）
         String devToken = FunSDK.DevGetLocalEncToken(getDevId());//获取设备的登录Token（支持Token的设备才有）
         if (!TextUtils.isEmpty(devToken)) {
             devShareQrCodeInfo.setDevToken(devToken);//设置设备的登录Token
         }
-
+        //String permissionValue =         "{\"DP_ModifyConfig\": 1,\"DP_ModifyPwd\": 1,\"DP_CloudServer\": 1,\"DP_Intercom\": 1,\"DP_PTZ\": 1,\"DP_LocalStorage\": 1,\"DP_ViewCloudVideo\": 1,\"DP_DeleteCloudVideo\": 1,\"DP_AlarmPush\": 1,\"DP_DeleteAlarmInfo\": 1}";
+        devShareQrCodeInfo.setPermissions(finalPermissions);
         /**
          * 如果要设置访问权限，可以调用以下方法
          * devShareQrCodeInfo.setPermissions(“权限信息”)，这个权限信息自定义，比如
@@ -107,7 +201,10 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
          * */
 
         String info = JSON.toJSONString(devShareQrCodeInfo);//注意：该数据建议要加密处理后再生成二维码
-        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_app);//获取logo
+        Log.d("share Generate QR code Share  ","QR code data "  + info);
+        Log.d("share Generate QR code Share  ","QR code data devId"  + devShareQrCodeInfo.getDevId());
+
+        Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher_);//获取logo
         System.out.println("encInfo:" + info);
         Bitmap bitmap = null;
         try {
@@ -208,4 +305,3 @@ public class DevShareConnectPresenter extends XMBasePresenter<ShareManager> impl
         return logo;
     }
 }
-

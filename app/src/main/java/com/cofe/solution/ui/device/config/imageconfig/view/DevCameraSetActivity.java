@@ -122,7 +122,7 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
         lsiWDR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 boolean isOpen = !(lsiWDR.getRightValue() == SDKCONST.Switch.Open);
                 lsiWDR.setRightImage(isOpen ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
                 presenter.setWDRConfig(isOpen);
@@ -142,13 +142,13 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.getCameraInfo();
     }
 
     @Override
     public void onUpdateView(String result, boolean isSupportSoftPhotosensitive) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (result.charAt(0) != '0' && !StringUtils.isStringNULL(result) && mCamera.onParse(result)) {
             rlDayNightMode.setVisibility(View.VISIBLE);
             mCamera.setState(DevConfigState.DEV_CONFIG_VIEW_VISIABLE);
@@ -198,7 +198,7 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
 
     @Override
     public void onSetWDRConfigResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
         } else {
@@ -208,7 +208,7 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
 
     @Override
     public void onSaveResult(int state) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (state == DevConfigState.DEV_CONFIG_UPDATE_SUCCESS) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_SHORT);
             finish();
@@ -238,7 +238,7 @@ public class DevCameraSetActivity extends BaseConfigActivity<DevCameraSetPresent
      * 根据控件信息去保存数据
      */
     private void tryToSaveConfig() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         mCamera.setmAeSensitivity(defValues[spDefinition.getSelectedItemPosition()]);
         mCamera.setmPictureFlip(btnFlip.isSelected());
         mCamera.setmPictureMirror(btnMirror.isSelected());

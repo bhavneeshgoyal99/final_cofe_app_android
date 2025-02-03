@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.basic.G;
 
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.lib.EDEV_ATTR;
 import com.lib.EUIMSG;
 import com.lib.FunSDK;
@@ -48,12 +49,15 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 	private XMDevInfo xmDevInfo=null;
 	
 	private int mUserId = -1;
-	
+
+	public LoaderDialog loaderDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_device_lan_alarm);
+		loaderDialog = new LoaderDialog(this);
+
 
 		titleBar = findViewById(R.id.layoutTop);
 		titleBar.setTitleText(getString(R.string.device_lan_alarm_test));
@@ -129,17 +133,17 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 	}
 	
 	private void loginDevice() {
-		showWaitDialog();
+		loaderDialog.setMessage();
 
 		DeviceManager deviceManager = DeviceManager.getInstance();
 		deviceManager.loginDev(xmDevInfo.getDevId(), "admin", "", new DeviceManager.OnDevManagerListener() {
 			@Override
 			public void onSuccess(String s, int i, Object o) {
-			      hideWaitDialog();
+			      loaderDialog.dismiss();
 				}
 			@Override
 			public void onFailed(String s, int i, String s1, int i1) {
-				hideWaitDialog();
+				loaderDialog.dismiss();
 				showToast(R.string.user_register_login_fail);
 			}
 		});
@@ -199,7 +203,7 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 			{
 				if ( msg.arg1 == FunError.EE_OK ) {
 					// 设备登录成功
-					hideWaitDialog();
+					loaderDialog.dismiss();
 				} else {
 					// 设备登录失败
 					showToast(FunError.getErrorStr(msg.arg1));

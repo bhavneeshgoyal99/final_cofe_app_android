@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounder_corner"
+    android:layout_margin="20dp"
+    android:paddingTop="10dp"
+
+    >
+
+    <TextView
+        android:id="@+id/popup_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/time_sync"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:textSize="@dimen/small_text_size"
+        android:paddingTop="10dp"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/popup_title"
+        android:background="@color/color_gray_light_open"
+        />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/popup_title"
+        >
+
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:id="@+id/btn_no_ll"
+        >
+
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:text="@string/cancle"
+            android:paddingLeft="@dimen/button_margin"
+            android:gravity="center"
+            android:textSize="@dimen/small_text_size"
+            android:layout_marginRight="@dimen/button_margin"
+            />
+        </RelativeLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="@color/color_gray_light_open"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/half_of_normal_margin"
+            android:id="@+id/devider"
+            android:visibility="gone"
+            />
+
+        <RelativeLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            >
+
+            <Button
+                android:id="@+id/btn_yes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:text="@string/ok"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/small_text_size"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/button_margin"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.config.devicestore.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import com.lib.FunSDK;
 import com.lib.sdk.bean.GeneralInfoBean;
 import com.lib.sdk.bean.JsonConfig;
 import com.lib.sdk.bean.StorageInfoBean;
+import com.manager.db.DevDataCenter;
+import com.manager.device.DeviceManager;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.XTitleBar;
 
@@ -93,7 +96,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 XMPromptDlg.onShow(DevSetupStorageActivity.this, String.valueOf(R.string.device_setup_storage_format_tip), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         //格式化
                         presenter.formatStorage();
                     }
@@ -104,11 +107,31 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
     }
 
     private void initData() {
-        showWaitDialog();
-        //获取存储容量信息
+        presenter.setDevId(getIntent().getStringExtra("devId"));
+        loaderDialog.setMessage();
         presenter.getStorageInfo();
         //获取存储配置
         presenter.getStorageConfig();
+
+        DevDataCenter.getInstance().isSupportSDsupportRecord(presenter.getDevId(),new DeviceManager.OnDevManagerListener(){
+            @Override
+            public void onSuccess(String devId, int operationType, Object result) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > success");
+                //获取存储容量信息
+                //presenter.getStorageInfo();
+                //获取存储配置
+                //presenter.getStorageConfig();
+
+            }
+
+            @Override
+            public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                Log.d(getClass().getName(), "isSupportSDsupportRecord > failed");
+                //findViewById(R.id.sd_item_ll).setVisibility(View.GONE);
+              //  findViewById(R.id.no_data_rl).setVisibility(View.VISIBLE);
+                //loaderDialog.dismiss();
+            }
+        });
     }
 
 
@@ -117,7 +140,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void getStorageDataSuccess(String totalSizeString, String remainSizeString, String videoPartSizeString, String picPartSizeString,boolean isShowPicPart) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         tvMemoryTotal.setText(totalSizeString);
         tvMemoryRemain.setText(remainSizeString);
         tvMemoryVideoPart.setText(videoPartSizeString);
@@ -127,6 +150,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
         } else {
             rlMemoryPicPart.setVisibility(View.GONE);
         }
+        findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+
     }
 
     /**
@@ -134,7 +159,9 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void getStorageDataError(String errorString) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
+        //findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+        findViewById(R.id.no_data_rl).setVisibility(View.VISIBLE);
         showToast(errorString,Toast.LENGTH_LONG);
     }
 
@@ -143,7 +170,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void onFormatResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(isSuccess ? String.valueOf(R.string.device_setup_storage_format_success) : String.valueOf(R.string.device_setup_storage_format_failed),
                 Toast.LENGTH_LONG);
         finish();
@@ -171,12 +198,12 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 switch (checkedId) {
                     case com.cofe.solution.R.id.rb_sto_video_stop:
                         //存储满时：停止录像
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.changeVideoFullState(true);
                         break;
                     case com.cofe.solution.R.id.rb_sto_video_cir:
                         //存储满时：循环录像
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.changeVideoFullState(false);
                         break;
                     default:
@@ -185,6 +212,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                 }
             }
         });
+       // findViewById(R.id.data_rl).setVisibility(View.VISIBLE);
+        loaderDialog.dismiss();
     }
 
     /**
@@ -192,12 +221,11 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      */
     @Override
     public void changeVideoFullStateResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if(isSuccess){
             showToast(FunSDK.TS("Save_Success"),Toast.LENGTH_LONG);
         } else {
             showToast(FunSDK.TS("Save_Failed"),Toast.LENGTH_LONG);
         }
-
     }
 }

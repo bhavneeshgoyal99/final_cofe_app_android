@@ -30,7 +30,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/cloud_upload_icon"
+                android:src="@drawable/ic_server"
                 android:contentDescription="Cloud Storage Icon" />
 
             <TextView
@@ -55,7 +55,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ai_icon"
+                android:src="@drawable/ic_ai"
                 android:contentDescription="AI Icon" />
 
             <TextView
@@ -74,14 +74,13 @@
             android:orientation="vertical"
             android:gravity="center"
             android:tag="25"
-
             >
 
             <ImageView
-                android:layout_width="36dp"
+                android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:src="@drawable/motion_icon"
-                android:contentDescription="Motion Tracking Icon" />
+                android:contentDescription="Motion Tracking Icon"
+                android:src="@drawable/motion_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -267,7 +266,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/image_new_icon"
+                android:src="@drawable/ic_image"
                 android:contentDescription="Favorites Icon" />
 
             <TextView
@@ -310,7 +309,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/image_icon"
+                android:src="@drawable/ic_image"
                 android:contentDescription="Motion Tracking Icon" />
 
             <TextView
@@ -330,13 +329,12 @@
             android:tag="battery"
             android:gravity="center"
             android:id="@+id/battery"
-            android:visibility="invisible"
-            >
+            android:visibility="invisible">
 
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/batery_icon"
+                android:src="@drawable/ic_battery"
                 android:contentDescription="Motion Tracking Icon" />
 
             <TextView
@@ -362,7 +360,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/batery_icon"
+                android:src="@drawable/ic_battery"
                 android:contentDescription="Motion Tracking Icon" />
 
             <TextView

@@ -5,46 +5,87 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical">
-
-    <!-- Two-way Intercom Switch -->
-    <com.xm.ui.widget.ListSelectItem
-        android:id="@+id/lsi_double_talk_switch"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        uilib:ImageRight1="@mipmap/icon_checked_no"
-        uilib:ImageRight2="@mipmap/icon_checked_yes"
-        uilib:ItemTitleColor="@color/default_normal_text_color"
-        uilib:ItemTitleSize="@dimen/normal_text_size"
-        uilib:RightClickable="false"
-        uilib:Title="Two-way Intercom" />
+        android:id="@+id/above_ll"
+        android:orientation="vertical"
+        >
+        <!-- Two-way Intercom Switch -->
+        <com.xm.ui.widget.ListSelectItem
+            android:id="@+id/lsi_double_talk_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            uilib:ImageRight1="@mipmap/icon_checked_no"
+            uilib:ImageRight2="@mipmap/icon_checked_yes"
+            uilib:ItemTitleColor="@color/default_normal_text_color"
+            uilib:ItemTitleSize="@dimen/normal_text_size"
+            uilib:RightClickable="false"
+            uilib:Title="Two-way Intercom"
+            android:visibility="gone"/>
 
-    <!-- Broadcast Intercom -->
-    <com.xm.ui.widget.ListSelectItem
-        android:id="@+id/lsi_double_talk_broadcast"
+        <!-- Broadcast Intercom -->
+        <com.xm.ui.widget.ListSelectItem
+            android:id="@+id/lsi_double_talk_broadcast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            uilib:ImageRight1="@mipmap/icon_checked_no"
+            uilib:ImageRight2="@mipmap/icon_checked_yes"
+            uilib:ItemTitleColor="@color/default_normal_text_color"
+            uilib:ItemTitleSize="@dimen/normal_text_size"
+            uilib:RightClickable="false"
+            uilib:Title="@string/talk_broadcast"
+            />
+    </LinearLayout>
+    <TextView android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/voice_change_selection"
+        android:id="@+id/voice_title_txtv"
+        android:textSize="@dimen/middle_text_size"
+        android:textColor="@color/default_normal_text_color"
+        android:drawableRight="@drawable/right_icon_1"
+        android:layout_marginRight="@dimen/button_margin"
+        android:layout_marginLeft="@dimen/button_margin"
+        android:layout_marginBottom="@dimen/button_margin"
+        android:visibility="gone"
+        android:textStyle="bold"
+        />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        uilib:ImageRight1="@mipmap/icon_checked_no"
-        uilib:ImageRight2="@mipmap/icon_checked_yes"
-        uilib:ItemTitleColor="@color/default_normal_text_color"
-        uilib:ItemTitleSize="@dimen/normal_text_size"
-        uilib:RightClickable="false"
-        uilib:Title="@string/talk_broadcast" />
+        android:orientation="horizontal"
+        >
 
     <!-- Voice Change Selection -->
     <com.xm.ui.widget.ListSelectItem
         android:id="@+id/lsi_choose_voice"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.9"
         uilib:Cap=""
         uilib:CapColor="@color/default_normal_text_color"
         uilib:CapSize="@dimen/middle_text_size"
         uilib:ExtraMode="Spinner"
-        uilib:ImageRight1="@drawable/right_icon_1"
-        uilib:ImageRight2="@drawable/right_icon_1"
         uilib:ItemTitleColor="@color/default_normal_text_color"
         uilib:ItemTitleSize="@dimen/normal_text_size"
-        uilib:Title="Voice Change Selection" />
+        uilib:Title="Voice Change Selection"
+        />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="0.1"
+            android:src="@drawable/right_icon_1"
+            android:layout_marginTop="@dimen/half_of_normal_margin"
+            android:id="@+id/right_arrow_img"
+            />
+    </LinearLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_voice_change"
+        android:visibility="gone"
 
+        />
     <!-- Press and Hold for Voice Chat -->
     <com.xm.ui.widget.RippleButton
         android:id="@+id/btn_talk"

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,12 +14,19 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.lib.FunSDK;
+import com.lib.MsgContent;
 import com.lib.sdk.bean.StringUtils;
+import com.manager.account.BaseAccountManager;
+import com.manager.account.XMAccountManager;
+import com.manager.db.DevDataCenter;
+import com.manager.db.XMDevInfo;
 import com.utils.LogUtils;
 import com.xm.activity.device.monitor.view.XMMonitorActivity;
 import com.xm.ui.dialog.XMPromptDlg;
@@ -29,6 +37,8 @@ import com.cofe.solution.base.DemoBaseActivity;
 import com.cofe.solution.ui.device.add.quick.listener.DevQuickConnectContract;
 import com.cofe.solution.ui.device.add.quick.presenter.DevQuickConnectPresenter;
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
+import com.xm.ui.widget.dialog.EditDialog;
+
 import io.reactivex.annotations.Nullable;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -67,7 +77,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
         findViewById(R.id.btnWifiQuickSettingSimple).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 String ssid = wifiSSIDEdit.getText().toString().trim();
                 String pwd = wifiPasswdEdit.getText().toString().trim();
                 if (StringUtils.isStringNULL(ssid)) {
@@ -121,15 +131,47 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
             wifiSSIDEdit.setText(curSSID);
         }
 
-        hideWaitDialog();
+        loaderDialog.dismiss();
     }
 
     @Override
     public void onAddDevResult(boolean isSuccess) {  //Callback after adding the device
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
-            turnToActivity(DevMonitorActivity.class);
+            showDevNameDialog();
+            //turnToActivity(DevMonitorActivity.class);
         }
+    }
+
+    void showDevNameDialog() {
+        XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
+        XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+            @Override
+            public void onResult(String devName) {
+                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener(){
+
+                    @Override
+                    public void onSuccess(int msgId) {
+                        /// turnToActivity(DevMonitorActivity.class);
+                        Toast.makeText(DevQuickConnectActivity.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailed(int msgId, int errorId) {
+                        // turnToActivity(DevMonitorActivity.class);
+
+                        Toast.makeText(DevQuickConnectActivity.this, "Failed to changed device name", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                    }
+                });
+
+            }
+        });
     }
 
     @Override
@@ -155,7 +197,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
 
     @Override
     public void onClick(View view) {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.startQuickSetWiFi(wifiPasswdEdit.getText().toString().trim());
     }
 

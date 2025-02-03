@@ -172,7 +172,7 @@ public class DevSimpleConfigActivity extends BaseConfigActivity<DevSimpleConfigP
                     return;
                 }
 
-                showWaitDialog();
+                loaderDialog.setMessage();
 
                 presenter.saveConfig(jsonName, spConfigChn.getSelectedValue(), etReceiveConfigContent.getText().toString());
                 isReceiveConfigContent.setLeftTitle(jsonName);
@@ -196,7 +196,7 @@ public class DevSimpleConfigActivity extends BaseConfigActivity<DevSimpleConfigP
                     return;
                 }
 
-                showWaitDialog();
+                loaderDialog.setMessage();
 
                 isReceiveConfigContent.setLeftTitle(configName);
 
@@ -349,7 +349,7 @@ public class DevSimpleConfigActivity extends BaseConfigActivity<DevSimpleConfigP
 
     @Override
     public void onReceiveDataResult(String state, String result) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         showToast(state, Toast.LENGTH_LONG);
         etReceiveConfigContent.setText(result);
     }

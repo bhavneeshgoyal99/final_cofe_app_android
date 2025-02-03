@@ -699,7 +699,7 @@
     <string name="input_correct_sn">请输入正确的序列号，长度为16或者20</string>
     <string name="total_capacity">总容量</string>
     <string name="residual_capacity">剩余容量</string>
-    <string name="battery_state_show">电量等级【%d】是否有存储【%d】是否充电中【%d】</string>
+    <string name="battery_state_show">是否充电中</string>
     <string name="wifi_state_show">WiFi信号等级【%d】</string>
     <string name="select_config_name">请选择配置名称</string>
     <string name="send_cmd">发送命令</string>
@@ -927,7 +927,7 @@
     <string name="aov_device">AOV设备配置</string>
     <string name="view_doc">查看文档</string>
     <string name="EpitomeRecord">缩影录像</string>
-    <string name="input_username_password">请输入用户名和密码</string>
+    <string name="input_username_password">username</string>
     <string name="ble_ctrl">蓝牙控制</string>
     <string name="save_media_data">保存实时预览媒体数据</string>
     <string name="save_talk_data">保存对讲数据</string>
@@ -981,4 +981,19 @@
     <string name="select_another_date_to_see_device_images">Select another date to see device images</string>
     <string name="no_picture_video_yet">There is no picture or video to display</string>
     <string name="working_mode">Working Mode</string>
+
+    <string name="cancle">Cancel</string>
+    <string name="tr_light_settings">TR Light Settings</string>
+    <string name="tr_back_light_settings">TR Back Light Setting</string>
+    <string name="sync_date_time">Sync Date Time</string>
+    <string name="dev_time_sync_success">"Device date and time sync successfully "</string>
+    <string name="please_wait_for_start_video_stram">Please wait for start video stream</string>
+    <string name="failed_to_add_device">An unexpected error occurred while adding the device.</string>
+    <string name="qr_code_does_match_to_add_device"> QR  code does match to add device.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="time_sync">Confirm sync time</string>
+    <string name="stobe_alaram">Stobe Alarm</string>
+    <string name="battery_low">Device battery is low. Either charge or change battery</string>
+    <string name="demon_work">Demon Work</string>
 </resources>
