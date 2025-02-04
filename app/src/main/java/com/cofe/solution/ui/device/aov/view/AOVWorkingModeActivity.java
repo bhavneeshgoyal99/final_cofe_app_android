@@ -79,7 +79,7 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
 
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.working_mode));
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

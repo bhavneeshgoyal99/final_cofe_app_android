@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +66,8 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
      * 图片分区View
      */
     private View rlMemoryPicPart;
+
+    private ImageView back_button;
     @Override
     public DevSetupStoragePresenter getPresenter() {
         return new DevSetupStoragePresenter(this);
@@ -90,6 +93,7 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
         btnFormat = findViewById(R.id.btn_dev_set_format_storage);
         rlMemoryPicPart = findViewById(R.id.rl_sto_img_part);
         rgRecordModeWhileFull = findViewById(R.id.rg_record_mode_while_full);
+        back_button = findViewById(R.id.back_button);
         btnFormat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +105,12 @@ public class DevSetupStorageActivity extends BaseConfigActivity<DevSetupStorageP
                         presenter.formatStorage();
                     }
                 },null);
+            }
+        });
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

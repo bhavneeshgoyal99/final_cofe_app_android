@@ -280,7 +280,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         imageLl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {// Account logout
-                turnToActivity(DevPictureActivity.class);
+                Intent intent = new Intent(DevListActivity.this, DevPictureActivity.class);
+                startActivity(intent);
+               // finish();
+
             }
         });
 
@@ -291,6 +294,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 // turnToActivity(DevMeActivity.class);
                 Intent intent = new Intent(DevListActivity.this, DevMeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

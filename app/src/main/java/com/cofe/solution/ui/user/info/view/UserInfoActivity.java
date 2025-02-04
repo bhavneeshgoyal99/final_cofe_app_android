@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import com.cofe.solution.ui.user.info.listener.UserInfoContract;
 import com.cofe.solution.ui.user.info.presenter.UserInfoPresenter;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.cofe.solution.utils.SPUtil;
+
 import io.reactivex.annotations.Nullable;
 
 /**
@@ -53,7 +55,9 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     private TextView tvUserEmail;
 
     private TextView tvUserPhone;
-    RelativeLayout passwordRl,emailRl;
+    RelativeLayout passwordRl, emailRl;
+    private ImageView back_button;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +75,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
         tvUserPhone = findViewById(R.id.phone_txtv);
         passwordRl = findViewById(R.id.pass_rl);
         emailRl = findViewById(R.id.email_rl);
+        back_button = findViewById(R.id.back_button);
 
         passwordRl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +87,12 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
             @Override
             public void onClick(View view) {
 
+            }
+        });
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -151,6 +162,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     public UserInfoPresenter getPresenter() {
         return new UserInfoPresenter(this);
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -225,6 +237,7 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
 
         });
     }
+
     private void setDimBackground(Activity activity, float dimAmount) {
         Window window = activity.getWindow();
         WindowManager.LayoutParams layoutParams = window.getAttributes();

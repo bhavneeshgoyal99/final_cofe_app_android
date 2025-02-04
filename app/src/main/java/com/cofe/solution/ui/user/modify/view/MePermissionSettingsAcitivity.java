@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
 
@@ -35,6 +36,7 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? Manifest.permission.RECORD_AUDIO : null,
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) ? Manifest.permission.POST_NOTIFICATIONS : null
     };
+    private ImageView back_button;
 
     private RelativeLayout llBluetooth, llLocation, llStorage, llCamera, llMic, llNotification;
 
@@ -50,6 +52,7 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
         llMic = findViewById(R.id.ll3_m);
         llCamera = findViewById(R.id.ll4_c);
         llNotification = findViewById(R.id.ll5_n);
+        back_button = findViewById(R.id.back_button);
 
         setClickListeners();
         for (String permission : permissions) {
@@ -69,6 +72,7 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
         llMic.setOnClickListener(v -> checkPermission(Manifest.permission.RECORD_AUDIO, "Microphone access is required for voice intercom."));
 
         llNotification.setOnClickListener(v -> checkPermission(Manifest.permission.POST_NOTIFICATIONS, "Notification access is required to receive alerts."));
+        back_button.setOnClickListener(v -> finish());
     }
 
     private String getBluetoothPermission() {
