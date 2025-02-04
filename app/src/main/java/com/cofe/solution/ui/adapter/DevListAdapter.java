@@ -527,9 +527,15 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             btnTurnToPushSet1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                   // onTurnNotificationOn
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo1);
+                        onItemDevClickListener.onTurnNotificationOn(getAdapterPosition(), finalXmDevInfo1);
                     }
+                    // commenting old code
+                    /*if (onItemDevClickListener != null) {
+                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo1);
+                    }*/
                 }
             });
             XMDevInfo finalXmDevInfo4 = xmDevInfo;
@@ -544,6 +550,11 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             settingIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // onTurnNotificationOn
+                    /*if (onItemDevClickListener != null) {
+                        onItemDevClickListener.onTurnNotificationOn(getAdapterPosition(), finalXmDevInfo1);
+                    }*/
+
                     XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) data.get(getAdapterPosition()).get("devId"));
                     onItemDevClickListener.openSettingActivity(getAdapterPosition(),xmDevInfo );
                 }
@@ -682,6 +693,7 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         void onTurnToCloudService(int position, XMDevInfo xmDevInfo);
 
         void onTurnToPushSet(int position, XMDevInfo xmDevInfo);
+        void onTurnNotificationOn(int position, XMDevInfo xmDevInfo);
 
         void onModifyDevName(int position, XMDevInfo xmDevInfo);
         void openSettingActivity(int position, XMDevInfo xmDevInfo);

@@ -117,6 +117,8 @@ public class DevListConnectPresenter extends XMBasePresenter<AccountManager> imp
         }
     }
 
+
+
     /**
      * 更新所有设备状态
      * update the status of all devices

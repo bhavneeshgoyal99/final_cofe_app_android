@@ -60,6 +60,9 @@ import com.manager.account.XMAccountManager;
 import com.manager.account.share.ShareManager;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
+import com.manager.device.DeviceManager;
+import com.manager.device.config.DevConfigInfo;
+import com.manager.device.config.DevConfigManager;
 import com.manager.device.config.PwdErrorManager;
 import com.utils.XUtils;
 import com.xm.activity.device.devset.ability.view.XMDevAbilityActivity;
@@ -128,6 +131,8 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
     Handler handler;
     boolean isPopupMenuOpen = false;
+
+    private DevConfigManager devConfigManager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -956,7 +961,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
      */
     @Override
     public void onTurnToPushSet(int position, XMDevInfo xmDevInfo) {
-        xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
+
+
+        // commenting old code
+       /* xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
         if (xmDevInfo.getDevState() != 0) {
 
             String devId = presenter.getDevId(position);
@@ -965,7 +973,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
 
-        }
+        }*/
+    }
+
+    @Override
+    public void onTurnNotificationOn(int position, XMDevInfo xmDevInfo) {
+        devConfigManager = DeviceManager.getInstance().getDevConfigManager(presenter.getDevId(position));
+
+        changeManualAlarmSwitch(false);
     }
 
     /**
@@ -1427,6 +1442,62 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         }, 2000);
 
+    }
+
+    // notification icon click functionality method
+
+    public boolean changeManualAlarmSwitch(boolean isManualAlarmOpen) {
+
+        //将开启/关闭 bool状态转成16进制字符串
+        // Convert the bool state of opening/closing to hexadecimal string.
+        String manualAlarmSwitch = isManualAlarmOpen ? "0x00000001" : "0x00000000";
+        DevConfigInfo devConfigInfo = DevConfigInfo.create(new DeviceManager.OnDevManagerListener() {
+            @Override
+            public void onSuccess(String devId, int msgId, Object result) {
+                //result是json数据
+                //result is JSON data check thr  result variable
+                //show toast -> manual alarm successfully activated
+                showToast(result.toString(),Toast.LENGTH_SHORT);
+
+                Log.d("RESUlt of Manuual",result.toString());
+
+            }
+
+            @Override
+            public void onFailed(String devId, int msgId, String s1, int errorId) {
+                showToast("manual alarm failed to activate",Toast.LENGTH_SHORT);
+                Log.d("RESUlt of Manuual", String.valueOf(errorId));
+                Log.d("RESUlt of Manuual", s1);
+                Log.d("RESUlt of Manuual", devId);
+                //获取失败，通过errorId分析具体原因
+                //Failed to retrieve, analyze the specific reason through errorId
+                //check the errorId and
+                //show toast -> manual alarm failed to activate
+
+            }
+        });
+
+        devConfigInfo.setJsonName("OPRemoteCtrl");
+        devConfigInfo.setChnId(-1);
+        devConfigInfo.setCmdId(4000);
+
+        HashMap<String, Object> remoteCtrlMap = new HashMap<>();
+        remoteCtrlMap.put("Type", "ManuIntelAlarm");
+        remoteCtrlMap.put("msg", manualAlarmSwitch);
+        remoteCtrlMap.put("P1", "0x00000000");
+        remoteCtrlMap.put("P2", "0x00000000");
+
+        HashMap<String, Object> sendMap = new HashMap<>();
+        sendMap.put("Name", "OPRemoteCtrl");
+        sendMap.put("OPRemoteCtrl", remoteCtrlMap);
+        sendMap.put("SessionID", "0x0000001b");
+
+        //设置保存的Json数据
+        //Set the saved JSON data.
+        devConfigInfo.setJsonData(new Gson().toJson(sendMap));
+        devConfigManager.setDevCmd(devConfigInfo);
+
+        return isManualAlarmOpen;
     }
 
 }

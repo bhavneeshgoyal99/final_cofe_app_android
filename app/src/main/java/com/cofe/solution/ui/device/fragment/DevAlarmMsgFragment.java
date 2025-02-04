@@ -738,6 +738,11 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
         turnToActivity(DevPushActivity.class);
     }
 
+    @Override
+    public void onTurnNotificationOn(int position, XMDevInfo xmDevInfo) {
+
+    }
+
     /**
      * 修改设备名
      *
