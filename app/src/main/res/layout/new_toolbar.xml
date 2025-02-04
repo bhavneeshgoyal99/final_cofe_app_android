@@ -47,7 +47,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="menu_icon"
         android:padding="10dp"
-        android:src="@drawable/cancle_circle" />
+        android:src="@drawable/grid_icon" />
 
 
     <ImageButton

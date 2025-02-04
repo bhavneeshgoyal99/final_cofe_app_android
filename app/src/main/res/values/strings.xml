@@ -1053,6 +1053,11 @@
     <string name="voice_change_selection">Chnage Voice Type</string>
     <string name="push_notification_started_for_this_device">Push notification started</string>
     <string name="push_setting_end">Push service end</string>
+    <string name="permission_already_granted">Permission already granted</string>
+    <string name="failed_rertive_profile_data">Failed rertive profile data</string>
+    <string name="password_modified_failed">Password modification Failed. Please check old passwsord is wrong.</string>
+    <string name="password_modified_successfully">Password modification successfully.</string>
+    <string name="enter_device_id">Please enter device cloud Id</string>
 
 
 </resources>

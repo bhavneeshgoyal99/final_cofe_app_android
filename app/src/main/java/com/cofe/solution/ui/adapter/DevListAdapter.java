@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -20,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
@@ -29,6 +31,7 @@ import com.constant.DeviceConstant;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.config.mqtt.DevStateNotifyMqttManager;
@@ -168,6 +171,34 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        // simran setting image size for grid layout
+        // Get the current layout manager of the RecyclerView
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+
+        // Check if the layout manager is a GridLayoutManager
+        if (layoutManager instanceof GridLayoutManager) {
+            // It's a GridLayout, adjust the height accordingly
+            int recyclerViewWidth = recyclerView.getWidth();
+            int spanCount = ((GridLayoutManager) layoutManager).getSpanCount(); // Get the number of columns
+            int itemWidth = recyclerViewWidth / spanCount;
+
+            // Set the size for the GridLayout
+            ViewGroup.LayoutParams params = holder.bannerImg.getLayoutParams();
+            //params.width = itemWidth;
+            params.height = 250;  // Adjust this value based on your requirement
+            holder.bannerImg.setLayoutParams(params);
+            holder.llbottomIcons.setVisibility(View.GONE);
+        } else {
+            // It's not a GridLayout, use other height for the image
+            ViewGroup.LayoutParams params = holder.bannerImg.getLayoutParams();
+            params.height = 500;  // Different height for non-GridLayouts
+            holder.bannerImg.setLayoutParams(params);
+            holder.llbottomIcons.setVisibility(View.VISIBLE);
+
+        }
+
+
         String devId = (String) data.get(position).get("devId");
         String devName = (String) data.get(position).get("devName");
         holder.lsiDevInfo.setTip(devId);
@@ -284,12 +315,17 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         LinearLayout cloudInfoLl;
         ImageView btnTurnToCloudService1;
 
-        ImageView openAiSetting, bannerImg;
+        // simran just make the banner image rounded image view
+        ImageView openAiSetting/*, bannerImg*/;
 
         ImageView openPopup;
         TextView status_txtv;
         TextView dSharedStatustxtv;
         TextView devNameTxtv;
+
+        // simran variable declaration
+        LinearLayout llbottomIcons;
+        ImageView bannerImg;
 
 
         public ViewHolder(final View itemView) {
@@ -474,19 +510,19 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             //该功能只有JF账号登录后才会显示
             btnUpdateDevToken.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
-             btnShareDev1   = itemView.findViewById(R.id.btn_share_dev1);
-             btnTurnToAlarmMsg1  = itemView.findViewById(R.id.btn_turn_to_alarm_msg1); ;
-             btnTurnToPushSet1  = itemView.findViewById(R.id.btn_turn_to_push_set1); ;
-             btnTurnToCloudService1  = itemView.findViewById(R.id.btn_turn_to_cloud_service1);;
-             cloudInfoLl  = itemView.findViewById(R.id.cloud_info_ll);;
-             settingIcon  = itemView.findViewById(R.id.setting_icon);
-             openAiSetting  = itemView.findViewById(R.id.open_ai_setting);;
-             openPopup  = itemView.findViewById(R.id.open_popup);;
-             status_txtv  = itemView.findViewById(R.id.status_txtv);;
-             dSharedStatustxtv  = itemView.findViewById(R.id.is_shared_device_txtv);;
-             devNameTxtv  = itemView.findViewById(R.id.dev_name);;
-             bannerImg  = itemView.findViewById(R.id.banner_img);;
-
+            btnShareDev1   = itemView.findViewById(R.id.btn_share_dev1);
+            btnTurnToAlarmMsg1  = itemView.findViewById(R.id.btn_turn_to_alarm_msg1); ;
+            btnTurnToPushSet1  = itemView.findViewById(R.id.btn_turn_to_push_set1); ;
+            btnTurnToCloudService1  = itemView.findViewById(R.id.btn_turn_to_cloud_service1);;
+            cloudInfoLl  = itemView.findViewById(R.id.cloud_info_ll);;
+            settingIcon  = itemView.findViewById(R.id.setting_icon);
+            openAiSetting  = itemView.findViewById(R.id.open_ai_setting);;
+            openPopup  = itemView.findViewById(R.id.open_popup);;
+            status_txtv  = itemView.findViewById(R.id.status_txtv);;
+            dSharedStatustxtv  = itemView.findViewById(R.id.is_shared_device_txtv);;
+            devNameTxtv  = itemView.findViewById(R.id.dev_name);;
+            bannerImg  = itemView.findViewById(R.id.banner_img);;
+            llbottomIcons  = itemView.findViewById(R.id.llbottomIcons);;
             XMDevInfo finalXmDevInfo1 = xmDevInfo;
             btnTurnToPushSet1.setOnClickListener(new View.OnClickListener() {
                 @Override

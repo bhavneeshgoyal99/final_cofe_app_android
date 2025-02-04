@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
     android:orientation="vertical"
-    tools:context=".ui.activity.DevMeActivity">
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +31,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/ivProfileImageRl"
+                >
 
                 <ImageView
                     android:id="@+id/ivProfileImage"
@@ -55,7 +57,8 @@
                         android:text="756765765656"
                         android:textColor="@color/black"
                         android:textSize="@dimen/font_small"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/account_id_txtv"/>
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -148,7 +151,9 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/solid_white_10"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
+
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -156,7 +161,8 @@
                     android:layout_weight="1"
 
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <ImageView
                         android:layout_width="wrap_content"

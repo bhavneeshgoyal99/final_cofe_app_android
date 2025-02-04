@@ -36,7 +36,7 @@ public class AudioVideoSettings extends AppCompatActivity {
 
     private void initUis()
     {
-        tvTitleHeader=findViewById(R.id.tvTitleHeader);
+        tvTitleHeader=findViewById(R.id.toolbar_title);
         back_button=findViewById(R.id.back_button);
         rlSpeakerVolume=findViewById(R.id.rlSpeakerVolume);
         llSpeakerVolume=findViewById(R.id.llSpeakerVolume);

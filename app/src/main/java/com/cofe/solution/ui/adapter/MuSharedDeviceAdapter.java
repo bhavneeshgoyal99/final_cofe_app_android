@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cofe.solution.R;
-import com.cofe.solution.ui.activity.DevMeActivity;
 import com.cofe.solution.ui.activity.MeSharingManagement;
 import com.cofe.solution.ui.activity.MySharedUserActivity;
 

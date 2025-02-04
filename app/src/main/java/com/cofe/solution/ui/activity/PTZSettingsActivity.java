@@ -34,7 +34,7 @@ public class PTZSettingsActivity extends AppCompatActivity {
 
     private void initUis()
     {
-        tvTitleHeader=findViewById(R.id.tvTitleHeader);
+        tvTitleHeader=findViewById(R.id.toolbar_title);
         back_button=findViewById(R.id.back_button);
         rlPtzSpeed=findViewById(R.id.rlPtzSpeed);
         llPtzOptions=findViewById(R.id.llPtzOptions);

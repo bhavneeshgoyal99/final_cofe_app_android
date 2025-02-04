@@ -30,6 +30,8 @@
             app:layout_scrollFlags="scroll|enterAlways"
             android:visibility="gone"/>
 
+
+
         <!-- Toolbar -->
         <include
             android:id="@+id/toolbar"
@@ -37,7 +39,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:elevation="0dp" />
+            android:elevation="0dp"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            >
+
+            <ImageView
+                android:id="@+id/back_button"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:src="@drawable/back_arrow_icon"/>
+
+            <TextView
+                        android:id="@+id/toolbar_title"
+                style="@style/text_system_info_title"
+                android:text="@string/account_information"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/font_normal"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -82,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="TR_Setting_Power_Saving_Mode"
+                        android:text="TR Setting Power Saving Mode"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -133,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="TR_Setting_Performance"
+                        android:text="TR Setting Performance"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -184,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="mode_customize"
+                        android:text="mode customize"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -197,7 +225,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="16dp"
-                        android:text="TR_Setting_Event_Record_Delay"
+                        android:text="TR Setting Event Record Delay"
                         android:textColor="#ff999999"
                         android:textSize="11sp"
                         uilib:layout_constraintBottom_toBottomOf="parent"
@@ -239,7 +267,7 @@
                         uilib:ItemTitleSize="15sp"
                         uilib:ShowTopLine="true"
                         uilib:Cap=""
-                        uilib:Title="TR_Setting_Event_Record_Delay"
+                        uilib:Title="TR Setting Event Record Delay"
                         uilib:singleClick="true" />
 
                     <com.xm.ui.widget.ListSelectItem
@@ -254,7 +282,7 @@
                         uilib:ItemTitleSize="15sp"
                         uilib:ShowTopLine="true"
                         uilib:Cap=""
-                        uilib:Title="TR_AOV_Fps"
+                        uilib:Title="TR AOV Fps"
                         uilib:singleClick="true" />
                 </LinearLayout>
             </LinearLayout>
@@ -278,7 +306,7 @@
                 android:layout_marginEnd="@dimen/normal_padding"
                 uilib:ShowTopLine="false"
                 uilib:Cap=""
-                uilib:Title="TR_AOV_Alarm_interval"
+                uilib:Title="TR AOV Alarm interval"
                 uilib:singleClick="true" />
 
             <TextView

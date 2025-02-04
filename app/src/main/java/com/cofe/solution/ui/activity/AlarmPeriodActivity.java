@@ -36,7 +36,7 @@ public class AlarmPeriodActivity extends AppCompatActivity {
     }
 
     private void initUis() {
-        tvTitleHeader = findViewById(R.id.tvTitleHeader);
+        tvTitleHeader = findViewById(R.id.toolbar_title);
         back_button = findViewById(R.id.back_button);
         rlCustomAlarm = findViewById(R.id.rlCustomAlarm);
         rvCustomAlarm = findViewById(R.id.rvCustomAlarm);

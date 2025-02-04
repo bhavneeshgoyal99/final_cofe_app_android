@@ -281,11 +281,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounder_corner"
+                    >
 
-                <!--   <ImageView
+                   <ImageView
                        android:layout_width="match_parent"
                        android:layout_height="200dp"
                        android:scaleType="centerCrop"
@@ -293,8 +297,8 @@
                        android:contentDescription="Device Thumbnail"
                        android:id="@+id/banner_img"
                        />
-   -->
-                <com.makeramen.roundedimageview.RoundedImageView
+                </RelativeLayout>
+                <!--<com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/banner_img"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
@@ -303,7 +307,7 @@
                     android:layout_centerVertical="true"
                     app:riv_corner_radius="10dip"
                     app:riv_mutate_background="true"
-                    />
+                    />-->
 
                 <!-- Sleep Badge -->
                 <TextView

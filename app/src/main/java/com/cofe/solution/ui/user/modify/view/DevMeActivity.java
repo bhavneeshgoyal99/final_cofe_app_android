@@ -7,17 +7,26 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cofe.solution.R;
+import com.cofe.solution.base.DemoBaseActivity;
 import com.cofe.solution.ui.activity.AccountInformationActivity;
 import com.cofe.solution.ui.activity.MeSharingManagement;
+import com.cofe.solution.ui.user.info.listener.UserInfoContract;
+import com.cofe.solution.ui.user.info.presenter.UserInfoPresenter;
+import com.cofe.solution.ui.user.info.view.BasicSettingsActivity;
+import com.cofe.solution.ui.user.info.view.UserInfoActivity;
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
+import com.manager.db.DevDataCenter;
 
-public class DevMeActivity extends AppCompatActivity {
-
+public class DevMeActivity extends DemoBaseActivity<UserInfoPresenter> implements  UserInfoContract.IUserInfoView {
     ImageView ivProfileImage;
+    RelativeLayout ivProfileImageRl;
     ImageView ivBasicSettings;
     RelativeLayout rlAbout;
     RelativeLayout rlPermissionSettings;
@@ -25,35 +34,40 @@ public class DevMeActivity extends AppCompatActivity {
     RelativeLayout rlSharingManagement;
 
     @Override
+    public UserInfoPresenter getPresenter() {
+        return new UserInfoPresenter(DevMeActivity.this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_dev_me2);
-
         initUis();
     }
 
     private void initUis() {
         ivProfileImage = findViewById(R.id.ivProfileImage);
+        ivProfileImageRl = findViewById(R.id.ivProfileImageRl);
         ivBasicSettings = findViewById(R.id.ivBasicSettings);
         rlPermissionSettings = findViewById(R.id.rlPermissionSettings);
         rlSharingManagement = findViewById(R.id.rlSharingManagement);
         rlTools = findViewById(R.id.rlTools);
         rlAbout = findViewById(R.id.rlAbout);
 
-        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+        ivProfileImageRl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DevMeActivity.this, AccountInformationActivity.class);
+                Intent intent = new Intent(DevMeActivity.this, UserInfoActivity.class);
                 startActivity(intent);
             }
         });
+
         ivBasicSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent intent = new Intent(DevMeActivity.this, BasicSettingsActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(DevMeActivity.this, BasicSettingsActivity.class);
+                startActivity(intent);
             }
         });
         rlAbout.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +77,7 @@ public class DevMeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         rlPermissionSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,6 +100,32 @@ public class DevMeActivity extends AppCompatActivity {
             }
         });
 
+        if (DevDataCenter.getInstance().isLoginByAccount()) {
+            loaderDialog.setMessage();
+            //findViewById(R.id.layout_user_Info).setVisibility(View.VISIBLE);
+            tryToGetUserInfo();
+        }
+    }
+
+    private void tryToGetUserInfo() {
+        loaderDialog.setMessage();
+        if (!presenter.getInfo()) {
+            showToast(getString(R.string.user_info_not_login), Toast.LENGTH_LONG);
+            finish();
+            Intent intent = new Intent();
+            intent.setClass(this, UserLoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
+
+    @Override
+    public void onUpdateView() {
+        loaderDialog.dismiss();
+        if (presenter != null) {
+            TextView accountIdTxttv = findViewById(R.id.account_id_txtv);
+            accountIdTxttv.setText(presenter.getUserName());
+        }
 
     }
 }

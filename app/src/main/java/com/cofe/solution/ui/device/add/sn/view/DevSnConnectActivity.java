@@ -295,6 +295,14 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         super.onActivityResult(requestCode, responseCode, data);
         if (requestCode == 1 && responseCode == RESULT_OK) {
             if (null != data) {
+                if(data.getStringExtra("useredit_sr")!=null) {
+
+                    if(XUtils.isSn(data.getStringExtra("useredit_sr"))) {
+                        devSNEdit.setText(data.getStringExtra("useredit_sr"));
+                        devLoginBtn.performClick();
+                        return;
+                    }
+                }
                 String result = data.getStringExtra("result");
                 //Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
 
@@ -351,7 +359,6 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                         devShareQrCodeInfo.getLoginName(),
                                         devShareQrCodeInfo.getPwd(),
                                         devShareQrCodeInfo.getDevType(),
-
                                         devShareQrCodeInfo.getPermissions());
                                 shareManager.addShareManagerListener(new ShareManager.OnShareManagerListener() {
                                     @Override

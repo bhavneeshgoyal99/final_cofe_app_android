@@ -5,6 +5,8 @@
 
     <uses-sdk tools:overrideLibrary="me.goldze.mvvmhabit" />
 
+    <uses-feature android:name="android.hardware.microphone" android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
@@ -144,6 +146,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.info.view.UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.info.view.BasicSettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.forget.view.UserForgetPwdActivity"

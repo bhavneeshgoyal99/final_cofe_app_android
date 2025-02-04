@@ -32,7 +32,7 @@ public class BulletCamActivity extends AppCompatActivity {
     {
         Intent intent = getIntent();
         String title = intent.getStringExtra("title");
-        tvTitleHeader=findViewById(R.id.tvTitleHeader);
+        tvTitleHeader=findViewById(R.id.toolbar_title);
         back_button=findViewById(R.id.back_button);
 
 

@@ -238,7 +238,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
                 /*} else {
                     Toast.makeText(anchorView.getContext(), "Please enter old password", Toast.LENGTH_SHORT).show();
                 }*/
-
+            popupWindow.showAsDropDown(anchorView, 0, 0);
 
         });
     }

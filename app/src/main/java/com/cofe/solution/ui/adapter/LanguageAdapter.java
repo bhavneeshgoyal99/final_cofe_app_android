@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cofe.solution.R;
-import com.cofe.solution.ui.device.BasicSettingsActivity;
+import com.cofe.solution.ui.user.info.view.BasicSettingsActivity;
 
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ItemViewHolder> {
 
@@ -17,7 +17,7 @@ public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ItemVi
     private BasicSettingsActivity activity;
 
     // Constructor
-    public LanguageAdapter(BasicSettingsActivity basicSettingsActivity) {
+    public  LanguageAdapter(BasicSettingsActivity basicSettingsActivity) {
         this.activity = basicSettingsActivity;
     }
 

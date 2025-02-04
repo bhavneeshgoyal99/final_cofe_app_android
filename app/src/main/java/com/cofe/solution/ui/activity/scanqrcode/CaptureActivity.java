@@ -15,13 +15,18 @@
  */
 package com.cofe.solution.ui.activity.scanqrcode;
 
+
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -29,13 +34,21 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.common.HybridBinarizer;
 import com.xm.activity.base.XMBasePresenter;
 
 import java.io.IOException;
@@ -43,6 +56,7 @@ import java.lang.reflect.Field;
 
 import com.cofe.solution.R;
 import com.cofe.solution.base.DemoBaseActivity;
+
 import io.reactivex.annotations.Nullable;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -52,7 +66,7 @@ import permissions.dispatcher.RuntimePermissions;
  * thread. It draws a viewfinder to help the user place the barcode correctly,
  * shows feedback as the image processing is happening, and then overlays the
  * results when a scan is successful.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  * @author Sean Owen
  */
@@ -67,8 +81,13 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 	private RelativeLayout scanCropView;
 	private ImageView scanLine;
 	private ImageView mFlash;
+	private ImageView imgGallary;
+	private ImageView imgMannual;
 
 	private Rect mCropRect = null;
+
+	private static final int PICK_IMAGE = 1;
+
 
 	public Handler getHandler() {
 		return handler;
@@ -97,7 +116,11 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 		scanCropView = (RelativeLayout) findViewById(R.id.capture_crop_view);
 		scanLine = (ImageView) findViewById(R.id.capture_scan_line);
 		mFlash = (ImageView) findViewById(R.id.capture_flash);
+		imgGallary = (ImageView) findViewById(R.id.imgGallary);
+		imgMannual = (ImageView) findViewById(R.id.imgMannual);
 		mFlash.setOnClickListener(this);
+		imgGallary.setOnClickListener(this);
+		imgMannual.setOnClickListener(this);
 
 		inactivityTimer = new InactivityTimer(CaptureActivity.this);
 		TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
@@ -115,10 +138,11 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 	 * 获取摄像头权限
 	 * Get camera permissions
 	 */
-	@NeedsPermission({ Manifest.permission.CAMERA})
+	@NeedsPermission({Manifest.permission.CAMERA})
 	protected void initData() {
 
 	}
+
 
 	@Override
 	protected void onResume() {
@@ -192,12 +216,9 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 	/**
 	 * A valid barcode has been found, so give an indication of success and show
 	 * the results.
-	 * 
-	 * @param rawResult
-	 *            The contents of the barcode.
-	 * 
-	 * @param bundle
-	 *            The extras
+	 *
+	 * @param rawResult The contents of the barcode.
+	 * @param bundle    The extras
 	 */
 	public void handleDecode(final Result rawResult, Bundle bundle) {
 		inactivityTimer.onActivity();
@@ -322,11 +343,11 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 			flag = false;
 			// 关闪光灯
 			cameraManager.offLight();
-			mFlash.setBackgroundResource(R.mipmap.flash_default);
+			// mFlash.setBackgroundResource(R.mipmap.flash_default);
 		} else {
 			cameraManager.openLight();
 			if (cameraManager.hasFlash) {
-				mFlash.setBackgroundResource(R.mipmap.flash_open);
+				// mFlash.setBackgroundResource(R.mipmap.flash_open);
 				flag = true;
 			} else {
 				Toast.makeText(CaptureActivity.this, getString(R.string.no_flash), Toast.LENGTH_SHORT).show();
@@ -341,14 +362,111 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 				openLight();
 				break;
 
+			case R.id.imgGallary:
+				openGallery();
+				break;
+			case R.id.imgMannual:
+				showMannualQrDialog();
+				break;
+
+
 			default:
 				break;
 		}
 	}
 
+
 	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull  String[] permissions, @NonNull  int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		CaptureActivityPermissionsDispatcher.onRequestPermissionsResult(this,requestCode,grantResults);
+		CaptureActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
 	}
+
+	// simran open gallery to detect scanner
+	private void openGallery() {
+		Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		intent.setType("image/*");
+		startActivityForResult(intent, PICK_IMAGE);
+	}
+
+	// simran gallery scanner manage
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+			Uri imageUri = data.getData();
+			try {
+				Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+				decodeBitmap(bitmap);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// simran decode method
+	private void decodeBitmap(Bitmap bitmap) {
+		int width = bitmap.getWidth(), height = bitmap.getHeight();
+		int[] intArray = new int[width * height];
+		bitmap.getPixels(intArray, 0, width, 0, 0, width, height);
+
+		LuminanceSource source = new RGBLuminanceSource(width, height, intArray);
+		BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+		try {
+			MultiFormatReader reader = new MultiFormatReader();
+			Result result = reader.decode(binaryBitmap);
+
+			Intent intent = new Intent();
+			intent.putExtra("result", result.getText());
+			setResult(RESULT_OK, intent);
+			Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
+			finish();
+		} catch (NotFoundException e) {
+			finish();
+			// Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+
+	// simran dialog for manualy qr
+	private void showMannualQrDialog() {
+		// Create and configure dialog
+		Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(R.layout.dialog_qr_mannual);
+		dialog.setCancelable(false);
+		dialog.setCanceledOnTouchOutside(false);
+
+		// Get views from dialog layout
+
+		EditText etDeviceId = dialog.findViewById(R.id.etDeviceId);
+		Button btnCancel = dialog.findViewById(R.id.btnCancel);
+		Button btnOk = dialog.findViewById(R.id.btnOk);
+
+		// Set button click listener
+		btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		});
+
+		btnOk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog.dismiss();
+				Intent intent = new Intent();
+				intent.putExtra("useredit_sr ", etDeviceId.getText().toString());
+				setResult(RESULT_OK, intent);
+				finish();
+			}
+		});
+
+		// Show the dialog
+		dialog.show();
+	}
+
+
 }

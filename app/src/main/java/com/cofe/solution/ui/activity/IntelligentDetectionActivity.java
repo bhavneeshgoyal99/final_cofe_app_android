@@ -31,7 +31,7 @@ public class IntelligentDetectionActivity extends AppCompatActivity {
     }
 
     private void initUis() {
-        tvTitleHeader = findViewById(R.id.tvTitleHeader);
+        tvTitleHeader = findViewById(R.id.toolbar_title);
         back_button = findViewById(R.id.back_button);
         rlAlarmPeriod = findViewById(R.id.rlAlarmPeriod);
         rlDomeCam = findViewById(R.id.rlDomeCam);

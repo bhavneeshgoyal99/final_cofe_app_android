@@ -51,8 +51,6 @@
                         style="@style/user_info_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
-
                         android:text="Bluetooth access Permission"
                         android:textSize="14sp" />
 
@@ -82,24 +80,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="On"
-                        android:textColor="@color/item_right_cap_text_color"
-                        android:textSize="10sp" />
+                        android:text="Set"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="10sp"
+                        android:tag="status_text"
+                        />
 
                     <ImageView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:contentDescription="@null"
                         android:src="@drawable/right_icon_1" />
 
-
                 </LinearLayout>
-
-
             </RelativeLayout>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,10 +147,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="On"
-                        android:textColor="@color/item_right_cap_text_color"
-
-                        android:textSize="10sp" />
+                        android:text="Set"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="10sp"
+                        android:tag="status_text"/>
 
                     <ImageView
 
@@ -229,7 +223,7 @@
                         android:layout_gravity="center"
                         android:text="Set"
                         android:textColor="@color/red"
-
+                        android:tag="status_text"
                         android:textSize="10sp" />
 
                     <ImageView
@@ -303,7 +297,7 @@
                         android:layout_gravity="center"
                         android:text="Set"
                         android:textColor="@color/red"
-
+                        android:tag="status_text"
                         android:textSize="10sp" />
 
                     <ImageView
@@ -377,7 +371,7 @@
                         android:layout_gravity="center"
                         android:text="Set"
                         android:textColor="@color/red"
-
+                        android:tag="status_text"
                         android:textSize="10sp" />
 
                     <ImageView
@@ -408,6 +402,7 @@
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:id="@+id/ll4_p"
+                    android:visibility="gone"
                     >
 
 
@@ -457,7 +452,7 @@
                             android:layout_gravity="center"
                             android:text="Set"
                             android:textColor="@color/red"
-
+                            android:tag="status_text"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -477,7 +472,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:background="@color/gray_transparent" />
+                    android:background="@color/gray_transparent"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -485,7 +481,7 @@
                     android:background="@drawable/solid_white_10"
                     android:orientation="vertical"
                     android:padding="20dp"
-                    android:id="@+id/ll5_n"
+                    android:visibility="gone"
                     >
 
                     <TextView
@@ -514,11 +510,11 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/solid_white_10"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="20dp"
+                android:id="@+id/ll5_n">
 
 
                 <LinearLayout
@@ -534,8 +530,6 @@
                         style="@style/user_info_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
-
                         android:text="Notification management Permission"
                         android:textSize="14sp" />
 
@@ -565,9 +559,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="On"
-                        android:textColor="@color/item_right_cap_text_color"
-                        android:textSize="10sp" />
+                        android:text="Set"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="10sp"
+                        android:tag="status_text"/>
 
                     <ImageView
 

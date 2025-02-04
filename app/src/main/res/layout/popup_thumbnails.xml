@@ -97,7 +97,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llOnline"
+            android:id="@+id/llOfline"
             android:layout_width="match_parent"
             android:layout_height="50dp">
 
@@ -118,12 +118,39 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
-                android:text="Online/Offline"
+                android:text="Offline"
                 android:textSize="15sp" />
 
 
         </LinearLayout>
 
+        <LinearLayout
+                android:id="@+id/llOnline"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+
+                android:src="@drawable/ic_online" />
+
+
+            <TextView
+                android:id="@+id/tvOffline"
+                style="@style/user_info_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:text="Online"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

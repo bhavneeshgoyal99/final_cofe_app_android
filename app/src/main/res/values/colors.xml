@@ -194,6 +194,7 @@
     <color name="color_f05656">#F05656</color>
     <color name="color_444444">#444444</color>
     <color name="color_F0DFC2">#F0DFC2</color>
+    <color name="page_bg_color">#d6d6d6</color>
 
     <color name="active_color">#FF6200EE</color> <!-- Purple -->
     <color name="dim_color">#FFBBBBBB</color> <!-- Gray -->
