@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -20,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
@@ -29,6 +31,7 @@ import com.constant.DeviceConstant;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.config.mqtt.DevStateNotifyMqttManager;
@@ -168,6 +171,34 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        // simran setting image size for grid layout
+        // Get the current layout manager of the RecyclerView
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+
+        // Check if the layout manager is a GridLayoutManager
+        if (layoutManager instanceof GridLayoutManager) {
+            // It's a GridLayout, adjust the height accordingly
+            int recyclerViewWidth = recyclerView.getWidth();
+            int spanCount = ((GridLayoutManager) layoutManager).getSpanCount(); // Get the number of columns
+            int itemWidth = recyclerViewWidth / spanCount;
+
+            // Set the size for the GridLayout
+            ViewGroup.LayoutParams params = holder.bannerImg.getLayoutParams();
+            //params.width = itemWidth;
+            params.height = 250;  // Adjust this value based on your requirement
+            holder.bannerImg.setLayoutParams(params);
+            holder.llbottomIcons.setVisibility(View.GONE);
+        } else {
+            // It's not a GridLayout, use other height for the image
+            ViewGroup.LayoutParams params = holder.bannerImg.getLayoutParams();
+            params.height = 500;  // Different height for non-GridLayouts
+            holder.bannerImg.setLayoutParams(params);
+            holder.llbottomIcons.setVisibility(View.VISIBLE);
+
+        }
+
+
         String devId = (String) data.get(position).get("devId");
         String devName = (String) data.get(position).get("devName");
         holder.lsiDevInfo.setTip(devId);
@@ -190,8 +221,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                         strShareState = strShareState + "[" + context.getString(R.string.share_reject) + "]";
                     }
                 }
-                holder.dSharedStatustxtv.setText(strShareState);
-                holder.cloudInfoLl.setVisibility(View.GONE);;
+                holder.dSharedStatustxtv.setText("");
+                //holder.cloudInfoLl.setVisibility(View.GONE);;
                 holder.btnShareDev1.setVisibility(View.GONE);;
                 holder.btnTurnToPushSet1.setVisibility(View.GONE);
 
@@ -240,6 +271,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         holder.status_txtv.setTag(DEV_STATE[(int) data.get(position).get("devState")]);
         holder.status_txtv.setText(DEV_STATE[(int) data.get(position).get("devState")]);
 
+        holder.openPopup.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -282,12 +315,17 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         LinearLayout cloudInfoLl;
         ImageView btnTurnToCloudService1;
 
-        ImageView openAiSetting, bannerImg;
+        // simran just make the banner image rounded image view
+        ImageView openAiSetting/*, bannerImg*/;
 
         ImageView openPopup;
         TextView status_txtv;
         TextView dSharedStatustxtv;
         TextView devNameTxtv;
+
+        // simran variable declaration
+        LinearLayout llbottomIcons;
+        ImageView bannerImg;
 
 
         public ViewHolder(final View itemView) {
@@ -313,15 +351,19 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     return false;
                 }
             });
-
+            XMDevInfo xmDevInfo = null;
+            if(getAdapterPosition()!=-1){
+                xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) data.get(getAdapterPosition()).get("devId"));
+            }
             lsiDevInfo = itemView.findViewById(R.id.lsi_dev_info);
             btnTurnToAlarmMsg = itemView.findViewById(R.id.btn_turn_to_alarm_msg);
+            XMDevInfo finalXmDevInfo2 = xmDevInfo;
             btnTurnToAlarmMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
                         int index = getAdapterPosition();
-                        onItemDevClickListener.onTurnToAlarmMsg(index);
+                        onItemDevClickListener.onTurnToAlarmMsg(index, finalXmDevInfo2);
                     }
                 }
             });
@@ -330,11 +372,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             btnTurnToAlarmMsg.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
             btnTurnToPushSet = itemView.findViewById(R.id.btn_turn_to_push_set);
+            XMDevInfo finalXmDevInfo = xmDevInfo;
             btnTurnToPushSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition());
+                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo);
                     }
                 }
             });
@@ -342,11 +385,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             btnTurnToPushSet.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
             btnTurnToCloudService = itemView.findViewById(R.id.btn_turn_to_cloud_service);
+            XMDevInfo finalXmDevInfo3 = xmDevInfo;
             btnTurnToCloudService.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition());
+                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition(), finalXmDevInfo3);
                     }
                 }
             });
@@ -466,32 +510,34 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
             //该功能只有JF账号登录后才会显示
             btnUpdateDevToken.setVisibility(DevDataCenter.getInstance().isLoginByAccount() ? View.VISIBLE : View.GONE);
 
-             btnShareDev1   = itemView.findViewById(R.id.btn_share_dev1);
-             btnTurnToAlarmMsg1  = itemView.findViewById(R.id.btn_turn_to_alarm_msg1); ;
-             btnTurnToPushSet1  = itemView.findViewById(R.id.btn_turn_to_push_set1); ;
-             btnTurnToCloudService1  = itemView.findViewById(R.id.btn_turn_to_cloud_service1);;
-             cloudInfoLl  = itemView.findViewById(R.id.cloud_info_ll);;
-             settingIcon  = itemView.findViewById(R.id.setting_icon);
-             openAiSetting  = itemView.findViewById(R.id.open_ai_setting);;
-             openPopup  = itemView.findViewById(R.id.open_popup);;
-             status_txtv  = itemView.findViewById(R.id.status_txtv);;
-             dSharedStatustxtv  = itemView.findViewById(R.id.is_shared_device_txtv);;
-             devNameTxtv  = itemView.findViewById(R.id.dev_name);;
-             bannerImg  = itemView.findViewById(R.id.banner_img);;
-
+            btnShareDev1   = itemView.findViewById(R.id.btn_share_dev1);
+            btnTurnToAlarmMsg1  = itemView.findViewById(R.id.btn_turn_to_alarm_msg1); ;
+            btnTurnToPushSet1  = itemView.findViewById(R.id.btn_turn_to_push_set1); ;
+            btnTurnToCloudService1  = itemView.findViewById(R.id.btn_turn_to_cloud_service1);;
+            cloudInfoLl  = itemView.findViewById(R.id.cloud_info_ll);;
+            settingIcon  = itemView.findViewById(R.id.setting_icon);
+            openAiSetting  = itemView.findViewById(R.id.open_ai_setting);;
+            openPopup  = itemView.findViewById(R.id.open_popup);;
+            status_txtv  = itemView.findViewById(R.id.status_txtv);;
+            dSharedStatustxtv  = itemView.findViewById(R.id.is_shared_device_txtv);;
+            devNameTxtv  = itemView.findViewById(R.id.dev_name);;
+            bannerImg  = itemView.findViewById(R.id.banner_img);;
+            llbottomIcons  = itemView.findViewById(R.id.llbottomIcons);;
+            XMDevInfo finalXmDevInfo1 = xmDevInfo;
             btnTurnToPushSet1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition());
+                        onItemDevClickListener.onTurnToPushSet(getAdapterPosition(), finalXmDevInfo1);
                     }
                 }
             });
+            XMDevInfo finalXmDevInfo4 = xmDevInfo;
             btnTurnToAlarmMsg1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToAlarmMsg(getAdapterPosition());
+                        onItemDevClickListener.onTurnToAlarmMsg(getAdapterPosition(), finalXmDevInfo4);
                     }
                 }
             });
@@ -502,11 +548,12 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     onItemDevClickListener.openSettingActivity(getAdapterPosition(),xmDevInfo );
                 }
             });
+            XMDevInfo finalXmDevInfo5 = xmDevInfo;
             btnTurnToCloudService1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemDevClickListener != null) {
-                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition());
+                        onItemDevClickListener.onTurnToCloudService(getAdapterPosition(), finalXmDevInfo5);
                     }
                 }
             });
@@ -520,6 +567,8 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     }
                 }
             });
+            openPopup.setVisibility(View.VISIBLE);
+
             openPopup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -527,10 +576,17 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
                     /*if (onItemDevClickListener != null) {
                         onItemDevClickListener.onShareDevManage(getAdapterPosition(), xmDevInfo);
                     }*/
-                        showPopupMenu(view.getContext() ,view, getAdapterPosition(),xmDevInfo);
+                    //showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
+
+                    if(xmDevInfo.getDevState()!=0) {
+                        showPopupMenu(view.getContext(), view, getAdapterPosition(), xmDevInfo);
+                    } else{
+                        Toast.makeText(openPopup.getContext(), openPopup.getContext().getString(R.string.dev_offline), Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
+            openPopup.setVisibility(View.VISIBLE);
 
         }
     }
@@ -621,11 +677,11 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
 
         boolean onLongItemClick(int position, XMDevInfo xmDevInfo);
 
-        void onTurnToAlarmMsg(int position);
+        void onTurnToAlarmMsg(int position,XMDevInfo xmDevInfo);
 
-        void onTurnToCloudService(int position);
+        void onTurnToCloudService(int position, XMDevInfo xmDevInfo);
 
-        void onTurnToPushSet(int position);
+        void onTurnToPushSet(int position, XMDevInfo xmDevInfo);
 
         void onModifyDevName(int position, XMDevInfo xmDevInfo);
         void openSettingActivity(int position, XMDevInfo xmDevInfo);
@@ -761,7 +817,7 @@ public class DevListAdapter extends RecyclerView.Adapter<DevListAdapter.ViewHold
         messageButton.setOnClickListener(v -> {
             popupWindow.dismiss();
             if (onItemDevClickListener != null) {
-                onItemDevClickListener.onTurnToPushSet(position);
+                onItemDevClickListener.onTurnToPushSet(position,xmDevInfo);
             }
         });
 

@@ -266,7 +266,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
     public void onSetDevToRouterResult(boolean isSuccess, XMDevInfo xmDevInfo) {
         if (isSuccess) {
             showToast(getString(R.string.libfunsdk_set_dev_to_router_s), Toast.LENGTH_LONG);
-            showWaitDialog();
+            loaderDialog.setMessage();
         }
     }
 
@@ -278,7 +278,7 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                hideWaitDialog();
+                loaderDialog.dismiss();
                 tvResult.setVisibility(View.VISIBLE);
                 findViewById(R.id.rl_show_qr_code).setVisibility(View.GONE);
 
@@ -289,11 +289,14 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
                 } else {
                     if (errorId == -604101) {
                         showToast(getString(R.string.the_dev_already_exist), Toast.LENGTH_LONG);
+                        findViewById(R.id.rl_show_qr_code).setVisibility(View.GONE);
                         tvResult.setText(tvResult.getText().toString() + "\n" + getString(R.string.the_dev_already_exist));
-                        presenter.syncDevTimeZone();
+
+                        finish();
                     } else {
                         showToast(getString(R.string.add_f) , Toast.LENGTH_LONG);
                         findViewById(R.id.rl_show_qr_code).setVisibility(View.GONE);
+                        finish();
                     }
                 }
             }

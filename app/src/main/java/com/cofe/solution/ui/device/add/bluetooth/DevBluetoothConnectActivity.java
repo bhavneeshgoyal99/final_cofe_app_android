@@ -55,7 +55,7 @@ public class DevBluetoothConnectActivity extends DemoBaseActivity<DevBluetoothCo
         findViewById(R.id.btnWifiQuickSetting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 String ssid = etWiFiSSID.getText().toString().trim();
                 String pwd = etWiFiPwd.getText().toString().trim();
                 presenter.connectWiFi(mac, ssid, pwd);
@@ -102,7 +102,7 @@ public class DevBluetoothConnectActivity extends DemoBaseActivity<DevBluetoothCo
             if ((data.getCmdId() == CMD_RECEIVE) || data.getCmdId() == CMD_CALLBACK) {
                 HashMap hashMap = XMBleManager.parseBleWiFiConfigResult(pid,data.getContentDataHexString());
                 if (hashMap != null) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                     boolean isSuccess = (boolean) hashMap.get("isSuccess");
                     if (isSuccess) {
                         XMDevInfo xmDevInfo = (XMDevInfo) hashMap.get("devInfo");
@@ -144,7 +144,7 @@ public class DevBluetoothConnectActivity extends DemoBaseActivity<DevBluetoothCo
 
     @Override
     public void onAddDevResult(XMDevInfo xmDevInfo, boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (!isSuccess) {
             showToast(getString(R.string.Add_Dev_Failed) , Toast.LENGTH_LONG);
         }

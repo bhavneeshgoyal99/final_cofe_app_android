@@ -1,10 +1,25 @@
 package com.cofe.solution.ui.device.push.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
+import com.lib.MsgContent;
 import com.lib.SDKCONST;
+import com.lib.sdk.bean.alarm.AlarmGroup;
+import com.lib.sdk.bean.alarm.AlarmInfo;
+import com.manager.account.AccountManager;
+import com.manager.account.BaseAccountManager;
+import com.manager.db.DevDataCenter;
+import com.manager.device.DeviceManager;
+import com.manager.device.alarm.DevAlarmInfoManager;
+import com.manager.push.XMPushManager;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.ListSelectItem;
 import com.xm.ui.widget.XTitleBar;
@@ -15,6 +30,11 @@ import com.cofe.solution.ui.device.push.listener.DevPushContract;
 import com.cofe.solution.ui.device.push.presenter.DevPushPresenter;
 import com.cofe.solution.ui.user.modify.view.UserModifyPwdActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author hws
  * @class 设备推送设置
@@ -22,10 +42,48 @@ import com.cofe.solution.ui.user.modify.view.UserModifyPwdActivity;
  */
 public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implements DevPushContract.IDevPushView {
     private ListSelectItem lsiPushSwitch;
+    Handler handler;
+    Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dev_push);
+        loaderDialog.show();
+        handler = new Handler();
+
+        if (!DevDataCenter.getInstance().isLoginByAccount()) {
+            // titleBar.setRightTitleText(getString(R.string.clear_dev_list));
+            if(DevDataCenter.getInstance().getAccountUserName()!=null) {
+                if(DevDataCenter.getInstance().getAccessToken()==null) {
+                    AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                            new BaseAccountManager.OnAccountManagerListener() {
+                                @Override
+                                public void onSuccess(int msgId) {
+                                    Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+
+                                }
+
+                                @Override
+                                public void onFailed(int msgId, int errorId) {
+                                }
+
+                                @Override
+                                public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                }
+                            });//LOGIN_BY_INTERNET（1）  Account login type
+
+                }
+
+            } else {
+                Log.d("account not present " ," > "  +DevDataCenter.getInstance().getAccessToken());
+                //finish();
+                //startActivity(new Intent(this, UserLoginActivity.class));
+            }
+        } else {
+            Log.d("customer not logged in  " ," > "  +DevDataCenter.getInstance().getAccountUserName());
+        }
+
         initView();
         initData();
     }
@@ -55,19 +113,112 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
         lsiPushSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loaderDialog.show();
                 lsiPushSwitch.setRightImage(lsiPushSwitch.getRightValue() == SDKCONST.Switch.Open
                         ? SDKCONST.Switch.Close : SDKCONST.Switch.Open);
+                String response ="";
                 if (lsiPushSwitch.getRightValue() == SDKCONST.Switch.Open) {
+                    response = getString(R.string.push_notification_started_for_this_device);
                     presenter.openPush();
                 }else {
+                    response = getString(R.string.push_setting_end);
+
                     presenter.closePush();
+                }
+                String finalResponse = response;
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), finalResponse, Toast.LENGTH_LONG).show();
+                        loaderDialog.dismiss();
+                    }
+                };
+                handler.postDelayed(runnable, 3000);
+
+            }
+        });
+        XMPushManager manager = new XMPushManager(new XMPushManager.OnXMPushLinkListener(){
+
+            @Override
+            public void onPushInit(int pushType, int errorId) {
+
+            }
+
+            @Override
+            public void onPushLink(int pushType, String devId, int seq, int errorId) {
+
+            }
+
+            @Override
+            public void onPushUnLink(int pushType, String devId, int seq, int errorId) {
+
+            }
+
+            @Override
+            public void onIsPushLinkedFromServer(int pushType, String devId, boolean isLinked) {
+                Log.d(getClass().getName() , "onIsPushLinkedFromServer > "+pushType  + " |  dev id > " + devId  + "   | isLinked > "  + isLinked);
+            }
+
+            @Override
+            public void onAlarmInfo(int pushType, String devId, Message msg, MsgContent ex) {
+
+            }
+
+            @Override
+            public void onLinkDisconnect(int pushType, String devId) {
+
+            }
+
+            @Override
+            public void onWeChatState(String devId, int state, int errorId) {
+
+            }
+
+            @Override
+            public void onThirdPushState(String info, int pushType, int state, int errorId) {
+
+            }
+
+            @Override
+            public void onAllUnLinkResult(boolean isSuccess) {
+
+            }
+
+            @Override
+            public void onFunSDKResult(Message msg, MsgContent ex) {
+
+            }
+        } );
+        manager.isAlarmLinked(presenter.getDevId());
+
+        Log.d(getClass().getName(),  "Switch  > "+presenter.isPushOpen()  +"devId "  +presenter.getDevId());
+
+
+        DevAlarmInfoManager devAlarmInfoManager = new DevAlarmInfoManager(new DevAlarmInfoManager.OnAlarmInfoListener() { // Callback of the query list
+            @Override
+            public void onSearchResult(List<AlarmGroup> list) {
+                Log.d(getClass().getName(),  "onSearchResult  > "+list);
+            }
+
+            @Override
+            public void onDeleteResult(boolean isSuccess, Message message, MsgContent msgContent, List<AlarmInfo> list) { // Remove callbacks for a single item
+                if (isSuccess) {
                 }
             }
         });
-    }
 
-    private void initData() {
-        lsiPushSwitch.setRightImage(presenter.isPushOpen() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
+        //devAlarmInfoManager.searchAlarmInfoAll(presenter.getDevId(),presenter.getChnId());
+        final Calendar startDate = Calendar.getInstance();
+        startDate.set(2020, Calendar.JANUARY, 10);
+        final Calendar stopDate = Calendar.getInstance();
+        stopDate.getTime();
+        // Format the date as yyyy-MM-dd
+        devAlarmInfoManager.searchAlarmInfoByTime(presenter.getDevId(), presenter.getChnId(),  startDate, stopDate, 1);
+
+
+        lsiPushSwitch.setRightImage(lsiPushSwitch.getRightValue() == SDKCONST.Switch.Open
+                ? SDKCONST.Switch.Close : SDKCONST.Switch.Open);
+
     }
 
     @Override
@@ -75,8 +226,14 @@ public class DevPushActivity extends DemoBaseActivity<DevPushPresenter> implemen
         return new DevPushPresenter(this);
     }
 
+    private void initData() {
+        lsiPushSwitch.setRightImage(presenter.isPushOpen() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
+    }
+
+
     @Override
     public void onPushStateResult(boolean isPushOpen) {
+        loaderDialog.dismiss();
         lsiPushSwitch.setRightImage(isPushOpen ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
     }
 }

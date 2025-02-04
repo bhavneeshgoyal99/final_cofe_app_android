@@ -1,15 +1,20 @@
 package com.cofe.solution.ui.device.record.view;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.transition.ChangeBounds;
+import android.transition.Transition;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -32,12 +37,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.cofe.solution.app.SDKDemoApplication;
 import com.cofe.solution.base.CustomCalendarDialog;
+import com.cofe.solution.base.SharedPreference;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.ScreenOrientationManager;
@@ -108,11 +118,84 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     private boolean isSeekTouchPlayProgress = false;
     LinearLayout parentLL;
     String selectedByuser;
+    int sharedWidth;
+    int sharedHeight;
+    ImageView microphoneImg,cameraImg, videoImg, soundImg;
+    boolean isVideoCaptureStart;
+    FloatingActionButton fab;
+    CustomCalendarDialog cCdialog;
+    HashSet<CalendarDay> highlightedDates;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_record_list);
+        loaderDialog.show();
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            loaderDialog.show();
+
+            Log.d(getClass().getName(), "highlightedDates > "  +highlightedDates);
+            cCdialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+                // Handle selected date
+              //  Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                try {
+                    Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
+                    selectedByuser = selectedDate.getDate().toString();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date1);
+                    noPlayBackTxtv.setVisibility(View.GONE);
+
+                    //parentLL.setVisibility(View.GONE);
+                    //presenter.searchRecordByTime(calendar);
+                    presenter.searchRecordByTime(calendar);
+                    presenter.searchRecordByFile(calendar);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
+            });
+            cCdialog.show();
+        });
+        fab.bringToFront();
+        fab.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                // FAB is attached to window (visible)
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                // Re-add the FAB if it's removed
+                //((ViewGroup) findViewById(android.R.id.content)).addView(fab);
+            }
+        });
+
+        SharedPreference cookies = new SharedPreference(getApplicationContext());
+
+        getWindow().setSharedElementEnterTransition(null);
+        getWindow().setSharedElementReturnTransition(null);
+        postponeEnterTransition();
+        String widthHeight = cookies.retrievDevicePreviewHeightandWidth();
+
+        sharedWidth = Integer.parseInt(widthHeight.split(";;;")[0]);
+        sharedHeight = Integer.parseInt(widthHeight.split(";;;")[1]);
+        RelativeLayout wndInnerLayout = findViewById(R.id.wnd_inner_layout);
+        setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                sharedElements.put(names.get(0), wndInnerLayout);
+
+                // Resize shared element before transition
+                wndInnerLayout.getLayoutParams().width = sharedWidth;
+                wndInnerLayout.getLayoutParams().height = sharedHeight;
+                wndInnerLayout.requestLayout();
+            }
+        });
+        wndInnerLayout.post(() -> startPostponedEnterTransition());
         initView();
         initData();
     }
@@ -132,26 +215,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 presenter.searchMediaFileCalendar(searchMonthCalendar);
-
             }
         });
 
-
-        titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.app_name));
-        titleBar.setRightBtnResource(R.mipmap.icon_date, R.mipmap.icon_date);
-        titleBar.setLeftClick(this);
-        titleBar.setRightIvClick(this);
-        titleBar.setBottomTip(DevRecordActivity.class.getName());
         rvRecordList = findViewById(R.id.rv_records);
         rvRecordFun = findViewById(R.id.rv_record_fun);
         tvPlaySpeed = findViewById(R.id.tv_play_speed);
         ((RadioButton) findViewById(R.id.rb_by_file)).setChecked(true);
         parentLL = findViewById(R.id.parent_ll);
         RelativeLayout rlBanner = findViewById(R.id.banner_rl);
+
+        microphoneImg = findViewById(R.id.microphone);
+        cameraImg = findViewById(R.id.camera);
+        videoImg= findViewById(R.id.video);
+        soundImg = findViewById(R.id.sound);
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
         rvRecordTimeAxis = new XMRecyclerView(this, null);
@@ -268,6 +347,55 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             hideVideoListRadioBtnAndDeleteButton();
             return true; // Allow other touch events to propagate
         });
+
+        findViewById(R.id.btn_layout1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreference cookies = new SharedPreference(DevRecordActivity.this);
+                cookies.savePreviewPageTabSelection("real-tab");
+                finishAfterTransition();
+                overridePendingTransition(0, 0);
+            }
+        });
+        findViewById(R.id.btn_layout3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreference cookies = new SharedPreference(DevRecordActivity.this);
+                cookies.savePreviewPageTabSelection("message-tab");
+                finishAfterTransition();
+                overridePendingTransition(0, 0);
+            }
+        });;
+
+
+
+        findViewById(R.id.camera_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
+            }
+        });
+        findViewById(R.id.video_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isVideoCaptureStart = (isVideoCaptureStart) ? false : true;
+                int image= (isVideoCaptureStart) ? R.drawable.active_video : R.drawable.video_icon ;
+                Glide.with(getApplicationContext()).load(image).into(videoImg);
+
+                //dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
+            }
+        });
+
+        findViewById(R.id.sound_ll).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //isSoundCaptureStart = (isSoundCaptureStart) ? false : true;
+                //int image= (isSoundCaptureStart) ? R.drawable.speaker_disabled_icon : R.drawable.speaker_icon_1 ;
+                //Glide.with(getApplicationContext()).load(image).into(soundImg);
+                //dealWithMonitorFunction(Integer.parseInt(soundImg.getTag().toString()), isSoundCaptureStart);
+            }
+        });
+
     }
 
     // Helper method to check if touch is outside the RecyclerView
@@ -307,10 +435,12 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 presenter.getShowCount(),
                 presenter.getTimeUnit());
         rvRecordTimeAxis.setAdapter(recordTimeAxisAdapter);
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.initRecordPlayer((ViewGroup) findViewById(R.id.layoutPlayWnd), recordType);
         presenter.searchRecordByFile(calendarShow);
         presenter.searchRecordByTime(calendarShow);
+        presenter.searchMediaFileCalendar(searchMonthCalendar);
+
 
         showTitleDate();
         screenOrientationManager = ScreenOrientationManager.getInstance();
@@ -319,9 +449,9 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     private void showTitleDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         if (recordType == PLAY_CLOUD_PLAYBACK) {
-            titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.cloud_playback) + ")");
+            //  titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.cloud_playback) + ")");
         } else {
-            titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.sd_playback) + ")");
+            // titleBar.setTitleText(dateFormat.format(calendarShow.getTime()) + "(" + getString(R.string.sd_playback) + ")");
         }
     }
 
@@ -332,12 +462,14 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByFileResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         recordListAdapter.notifyDataSetChanged();
         if (!isSuccess) {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
-            parentLL.setVisibility(View.GONE);
-            showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
+            noPlayBackTxtv.setText(getString(R.string.search_record_failed_));
+            rvRecordFun.setVisibility(View.GONE);
+            //parentLL.setVisibility(View.GONE);
+            showToast(getString(R.string.search_record_failed_), Toast.LENGTH_LONG);
         } else{
             noPlayBackTxtv.setVisibility(View.GONE);
             parentLL.setVisibility(View.VISIBLE);
@@ -346,7 +478,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchRecordByTimeResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         recordListAdapter.notifyDataSetChanged();
         recordTimeAxisAdapter.notifyDataSetChanged();
         if (isSuccess) {
@@ -364,9 +496,13 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
         } else {
             noPlayBackTxtv.setVisibility(View.VISIBLE);
-            parentLL.setVisibility(View.GONE);
-            showToast(getString(R.string.search_record_failed), Toast.LENGTH_LONG);
+            rvRecordFun.setVisibility(View.GONE);
+            //parentLL.setVisibility(View.GONE);
+            showToast(getString(R.string.search_record_failed_), Toast.LENGTH_LONG);
         }
+
+
+
     }
 
     /**
@@ -377,7 +513,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
     @Override
     public void onPlayStateResult(int playState, int playSpeed) {
         if (playState == PlayerAttribute.E_STATE_PlAY) {
-            hideWaitDialog();
+            loaderDialog.dismiss();
             recordFunAdapter.changeBtnState(0, getString(R.string.playback_pause), true);
         } else if (playState == E_STATE_STOP
                 || playState == E_STATE_PAUSE
@@ -389,10 +525,22 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
         if (playState == E_STATE_SAVE_RECORD_FILE_S) {
-            showToast(getString(R.string.record_s), Toast.LENGTH_LONG);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+                showToast(getString(R.string.record_s), Toast.LENGTH_LONG);
+            }
+
             recordFunAdapter.changeBtnState(3, getString(R.string.cut_video), false);
         } else if (playState == E_STATE_SAVE_PIC_FILE_S) {
-            showToast(getString(R.string.capture_s), Toast.LENGTH_LONG);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            } else{
+                ((SDKDemoApplication)getApplicationContext()).makeFilesVisibleInGallery();
+                showToast(getString(R.string.capture_s), Toast.LENGTH_LONG);
+            }
         }
     }
 
@@ -461,19 +609,14 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
     @Override
     public void onSearchCalendarResult(boolean isSuccess, Object result) {
-
-
-
+        Log.d("onSearchCalendarResult ","called isSuccess > "   + isSuccess );
         if (result instanceof String) {
             XMPromptDlg.onShow(this, (String) result, null);
         } else {
-
-
             Log.d("recordDateMap ","====================================== "  );
 
-
             HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
-            HashSet<CalendarDay> highlightedDates = new HashSet<>();
+            highlightedDates = new HashSet<>();
 
             for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
                 Log.d("recordDateMap ","recordDateMap looping > "  +info.getKey());
@@ -484,10 +627,11 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
 
                 highlightedDates.add(CalendarDay.from(year, month, day)); // Jan 1, 2025
             }
+            Log.d(getClass().getName(), "after aded data highlightedDates > "  +highlightedDates);
 
-            CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
+            cCdialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
                 // Handle selected date
-                Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 try {
                     Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
@@ -495,109 +639,39 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(date1);
                     noPlayBackTxtv.setVisibility(View.GONE);
-                    parentLL.setVisibility(View.GONE);
-                    presenter.searchRecordByTime(calendarShow);
+
+                    //parentLL.setVisibility(View.GONE);
+                    //presenter.searchRecordByTime(calendar);
+                    //presenter.searchRecordByTime(calendarShow);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
 
             });
-            dialog.show();
-            /*HashMap<Object, Boolean> recordDateMap = (HashMap<Object, Boolean>) result;
-            List recordDateList = new ArrayList();
-            HashMap<String, Object> itemMap;
-            for (Map.Entry<Object, Boolean> info : recordDateMap.entrySet()) {
-                itemMap = new HashMap<>();
-                itemMap.put("date", info.getKey());
-                recordDateList.add(itemMap);
-            }
-            SimpleAdapter simpleAdapter = new SimpleAdapter(this, recordDateList,
-                    R.layout.adapter_date_list,
-                    new String[]{"date"}, new int[]{R.id.tv_date});
-
-            View layout = LayoutInflater.from(this).inflate(R.layout.dialog_date, null);
-            Dialog dialog = XMPromptDlg.onShow(this, layout);
-
-            TextView tvTitle = layout.findViewById(R.id.tv_title);
-            tvTitle.setText(getString(R.string.month) + ":" + (searchMonthCalendar.get(Calendar.MONTH) + 1));
-
-            ListView listView = layout.findViewById(R.id.lv_date);
-            listView.setAdapter(simpleAdapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    HashMap<String, Object> itemData = (HashMap<String, Object>) simpleAdapter.getItem(i);
-                    String date = (String) itemData.get("date");
-                    try {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-                        calendarShow = Calendar.getInstance();
-                        calendarShow.setTime(dateFormat.parse(date));
-                        presenter.searchRecordByTime(calendarShow);
-                        presenter.searchRecordByFile(calendarShow);
-                        showTitleDate();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    dialog.dismiss();
-                }
-            });
-
-            //取消 Cancel
-            Button btnCancel = layout.findViewById(R.id.btn_cancel);
-            btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            //上个月 last month
-            Button btnLastMonth = layout.findViewById(R.id.btn_pre_month);
-            btnLastMonth.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchMonthCalendar.add(Calendar.MONTH, -1);
-                    presenter.searchMediaFileCalendar(searchMonthCalendar);
-                    dialog.dismiss();
-                }
-            });
-
-            //下个月 next month
-            Button btnNextMonth = layout.findViewById(R.id.btn_next_month);
-            btnNextMonth.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    searchMonthCalendar.add(Calendar.MONTH, 1);
-                    presenter.searchMediaFileCalendar(searchMonthCalendar);
-                    dialog.dismiss();
-                }
-            });*/
-
+           // cCdialog.show();
         }
     }
 
     @Override
     public void onDownloadState(int state, String filePath) {
         if (state == DOWNLOAD_STATE_FAILED) {
-            hideWaitDialog();
+            loaderDialog.dismiss();
             Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
             Toast.makeText(this, getString(R.string.download_start), Toast.LENGTH_LONG).show();
-            hideWaitDialog();
+            loaderDialog.dismiss();
         } else if (state == DOWNLOAD_STATE_COMPLETE_ALL) {
             Toast.makeText(this, getString(R.string.download_s), Toast.LENGTH_LONG).show();
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + filePath)));
-            hideWaitDialog();
+            loaderDialog.dismiss();
         }
     }
 
     @Override
     public void onDownloadProgress(int progress) {
         String content = String.format(getString(R.string.download_progress), progress);
-        showWaitDialog(content);
+        loaderDialog.setMessage(content);
     }
 
     private void dealWithTimeScrollEnd() {
@@ -614,7 +688,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 int times = presenter.getPlayTimeByMinute() * 60 + presenter.getPlayTimeBySecond();
 
                 presenter.setPlayTimeBySecond(times % 60);
@@ -660,7 +734,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             presenter.searchRecordByTime(calendarShow);
             ToastUtils.showLong(getString(R.string.delete_s));
         } else {
-            hideWaitDialog();
+            loaderDialog.dismiss();
             ToastUtils.showLong(getString(R.string.delete_f) );
         }
     }
@@ -841,7 +915,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             XMPromptDlg.onShow(DevRecordActivity.this, getString(R.string.is_sure_delete_cloud_video), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                     presenter.stopPlay();
                     presenter.deleteVideo(0);
                 }
@@ -892,7 +966,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 lsiRecordInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.stopPlay();
                         presenter.startPlayRecord(getAdapterPosition());
                     }
@@ -900,7 +974,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                 btnDownload.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.downloadVideoByFile(getAdapterPosition());
                     }
                 });
@@ -968,7 +1042,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         if (position != presenter.getRecordFileType()) {
-                            showWaitDialog();
+                            loaderDialog.setMessage();
                             presenter.setSearchRecordFileType(position);//position枚举对应的值 0：全部 1：普通 2：报警
                             presenter.searchRecordByFile(calendarShow);
                             presenter.searchRecordByTime(calendarShow);
@@ -1002,13 +1076,17 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
         }
 
     }
+
     @Override
     public void onBackPressed() {
         hideVideoListRadioBtnAndDeleteButton();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             screenOrientationManager.portraitScreen(this, true);
         } else {
-            finish();
+            SharedPreference cookies = new SharedPreference(getApplicationContext());
+            cookies.savePreviewPageTabSelection("real-tab");
+            overridePendingTransition(0, 0);
+            finishAfterTransition();
         }
     }
 

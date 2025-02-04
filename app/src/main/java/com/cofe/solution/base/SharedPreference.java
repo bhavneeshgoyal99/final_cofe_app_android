@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -95,5 +96,39 @@ public class SharedPreference {
         editor.apply();
     }
 
+
+    public void savePreviewPageTabSelection(String tabname) {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.putString("preview_page_tab",tabname);
+        editor.apply();
+    }
+    public String retrievPreviewPageTabSelection() {
+        return sharedPreference.getString("preview_page_tab","");
+    }
+
+
+    public void saveDevicePreviewHeightandWidth(int width, int height) {
+        Log.d("saveDevicePreviewHeightandWidth view ", "height > "+ height +" | width "+ width);
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.putString("width_height",width  +";;;"+height);
+        editor.apply();
+    }
+
+    public String retrievDevicePreviewHeightandWidth() {
+        Log.d("saveDevicePreviewHeightandWidth view ", " return height > "+ sharedPreference.getString("width_height",""));
+        return sharedPreference.getString("width_height","");
+    }
+
+    public void saveisDeviceAOV(boolean isDeviceAOV) {
+        Log.d("saveisDeviceAOV ","device > " + isDeviceAOV );
+        SharedPreferences.Editor editor = sharedPreference.edit();
+        editor.putBoolean("isDeviceAOV",isDeviceAOV);
+        editor.apply();
+    }
+
+    public Boolean retrievisDeviceAOV() {
+        Log.d("retrievisDeviceAOV  ", " device "+ sharedPreference.getBoolean("isDeviceAOV",false));
+        return sharedPreference.getBoolean("isDeviceAOV",false);
+    }
 
 }

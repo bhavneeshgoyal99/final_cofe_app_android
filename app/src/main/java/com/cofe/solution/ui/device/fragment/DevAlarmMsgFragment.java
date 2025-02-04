@@ -385,7 +385,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
 
     private void initData() {
-//        showWaitDialog();
+//        loaderDialog.setMessage();
         adapter = new DevListAdapter(activity.getApplication(), listView, (ArrayList<HashMap<String, Object>>) presenter.getDevList(), this);
         listView.setAdapter(adapter);
         presenter.updateDevState();//Update the status of the list
@@ -502,7 +502,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
-//        hideWaitDialog();
+//        loaderDialog.dismiss();
         slRefresh.setRefreshing(false);
         if (isSuccess) {
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
@@ -533,7 +533,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
     @Override
     public void onModifyDevNameFromServerResult(boolean isSuccess) {
-//        hideWaitDialog();
+//        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
             adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
@@ -544,7 +544,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
     @Override
     public void onDeleteDevResult(boolean isSuccess) {
-//        hideWaitDialog();
+//        loaderDialog.dismiss();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.delete_s), Toast.LENGTH_LONG);
@@ -555,7 +555,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
     @Override
     public void onAcceptDevResult(boolean isSuccess) {
-//        hideWaitDialog();
+//        loaderDialog.dismiss();
         adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
         if (isSuccess) {
             showToast(getString(R.string.accept_share_s), Toast.LENGTH_LONG);
@@ -573,7 +573,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      */
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-//        hideWaitDialog();
+//        loaderDialog.dismiss();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -592,7 +592,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
                         0, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-//                                showWaitDialog();
+//                                loaderDialog.setMessage();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -602,7 +602,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
                         0, getString(R.string.input_username_password), INPUT_TYPE_DEV_USER_PWD, true, new PwdErrorManager.OnRepeatSendMsgListener() {
                             @Override
                             public void onSendMsg(int msgId) {
-//                                showWaitDialog();
+//                                loaderDialog.setMessage();
                                 presenter.getChannelList();
                             }
                         }, false);
@@ -654,7 +654,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
                 return;
             }
 
-//            showWaitDialog(getString(R.string.get_channel_info));
+//            loaderDialog.setMessage(getString(R.string.get_channel_info));
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
 
@@ -677,7 +677,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
         XMPromptDlg.onShow(activity, getString(R.string.is_sure_delete_dev), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showWaitDialog();
+//                loaderDialog.setMessage();
                 presenter.deleteDev(position);
             }
         }, null);
@@ -691,7 +691,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToAlarmMsg(int position) {// This is push messaging
+    public void onTurnToAlarmMsg(int position, XMDevInfo xmDevInfo) {// This is push messaging
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(DevAlarmMsgActivity.class);
@@ -704,7 +704,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToCloudService(int position) {
+    public void onTurnToCloudService(int position,  XMDevInfo xmDevInfo) {
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(CloudStateActivity.class);
@@ -732,7 +732,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
      * @param position
      */
     @Override
-    public void onTurnToPushSet(int position) {
+    public void onTurnToPushSet(int position , XMDevInfo xmDevInfo) {
         String devId = presenter.getDevId(position);
         presenter.setDevId(devId);
         turnToActivity(DevPushActivity.class);

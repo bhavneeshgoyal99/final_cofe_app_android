@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 
 import com.basic.G;
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
@@ -48,10 +49,7 @@ import com.cofe.solution.base.ErrorMapping;
 import com.cofe.solution.ui.activity.MainActivity;
 import com.cofe.solution.ui.device.add.list.view.ChannelListActivity;
 import com.cofe.solution.ui.device.add.list.view.DevListActivity;
-import com.cofe.solution.ui.device.config.intelligentvigilance.alert.view.AlertSetActivity;
 import com.cofe.solution.ui.device.config.intelligentvigilance.view.IntelligentVigilanceActivity;
-import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
-import com.cofe.solution.ui.device.push.view.DevPushService;
 import com.cofe.solution.ui.user.forget.view.UserForgetPwdActivity;
 import com.cofe.solution.ui.user.login.listener.UserLoginContract;
 import com.cofe.solution.ui.user.login.presenter.UserLoginPresenter;
@@ -248,7 +246,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
             //startService(new Intent(this, DevPushService.class));
             finish();
         } else {
-            hideWaitDialog();
+            loaderDialog.dismiss();
             ErrorMapping errorMessage = new ErrorMapping();
             showToast(getString(R.string.user_register_login_fail) + ":" + errorMessage.getErrorMessage(presenter.getErrorId()), Toast.LENGTH_LONG);
 
@@ -262,7 +260,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
 
     @Override
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             //如果返回的数据是通道数并且大于1就跳转到通道列表
             /*If the number of channels returned is greater than 1, jump to the list of channels*/
@@ -277,7 +275,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                 XMPromptDlg.onShowPasswordErrorDialog(this, devInfo.getSdbDevInfo(), 0, new PwdErrorManager.OnRepeatSendMsgListener() {
                     @Override
                     public void onSendMsg(int msgId) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.loginByAP();
                     }
                 }, false);
@@ -305,7 +303,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
 
                 if (etPwd.getText().toString().trim().length() != 0 && etUserName.getText().toString().trim().length() != 0) {
                     try {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.loginByAccount(etUserName.getText().toString(), etPwd.getText().toString());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -399,7 +397,7 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
                         }, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                showWaitDialog();
+                                loaderDialog.setMessage();
                                 presenter.loginByAP();
                             }
                         });

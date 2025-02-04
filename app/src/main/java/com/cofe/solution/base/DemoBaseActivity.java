@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.ui.widget.XTitleBar;
@@ -18,9 +19,6 @@ import com.xm.ui.widget.XTitleBar;
 import java.util.Locale;
 
 import com.cofe.solution.app.SDKDemoApplication;
-import com.cofe.solution.ui.dialog.PermissionDialog;
-import com.cofe.solution.utils.MobileInfoUtils;
-import io.reactivex.functions.Consumer;
 
 /**
  * 动态申请权限封装 Activity（Android 6.0 以上）
@@ -32,6 +30,7 @@ public abstract class DemoBaseActivity <T extends XMBasePresenter> extends XMBas
     public static final String androidDoc = "https://docs.jftech.com/docs?menusId=ab0ed73834f54368be3e375075e27fb2&siderId=45357c529496431590a7e3463b7cc520&lang=" + Locale.getDefault().getLanguage();
 
     protected XTitleBar titleBar;
+    public LoaderDialog loaderDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +41,7 @@ public abstract class DemoBaseActivity <T extends XMBasePresenter> extends XMBas
         if (getApplication() instanceof SDKDemoApplication) {
             ((SDKDemoApplication) getApplication()).addActivity(this);
         }
+        loaderDialog = new LoaderDialog(this);
     }
 
     protected boolean checkLocationService() {

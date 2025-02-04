@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.config.detecttrack;
 
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -24,6 +25,7 @@ public class DetectTrackPresenter extends XMBasePresenter<DeviceManager> impleme
     private PresetManager presetManager;
 
     public DetectTrackPresenter(DetectTrackContract.IDetectTrackView iDetectTrackView) {
+        Log.d(getClass().getName(),"iDetectTrackView > " +iDetectTrackView);
         this.iDetectTrackView = iDetectTrackView;
     }
 
@@ -35,6 +37,7 @@ public class DetectTrackPresenter extends XMBasePresenter<DeviceManager> impleme
     @Override
     public void setDevId(String devId) {
         super.setDevId(devId);
+        Log.d(getClass().getName(),"devId  > " +devId);
         devConfigManager = manager.getDevConfigManager(devId);
         presetManager = new PresetManager(getDevId(), new DevConfigManager.OnDevConfigResultListener() {
             @Override
@@ -56,6 +59,7 @@ public class DetectTrackPresenter extends XMBasePresenter<DeviceManager> impleme
 
     @Override
     public void getDetectTrack() {
+        Log.d(getClass().getName()," devConfigManager  > " +devConfigManager);
         DevConfigInfo devConfigInfo = DevConfigInfo.create(new DeviceManager.OnDevManagerListener<String>() {
             @Override
             public void onSuccess(String devId, int msgId, String result) {
@@ -76,6 +80,7 @@ public class DetectTrackPresenter extends XMBasePresenter<DeviceManager> impleme
                 }
             }
         });
+        Log.d(getClass().getName()," devConfigInfo  > " +devConfigInfo);
 
         devConfigInfo.setJsonName(JsonConfig.CFG_DETECT_TRACK);
         devConfigInfo.setChnId(-1);

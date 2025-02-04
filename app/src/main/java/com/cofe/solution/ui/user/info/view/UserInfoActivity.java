@@ -1,15 +1,34 @@
 package com.cofe.solution.ui.user.info.view;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basic.G;
+import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
+import com.lib.MsgContent;
+import com.lib.sdk.struct.SDBDeviceInfo;
+import com.manager.account.BaseAccountManager;
+import com.manager.account.XMAccountManager;
 import com.manager.db.DevDataCenter;
+import com.manager.device.DeviceManager;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.ui.widget.XTitleBar;
 
@@ -21,6 +40,7 @@ import com.cofe.solution.ui.user.info.listener.UserInfoContract;
 import com.cofe.solution.ui.user.info.presenter.UserInfoPresenter;
 import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.cofe.solution.utils.SPUtil;
+
 import io.reactivex.annotations.Nullable;
 
 /**
@@ -35,41 +55,61 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     private TextView tvUserEmail;
 
     private TextView tvUserPhone;
+    RelativeLayout passwordRl, emailRl;
+    private ImageView back_button;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.activity_account_information);
         initView();
         initData();
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.set_user_info));
-        titleBar.setLeftClick(this);
-        titleBar.setBottomTip(UserInfoActivity.class.getName());
-        tvUserId = findViewById(R.id.tv_user_Id);
-        tvUserName = findViewById(R.id.tv_user_name);
+        tvUserId = findViewById(R.id.account_id_txtv);
+        tvUserName = findViewById(R.id.nick_nametxtv);
 
-        tvUserEmail = findViewById(R.id.tv_user_email);
-        tvUserPhone = findViewById(R.id.tv_user_phone);
+        tvUserEmail = findViewById(R.id.email_txtv);
+        tvUserPhone = findViewById(R.id.phone_txtv);
+        passwordRl = findViewById(R.id.pass_rl);
+        emailRl = findViewById(R.id.email_rl);
+        back_button = findViewById(R.id.back_button);
 
-        Button btnLogout = (Button) findViewById(R.id.btn_user_logout);
+        passwordRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPasswordManagementSettings(passwordRl);
+            }
+        });
+        emailRl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        RelativeLayout btnLogout = findViewById(R.id.logout_rl);
         btnLogout.setOnClickListener(this);
     }
 
     private void initData() {
         if (DevDataCenter.getInstance().isLoginByAccount()) {
-            showWaitDialog();
-            findViewById(R.id.layout_user_Info).setVisibility(View.VISIBLE);
+            loaderDialog.setMessage();
+            //findViewById(R.id.layout_user_Info).setVisibility(View.VISIBLE);
             tryToGetUserInfo();
         }
     }
 
     private void tryToGetUserInfo() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         if (!presenter.getInfo()) {
             showToast(getString(R.string.user_info_not_login), Toast.LENGTH_LONG);
             finish();
@@ -80,35 +120,41 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     }
 
     private void tryToLogout() {
-        presenter.logout(this);
-        stopService(new Intent(this, DevPushService.class));
-        turnToActivity(UserLoginActivity.class);
-        if (getApplication() instanceof SDKDemoApplication) {
-            ((SDKDemoApplication) getApplication()).exit();
+        XMAccountManager.getInstance().logout();
+        if (XMAccountManager.getInstance().getUserName() == null) {
+
+            SharedPreference cookies = new SharedPreference(getApplicationContext());
+            cookies.saveLoginStatus(1);
+
+            Intent intent = new Intent(UserInfoActivity.this, UserLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+
         }
-        finish();
     }
 
     /*获取用户信息并更新数据至界面*/
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (presenter != null) {
             tvUserId.setText(presenter.getUserId());
             tvUserName.setText(presenter.getUserName());
 
             if (SPUtil.isEmpty(presenter.getEmail())) {
-                findViewById(R.id.layoutUserEmail).setVisibility(View.GONE);
+                //findViewById(R.id.layoutUserEmail).setVisibility(View.GONE);
             } else {
                 tvUserEmail.setText(presenter.getEmail());
             }
             if (SPUtil.isEmpty(presenter.getPhoneNo())) {
-                findViewById(R.id.layoutUserPhone).setVisibility(View.GONE);
+                //findViewById(R.id.layoutUserPhone).setVisibility(View.GONE);
             } else {
                 tvUserPhone.setText(presenter.getPhoneNo());
             }
         } else {
-            showToast("", Toast.LENGTH_LONG);
+            showToast(getString(R.string.failed_rertive_profile_data), Toast.LENGTH_LONG);
+            finish();
         }
     }
 
@@ -116,12 +162,87 @@ public class UserInfoActivity extends DemoBaseActivity<UserInfoPresenter> implem
     public UserInfoPresenter getPresenter() {
         return new UserInfoPresenter(this);
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btn_user_logout) {
-            showWaitDialog();
+        if (view.getId() == R.id.logout_rl) {
+            loaderDialog.setMessage();
             tryToLogout();
         }
     }
+
+    private void openPasswordManagementSettings(View anchorView) {
+        // Inflate the custom popup layout
+        View popupView = LayoutInflater.from(anchorView.getContext())
+                .inflate(R.layout.edit_device_name, null);
+
+        PopupWindow popupWindow = new PopupWindow(
+                popupView,
+                (int) (anchorView.getContext().getResources().getDisplayMetrics().widthPixels * 0.8), // 80% of screen width
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+
+        popupWindow.setFocusable(true);
+
+        setDimBackground((Activity) anchorView.getContext(), 0.5f);
+
+        popupWindow.setOnDismissListener(() -> setDimBackground((Activity) anchorView.getContext(), 1f));
+
+        View rootView = ((Activity) anchorView.getContext()).getWindow().getDecorView().getRootView();
+        popupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+        TextView label = popupView.findViewById(R.id.popup_label);
+
+        label.setText(anchorView.getContext().getString(R.string.enter_password));
+        EditText editText = popupView.findViewById(R.id.popup_edittext);
+        EditText oldPwdTextView = popupView.findViewById(R.id.popup_oldPwdText);
+        Button button = popupView.findViewById(R.id.popup_button);
+
+        // Handle button click
+        button.setOnClickListener(v -> {
+            String userInput = editText.getText().toString().trim();
+            String oldPwdText = oldPwdTextView.getText().toString().trim();
+            loaderDialog.show();
+            //if (!oldPwdText.isEmpty() ) {
+            if (!userInput.isEmpty()) {
+                XMAccountManager.getInstance().modifyPwd(presenter.getUserName(), oldPwdText, userInput, new BaseAccountManager.OnAccountManagerListener() {
+                    @Override
+                    public void onSuccess(int msgId) {
+                        loaderDialog.dismiss();
+                        popupWindow.dismiss();
+                        showToast(getString(R.string.password_modified_successfully), Toast.LENGTH_LONG);
+                        tryToLogout();
+                    }
+
+                    @Override
+                    public void onFailed(int msgId, int errorId) {
+                        loaderDialog.dismiss();
+                        popupWindow.dismiss();
+                        showToast(getString(R.string.password_modified_failed), Toast.LENGTH_LONG);
+
+                    }
+
+                    @Override
+                    public void onFunSDKResult(Message message, MsgContent msgContent) {
+
+
+                    }
+                });
+
+            } else {
+                Toast.makeText(anchorView.getContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+            }
+            popupWindow.showAsDropDown(anchorView, 0, 0);
+
+
+        });
+    }
+
+    private void setDimBackground(Activity activity, float dimAmount) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        layoutParams.alpha = dimAmount; // Set dim level (0.0f to 1.0f)
+        window.setAttributes(layoutParams);
+    }
+
 }

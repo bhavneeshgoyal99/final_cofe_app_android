@@ -6,6 +6,7 @@ import static com.lib.SDKCONST.EEncoderPreSet.E_ENCODER_PRESET_SUPERFAST;
 
 import android.content.Context;
 import android.os.Message;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +113,10 @@ public class VideoIntercomPresenter extends XMBasePresenter implements VideoInte
 
                 @Override
                 public int OnFunSDKResult(Message message, MsgContent msgContent) {
+                    LogUtils.debugInfo("startVideoTalk  > "+APP_VIDEO_ENCODE, "try start video talk reason: " + message.arg1);
+
                     if (message.what == DEV_START_AV_TALK) {
+                        LogUtils.debugInfo("startVideoTalk  > "+DEV_START_AV_TALK, "try start video styart talk error reason: " + message.arg1);
                         if (message.arg1 == EFUN_ERROR.EE_DEV_NO_ENABLE) {
                             //如果返回的是 设备功能未启用，直接返回上层弹窗
                             LogUtils.debugInfo(APP_VIDEO_ENCODE, "try start video talk failed,error reason: " + message.arg1);
@@ -185,8 +189,8 @@ public class VideoIntercomPresenter extends XMBasePresenter implements VideoInte
      * @param isAudioCall    是否音频对讲
      */
     public void initVideoChat(Context context, TextureView textureView, int cameraLensType, boolean isAudioCall) {
-
         if (isAudioCall) {
+            Log.d("initVideoChat " , "getDevId" +getDevId());
             //如果是音频对讲，此时视频解码参数不需要去获取，直接就开始音视频对讲即可
             startVideoTalk(context, textureView, cameraLensType, true);
             return;
@@ -206,7 +210,8 @@ public class VideoIntercomPresenter extends XMBasePresenter implements VideoInte
 
             @Override
             public void onFailed(String devId, int msgId, String jsonName, int errorId) {
-                LogUtils.debugInfo(APP_VIDEO_ENCODE, "获取DecoderPram失败,使用默认分辨率开启音视频对讲");
+                Log.d("initVideoChat " , "onFailed " +"jsonName > " + jsonName +"  | errorId > " + errorId) ;
+                LogUtils.debugInfo( "initial Video Chat DevConfigInfo "+ APP_VIDEO_ENCODE, "获取DecoderPram失败,使用默认分辨率开启音视频对讲");
                 if (iVideoIntercomView != null) {
                     startVideoTalk(context, textureView, cameraLensType, false);
                 }

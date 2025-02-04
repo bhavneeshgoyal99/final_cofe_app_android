@@ -178,7 +178,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 showToast(getString(R.string.user_login_error_email), Toast.LENGTH_LONG);
                 return;
             }
-            showWaitDialog();
+            loaderDialog.setMessage();
 
             if (!presenter.emailCode(emailStr)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
@@ -189,7 +189,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 showToast(getString(R.string.user_login_error_phone_number), Toast.LENGTH_LONG);
                 return;
             }
-            showWaitDialog();
+            loaderDialog.setMessage();
 
             if (!presenter.phoneMsg(userName, phoneNum)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
@@ -247,7 +247,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 return;
             }
 
-            showWaitDialog();
+            loaderDialog.setMessage();
             if (!presenter.registerEmail(userName, passWord, email, verifyCode)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }
@@ -268,7 +268,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
                 return;
             }
 
-            showWaitDialog();
+            loaderDialog.setMessage();
             if (!presenter.registerPhone(userName, passWord, verifyCode, phoneNo)) {
                 showToast(getString(R.string.guide_message_error_call), Toast.LENGTH_LONG);
             }
@@ -321,7 +321,7 @@ public class UserRegisterActivity extends DemoBaseActivity<UserRegisterPresenter
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (presenter.getErrorId() == 0) {
             switch (presenter.getMsgId()) { //Depending on the MsgId returned, different subsequent actions are processed
                 case EUIMSG.SYS_CHECK_USER_REGISTE:

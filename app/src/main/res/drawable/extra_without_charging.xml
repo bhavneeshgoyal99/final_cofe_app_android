@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="14dp"
+    android:viewportWidth="22.0"
+    android:viewportHeight="14.0">
+
+    <!-- Battery Outer Shape -->
+    <path
+        android:fillColor="#00000000"
+        android:fillType="evenOdd"
+        android:pathData="M19.487,2.006A1.509,1.509 0,0 1,17.977 0.5H2.006c-0.832,0 -1.507,0.674 -1.507,1.506v9.988c0,0.83 0.673,1.506 1.491,1.506H18.011c0.823,0 1.49,-0.672 1.489,-1.505V2.006z"
+        android:strokeColor="#FFF"
+        android:strokeWidth="1" />
+
+    <!-- Battery Head -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M18.011,4h2v6h-2z" />
+
+
+</vector>

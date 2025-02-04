@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:text="Turn on Wi-Fi"
-                        android:drawableEnd="@drawable/warning_circle_icon"
+                        android:drawableEnd="@drawable/ic_about"
                         android:drawablePadding="8dp"
                         android:padding="12dp"
                         android:visibility="gone"/>
@@ -74,7 +74,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:text="Turn on Bluetooth"
-                        android:drawableEnd="@drawable/warning_circle_icon"
+                        android:drawableEnd="@drawable/ic_about_24x24"
                         android:drawablePadding="8dp"
                         android:layout_marginTop="8dp"
                         android:padding="12dp" />
@@ -173,7 +173,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_wifi_camera" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -201,7 +201,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_4g_camera" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -230,7 +230,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_viot_station" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -258,7 +258,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_dvr_nvr" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -287,7 +287,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_wired_camera" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -314,7 +314,7 @@
                         <ImageView
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:src="@drawable/cctv_icon" />
+                            android:src="@drawable/ic_shared_device" />
 
                         <TextView
                             android:layout_width="wrap_content"

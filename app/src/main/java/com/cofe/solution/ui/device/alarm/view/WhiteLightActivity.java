@@ -806,12 +806,12 @@ public class WhiteLightActivity extends BaseConfigActivity<WhiteLightPresenter> 
 
 	@Override
 	public void onShowWaitDialog() {
-		showWaitDialog();
+		loaderDialog.setMessage();
 	}
 
 	@Override
 	public void onHideWaitDialog() {
-		hideWaitDialog();
+		loaderDialog.dismiss();
 	}
 
 	/**

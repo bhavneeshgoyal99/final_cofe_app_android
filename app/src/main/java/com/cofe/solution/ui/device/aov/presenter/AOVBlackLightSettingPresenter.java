@@ -65,12 +65,12 @@ public class AOVBlackLightSettingPresenter extends XMBasePresenter<DeviceManager
 
     public void saveWorkPeriod(int hour,int min,boolean isStart){
         if(isStart){
-            iAOVBlackLightSettingView.onShowWaitDialog();
+            //iAOVBlackLightSettingView.onloaderDialog.setMessage();
             mWhiteLight.getWorkPeriod().setSHour(hour);
             mWhiteLight.getWorkPeriod().setSMinute(min);
             saveLightConfig();
         } else {
-            iAOVBlackLightSettingView.onShowWaitDialog();
+            //iAOVBlackLightSettingView.onloaderDialog.setMessage();
             mWhiteLight.getWorkPeriod().setEHour(hour);
             mWhiteLight.getWorkPeriod().setEMinute(min);
             saveLightConfig();

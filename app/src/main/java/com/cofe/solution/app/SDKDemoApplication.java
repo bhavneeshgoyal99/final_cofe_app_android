@@ -3,14 +3,25 @@ package com.cofe.solution.app;
 import static com.lib.EFUN_ATTR.LOGIN_SUP_RSA_ENC;
 import static com.utils.FileUtils.makeRootDirectory;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+
+import com.cofe.solution.R;
 import com.google.firebase.FirebaseApp;
 import com.lib.EFUN_ATTR;
 import com.lib.FunSDK;
@@ -22,6 +33,10 @@ import com.utils.FileUtils;
 import com.utils.PathUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -208,7 +223,7 @@ public class SDKDemoApplication extends Application {
          * 视频保存路径
          * Video save path
          */
-        PATH_VIDEO = getPathForVideo();
+        PATH_VIDEO = getPathForPhoto();
 
         File pFile = new File(DEFAULT_PATH);
         if (!pFile.exists()) {
@@ -269,7 +284,7 @@ public class SDKDemoApplication extends Application {
         }
         return true;
     }
-
+    /*
     private String getPathForPhoto() {
         SharedPreferences bell = getSharedPreferences("my_pref", 0);
         String path = bell.getString("img_save_path", null);
@@ -289,6 +304,15 @@ public class SDKDemoApplication extends Application {
             }
         }
         return path;
+    } */
+    private String getPathForPhoto() {
+        String childDir = getString(R.string.app_name).replaceAll("\\s", "");
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), childDir);
+
+        if (!mediaStorageDir.exists()) {
+            mediaStorageDir.mkdirs();
+        }
+        return mediaStorageDir.getPath();
     }
 
     private String getPathForVideo() {
@@ -350,4 +374,100 @@ public class SDKDemoApplication extends Application {
     public void setAlarmTranslationIconBean(AlarmTranslationIconBean alarmTranslationIconBean) {
         this.alarmTranslationIconBean = alarmTranslationIconBean;
     }
+
+    public void makeFilesVisibleInGallery() {
+        // App's private directory
+        String childDir = getString(R.string.app_name).replaceAll("\\s", "");
+        File appDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), childDir);
+
+        if (appDir.exists()) {
+            File[] files = appDir.listFiles();
+            Log.d("files", "File found: " + files.length);
+
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && (file.getName().endsWith(".jpg") || file.getName().endsWith(".mp4"))) {
+                        // Register the file with MediaStore
+                        addFileToMediaStore(file);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addFileToMediaStore(File file) {
+
+        Log.d("addFileToMediaStore", "Processing file: " + file);
+
+        try {
+            // Determine if the file is an image or a video
+            boolean isVideo = file.getName().endsWith(".mp4");
+            String mimeType = isVideo ? "video/mp4" : "image/jpeg";
+
+            // Use different collections for images and videos
+            Uri collection;
+            String relativePath;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Android 10+ (API 29+)
+                collection = isVideo
+                        ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                        : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+                relativePath = isVideo
+                        ? Environment.DIRECTORY_MOVIES + "/MyApp"
+                        : Environment.DIRECTORY_PICTURES + "/MyApp";
+
+                // Insert the file into MediaStore
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, file.getName());
+                values.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath);
+
+                ContentResolver resolver = getContentResolver();
+                Uri uri = resolver.insert(collection, values);
+
+                if (uri != null) {
+                    copyFileToUri(file, uri);
+                }
+            } else {
+                // Android 9 and below (Legacy path handling)
+                File legacyDir = new File(Environment.getExternalStorageDirectory(), "DCIM/MyApp");
+
+                if (!legacyDir.exists()) {
+                    legacyDir.mkdirs();
+                }
+
+                File newFile = new File(legacyDir, file.getName());
+                if (file.renameTo(newFile)) {
+                    MediaScannerConnection.scanFile(this, new String[]{newFile.getAbsolutePath()}, new String[]{mimeType},
+                            (path, uri) -> Log.d("MediaStore", "Legacy file registered: " + path));
+                } else {
+                    Log.e("addFileToMediaStore", "Failed to move file to legacy path.");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("MediaStoreError", "Error registering file: " + file.getName(), e);
+        }
+    }
+
+    private void copyFileToUri(File file, Uri uri) {
+        try (FileInputStream inputStream = new FileInputStream(file);
+             OutputStream outputStream = getContentResolver().openOutputStream(uri)) {
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+
+            Log.d("addFileToMediaStore", "File successfully registered: " + file.getName());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("MediaStoreError", "Error copying file: " + file.getName(), e);
+        }
+    }
+
+
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lib.FunSDK;
@@ -108,6 +109,17 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
     }
 
     private void initView() {
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.stobe_alaram));
+
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.alarm_by_voice_light));
         titleBar.setLeftClick(new XTitleBar.OnLeftClickListener() {
@@ -145,7 +157,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
         String devId = getIntent().getStringExtra("devId");
         presenter.setDevId(devId);
         presenter.setChnId(-1);
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.getSystemFunction();
         initSmartAlarmDuration();
         initSmartAlarmListener();
@@ -344,12 +356,12 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onShowWaitDialog() {
-        showWaitDialog();
+        loaderDialog.setMessage();
     }
 
     @Override
     public void onHideWaitDialog() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
     }
 
     @Override
@@ -359,7 +371,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onUpdateView(boolean isSuccess, WhiteLightBean mWhiteLight) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (mWhiteLight != null) {
             if (WORK_MODE_AUTO.equals(mWhiteLight.getWorkMode())) {
                 mSpControlMode.setValue(0);
@@ -404,7 +416,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
 
     @Override
     public void onSaveResult(boolean isSuccess) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (!isSuccess) {
             Toast.makeText(DoubleLightBoxActivity.this, getString(R.string.set_dev_config_failed), Toast.LENGTH_SHORT).show();
         } else {
@@ -480,7 +492,7 @@ public class DoubleLightBoxActivity extends BaseConfigActivity<DoubleLightBoxPre
      * 保存声光报警配置
      */
     private void saveConfig() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.saveAlarmByVoiceLightConfig();
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lib.SDKCONST;
@@ -59,6 +60,18 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
     }
 
     private void initView() {
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.intelligent_vigilance));
+
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.hunman_detect));
         titleBar.setRightBtnResource(R.mipmap.icon_save_normal,R.mipmap.icon_save_pressed);
@@ -72,7 +85,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
         titleBar.setRightTvClick(new XTitleBar.OnRightClickListener() {
             @Override
             public void onRightClick() {
-                showWaitDialog();
+                loaderDialog.setMessage();
                 presenter.saveHumanDetect();
             }
         });
@@ -137,7 +150,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
     }
 
     private void initData() {
-        showWaitDialog();
+        loaderDialog.setMessage();
         presenter.updateHumanDetectAbility();
     }
 
@@ -167,7 +180,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
 
     @Override
     public void updateHumanDetectResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             lsiSwitch.setRightImage(presenter.isHumanDetectEnable() ? SDKCONST.Switch.Open : SDKCONST.Switch.Close);
         }else {
@@ -178,7 +191,7 @@ public class IntelligentVigilanceActivity extends BaseConfigActivity<Intelligent
 
     @Override
     public void saveHumanDetectResult(boolean isSuccess, int errorId) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (isSuccess) {
             showToast(getString(R.string.set_dev_config_success), Toast.LENGTH_LONG);
         }else {

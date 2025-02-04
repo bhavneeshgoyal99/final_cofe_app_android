@@ -30,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.cofe.solution.base.CustomCalendarDialog;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.user.modify.view.DevMeActivity;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.image.BaseImageManager;
 import com.manager.image.DevImageManager;
@@ -93,9 +95,11 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             }
         });
 
+
+
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.picture_list));
-        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ivBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -113,6 +117,38 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
         rvDevPic = findViewById(R.id.rv_dev_pic);
         rvDevPic.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayout homeLL = findViewById(R.id.home_ll);
+        homeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(DevPictureActivity.this, DevListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        LinearLayout imageLl = findViewById(R.id.image_ll);
+        imageLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(DevPictureActivity.this, DevPictureActivity.class);
+                startActivity(intent);
+                //finish();
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+                // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(DevPictureActivity.this, DevMeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         initData();
     }
@@ -143,7 +179,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onUpdateView() {
-        hideWaitDialog();
+        loaderDialog.dismiss();
 
         if(picListAdapter.getItemCount()<=0){
             noDataContLl.setVisibility(View.VISIBLE);
@@ -166,7 +202,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     @Override
     public void onDownloadResult(int state, String filePath) {
-        hideWaitDialog();
+        loaderDialog.dismiss();
         if (state == DOWNLOAD_STATE_FAILED) {
             Toast.makeText(this, getString(R.string.download_f), Toast.LENGTH_LONG).show();
         } else if (state == DOWNLOAD_STATE_START) {
@@ -235,7 +271,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
                 @Override
                 public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                    showWaitDialog();
+                    loaderDialog.setMessage();
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.YEAR, year);
                     calendar.set(Calendar.MONTH, month);
@@ -419,7 +455,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
                 lsiPicInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showWaitDialog();
+                        loaderDialog.setMessage();
                         presenter.downloadFile(getAdapterPosition());
                     }
                 });

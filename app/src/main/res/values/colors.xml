@@ -7,11 +7,12 @@
     <color name="item_pressed">#80888888</color>
     <color name="passw_strong">#24DC55</color>
     <color name="demo_title">#ff0d0d0d</color>
+    <color name="other_black">#ff101010</color>
     <color name="grey">#808080</color>
     <color name="theme">#2c8dfa</color>
-    <color name="color_gray_light_open">#a6a6a6</color>
+    <color name="color_gray_light_open">#D7D7D7</color>
     <color name="text">#555454</color>
-    <color name="line_color">#eaeaeaea</color>
+    <color name="line_color">#EAF2F2F2</color>
     <color name="theme_color">#DC393E</color>
     <color name="theme_color1">#EC3339</color>
     <!--  hint颜色  -->
@@ -27,6 +28,9 @@
     <color name="reveal_color">#40FFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="black_opac_60">#99000000</color>
+    <color name="black_opac_40">#66000000</color>
+    <color name="black_opac_10">#1A000000</color>
     <color name="gray_e5e5e5">#e5e5e5</color>
     <color name="gray_424242">#424242</color>
     <color name="gray_line">#D0D0D0</color>
@@ -190,12 +194,14 @@
     <color name="color_f05656">#F05656</color>
     <color name="color_444444">#444444</color>
     <color name="color_F0DFC2">#F0DFC2</color>
+    <color name="page_bg_color">#d6d6d6</color>
 
     <color name="active_color">#FF6200EE</color> <!-- Purple -->
     <color name="dim_color">#FFBBBBBB</color> <!-- Gray -->
     <color name="layout1_background">#FFE1F5FE</color> <!-- Light Blue -->
     <color name="layout2_background">#FFF8E1F5</color> <!-- Light Pink -->
     <color name="layout3_background">#FFF1F8E9</color> <!-- Light Green -->
-    <color name="bg_color">#FFF1F8E9</color> <!-- Light Green -->
+    <color name="bg_color">#FFF1F8E9</color>
+    <color name="green">#47C54D</color> <!-- Light Green -->
 
 </resources>

@@ -211,11 +211,15 @@
                     android:text=""
                     android:textSize="16sp"
                     android:textColor="#000000"
+                    android:maxLines="1"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/llInfo"
                     android:layout_marginBottom="8dp"
                     android:id="@+id/dev_name"
                     />
 
                 <LinearLayout
+                    android:id="@+id/llInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -223,23 +227,25 @@
                     >
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="#000000"
                         android:layout_marginBottom="8dp"
                         android:id="@+id/is_shared_device_txtv"
+                        android:visibility="gone"
                         />
 
                     <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:orientation="horizontal"
-                    android:id="@+id/cloud_info_ll"
-                    android:visibility="visible"
-                    >
-                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:orientation="horizontal"
+                        android:id="@+id/cloud_info_ll"
+                        android:visibility="visible"
+                        >
+                        <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/user_rounded_icon"
@@ -252,7 +258,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/cloud_upload_1"
+                            android:src="@drawable/ic_cloud"
                             android:contentDescription="Upload"
                             android:id="@+id/btn_turn_to_cloud_service1"
                             android:visibility="gone"
@@ -275,18 +281,33 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#CCCCCC"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounder_corner"
+                    >
 
-                <ImageView
+                   <ImageView
+                       android:layout_width="match_parent"
+                       android:layout_height="200dp"
+                       android:scaleType="centerCrop"
+                       android:src="@drawable/demo_image"
+                       android:contentDescription="Device Thumbnail"
+                       android:id="@+id/banner_img"
+                       />
+                </RelativeLayout>
+                <!--<com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/banner_img"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/demo_image"
-                    android:contentDescription="Device Thumbnail"
-                    android:id="@+id/banner_img"
-                    />
+                    android:layout_centerVertical="true"
+                    app:riv_corner_radius="10dip"
+                    app:riv_mutate_background="true"
+                    />-->
 
                 <!-- Sleep Badge -->
                 <TextView
@@ -304,6 +325,7 @@
 
             <!-- Action Buttons -->
             <LinearLayout
+                android:id="@+id/llbottomIcons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -323,7 +345,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/share_icon1"
+                        android:src="@drawable/ic_share"
                         android:contentDescription="Share" />
 
                     <TextView
@@ -345,7 +367,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/message_chat"
+                        android:src="@drawable/ic_conversation"
                         android:contentDescription="Message" />
 
                     <TextView
@@ -367,7 +389,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/bell_slash_icon"
+                        android:src="@drawable/ic_mute"
                         android:contentDescription="Notification" />
 
                     <TextView
@@ -390,7 +412,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/settings_icon"
+                        android:src="@drawable/ic_setting"
                         android:contentDescription="Settings" />
 
                     <TextView

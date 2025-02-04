@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="48">
+
+    <!-- Battery Outer Shape -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M4,2h16v44h-16z" />
+
+    <!-- Battery Head -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M8,0h8v2h-8z" />
+</vector>
