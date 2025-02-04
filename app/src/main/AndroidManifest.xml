@@ -172,6 +172,9 @@
             android:name=".ui.activity.MeSharingManagement"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.MySharedUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />

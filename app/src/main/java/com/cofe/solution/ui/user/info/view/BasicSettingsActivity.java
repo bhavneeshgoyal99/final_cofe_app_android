@@ -3,6 +3,7 @@ package com.cofe.solution.ui.user.info.view;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,6 +27,9 @@ public class BasicSettingsActivity extends AppCompatActivity {
     LinearLayout llBasicSettings;
     LinearLayout llSpeakerVolume;
     LinearLayout llLanguage;
+    ImageView back_button;
+
+    boolean backState = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class BasicSettingsActivity extends AppCompatActivity {
         rlLanguage = findViewById(R.id.rlLanguage);
         rvLanguage = findViewById(R.id.rvLanguage);
         llLanguage = findViewById(R.id.llLanguage);
+        back_button = findViewById(R.id.back_button);
         //tvTitleHeader.setText("Basic Settings");
 
 
@@ -56,6 +61,8 @@ public class BasicSettingsActivity extends AppCompatActivity {
         rlDayNightSwitchOverSens.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                backState =true;
+
                 llDayNightSwitchesSensitivity.setVisibility(View.VISIBLE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.GONE);
@@ -67,6 +74,8 @@ public class BasicSettingsActivity extends AppCompatActivity {
         rlSpeakerVolume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                backState =true;
+
                 llDayNightSwitchesSensitivity.setVisibility(View.GONE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.VISIBLE);
@@ -78,10 +87,29 @@ public class BasicSettingsActivity extends AppCompatActivity {
         rlLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                backState =true;
                 llDayNightSwitchesSensitivity.setVisibility(View.GONE);
                 llBasicSettings.setVisibility(View.GONE);
                 llSpeakerVolume.setVisibility(View.GONE);
                 llLanguage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!backState) {
+                    finish();
+
+                }
+                else {
+                    backState =false;
+
+                    llDayNightSwitchesSensitivity.setVisibility(View.GONE);
+                    llBasicSettings.setVisibility(View.VISIBLE);
+                    llSpeakerVolume.setVisibility(View.GONE);
+                    llLanguage.setVisibility(View.GONE);
+                }
             }
         });
     }
