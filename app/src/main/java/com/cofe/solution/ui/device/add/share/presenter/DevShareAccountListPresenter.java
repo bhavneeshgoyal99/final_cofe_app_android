@@ -34,6 +34,7 @@ public class DevShareAccountListPresenter extends XMBasePresenter<ShareManager> 
         manager.getMyShareDevUserList(getDevId());
     }
 
+
     @Override
     public void cancelShare(String shareId) {
         manager.cancelShare(shareId);

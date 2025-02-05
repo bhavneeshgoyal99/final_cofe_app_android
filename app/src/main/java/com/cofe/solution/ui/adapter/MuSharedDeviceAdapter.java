@@ -12,24 +12,33 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cofe.solution.R;
 import com.cofe.solution.ui.activity.MeSharingManagement;
 import com.cofe.solution.ui.activity.MySharedUserActivity;
+import com.lib.sdk.bean.share.MyShareUserInfoBean;
+
+import java.util.List;
 
 public class MuSharedDeviceAdapter extends RecyclerView.Adapter<MuSharedDeviceAdapter.ItemViewHolder> {
 
     // private List<Item> itemList;
     private MeSharingManagement activity;
+    List<MyShareUserInfoBean> data;
 
     // Constructor
     public MuSharedDeviceAdapter(MeSharingManagement activity) {
         this.activity = activity;
     }
+    public void setData(List<MyShareUserInfoBean> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
 
     // ViewHolder class
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTextView, subtitleTextView;
+        TextView tv1, tv2;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            //titleTextView = itemView.findViewById(R.id.textViewTitle);
+            tv1 = itemView.findViewById(R.id.tv1);
+            tv2 = itemView.findViewById(R.id.tv2);
             // subtitleTextView = itemView.findViewById(R.id.textViewSubtitle);
         }
     }
@@ -47,6 +56,13 @@ public class MuSharedDeviceAdapter extends RecyclerView.Adapter<MuSharedDeviceAd
        /* Item currentItem = itemList.get(position);
         holder.titleTextView.setText(currentItem.getTitle());
         holder.subtitleTextView.setText(currentItem.getSubtitle());*/
+        if (data != null && position < data.size()) {
+        holder.tv1.setText(data.get(position).getDevId());
+        holder.tv2.setText("Shared with "+data.get(position).getSameDevUserCount()+" User");
+        } else {
+            // Handle the null case appropriately, maybe set a default value or log an error.
+            holder.tv1.setText("No data available");
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +75,6 @@ public class MuSharedDeviceAdapter extends RecyclerView.Adapter<MuSharedDeviceAd
 
     @Override
     public int getItemCount() {
-        return 5;
+        return (data != null) ? data.size() : 0;
     }
 }

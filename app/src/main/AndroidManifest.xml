@@ -169,7 +169,7 @@
             android:name=".ui.user.modify.view.AppAboutAcitivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.modify.view.MeSharingManagement"
+            android:name=".ui.activity.MeSharingManagement"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.MainActivity"
