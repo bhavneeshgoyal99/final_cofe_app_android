@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.basic.G;
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.gson.Gson;
-import com.lib.EFUN_ERROR;
 import com.lib.EUIMSG;
 import com.lib.FunSDK;
 import com.lib.MsgContent;
@@ -29,10 +27,8 @@ import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
 import com.utils.LogUtils;
-import com.utils.SignatureUtil;
 import com.xm.activity.base.XMBasePresenter;
 import com.xm.base.code.ErrorCodeManager;
-import com.xm.ui.dialog.XMPromptDlg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +40,6 @@ import com.cofe.solution.ui.device.add.share.listener.ShareDevListContract;
 import com.cofe.solution.ui.device.push.view.DevPushService;
 
 import static com.manager.account.share.ShareInfo.SHARE_ACCEPT;
-import static com.manager.account.share.ShareInfo.SHARE_NOT_YET_ACCEPT;
 import static com.manager.account.share.ShareManager.OPERATING.ACCPET_SHARE;
 import static com.manager.account.share.ShareManager.OPERATING.CANCEL_SHARE;
 import static com.manager.account.share.ShareManager.OPERATING.GET_OTHER_SHARE_DEV_USER_LIST;
@@ -57,7 +52,7 @@ import static com.manager.db.XMDevInfo.OFF_LINE;
  */
 public class DevListConnectPresenter extends XMBasePresenter<AccountManager> implements DevListConnectContract.IDevListConnectPresenter, ShareDevListContract.IShareDevListPresenter, BaseAccountManager.OnDevStateListener, ShareManager.OnShareManagerListener {
 
-    private DevListConnectContract.IDevListConnectView iDevListConnectView;
+    private  DevListConnectContract.IDevListConnectView iDevListConnectView;
     private List<HashMap<String, Object>> devList;
     private ShareManager shareManager;
     private List<OtherShareDevUserBean> otherShareDevUserBeans;
@@ -66,10 +61,54 @@ public class DevListConnectPresenter extends XMBasePresenter<AccountManager> imp
 
     public DevListConnectPresenter(DevListConnectContract.IDevListConnectView iDevListConnectView) {
         this.iDevListConnectView = iDevListConnectView;
-        shareManager = ShareManager.getInstance(iDevListConnectView.getContext());
-        shareManager.init();
-        shareManager.addShareManagerListener(this);
+        //shareManager.addShareManagerListener(this);
+        checkLoginStatus(this);
     }
+
+    void checkLoginStatus(DevListConnectPresenter devListConnectPresenter){
+        if (!DevDataCenter.getInstance().isLoginByAccount()) {
+            if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                if (DevDataCenter.getInstance().getAccessToken() == null) {
+                    AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                            new BaseAccountManager.OnAccountManagerListener() {
+                                @Override
+                                public void onSuccess(int msgId) {
+                                    Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
+                                    if (DevDataCenter.getInstance().isLoginByAccount()) {
+                                        shareManager = ShareManager.getInstance(iDevListConnectView.getContext());
+                                        shareManager.init();
+                                        shareManager.addShareManagerListener(devListConnectPresenter);
+                                    } else {
+                                        Log.d("devLListPresenter","ShareManager > manager is null or values not set ");
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int msgId, int errorId) {
+                                    iDevListConnectView.logout();
+
+                                }
+
+                                @Override
+                                public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                }
+                            });//LOGIN_BY_INTERNET（1）  Account login type
+
+                } else {
+                    iDevListConnectView.logout();
+                }
+
+            } else {
+                iDevListConnectView.logout();
+            }
+        } else {
+            shareManager = ShareManager.getInstance(iDevListConnectView.getContext());
+            shareManager.init();
+            shareManager.addShareManagerListener(devListConnectPresenter);
+        }
+    }
+
 
     @Override
     public AccountManager getManager() {
@@ -252,8 +291,10 @@ public class DevListConnectPresenter extends XMBasePresenter<AccountManager> imp
 
     @Override
     public void clear() {
-        shareManager.removeShareManagerListener(this);
-        manager.removeDevStateListener(this);
+        if(shareManager!=null) {
+            shareManager.removeShareManagerListener(this);
+            manager.removeDevStateListener(this);
+        }
     }
 
     @Override

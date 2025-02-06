@@ -930,4 +930,8 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
         super.onAttach(activity);
         this.activity = (DevActivity) activity;
     }
+
+    @Override
+    public void logout(){
+    }
 }

@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -11,17 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cofe.solution.R;
 import com.cofe.solution.app.SDKDemoApplication;
 
-public class MeAboutAcitivity extends AppCompatActivity {
+public class AppAboutAcitivity extends AppCompatActivity {
 
     TextView tvTitleHeader;
     ImageView back_button;
+    TextView imagtPathTextv;
+    TextView videotPathTextv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_me_about_acitivity);
-        TextView imagtPathTextv = findViewById(R.id.path_path_txttv);
-        TextView videotPathTextv = findViewById(R.id.video_path_txttv);
+        imagtPathTextv = findViewById(R.id.path_path_txttv);
+        videotPathTextv = findViewById(R.id.video_path_txttv);
+        Log.d("AppAboutAcitivity", "vvPATH_PHOTO > " + SDKDemoApplication.PATH_PHOTO);
         imagtPathTextv.setText(SDKDemoApplication.PATH_PHOTO);
         videotPathTextv.setText(SDKDemoApplication.PATH_PHOTO);
         initUis();
@@ -39,5 +43,9 @@ public class MeAboutAcitivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        imagtPathTextv.setText(SDKDemoApplication.PATH_PHOTO);
+        videotPathTextv.setText(SDKDemoApplication.PATH_PHOTO);
+
     }
 }

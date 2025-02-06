@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:uilib="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:id="@+id/parent_rl"
+    >
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null"
+        >
+
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="gone"/>
+
+        <!-- Toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/common_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="0dp"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@color/white"
+            >
+
+            <ImageView
+                android:id="@+id/imgDeviceQRCode_1"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="QR Code" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                >
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                    <!-- SN -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SN:"
+                            android:textStyle="bold"
+                            android:padding="8dp" />
+                        <TextView
+                            android:id="@+id/tvSN"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxWidth="200dp"
+                            android:padding="8dp"
+                            android:ellipsize="none"
+                            android:maxLines="5"
+                            android:breakStrategy="simple"
+                            android:singleLine="false" />
+                    </TableRow>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iccid_table_row"
+                            android:orientation="vertical"
+                            >
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/little_grey_"
+                                />
+                            <!-- ICCID -->
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ICCID:"
+                                    android:textStyle="bold"
+                                    android:padding="8dp" />
+                                <TextView
+                                    android:id="@+id/tvICCID"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxWidth="200dp"
+                                    android:padding="8dp"
+                                    android:ellipsize="none"
+                                    android:maxLines="5"
+                                    android:breakStrategy="simple"
+                                    android:singleLine="false" />
+                            </TableRow>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imei_table_row"
+                            android:orientation="vertical"
+                            >
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                                <!-- IMEI -->
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="IMEI:"
+                                    android:textStyle="bold"
+                                    android:padding="8dp" />
+                                <TextView
+                                    android:id="@+id/tvIMEI"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:maxWidth="200dp"
+                                    android:padding="8dp"
+                                    android:ellipsize="none"
+                                    android:maxLines="5"
+                                    android:breakStrategy="simple"
+                                    android:singleLine="false" />
+                            </TableRow>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <!-- Device Version -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Device Version:"
+                            android:textStyle="bold"
+                            android:padding="8dp" />
+                        <TextView
+                            android:id="@+id/tvDeviceVersion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxWidth="200dp"
+                            android:padding="8dp"
+                            android:ellipsize="none"
+                            android:maxLines="5"
+                            android:breakStrategy="simple"
+                            android:singleLine="false" />
+                    </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <!-- Device Version -->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="MCU Version:"
+                                android:textStyle="bold"
+                                android:padding="8dp" />
+                            <TextView
+                                android:id="@+id/tvMCUVersion"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+                                />
+                        </TableRow>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/syncDevTimeZone">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Publish Date:"
+                                android:textStyle="bold"
+                                android:padding="8dp"/>
+                            <TextView
+                                android:id="@+id/tvPublishDate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"/>
+                        </TableRow>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:text="Time Zone:"
+                                android:textStyle="bold"
+                                android:padding="8dp"/>
+                            <TextView
+                                android:id="@+id/tvTimeZone"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"/>
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <!-- Software Version -->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Software Version:"
+                                android:textStyle="bold"
+                                android:padding="8dp" />
+                            <TextView
+                                android:id="@+id/tvSoftwareVersion"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false" />
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <!-- Device Version -->
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PID"
+                                android:textStyle="bold"
+                                android:padding="8dp" />
+                            <TextView
+                                android:id="@+id/tvPid"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+                                />
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <!-- Device Time -->
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/network_mode_table_row">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Device Time:"
+                            android:textStyle="bold"
+                            android:padding="8dp" />
+                        <TextView
+                            android:id="@+id/tvDeviceTime"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxWidth="200dp"
+                            android:padding="8dp"
+                            android:ellipsize="none"
+                            android:maxLines="5"
+                            android:breakStrategy="simple"
+                            android:singleLine="false" />
+                    </TableRow>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Network Mode:" android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+                                android:id="@+id/tvNetworkMode" />
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Manufacturing Method:" android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+
+                                android:id="@+id/tvManufacturingMethod"
+                                />
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Place Code:" android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+                                android:id="@+id/tvPlaceCode" />
+                        </TableRow>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/little_grey_"
+                            />
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:id="@+id/upgrade_table_row"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upgrade Status:" android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxWidth="200dp"
+                                android:padding="8dp"
+                                android:ellipsize="none"
+                                android:maxLines="5"
+                                android:breakStrategy="simple"
+                                android:singleLine="false"
+                                android:id="@+id/tvUpgrade" />
+                        </TableRow>
+
+                </TableLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/little_grey_"
+                    />
+
+                <Button
+                    android:id="@+id/btnRestoreDefaults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Restore Defaults"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@android:color/holo_blue_dark"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btnRestart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Restart"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@android:color/holo_red_dark"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

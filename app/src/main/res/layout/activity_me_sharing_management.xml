@@ -79,11 +79,13 @@
         >
 
         <TextView
+            android:id="@+id/tvMySharingCount"
+
             style="@style/user_info_normal_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Initiated 5 items device share"
+            android:text=""
             android:textColor="@color/theme"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -105,11 +107,13 @@
         >
 
         <TextView
+            android:id="@+id/llFromSharedDeviceCount"
+
             style="@style/user_info_normal_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Initiated 5 items device share"
+            android:text=""
             android:textColor="@color/theme"
             android:textSize="14sp"
             android:textStyle="bold" />

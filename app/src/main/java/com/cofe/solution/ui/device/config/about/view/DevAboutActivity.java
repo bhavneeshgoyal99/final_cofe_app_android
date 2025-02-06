@@ -1,5 +1,11 @@
 package com.cofe.solution.ui.device.config.about.view;
 
+// live preview  > intent pass home page
+// live preview  >
+
+
+
+
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
@@ -30,6 +36,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +48,9 @@ import androidx.core.content.ContextCompat;
 import com.alibaba.fastjson.JSON;
 
 import com.bumptech.glide.Glide;
+import com.cofe.solution.base.FunError;
+import com.cofe.solution.utils.ApiService;
+import com.cofe.solution.utils.RetrofitClient;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -53,6 +63,7 @@ import com.lib.FunSDK;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.SysDevAbilityInfoBean;
 import com.lib.sdk.bean.SystemFunctionBean;
+import com.lib.sdk.bean.TimeZoneBean;
 import com.lib.sdk.bean.share.DevShareQrCodeInfo;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
@@ -60,6 +71,7 @@ import com.manager.device.DeviceManager;
 import com.manager.sysability.SysAbilityManager;
 import com.utils.FileUtils;
 import com.utils.XUtils;
+import com.xm.base.code.ErrorCodeManager;
 import com.xm.ui.dialog.XMPromptDlg;
 import com.xm.ui.widget.ItemSetLayout;
 import com.xm.ui.widget.ListSelectItem;
@@ -70,15 +82,24 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import com.cofe.solution.R;
 import com.cofe.solution.ui.device.config.BaseConfigActivity;
 import com.cofe.solution.ui.device.config.about.listener.DevAboutContract;
 import com.cofe.solution.ui.device.config.about.presenter.DevAboutPresenter;
 import io.reactivex.annotations.Nullable;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 关于设备界面,包含设备基本信息(序列号,设备型号,硬件版本,软件版本,
@@ -91,33 +112,19 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     private int MANAGE_STORAGE_PERMISSION_CODE = 2296;
     private int PERMISSION_REQUEST_CODE = 102;
 
-    private TextView devModelText = null;
-    private TextView devHWVerText = null;
-    private TextView devSWVerText = null;
     private TextView devPubDateText = null;
-    private TextView devPubTimeText = null;
-    private TextView devRunTimeText = null;
-    private TextView devNatCodeText = null;
-    private TextView devNatStatusText = null;
     private ImageView devSNCodeImg = null;
-    private ImageView updateFromStorage = null;
-    private TextView devUpdateText = null;
-    private ListSelectItem lsiDevUpgrade;
-    private ListSelectItem lsiDevPid;//设备PID信息
-    private ListSelectItem lsiDevLocalUpgrade;//本地升级
-    private ListSelectItem lsiSyncDevTime;//同步时间
-    private ListSelectItem lsiSyncDevTimeZone;//同步时区
-    private ListSelectItem lsiOemId;//OEMID信息
-    private ListSelectItem lsiICCID;//ICCID信息
-    private ListSelectItem lsiIMEI;//IMEI信息
-    private ListSelectItem lsiNetworkMode;//网络模式
-    private Button defaltConfigBtn = null;
-    private TextView tvDevInfo;
     private boolean isLocalUpgrade;//是否为本地升级
     private static final int SYS_LOCAL_FILE_REQUEST_CODE = 0x08;
     private String firmwareType;//固件類型 默认是System（主控），Mcu（单片机）
 
-
+    private TextView tvSN, tvICCID, tvIMEI,tvPdi,  tvDeviceVersion, tvSoftwareVersion,
+            tvMCUVersion, tvPublishDate, tvTimeZone, tvDeviceTime, tvNetworkMode,
+            tvManufacturingMethod, tvPlaceCode, tvUpgrade;
+    private Button btnRestoreDefaults, btnRestart;
+    Handler handler;
+    Runnable updateTimeRunnable;
+    TableRow syncDevTimeZone;
     @Override
     public DevAboutPresenter getPresenter() {
         return new DevAboutPresenter(this);
@@ -128,13 +135,13 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_device_system_info);
+        setContentView(R.layout.activity_device_system_info_1);
+        loaderDialog.show();
         initView();
         initData();
     }
 
     private void initView() {
-
         titleBar = findViewById(R.id.layoutTop);
         titleBar.setTitleText(getString(R.string.device_system_info));
         titleBar.setLeftClick(this);
@@ -142,26 +149,55 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.device_system_info));
 
+        tvSN = findViewById(R.id.tvSN);
+        tvICCID = findViewById(R.id.tvICCID);
+        tvIMEI = findViewById(R.id.tvIMEI);
+        tvDeviceVersion = findViewById(R.id.tvDeviceVersion);
+        tvPdi = findViewById(R.id.tvPid);
+        tvSoftwareVersion = findViewById(R.id.tvSoftwareVersion);
+        tvMCUVersion = findViewById(R.id.tvMCUVersion);
+        tvPublishDate = findViewById(R.id.tvPublishDate);
+        tvTimeZone = findViewById(R.id.tvTimeZone);
+        tvDeviceTime = findViewById(R.id.tvDeviceTime);
 
-        devSnText = findViewById(R.id.textDeviceSN_1);
-        devHWVerText = findViewById(R.id.textDeviceHWVer_1);
+        tvNetworkMode = findViewById(R.id.tvNetworkMode);
+        tvManufacturingMethod = findViewById(R.id.tvManufacturingMethod);
+        tvPlaceCode = findViewById(R.id.tvPlaceCode);
+        tvUpgrade = findViewById(R.id.tvUpgrade);
+
+
+        btnRestoreDefaults = findViewById(R.id.btnRestoreDefaults);
+        btnRestart = findViewById(R.id.btnRestart);
+        devSNCodeImg = findViewById(R.id.imgDeviceQRCode_1);
+
+        findViewById(R.id.upgrade_table_row).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (presenter.isDevUpgradeEnable()) {
+                    presenter.startDevUpgrade();
+                } else {
+                    showToast(getString(R.string.already_latest), Toast.LENGTH_LONG);
+                }
+
+            }
+        });
+
+        /*devSnText = findViewById(R.id.textDeviceSN_1);
+        devHWVerText = findViewById(R.id.textDeviceVer_1);
         devSWVerText = findViewById(R.id.textDeviceSWVer_1);
         devPubDateText = findViewById(R.id.textDevicePubDate_1);
 
+
         devRunTimeText = findViewById(R.id.textDeviceRunTime_1);
         devNatCodeText = findViewById(R.id.textDeviceNetwork);
-        devSNCodeImg = findViewById(R.id.imgDeviceQRCode_1);
         devUpdateText = findViewById(R.id.textDeviceUpgrade_1);
         defaltConfigBtn = findViewById(R.id.defealtconfig_1);
-        updateFromStorage = findViewById(R.id.updateFromStorage);
-        defaltConfigBtn.setOnClickListener(this);
+        updateFromStorage = findViewById(R.id.updateFromStorage);*/
+        //defaltConfigBtn.setOnClickListener(this);
 
         //tvDevInfo = ((ItemSetLayout) findViewById(R.id.isl_device_info)).getMainLayout().findViewById(R.id.textDeviceNatCode_1);
 
-        lsiDevUpgrade = findViewById(R.id.lsi_check_dev_upgrade);
-
-        presenter.getDevInfo("System");
-
+        /*lsiDevUpgrade = findViewById(R.id.lsi_check_dev_upgrade);
         lsiDevUpgrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,41 +207,28 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                     showToast(getString(R.string.already_latest), Toast.LENGTH_LONG);
                 }
             }
-        });
-        updateFromStorage.setOnClickListener(new View.OnClickListener() {
+        });*/
+        /*updateFromStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 openStorage();
 
             }
-        });
+        });*/
 
-        lsiDevLocalUpgrade = findViewById(R.id.lsi_local_dev_upgrade);
+        //lsiDevLocalUpgrade = findViewById(R.id.lsi_local_dev_upgrade);
+        //lsiDevLocalUpgrade.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+         //       Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+         //      intent.setType("*/*");
+         //       startActivityForResult(intent, SYS_LOCAL_FILE_REQUEST_CODE);
+          //  }
+        //});
 
-        lsiDevLocalUpgrade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                startActivityForResult(intent, SYS_LOCAL_FILE_REQUEST_CODE);
-            }
-        });
-
-        lsiDevPid = findViewById(R.id.lsi_dev_pid);
-
-        lsiSyncDevTime = findViewById(R.id.lsi_sync_dev_time);
-
-        lsiSyncDevTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showWaitDialog();
-                presenter.syncDevTime();
-            }
-        });
-
-        lsiSyncDevTimeZone = findViewById(R.id.lsi_sync_dev_time_zone);
-        lsiSyncDevTimeZone.setOnClickListener(new View.OnClickListener() {
+        syncDevTimeZone = findViewById(R.id.syncDevTimeZone);
+        syncDevTimeZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showWaitDialog();
@@ -213,10 +236,10 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
             }
         });
 
-        lsiOemId = findViewById(R.id.lsi_dev_oemid);
+        /*lsiOemId = findViewById(R.id.lsi_dev_oemid);
         lsiICCID = findViewById(R.id.lsi_iccid);
         lsiIMEI = findViewById(R.id.lsi_imei);
-        lsiNetworkMode = findViewById(R.id.lsi_network_mode);
+        lsiNetworkMode = findViewById(R.id.lsi_network_mode);*/
     }
 
     private void initData() {
@@ -230,10 +253,12 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         presenter.getDevCapsAbility(this);
         Log.d("Dev About Page ", "device id > " + presenter.getDevId());
         XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-        if (xmDevInfo != null) {
+        /*if (xmDevInfo != null) {
             lsiDevPid.setRightText(StringUtils.isStringNULL(xmDevInfo.getPid()) ? "" : xmDevInfo.getPid());
-        }
+        }*/
 
+        presenter.getDevInfo("System");
+        callWebAPI();
         this.publishDeviceData();
     }
 
@@ -247,21 +272,86 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         try {
             Log.d("DevAbout Activity", "onUpdateView  result " + result);
             JSONObject originalResult = new JSONObject(result);
-            JSONObject systemInfo = new JSONObject(originalResult.get("SystemInfo").toString());
 
-            Log.d("DevAbout Activity", "onUpdateView  result > 210 " + systemInfo.get("BuildTime"));
+            if(result.contains("SystemInfoEx")) {
+                JSONObject systemInfo = new JSONObject(originalResult.get("SystemInfoEx").toString());
+                tvMCUVersion.setText(systemInfo.get("McuVersion").toString());
+            } else {
+                JSONObject systemInfo = new JSONObject(originalResult.get("SystemInfo").toString());
 
-            devSnText.setText(systemInfo.get("SerialNo").toString());
-            devSnText.setText("a***n");
-            devSWVerText.setText(systemInfo.get("SoftWareVersion").toString());
-            devSWVerText.setText(systemInfo.get("HardWare").toString());
-            devPubDateText.setText(systemInfo.get("BuildTime").toString());
-            Bitmap bitmap = getShareDevQrCode(getApplicationContext());
-            Glide.with(getApplicationContext()).load(bitmap).into(devSNCodeImg);
+                Log.d("DevAbout Activity", "onUpdateView  result > 210 " + systemInfo.get("BuildTime"));
+                tvSN.setText(systemInfo.get("SerialNo").toString());
+                tvSoftwareVersion.setText(systemInfo.get("SoftWareVersion").toString());
+                tvDeviceVersion.setText(systemInfo.get("HardWare").toString());
+                tvPublishDate.setText(systemInfo.get("BuildTime").toString());
+                tvPdi.setText(systemInfo.get("Pid").toString());
+                XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
 
+                DeviceManager.getInstance().getMcuVersion(presenter.getDevId(), new DeviceManager.OnDevManagerListener<String>() {
+                    @Override
+                    public void onSuccess(String devId, int operationType, String result) {
+                        tvMCUVersion.setText(result.toString());
+
+                    }
+
+                    @Override
+                    public void onFailed(String devId, int msgId, String jsonName, int errorId) {
+                        tvMCUVersion.setText(getString(R.string.nan));
+
+                    }
+                });
+
+                tvTimeZone.setText("not found");
+                tvDeviceTime.setText("");
+                tvManufacturingMethod.setText("original1");
+                tvPlaceCode.setText("0000000");
+                handler = new Handler();
+                updateTimeRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        updateDeviceTime();
+                        handler.postDelayed(this, 1000); // Update every second
+                    }
+                };
+
+                // Start updating clock
+                handler.post(updateTimeRunnable);
+
+
+                Bitmap bitmap = getShareDevQrCode(getApplicationContext());
+                Glide.with(getApplicationContext()).load(bitmap).into(devSNCodeImg);
+
+                // Button Click Listeners
+                btnRestoreDefaults.setOnClickListener(v -> {
+                    Toast.makeText(DevAboutActivity.this, "Restoring Defaults...", Toast.LENGTH_SHORT).show();
+                    // Add restore functionality here
+                });
+
+                btnRestart.setOnClickListener(v -> {
+                    Toast.makeText(DevAboutActivity.this, "Restarting Device...", Toast.LENGTH_SHORT).show();
+                    // Add restart functionality here
+                });
+            }
         } catch (Exception e) {
+            try {
+                FunError.getErrorStr(Integer.parseInt(result));
+            } catch (Exception e1) {
+                showToast(getString(R.string.unexcepted_error), Toast.LENGTH_LONG);
+
+            } finally {
+                finish();
+            }
+
             e.printStackTrace();
         }
+    }
+
+    // Function to get the real-time clock and update the TextView
+    private void updateDeviceTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        String currentTime = sdf.format(new Date());
+        Log.d("updateDeviceTime > " ,"time > "  +currentTime);
+        tvDeviceTime.setText(currentTime);
     }
 
     void publishDeviceData() {
@@ -287,11 +377,13 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
     @Override
     public void onCheckDevUpgradeResult(boolean isSuccess, boolean isNeedUpgrade) {
+        String text = "";
         if (isNeedUpgrade) {
-            lsiDevUpgrade.setRightText(getString(R.string.have_new_version_click_to_upgrade));
+            text  = getString(R.string.have_new_version_click_to_upgrade);
         } else {
-            lsiDevUpgrade.setRightText(getString(R.string.already_latest));
+            text  =  getString(R.string.already_latest);
         }
+        tvUpgrade.setText(text);
     }
 
     @Override
@@ -300,33 +392,33 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
             //正在下载升级包
             case ECONFIG.EUPGRADE_STEP_DOWN:
                 if (isLocalUpgrade) {
-                    lsiDevLocalUpgrade.setRightText(getString(R.string.download_dev_firmware) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.download_dev_firmware) + ":" + progress);
                 } else {
-                    lsiDevUpgrade.setRightText(getString(R.string.download_dev_firmware) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.download_dev_firmware) + ":" + progress);
                 }
                 break;
             //正在上传
             case ECONFIG.EUPGRADE_STEP_UP:
                 if (isLocalUpgrade) {
-                    lsiDevLocalUpgrade.setRightText(getString(R.string.upload_dev_firmware) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.upload_dev_firmware) + ":" + progress);
                 } else {
-                    lsiDevUpgrade.setRightText(getString(R.string.upload_dev_firmware) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.upload_dev_firmware) + ":" + progress);
                 }
                 break;
             //正在升级
             case ECONFIG.EUPGRADE_STEP_UPGRADE:
                 if (isLocalUpgrade) {
-                    lsiDevLocalUpgrade.setRightText(getString(R.string.dev_upgrading) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.dev_upgrading) + ":" + progress);
                 } else {
-                    lsiDevUpgrade.setRightText(getString(R.string.dev_upgrading) + ":" + progress);
+                    tvUpgrade.setText(getString(R.string.dev_upgrading) + ":" + progress);
                 }
                 break;
             //升级完成
             case ECONFIG.EUPGRADE_STEP_COMPELETE:
                 if (isLocalUpgrade) {
-                    lsiDevLocalUpgrade.setRightText(getString(R.string.completed_dev_upgrade));
+                    tvUpgrade.setText(getString(R.string.completed_dev_upgrade));
                 } else {
-                    lsiDevUpgrade.setRightText(getString(R.string.completed_dev_upgrade));
+                    tvUpgrade.setText(getString(R.string.completed_dev_upgrade));
                 }
 
                 isLocalUpgrade = false;
@@ -349,59 +441,17 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     }
 
     @Override
-    public void onGetDevOemIdResult(String oemId) {
-        lsiOemId.setRightText(oemId);
-    }
-
-    @Override
-    public void onGetICCIDResult(String iccid) {
-        if (iccid != null) {
-            lsiICCID.setVisibility(View.VISIBLE);
-            lsiICCID.setRightText(iccid);
-        }
-    }
-
-    @Override
-    public void onGetIMEIResult(String imei) {
-        if (imei != null) {
-            lsiIMEI.setVisibility(View.VISIBLE);
-            lsiIMEI.setRightText(imei);
-        }
-    }
-
-    @Override
     public void onDevUpgradeFailed(int errorId) {
         //如果升级失败了，提示失败原因，然后重新检测升级
         XMPromptDlg.onShow(this, FunSDK.TS("TR_download_failure_click"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToast(getString(R.string.failed_to_upgrade), Toast.LENGTH_LONG);
                 // finish();
             }
         });
     }
 
-    @Override
-    public void onDevNetConnectMode(int netConnectType) {
-        if (netConnectType == CONNECT_TYPE_P2P) {
-            devNatCodeText.setText("P2P");
-//            lsiNetworkMode.setRightText("P2P");
-        } else if (netConnectType == CONNECT_TYPE_TRANSMIT) {
-            devNatCodeText.setText(getString(R.string.settings_about_transmit_mode));
-//            lsiNetworkMode.setRightText(getString(R.string.settings_about_transmit_mode));
-        } else if (netConnectType == CONNECT_TYPE_RPS) {
-            devNatCodeText.setText("RPS");
-//            lsiNetworkMode.setRightText(FunSDK.TS("RPS"));
-        } else if (netConnectType == CONNECT_TYPE_RTS_P2P) {
-            devNatCodeText.setText("RTS P2P");
-//            lsiNetworkMode.setRightText(FunSDK.TS("RTS P2P"));
-        } else if (netConnectType == CONNECT_TYPE_RTS) {
-            devNatCodeText.setText("RTS Proxy");
-//            lsiNetworkMode.setRightText(FunSDK.TS("RTS Proxy"));
-        } else {
-            devNatCodeText.setText("IP");
-//            lsiNetworkMode.setRightText("IP");
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
@@ -426,6 +476,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
             }
         }
+
         if (requestCode == FILE_PICKER_REQUEST_CODE) {
             if (resultCode == RESULT_OK && data != null) {
                 Uri uri = data.getData();
@@ -435,6 +486,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                 }
             }
         }
+
         if (requestCode == MANAGE_STORAGE_PERMISSION_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
@@ -585,6 +637,52 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 //    }
 
 
+    @Override
+    public void onGetIMEIResult(String imei) {
+        if (imei != null) {
+            tvIMEI.setVisibility(View.VISIBLE);
+            tvIMEI.setText(imei);
+            tvIMEI.setText(imei);
+
+        } else {
+            findViewById(R.id.imei_table_row).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onGetDevOemIdResult(String oemId) {
+        //lsiOemId.setRightText(oemId);
+    }
+
+    @Override
+    public void onGetICCIDResult(String iccid) {
+        if (iccid != null) {
+            tvICCID.setText(iccid);
+        } else {
+            findViewById(R.id.iccid_table_row).setVisibility(View.GONE);
+        }
+    }
+
+
+
+    @Override
+    public void onDevNetConnectMode(int netConnectType) {
+        String value = "";
+        if (netConnectType == CONNECT_TYPE_P2P) {
+            value =  "P2P";
+        } else if (netConnectType == CONNECT_TYPE_TRANSMIT) {
+            value =  getString(R.string.settings_about_transmit_mode);
+        } else if (netConnectType == CONNECT_TYPE_RPS) {
+            value = FunSDK.TS("RPS");
+        } else if (netConnectType == CONNECT_TYPE_RTS_P2P) {
+            value = FunSDK.TS("RTS P2P");
+        } else if (netConnectType == CONNECT_TYPE_RTS) {
+            value =  FunSDK.TS("RTS Proxy");
+        } else {
+            value =  "IP";
+        }
+        tvNetworkMode.setText(value);
+    }
 
     public Bitmap getShareDevQrCode(Context context) {
         String loginUserId = FunSDK.GetFunStrAttr(LOGIN_USER_ID);
@@ -677,5 +775,53 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         logo = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         logo.setPixels(pixels, 0, width, 0, 0, width, height);
         return logo;
+    }
+
+    void callWebAPI(){
+        XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
+        ApiService apiService = RetrofitClient.getApiService();
+        Log.d("callWebAPI userToken " ,"token >" + DevDataCenter.getInstance().getAccessToken());
+        Log.d("callWebAPI devToken " ,"token >" + xmDevInfo.getDevToken());
+        // Request body
+
+        String json = "{\"Name\":\"System.TimeZone\"}";
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        // Dynamic headers
+        String authorizationToken = DevDataCenter.getInstance().getAccessToken(); // user toke
+        String deviceAuthToken = xmDevInfo.getDevToken();  // device tokken
+        String acceptLanguage = "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,hi;q=0.6"; // thbis language
+
+        apiService.getDeviceConfiguration(authorizationToken, deviceAuthToken, acceptLanguage, "application/json", body )
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                Log.d("API_RESPONSE", response.body().string());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.e("API_ERROR", "Error: " + response.code());
+                        }
+                        loaderDialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.e("API_ERROR", "Failure: " + t.getMessage());
+                        loaderDialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(handler !=null) {
+            handler.removeCallbacks(null);
+            handler = null;
+        }
     }
 }

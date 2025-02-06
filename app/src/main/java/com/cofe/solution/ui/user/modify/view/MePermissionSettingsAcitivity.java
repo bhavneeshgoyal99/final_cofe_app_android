@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
 
@@ -38,6 +39,7 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
 
     private RelativeLayout llBluetooth, llLocation, llStorage, llCamera, llMic, llNotification;
 
+    ImageView back_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,8 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
                 checkPermission(permission);
             }
         }
+        back_button = findViewById(R.id.back_button);
+        back_button.setOnClickListener(v -> finish());
     }
 
     private void setClickListeners() {

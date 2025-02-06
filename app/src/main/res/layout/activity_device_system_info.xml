@@ -53,7 +53,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,23 +72,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_weight="1"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="SN"
                         android:textAlignment="viewStart"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceSN_1"/>
 
@@ -100,22 +99,23 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_weight="1"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Device Login Name"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
+                        android:id="@+id/device_login_name_txtv"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray" />
                 </LinearLayout>
 
@@ -124,44 +124,44 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_weight="1"
+                    android:layout_marginTop="16dp"
                     >
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Device Version"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
-                        android:id="@+id/textDeviceHWVer_1"/>
+                        android:id="@+id/textDeviceVer_1"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Software Version"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceSWVer_1"/>
                 </LinearLayout>
@@ -170,22 +170,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Publish Date"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDevicePubDate_1"/>
                 </LinearLayout>
@@ -194,22 +194,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Timezone"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceTimezone"/>
                 </LinearLayout>
@@ -218,22 +218,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Device Time"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceRunTime_1"/>
                 </LinearLayout>
@@ -242,23 +242,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Network"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textDeviceNetwork"/>
                 </LinearLayout>
@@ -267,76 +267,311 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
                     >
 
                     <TextView
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".3"
+                        android:layout_weight=".4"
                         android:text="Manufacturing Method"
                         android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
+                        />
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight=".7"
+                        android:layout_weight=".6"
                         android:textSize="14sp"
-                        android:layout_marginTop="4dp"
                         android:textColor="@android:color/darker_gray"
                         android:id="@+id/textManufacturingMethod"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
-                        android:layout_width="60dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".3"
-                        android:text="Upgrade"
-                        android:textSize="14sp"
-                        android:layout_marginTop="16dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".7"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"
-                        android:textColor="@android:color/darker_gray"
-                        android:id="@+id/textDeviceUpgrade_1"/>
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/updateFromStorage"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_cloud_24x24"
-                    android:visibility="visible" />
-
-                <Button
-                    android:id="@+id/defealtconfig_1"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/common_button_shape"
-                    android:text="@string/device_system_info_defealtconfig"
-                    android:textColor="@drawable/common_text_selector"
-                    android:visibility="gone" />
-                <!-- Add more fields following the same pattern -->
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_sn"
+                    />
+
+                <TextView
+                    android:id="@+id/textDeviceSN"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_model" />
+
+                <TextView
+                    android:id="@+id/textDeviceModel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_hw_ver" />
+
+                <TextView
+                    android:id="@+id/textDeviceHWVer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_sw_ver"
+                    />
+
+                <TextView
+                    android:id="@+id/textDeviceSWVer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_pub_date" />
+
+                <TextView
+                    android:id="@+id/textDevicePubDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+
+                    android:onClick="syncTime" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:textSize="14sp"
+                    android:text="@string/device_system_info_pub_time" />
+                <TextView
+                    android:id="@+id/deviceTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:text="@string/device_system_info_pub_time" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:text="@string/device_system_info_run_time"
+                    android:textAlignment="viewStart"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/textDeviceRunTime"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:text="@string/device_system_info_nat_code"
+                    android:textAlignment="viewStart"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/textDeviceNatCode"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:text="@string/device_system_info_nat_status"
+                    android:textAlignment="viewStart"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/textDeviceNatStatus"
+                    />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+            <!--android:onClick="onUpdate"-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp"
+                >
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:text="@string/device_system_info_upgrade"
+                    android:textAlignment="viewStart"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/textDeviceUpgrade"
+                    />
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -512,23 +747,6 @@
                     android:textColor="@drawable/common_text_selector"
                     android:visibility="gone" />
             </LinearLayout>
-        </LinearLayout>
-
-    </ScrollView>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/defealtconfig"
-        android:layout_below="@id/imgDeviceQRCode"
-        android:layout_margin="@dimen/half_of_normal_margin"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -538,207 +756,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="12dp">
+                android:layout_marginTop="16dp"
+                >
 
                 <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_sn" />
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".4"
+                    android:text="Upgrade"
+                    android:textSize="14sp"
+                    />
 
                 <TextView
-                    android:id="@+id/textDeviceSN"
-                    style="@style/text_system_info_value" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".6"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:id="@+id/textDeviceUpgrade_1"/>
             </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/demo_desc" />
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/updateFromStorage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_cloud_24x24"
+                android:visibility="visible" />
+            <View
                 android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/demo_desc" />
+
+            <Button
+                android:id="@+id/defealtconfig_1"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_model" />
-
-                <TextView
-                    android:id="@+id/textDeviceModel"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_hw_ver" />
-
-                <TextView
-                    android:id="@+id/textDeviceHWVer"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_sw_ver" />
-
-                <TextView
-                    android:id="@+id/textDeviceSWVer"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_pub_date" />
-
-                <TextView
-                    android:id="@+id/textDevicePubDate"
-                    style="@style/text_system_info_value"
-                    android:onClick="syncTime" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_pub_time" />
-                <!--<com.lib.funsdk.support.widget.TimeTextView-->
-                <!--android:id="@+id/textDevicePubTime"-->
-                <!--style="@style/text_system_info_value"-->
-                <!--android:onClick="syncTime"-->
-                <!--/>-->
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_run_time" />
-
-                <TextView
-                    android:id="@+id/textDeviceRunTime"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_nat_code" />
-
-                <TextView
-                    android:id="@+id/textDeviceNatCode"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_nat_status" />
-
-                <TextView
-                    android:id="@+id/textDeviceNatStatus"
-                    style="@style/text_system_info_value" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
-
-            <!--android:onClick="onUpdate"-->
-            <LinearLayout
-                android:id="@+id/device_update"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:orientation="horizontal"
-                android:padding="12dp">
-
-                <TextView
-                    style="@style/text_system_info_title"
-                    android:text="@string/device_system_info_upgrade" />
-
-                <TextView
-                    android:id="@+id/textDeviceUpgrade"
-                    style="@style/text_system_info_value"
-                    android:text="Checking" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/demo_desc" />
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/common_button_shape"
+                android:text="@string/device_system_info_defealtconfig"
+                android:textColor="@drawable/common_text_selector"
+                android:visibility="gone" />
+            <!-- Add more fields following the same pattern -->
 
         </LinearLayout>
     </ScrollView>

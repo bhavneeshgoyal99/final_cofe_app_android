@@ -50,15 +50,6 @@ public class AovSettingActivity extends BaseConfigActivity<AovSettingPresenter> 
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.xb_idr_setting);
-        titleBar.setTitleText(getString(R.string.aov_device));
-        titleBar.setLeftClick(new XTitleBar.OnLeftClickListener() {
-            @Override
-            public void onLeftclick() {
-                finish();
-            }
-        });
-
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.aov_device));
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {

@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,9 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
+import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
+import com.cofe.solution.ui.user.modify.view.DevMeActivity;
 import com.google.gson.Gson;
 import com.lib.FunSDK;
 import com.lib.sdk.bean.share.SearchUserInfoBean;
@@ -115,6 +119,37 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
         // Set up button click listeners
         shareButton.setOnClickListener(view -> shareDeviceDetails());
         saveToPhoneButton.setOnClickListener(view -> saveQRCodeToPhone());
+        LinearLayout homeLL = findViewById(R.id.home_ll);
+        homeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(ShareDevToOtherAccountActivity.this, DevListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        LinearLayout imageLl = findViewById(R.id.image_ll);
+        imageLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(ShareDevToOtherAccountActivity.this, DevPictureActivity.class);
+                startActivity(intent);
+                //finish();
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+                // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(ShareDevToOtherAccountActivity.this, DevMeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         initData();
     }

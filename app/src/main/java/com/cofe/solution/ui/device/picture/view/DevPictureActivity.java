@@ -30,7 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.cofe.solution.base.CustomCalendarDialog;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
+import com.cofe.solution.ui.user.modify.view.DevMeActivity;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.image.BaseImageManager;
 import com.manager.image.DevImageManager;
@@ -83,8 +85,6 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
         noDataContLl = findViewById(R.id.no_data_cont_ll);
         noDatTextv = findViewById(R.id.text_txtv);
 
-
-
         findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,17 +102,40 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
             }
         });
 
-
-
-        titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.app_name));
-        titleBar.setRightBtnResource(R.mipmap.icon_date, R.mipmap.icon_date);
-        titleBar.setLeftClick(this);
-        titleBar.setRightIvClick(this);
-        titleBar.setBottomTip(DevPictureActivity.class.getName());
-
         rvDevPic = findViewById(R.id.rv_dev_pic);
         rvDevPic.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayout homeLL = findViewById(R.id.home_ll);
+        homeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(DevPictureActivity.this, DevListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        LinearLayout imageLl = findViewById(R.id.image_ll);
+        imageLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(DevPictureActivity.this, DevPictureActivity.class);
+                startActivity(intent);
+                //finish();
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+                // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(DevPictureActivity.this, DevMeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         initData();
     }
@@ -133,7 +156,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
     private void showTitleDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        titleBar.setTitleText(dateFormat.format(calendarShow.getTime()));
+//        titleBar.setTitleText(dateFormat.format(calendarShow.getTime()));
     }
 
     @Override

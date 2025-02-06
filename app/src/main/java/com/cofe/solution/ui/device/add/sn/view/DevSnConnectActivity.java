@@ -34,8 +34,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
+import com.cofe.solution.ui.activity.MeSharingManagement;
 import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.config.DeviceSetting;
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.lib.MsgContent;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.share.DevShareQrCodeInfo;
@@ -182,8 +184,47 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         devLoginTokenEdit = findViewById(R.id.editDeviceLoginToken);
         devPidEdit = findViewById(R.id.editDevicePid);
         startAnim();
+        checkLoginStatus();
+    }
 
-        scanQrCodeBtn.performClick();
+    void checkLoginStatus() {
+        if (!DevDataCenter.getInstance().isLoginByAccount()) {
+            if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                if (DevDataCenter.getInstance().getAccessToken() == null) {
+                    AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
+                            new BaseAccountManager.OnAccountManagerListener() {
+                                @Override
+                                public void onSuccess(int msgId) {
+                                    Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
+                                    if (DevDataCenter.getInstance().isLoginByAccount()) {
+
+                                        scanQrCodeBtn.performClick();
+                                    } else {
+                                        Log.d("DevSNConnect", "ShareManager > manager is null or values not set ");
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int msgId, int errorId) {
+                                    finish();
+                                    startActivity(new Intent(DevSnConnectActivity.this, UserLoginActivity.class));
+                                }
+
+                                @Override
+                                public void onFunSDKResult(Message msg, MsgContent ex) {
+
+                                }
+                            });//LOGIN_BY_INTERNET（1）  Account login type
+
+                }
+
+            } else {
+                finish();
+                startActivity(new Intent(DevSnConnectActivity.this, UserLoginActivity.class));
+            }
+        } else {
+            scanQrCodeBtn.performClick();
+        }
     }
 
     void startAnim() {
@@ -303,6 +344,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                         return;
                     }
                 }
+                Log.d("onActivityResult", "data.getStringExtra(\"result\") > " +data.getStringExtra("result"));
                 String result = data.getStringExtra("result");
                 //Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
 
@@ -322,8 +364,9 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(devInfos[0].split(":")[1]);
-                        //Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
-                        devLoginBtn.performClick();
+                        Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
+                       // devLoginBtn.performClick();
+                        finish();
 
                     }
 
@@ -352,6 +395,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                                 loaderDialog.setMessage();
                                 devSNEdit.setText(devShareQrCodeInfo.getDevId());
                                 //扫描并添加分享设备
+                                //ShareManager.getInstance(DevSnConnectActivity.this).init();
                                 ShareManager shareManager = ShareManager.getInstance(this);
                                 shareManager.addDevFromShared(
                                         devShareQrCodeInfo.getDevId(),
@@ -451,8 +495,6 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                 }
             });*/
             presenter.setDevId(devSNEdit.getText().toString());
-            presenter.setDevId(devSNEdit.getText().toString());
-            presenter.setDevId(devSNEdit.getText().toString());
 
         } else {
             Toast.makeText(DevSnConnectActivity.this, "Device does not added to account", Toast.LENGTH_SHORT).show();
@@ -519,13 +561,38 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
                     @Override
                     public void onSuccess(int msgId) {
+                        Log.d("onSuccess", "devId > " +xmDevInfo.getDevId());
+                        presenter.setDevId(xmDevInfo.getDevId());
+
+                        Intent intent1 = new Intent(DevSnConnectActivity.this, DevListActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent1);
+
+
+                        Intent intent = new Intent(DevSnConnectActivity.this, DevMonitorActivity.class);
+                        intent.putExtra("devId",presenter.getDevId());
+                       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish(); // Finish current activity
+
                         turnToActivity(DevMonitorActivity.class);
                         Toast.makeText(DevSnConnectActivity.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailed(int msgId, int errorId) {
-                         turnToActivity(DevMonitorActivity.class);
+                        Log.d("onFailed", "devId > " +xmDevInfo.getDevId());
+                        presenter.setDevId(xmDevInfo.getDevId());
+
+                        Intent intent1 = new Intent(DevSnConnectActivity.this, DevListActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent1);
+
+                        Intent intent = new Intent(DevSnConnectActivity.this, DevMonitorActivity.class);
+                        intent.putExtra("devId",presenter.getDevId());
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish(); // Finish current activity
 
                         Toast.makeText(DevSnConnectActivity.this, "Failed to changed device name", Toast.LENGTH_SHORT).show();
 

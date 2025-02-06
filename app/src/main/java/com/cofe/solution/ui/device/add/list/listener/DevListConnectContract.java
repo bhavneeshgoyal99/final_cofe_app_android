@@ -50,6 +50,8 @@ public class DevListConnectContract {
         void onGetChannelListResult(boolean isSuccess, int resultId);
 
         Context getContext();
+
+        void logout();
     }
 
     public interface IDevListConnectPresenter extends BaseAccountManager.OnAccountManagerListener {

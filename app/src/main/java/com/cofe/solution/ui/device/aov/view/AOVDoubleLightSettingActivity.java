@@ -48,15 +48,6 @@ public class AOVDoubleLightSettingActivity extends BaseConfigActivity<AOVDoubleL
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(FunSDK.TS("TR_Light_Settings"));
-        titleBar.setLeftClick(new XTitleBar.OnLeftClickListener() {
-            @Override
-            public void onLeftclick() {
-                finish();
-            }
-        });
-
         TextView titleTxtv = findViewById(R.id.toolbar_title);
         titleTxtv.setText(getString(R.string.tr_light_settings));
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {

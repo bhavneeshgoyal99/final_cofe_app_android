@@ -34,6 +34,7 @@ import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.SDBDeviceInfo;
 import com.manager.account.AccountManager;
 import com.manager.account.LocalAccountManager;
+import com.manager.account.share.ShareManager;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
 import com.manager.device.DeviceManager;
@@ -55,6 +56,9 @@ import com.cofe.solution.ui.user.login.listener.UserLoginContract;
 import com.cofe.solution.ui.user.login.presenter.UserLoginPresenter;
 import com.cofe.solution.ui.user.register.view.UserRegisterActivity;
 import com.cofe.solution.utils.SPUtil;
+
+import java.lang.reflect.Field;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -250,6 +254,16 @@ public class UserLoginActivity extends DemoBaseActivity<UserLoginPresenter> impl
             ErrorMapping errorMessage = new ErrorMapping();
             showToast(getString(R.string.user_register_login_fail) + ":" + errorMessage.getErrorMessage(presenter.getErrorId()), Toast.LENGTH_LONG);
 
+        }
+    }
+
+    public void resetShareManager(Context context) {
+        try {
+            Field instanceField = ShareManager.class.getDeclaredField("shareManager");
+            instanceField.setAccessible(true);
+            instanceField.set(null, null);  // Reset the static instance
+        } catch (Exception e) {
+            Log.e("TAG", "Failed to reset ShareManager", e);
         }
     }
 

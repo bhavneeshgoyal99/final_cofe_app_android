@@ -48,4 +48,10 @@
         uilib:layout_constraintStart_toStartOf="parent"
         uilib:layout_constraintTop_toBottomOf="@+id/rlFps" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tvTips" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

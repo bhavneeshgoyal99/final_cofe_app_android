@@ -80,7 +80,43 @@
 
         >
 
-        <include layout="@layout/common_header" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@null"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:src="@drawable/back_arrow_icon"/>
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/text_system_info_title"
+                android:text="@string/account_information"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/font_normal"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/ivEdit"
+
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:contentDescription="@null"
+                android:layout_centerVertical="true"
+                android:padding="5dp"
+                android:visibility="gone"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/pencil_edit_icon"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -306,7 +342,7 @@
                     layout="@layout/include_title_layout" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_dev_pic"
+                    android:id="@+id/rv_dev_pic2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/layoutTop" />
@@ -335,6 +371,12 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
+
+    <include layout="@layout/bottom_bav_bar"
+        android:id="@+id/bottom_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
 
 
 

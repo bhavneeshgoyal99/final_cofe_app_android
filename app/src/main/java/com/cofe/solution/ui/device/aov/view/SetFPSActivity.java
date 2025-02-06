@@ -52,14 +52,24 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
     }
 
     private void initView() {
-        titleBar = findViewById(R.id.layoutTop);
+        /*titleBar = findViewById(R.id.layoutTop);
         titleBar.setLeftClick(new XTitleBar.OnLeftClickListener() {
             @Override
             public void onLeftclick() {
                 finish();
             }
         });
-        titleBar.setBottomTip(getClass().getName());
+        titleBar.setBottomTip(getClass().getName());*/
+
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.set_FPS));
+        findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         tvTips = findViewById(R.id.tvTips);
         rlFPS = findViewById(R.id.rlFps);
         rlFPS.setLayoutManager(new LinearLayoutManager(this));

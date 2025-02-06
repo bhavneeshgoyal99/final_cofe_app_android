@@ -345,7 +345,7 @@ public class FunError {
 
 	
 	
-	private static Map<Integer, Integer> mErrStrMap = new HashMap<Integer, Integer>();
+	public static Map<Integer, Integer> mErrStrMap = new HashMap<Integer, Integer>();
 	
 	static {
 		mErrStrMap.put(EE_OK, R.string.EE_OK);

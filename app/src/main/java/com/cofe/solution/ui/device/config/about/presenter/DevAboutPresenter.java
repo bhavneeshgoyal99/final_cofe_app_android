@@ -1,6 +1,9 @@
 package com.cofe.solution.ui.device.config.about.presenter;
 
+
 import com.alibaba.fastjson.JSON;
+import com.cofe.solution.app.SDKDemoApplication;
+import com.cofe.solution.ui.device.config.about.listener.DevAboutContract;
 import com.google.gson.Gson;
 import com.lib.FunSDK;
 import com.lib.IFunSDKResult;
@@ -19,8 +22,6 @@ import com.manager.sysability.SysAbilityManager;
 import com.utils.FileUtils;
 import com.xm.activity.base.XMBasePresenter;
 
-import com.cofe.solution.app.SDKDemoApplication;
-import com.cofe.solution.ui.device.config.about.listener.DevAboutContract;
 
 import static com.manager.device.DeviceManager.UPGRADE_TYPE_CLOUD;
 import static com.manager.device.DeviceManager.UPGRADE_TYPE_FILE_DOWNLOAD;
@@ -371,4 +372,3 @@ public class DevAboutPresenter extends XMBasePresenter<DeviceManager>
         return 0;
     }
 }
-

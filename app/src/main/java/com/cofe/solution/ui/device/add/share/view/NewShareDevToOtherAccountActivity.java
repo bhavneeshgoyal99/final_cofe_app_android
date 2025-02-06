@@ -3,6 +3,7 @@ package com.cofe.solution.ui.device.add.share.view;
 import static com.lib.EFUN_ATTR.LOGIN_USER_ID;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,13 +14,17 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.cofe.solution.R;
 import com.cofe.solution.base.DemoBaseActivity;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.add.share.listener.DevShareConnectContract;
 import com.cofe.solution.ui.device.add.share.presenter.DevShareConnectPresenter;
+import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
+import com.cofe.solution.ui.user.modify.view.DevMeActivity;
 import com.lib.FunSDK;
 import com.lib.MsgContent;
 import com.lib.sdk.bean.share.SearchUserInfoBean;
@@ -72,6 +77,39 @@ public class NewShareDevToOtherAccountActivity extends DemoBaseActivity<DevShare
                 onSearchAccount(view);
             }
         });
+
+        LinearLayout homeLL = findViewById(R.id.home_ll);
+        homeLL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(NewShareDevToOtherAccountActivity.this, DevListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+        LinearLayout imageLl = findViewById(R.id.image_ll);
+        imageLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {// Account logout
+                Intent intent = new Intent(NewShareDevToOtherAccountActivity.this, DevPictureActivity.class);
+                startActivity(intent);
+                //finish();
+            }
+        });
+
+        LinearLayout meLl = findViewById(R.id.me_ll);
+        meLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // Account logout
+                // turnToActivity(DevMeActivity.class);
+                Intent intent = new Intent(NewShareDevToOtherAccountActivity.this, DevMeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         ivQrCode = findViewById(R.id.iv_qr_code);
         initData();
     }

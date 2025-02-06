@@ -61,7 +61,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoTitleBar"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:allowClearUserData="true">
         <activity
             android:name=".ui.device.preview.view.MainActivity"
             android:exported="false" />
@@ -169,7 +170,7 @@
             android:name=".ui.user.modify.view.AppAboutAcitivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.user.modify.view.MeSharingManagement"
+            android:name=".ui.activity.MeSharingManagement"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.MainActivity"

@@ -14,6 +14,7 @@ import static com.manager.device.media.audio.XMAudioManager.SPEAKER_TYPE_WOMAN;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.app.KeyguardManager;
@@ -88,6 +89,7 @@ import com.cofe.solution.base.BatteryDrawable;
 import com.cofe.solution.base.CustomBottomSheet;
 import com.cofe.solution.base.CustomBottomSheetDialogFragment;
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgFragment;
 import com.cofe.solution.ui.device.config.detecttrack.DetectTrackFragment;
@@ -1171,8 +1173,9 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             handler_record.removeCallbacks(null); // Clear all callbacks
             handler_record=null;
         }
-    }
 
+
+    }
     @Override
     public DevMonitorPresenter getPresenter() {
         return new DevMonitorPresenter(this);
@@ -2681,7 +2684,16 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             screenOrientationManager.portraitScreen(this, true);
             super.onBackPressed();
         } else {
+            ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            List<ActivityManager.AppTask> tasks = am.getAppTasks();
+            if (tasks != null && tasks.size() > 0) {
+                Log.d("StackInfo", "Previous stack exists with " + tasks.size() + " tasks.");
+            } else {
+                startActivity(new Intent(DevMonitorActivity.this, DevListActivity.class));
+                Log.d("StackInfo", "No previous stack found.");
+            }
             finish();
+
             super.onBackPressed();
         }
     }

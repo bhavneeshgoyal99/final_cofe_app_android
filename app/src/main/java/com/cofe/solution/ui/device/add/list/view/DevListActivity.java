@@ -60,6 +60,9 @@ import com.manager.account.XMAccountManager;
 import com.manager.account.share.ShareManager;
 import com.manager.db.DevDataCenter;
 import com.manager.db.XMDevInfo;
+import com.manager.device.DeviceManager;
+import com.manager.device.config.DevConfigInfo;
+import com.manager.device.config.DevConfigManager;
 import com.manager.device.config.PwdErrorManager;
 import com.utils.XUtils;
 import com.xm.activity.device.devset.ability.view.XMDevAbilityActivity;
@@ -133,27 +136,11 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_list);
-        initView();
-        initData();
-
+        checkLoginStatus();
     }
 
-    private void initView() {
-        loaderDialog = new LoaderDialog(this);
-        loaderDialog.setMessage("Please wait...");
 
-
-        /*titleBar = findViewById(R.id.layoutTop);
-        titleBar.setTitleText(getString(R.string.set_list));
-        //titleBar.setRightTitleText(getString(R.string.share_dev_list));
-        //titleBar.setBottomTip(DevListActivity.class.getName());
-        titleBar.setLeftClick(this);
-        titleBar.setRightIvClick(this);
-        titleBar.setRightTvClick(this);*/
-        TextView titleTxtv = findViewById(R.id.toolbar_title);
-        titleTxtv.setText(getString(R.string.set_list));
-        add_img = findViewById(R.id.add_img);
-        //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
+    void checkLoginStatus(){
         if (!DevDataCenter.getInstance().isLoginByAccount()) {
             if (DevDataCenter.getInstance().getAccountUserName() != null) {
                 if (DevDataCenter.getInstance().getAccessToken() == null) {
@@ -162,7 +149,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                                 @Override
                                 public void onSuccess(int msgId) {
                                     Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
+                                    if (DevDataCenter.getInstance().isLoginByAccount()) {
+                                        initView();
+                                        initData();
 
+                                        ShareManager manager = ShareManager.getInstance(getApplicationContext());
+                                    } else {
+                                        Log.d(TAG,"ShareManager > manager is null or values not set ");
+                                    }
                                 }
 
                                 @Override
@@ -181,7 +175,29 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 finish();
                 startActivity(new Intent(this, UserLoginActivity.class));
             }
+        } else {
+            initView();
+            initData();
+
         }
+    }
+    private void initView() {
+        loaderDialog = new LoaderDialog(this);
+        loaderDialog.setMessage("Please wait...");
+
+
+        /*titleBar = findViewById(R.id.layoutTop);
+        titleBar.setTitleText(getString(R.string.set_list));
+        //titleBar.setRightTitleText(getString(R.string.share_dev_list));
+        //titleBar.setBottomTip(DevListActivity.class.getName());
+        titleBar.setLeftClick(this);
+        titleBar.setRightIvClick(this);
+        titleBar.setRightTvClick(this);*/
+        TextView titleTxtv = findViewById(R.id.toolbar_title);
+        titleTxtv.setText(getString(R.string.set_list));
+        add_img = findViewById(R.id.add_img);
+        //如果不是账号登录，需要隐藏分享功能改成批量删除设备功能
+
 
         listView = findViewById(R.id.listViewDevice);
         noDeviceContLl = findViewById(R.id.no_device_cont_ll);
@@ -582,7 +598,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         Log.d(TAG,"onUpdateDevListView");
 
         slRefresh.setRefreshing(false);
-        ShareManager shareManager = ShareManager.getInstance(this);
 
         Bundle bundle = new Bundle();
         bundle.putString("called", "onUpdateDevListView");
@@ -959,9 +974,54 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         xmDevInfo = DevDataCenter.getInstance().getDevInfo((String) presenter.getDevList().get(position).get("devId"));
         if (xmDevInfo.getDevState() != 0) {
 
-            String devId = presenter.getDevId(position);
+            /*String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
-            turnToActivity(DevPushActivity.class);
+            turnToActivity(DevPushActivity.class);*/
+            DevConfigManager devConfigManager = DeviceManager.getInstance().getDevConfigManager(xmDevInfo.getDevId());
+            boolean isManualAlarmOpen = true;
+            //将开启/关闭 bool状态转成16进制字符串
+            // Convert the bool state of opening/closing to hexadecimal string.
+            String manualAlarmSwitch = isManualAlarmOpen ? "0x00000001" : "0x00000000";
+            DevConfigInfo devConfigInfo = DevConfigInfo.create(new DeviceManager.OnDevManagerListener() {
+                @Override
+                public void onSuccess(String devId, int msgId, Object result) {
+                    //result是json数据
+                    //result is JSON data
+                    Log.d(TAG ,"manuall notification true");
+                    showToast(getString(R.string.manuall_notification_Active), Toast.LENGTH_SHORT);
+                }
+
+                @Override
+                public void onFailed(String devId, int msgId, String s1, int errorId) {
+                    //获取失败，通过errorId分析具体原因
+                    //Failed to retrieve, analyze the specific reason through errorId
+                    Log.d(TAG, "manuall notification false");
+                    showToast(getString(R.string.manuall_notification_failed), Toast.LENGTH_SHORT);
+
+                }
+            });
+
+            devConfigInfo.setJsonName("OPRemoteCtrl");
+            devConfigInfo.setChnId(-1);
+            devConfigInfo.setCmdId(4000);
+
+            HashMap<String, Object> sendMap = new HashMap<>();
+            HashMap<String, Object> remoteCtrlMap = new HashMap<>();
+            remoteCtrlMap.put("Type", "ManuIntelAlarm");
+            remoteCtrlMap.put("msg", manualAlarmSwitch);
+            remoteCtrlMap.put("P1", "0x00000000");
+            remoteCtrlMap.put("P2", "0x00000000");
+
+            sendMap.put("Name", "OPRemoteCtrl");
+            sendMap.put("OPRemoteCtrl", remoteCtrlMap);
+            sendMap.put("SessionID", "0x0000001b");
+
+            //设置保存的Json数据
+            //Set the saved JSON data.
+            devConfigInfo.setJsonData(new Gson().toJson(sendMap));
+            devConfigManager.setDevCmd(devConfigInfo);
+
+
         } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
 
@@ -1173,8 +1233,10 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         if (adapter != null) {
             adapter.release();
         }
+        if(presenter!=null){
+            presenter.clear();
 
-        presenter.clear();
+        }
     }
 
 
@@ -1427,6 +1489,16 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         }, 2000);
 
+    }
+
+    void maunalNotification() {
+
+    }
+
+    @Override
+    public void logout(){
+        finish();
+        startActivity(new Intent(this, UserLoginActivity.class));
     }
 
 }

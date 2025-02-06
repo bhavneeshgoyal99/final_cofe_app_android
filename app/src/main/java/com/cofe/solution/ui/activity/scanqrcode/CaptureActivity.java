@@ -425,7 +425,12 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 			finish();
 		} catch (NotFoundException e) {
 			finish();
-			// Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show();
+			e.printStackTrace();
+			//Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			finish();
+			e.printStackTrace();
+			 Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show();
 		}
 	}
 

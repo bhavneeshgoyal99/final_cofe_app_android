@@ -39,6 +39,7 @@ import com.cofe.solution.ui.device.config.alarmconfig.view.DevAlarmSetActivity;
 import com.cofe.solution.ui.device.config.devicestore.view.DevSetupStorageActivity;
 import com.cofe.solution.ui.device.preview.view.DevMonitorActivity;
 import com.cofe.solution.ui.device.push.view.DevPushActivity;
+import com.cofe.solution.ui.user.login.view.UserLoginActivity;
 import com.google.gson.Gson;
 import com.lib.MsgContent;
 import com.lib.sdk.struct.SDBDeviceInfo;
@@ -414,5 +415,11 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     @Override
     public Context getContext() {
         return null;
+    }
+
+    @Override
+    public void logout(){
+        finish();
+        startActivity(new Intent(this, UserLoginActivity.class));
     }
 }

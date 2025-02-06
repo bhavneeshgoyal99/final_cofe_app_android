@@ -28,6 +28,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.ui.device.add.list.view.DevListActivity;
+import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.lib.FunSDK;
@@ -322,8 +324,22 @@ public class SetDevToRouterByQrCodeActivity extends DemoBaseActivity<SetDevToRou
                 XMPromptDlg.onShow(SetDevToRouterByQrCodeActivity.this, getString(R.string.need_turn_to_monitor), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        turnToActivity(DevMonitorActivity.class);
-                        finish();
+
+                        Intent intent1 = new Intent(SetDevToRouterByQrCodeActivity.this, DevListActivity.class);
+                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent1);
+                        Intent intent=null;
+                        if(presenter!=null) {
+                            if(presenter.getDevId()!=null){
+                                intent = new Intent(SetDevToRouterByQrCodeActivity.this, DevMonitorActivity.class);
+                            }
+                        } else {
+                            intent = new Intent(SetDevToRouterByQrCodeActivity.this, DevListActivity.class);
+                        }
+                        intent.putExtra("devId",presenter.getDevId());
+                        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish(); // Finish current activity
                     }
                 },null);
             }

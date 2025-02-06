@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/layout3_background"
     android:orientation="vertical"
-    tools:context=".ui.activity.MeAboutAcitivity">
+    tools:context=".ui.activity.AppAboutAcitivity">
 
     <include layout="@layout/common_header" />
 

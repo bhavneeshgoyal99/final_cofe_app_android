@@ -11,7 +11,7 @@
     <string name="EE_NO_SUPPORTED">EE_NO_SUPPORTED</string>
     <string name="EE_NET">Net Error</string>
     <string name="EE_DVR_SDK_NOTVALID">Illegal request</string>
-    <string name="EE_DVR_NO_INIT">SDK not initialization</string>
+        <string name="EE_DVR_NO_INIT">SDK not initialization</string>
     <string name="EE_DVR_ILLEGAL_PARAM">User parameters error</string>
     <string name="EE_DVR_INVALID_HANDLE">Invalid handle</string>
     <string name="EE_DVR_SDK_UNINIT_ERROR">SDK Error cleaning</string>

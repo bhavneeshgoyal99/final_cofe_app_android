@@ -1058,6 +1058,12 @@
     <string name="password_modified_failed">Password modification Failed. Please check old passwsord is wrong.</string>
     <string name="password_modified_successfully">Password modification successfully.</string>
     <string name="enter_device_id">Please enter device cloud Id</string>
+    <string name="nan">Not found</string>
+    <string name="failed_to_upgrade">Failed to upgrade the device fireware</string>
+    <string name="set_FPS">Set FPS</string>
+    <string name="manuall_notification_Active">Manual notification is active now.</string>
+    <string name="manuall_notification_failed">Manual notification failed to activate</string>
+    <string name="unexcepted_error">unexpected error occurred</string>
 
 
 </resources>
