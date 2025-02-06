@@ -176,6 +176,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.MySharedUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.user.register.view.UserRegisterActivity"
             android:screenOrientation="portrait" />
         <activity

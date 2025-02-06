@@ -1,5 +1,6 @@
 package com.cofe.solution.ui.adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class FromSharedDeviceAdapter extends RecyclerView.Adapter<FromSharedDevi
 
     List<OtherShareDevUserBean> data;
     public interface OnItemClickListener {
-        void onItemClick();
+        void onItemClick(String shareId, int position, List<OtherShareDevUserBean> data);
     }
 
     private final OnItemClickListener listener;
@@ -68,14 +69,28 @@ public class FromSharedDeviceAdapter extends RecyclerView.Adapter<FromSharedDevi
        /* Item currentItem = itemList.get(position);
         holder.titleTextView.setText(currentItem.getTitle());
         holder.subtitleTextView.setText(currentItem.getSubtitle());*/
-
-        holder.tv2.setText("sharing from "+data.get(position).getUsername()+"("+data.get(position).getShareState()+")");
+        Log.d("FULL DA",data.get(0).getShareId());
+        Log.d("FULL DA",data.get(0).getAccount());
+        Log.d("FULL DA",data.get(0).getPowers());
+        Log.d("FULL DA",data.get(0).getDevPermissions());
+        Log.d("FULL DA",data.get(0).getDevId());
+        Log.d("FULL DA", String.valueOf(data.get(0).getDevName()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getUsername()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getLoginName()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getWxpms()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
+        Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
+        holder.tv2.setText("sharing from "+data.get(position).getAccount()+"(Agreed)");
         holder.tv1.setText(data.get(position).getDevId());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClick();
+                listener.onItemClick(
+                        data.get(position).getShareId(),position,data
+                );
             }
         });
     }

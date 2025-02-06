@@ -9,6 +9,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,29 +20,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.cofe.solution.R;
 import com.cofe.solution.base.DemoBaseActivity;
 import com.cofe.solution.ui.adapter.FromSharedDeviceAdapter;
 import com.cofe.solution.ui.adapter.ItemSetAdapter;
-import com.cofe.solution.ui.adapter.LanguageAdapter;
 import com.cofe.solution.ui.adapter.MuSharedDeviceAdapter;
 import com.cofe.solution.ui.device.add.share.listener.DevShareAccountListContract;
 import com.cofe.solution.ui.device.add.share.listener.ShareDevListContract;
 import com.cofe.solution.ui.device.add.share.presenter.DevShareAccountListPresenter;
 import com.cofe.solution.ui.device.add.share.presenter.ShareDevListPresenter;
+import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.lib.sdk.bean.share.MyShareUserInfoBean;
 import com.lib.sdk.bean.share.OtherShareDevUserBean;
+import com.manager.XMFunSDKManager;
 import com.manager.account.share.ShareManager;
+import com.utils.TimeMillisUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +62,8 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
 
     RecyclerView rvMySharings;
     RecyclerView rvFromSharedDevice;
+    TextView llFromSharedDeviceCount;
+    TextView tvMySharingCount;
 
     private FromSharedDeviceAdapter fromSharedDeviceAdapter;
     private MuSharedDeviceAdapter muSharedDeviceAdapter;
@@ -71,6 +72,7 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
 
     // Presenter for "Other Share Dev User List"
     private ShareDevListPresenter shareDevListPresenter;
+    LoaderDialog loaderDialog;
 
 
     @Override
@@ -84,42 +86,52 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_me_sharing_management);
 
+
+
         initUis();
     }
 
-    private void initUis()
-
-    {
-
+    private void initUis() {
+        loaderDialog = new LoaderDialog(this);
+        loaderDialog.setMessage("Please wait...");
         // Initialize the second presenter
         shareDevListPresenter = new ShareDevListPresenter(this);
-        ShareManager.getInstance(MeSharingManagement.this).init();
-        data=new ArrayList<>();
-        myShareUserInfoBeans=new ArrayList<>();
-        tvTitleHeader=findViewById(R.id.toolbar_title);
-        back_button=findViewById(R.id.back_button);
-        llFromSharedDevice=findViewById(R.id.llFromSharedDevice);
-        llMySharing=findViewById(R.id.llMySharing);
-        rlMySharings=findViewById(R.id.rlMySharings);
-        rlFromSharedDevice=findViewById(R.id.rlFromSharedDevice);
-        rvMySharings=findViewById(R.id.rvMySharings);
-        rvFromSharedDevice=findViewById(R.id.rvFromSharedDevice);
-        tvMySharing=findViewById(R.id.tvMySharing);
-        tvFromSharing=findViewById(R.id.tvFromSharing);
+        //
+        data = new ArrayList<>();
+        myShareUserInfoBeans = new ArrayList<>();
+        tvTitleHeader = findViewById(R.id.toolbar_title);
+        back_button = findViewById(R.id.back_button);
+        llFromSharedDevice = findViewById(R.id.llFromSharedDevice);
+        llMySharing = findViewById(R.id.llMySharing);
+        rlMySharings = findViewById(R.id.rlMySharings);
+        rlFromSharedDevice = findViewById(R.id.rlFromSharedDevice);
+        rvMySharings = findViewById(R.id.rvMySharings);
+        rvFromSharedDevice = findViewById(R.id.rvFromSharedDevice);
+        tvMySharing = findViewById(R.id.tvMySharing);
+        tvFromSharing = findViewById(R.id.tvFromSharing);
+        llFromSharedDeviceCount = findViewById(R.id.llFromSharedDeviceCount);
+        tvMySharingCount = findViewById(R.id.tvMySharingCount);
 
         rvMySharings.setLayoutManager(new LinearLayoutManager(this));
-        muSharedDeviceAdapter=new MuSharedDeviceAdapter(MeSharingManagement.this);
+        muSharedDeviceAdapter = new MuSharedDeviceAdapter(MeSharingManagement.this, new MuSharedDeviceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String dev_id) {
+                Intent intent = new Intent(MeSharingManagement.this, MySharedUserActivity.class);
+                intent.putExtra("dev_id", dev_id);
+                startActivity(intent);
+            }
+        });
         rvMySharings.setAdapter(muSharedDeviceAdapter);
 
         //String result=ShareManager.getInstance(this).getMyShareDevUserList(presenter.getDevId());
-      //  Log.d("RES",result);
+        //  Log.d("RES",result);
         //myShareUserInfoBeans=
 
         rvFromSharedDevice.setLayoutManager(new LinearLayoutManager(this));
-        fromSharedDeviceAdapter=new FromSharedDeviceAdapter(MeSharingManagement.this, new FromSharedDeviceAdapter.OnItemClickListener() {
+        fromSharedDeviceAdapter = new FromSharedDeviceAdapter(MeSharingManagement.this, new FromSharedDeviceAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick() {
-                showCancelSharingDialog();
+            public void onItemClick(String shareId, int position, List<OtherShareDevUserBean> data) {
+                showCancelSharingDialog(shareId, position, data);
             }
         });
         rvFromSharedDevice.setAdapter(fromSharedDeviceAdapter);
@@ -192,15 +204,18 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
 
             }
         });
-        // ShareManager.getInstance(this).getMyShareDevUserList(presenter.getDevId());
-       ShareManager.getInstance(this).getMyShareDevList();
+        String timeMillis = TimeMillisUtil.getTimMillis();
+        Log.d("MeSharingManagement", "timeMillis: " + timeMillis);
+        Log.d("MeSharingManagement", "uuid: " + XMFunSDKManager.getInstance().getAppUuid());
+        Log.d("MeSharingManagement", "appKey: " + XMFunSDKManager.getInstance().getAppKey());
+        Log.d("MeSharingManagement", "appSecret: " + XMFunSDKManager.getInstance().getAppSecret());
+        Log.d("MeSharingManagement", "movedCard: " + XMFunSDKManager.getInstance().getAppMovecard());
 
 
-        //presenter.searchUsersByShareThisDev();
-
-
-
-                ShareManager.getInstance(this).getOtherShareDevList();
+       /* shareDevListPresenter.searchShareDevList();
+        presenter.searchUsersByShareThisDev();*/
+        ShareManager.getInstance(this).getMyShareDevList();
+        ShareManager.getInstance(this).getOtherShareDevList();
     }
 
     // Slide-out animation
@@ -247,7 +262,7 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
         animator.start();
     }
 
-    private void showCancelSharingDialog() {
+    private void showCancelSharingDialog(String shareId, int position, List<OtherShareDevUserBean> data) {
         // Create and configure the dialog
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -258,12 +273,23 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
         // Find views in the custom layout
 
         TextView tvCancel = dialog.findViewById(R.id.tvCancel);
+        TextView tvOk = dialog.findViewById(R.id.tvOk);
 
         // Set up click listeners
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                OtherShareDevUserBean otherShareDevUserBean = data.get(position);
+                shareDevListPresenter.acceptShare(otherShareDevUserBean);
+                dialog.dismiss();
+            }
+        });
+        tvOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loaderDialog.show();
+                OtherShareDevUserBean otherShareDevUserBean = data.get(position);
+                shareDevListPresenter.rejectShare(otherShareDevUserBean);
                 dialog.dismiss();
             }
         });
@@ -293,23 +319,35 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
 
     @Override
     public void onSearchShareDevListResult(List<OtherShareDevUserBean> otherShareDevUserBeans) {
+        if (loaderDialog != null) {
+            loaderDialog.dismiss();
+        }
         if (otherShareDevUserBeans != null && !otherShareDevUserBeans.isEmpty()) {
+            llFromSharedDeviceCount.setText("Get " + otherShareDevUserBeans.size() + " times device share");
             fromSharedDeviceAdapter.setData(otherShareDevUserBeans);
         }
     }
 
     @Override
     public void onRejectShareResult(boolean isSuccess) {
-
+        loaderDialog.dismiss();
+        ToastUtils.showLong(isSuccess ? getString(R.string.reject_share_s) : getString(R.string.reject_share_f));
+        if (isSuccess) {
+            shareDevListPresenter.searchShareDevList();
+        }
     }
 
     @Override
     public void onAcceptShareResult(boolean isSuccess) {
-
+        //ToastUtils.showLong(isSuccess ? getString(R.string.accept_share_s) : getString(R.string.accept_share_f));
+        if (isSuccess) {
+            shareDevListPresenter.searchShareDevList();
+        }
     }
 
     @Override
     public void onSearchMyShareUsersResult(List<MyShareUserInfoBean> myShareUserInfoBeans) {
+        loaderDialog.dismiss();
         if (myShareUserInfoBeans != null) {
             this.myShareUserInfoBeans = myShareUserInfoBeans;
             List<String> data = new ArrayList<>();
@@ -329,16 +367,19 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
                     data.add(myShareUserInfoBean.getAccount() + "[" + strShareState + "]");
                 }
             }
-
+            tvMySharingCount.setText("Initiated " + myShareUserInfoBeans.size() + " items device share");
             muSharedDeviceAdapter.setData(myShareUserInfoBeans);
         } else {
-           // muSharedDeviceAdapter.setData(null);
+            // muSharedDeviceAdapter.setData(null);
             //ToastUtils.showLong(R.string.not_found);
         }
     }
 
     @Override
     public void onCancelShareResult(boolean isSuccess) {
+        if (isSuccess) {
+            presenter.searchUsersByShareThisDev();
+        }
 
     }
 
