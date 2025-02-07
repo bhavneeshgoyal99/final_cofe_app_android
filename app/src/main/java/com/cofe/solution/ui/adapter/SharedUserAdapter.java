@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cofe.solution.R;
 import com.cofe.solution.ui.activity.MySharedUserActivity;
 import com.lib.sdk.bean.share.MyShareUserInfoBean;
+import com.lib.sdk.bean.share.Permission;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class SharedUserAdapter extends RecyclerView.Adapter<SharedUserAdapter.It
     private MySharedUserActivity activity;
     // Define the interface
     public interface OnItemClickListener {
-        void onItemClick(String shareId);
+        void onItemClick(String shareId, List<Permission> permissions);
     }
 
     public void setData(List<MyShareUserInfoBean> data) {
@@ -65,7 +66,7 @@ public class SharedUserAdapter extends RecyclerView.Adapter<SharedUserAdapter.It
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClick(data.get(position).getShareId());
+                listener.onItemClick(data.get(position).getShareId(),data.get(position).getPermissions());
             }
         });
     }

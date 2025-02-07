@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ import com.cofe.solution.ui.device.add.share.listener.DevShareAccountListContrac
 import com.cofe.solution.ui.device.add.share.presenter.DevShareAccountListPresenter;
 import com.cofe.solution.ui.dialog.LoaderDialog;
 import com.lib.sdk.bean.share.MyShareUserInfoBean;
+import com.lib.sdk.bean.share.Permission;
 import com.manager.account.share.ShareManager;
 
 import java.util.ArrayList;
@@ -84,8 +87,13 @@ public class MySharedUserActivity extends DemoBaseActivity<DevShareAccountListPr
         rvSharedUser.setLayoutManager(new LinearLayoutManager(this));
         sharedUserAdapter=new SharedUserAdapter(this, new SharedUserAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String shareId) {
-                showActionDialog(shareId);
+            public void onItemClick(String shareId, List<Permission> permissions) {
+
+                Log.d("Permission",permissions.get(0).getLabel());
+                Log.d("Permission", String.valueOf(permissions.get(0).isEnabled()));
+                Log.d("Permission",permissions.toString());
+                Log.d("Permission", String.valueOf(permissions.size()));
+                showActionDialog(shareId,permissions);
             }
         });
         rvSharedUser.setAdapter(sharedUserAdapter);
@@ -100,7 +108,7 @@ public class MySharedUserActivity extends DemoBaseActivity<DevShareAccountListPr
 
     }
 
-    private void showActionDialog(String shareId) {
+    private void showActionDialog(String shareId, List<Permission> permissions) {
         // Create and configure the dialog
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -111,14 +119,36 @@ public class MySharedUserActivity extends DemoBaseActivity<DevShareAccountListPr
         // Find views in the custom layout
 
         ImageView ivCancel = dialog.findViewById(R.id.ivCancel);
-        ImageView btnCancelSharing = dialog.findViewById(R.id.btnCancelSharing);
+        Button btnCancelSharing = dialog.findViewById(R.id.btnCancelSharing);
+        Button btnChangePermission = dialog.findViewById(R.id.btnChangePermission);
 
         // Set up click listeners
         ivCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+
                 dialog.dismiss();
+
+            }
+        });
+        btnChangePermission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> permissionStrings = new ArrayList<>();
+
+                for (Permission permission : permissions) {
+                    // Convert to a string format: "name:isGranted"
+                    permissionStrings.add(permission.getLabel() + ":" + permission.isEnabled());
+                }
+
+                Log.d("Permission", permissionStrings.get(0));
+                Log.d("Permission", String.valueOf(permissionStrings.size()));
+                dialog.dismiss();
+                Intent intent=new Intent(MySharedUserActivity.this,ShareUserChangePermissionActivity.class);
+                intent.putStringArrayListExtra("permissions_list",permissionStrings);
+                intent.putExtra("share_id",shareId);
+                startActivity(intent);
             }
         });
         btnCancelSharing.setOnClickListener(new View.OnClickListener() {
