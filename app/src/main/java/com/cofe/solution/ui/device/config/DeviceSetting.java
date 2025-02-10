@@ -31,6 +31,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.basic.G;
 import com.cofe.solution.ui.activity.DeviceConfigActivity;
 import com.cofe.solution.ui.activity.DeviceConfigPresenter;
+import com.cofe.solution.ui.activity.NetworkSettings;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.device.config.about.presenter.DevAboutPresenter;
 import com.cofe.solution.ui.device.config.about.view.DevAboutActivity;
@@ -64,11 +65,12 @@ import com.cofe.solution.ui.device.add.wifi.CameraConfigInstruction;
 import com.cofe.solution.ui.device.add.wifi.WifiPowerOnCamer;
 import com.cofe.solution.ui.device.aov.view.AovSettingActivity;
 
-public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implements  DevListConnectContract.IDevListConnectView {
+public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter> implements DevListConnectContract.IDevListConnectView {
     XMDevInfo xmDevInfo;
     Context context;
-    DevListConnectContract.IDevListConnectView presenter ;
+    DevListConnectContract.IDevListConnectView presenter;
     TextView dTxtv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +88,8 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
             xmDevInfo = gson.fromJson(personJson, XMDevInfo.class);
         }
 
-        context =  DeviceSetting.this;
-        presenter =  DeviceSetting.this;
+        context = DeviceSetting.this;
+        presenter = DeviceSetting.this;
 
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,8 +97,15 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
                 finish();
             }
         });
+        findViewById(R.id.rlNetWorkSettings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DeviceSetting.this, NetworkSettings.class);
+                startActivity(intent);
+            }
+        });
 
-        DevDataCenter.getInstance().isSupportSDsupportRecord(xmDevInfo.getDevId(),new DeviceManager.OnDevManagerListener(){
+        DevDataCenter.getInstance().isSupportSDsupportRecord(xmDevInfo.getDevId(), new DeviceManager.OnDevManagerListener() {
             @Override
             public void onSuccess(String devId, int operationType, Object result) {
                 Log.d(getClass().getName(), "isSupportSDsupportRecord > success");
@@ -129,9 +138,9 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         dTxtv = findViewById(R.id.dname_txtv);
         try {
             dTxtv.setText(xmDevInfo.getDevName());
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(),"device id not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "device id not found", Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -144,11 +153,14 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openDeviceNameSettings(View anchorView, Boolean isPsasword) {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
-        XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
+        XMPromptDlg.onShowEditDialog(this, "Change Device Name", xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
-                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener(){
+                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener() {
 
                     @Override
                     public void onSuccess(int msgId) {
@@ -176,9 +188,11 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
 
-
     private void openPasswordManagementSettings(View anchorView) {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         // Inflate the custom popup layout
         View popupView = LayoutInflater.from(anchorView.getContext())
                 .inflate(R.layout.edit_device_name, null);
@@ -208,34 +222,34 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
         button.setOnClickListener(v -> {
             String userInput = editText.getText().toString().trim();
             String oldPwdText = oldPwdTextView.getText().toString().trim();
-                //if (!oldPwdText.isEmpty() ) {
-                    if (!userInput.isEmpty()) {
+            //if (!oldPwdText.isEmpty() ) {
+            if (!userInput.isEmpty()) {
 
-                        if (xmDevInfo != null) {
-                            SDBDeviceInfo deviceInfo = xmDevInfo.getSdbDevInfo();
-                            if (deviceInfo != null) {
-                                String loginName = G.ToString(deviceInfo.st_4_loginName);
-                                if (TextUtils.isEmpty(loginName)) {
-                                    loginName = "admin";
-                                }
-                                DeviceManager.getInstance().modifyDevPwd(xmDevInfo.getDevId(), loginName, oldPwdText, userInput, new DeviceManager.OnDevManagerListener() {
-                                    @Override
-                                    public void onSuccess(String s, int i, Object o) {
-                                        popupWindow.dismiss();
-                                        Toast.makeText(anchorView.getContext(), "Password changes successfully", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                    @Override
-                                    public void onFailed(String s, int i, String s1, int errorId) {
-                                        popupWindow.dismiss();
-                                        Toast.makeText(anchorView.getContext(), "Failed to change the password", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                if (xmDevInfo != null) {
+                    SDBDeviceInfo deviceInfo = xmDevInfo.getSdbDevInfo();
+                    if (deviceInfo != null) {
+                        String loginName = G.ToString(deviceInfo.st_4_loginName);
+                        if (TextUtils.isEmpty(loginName)) {
+                            loginName = "admin";
                         }
-                    } else {
-                        Toast.makeText(anchorView.getContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+                        DeviceManager.getInstance().modifyDevPwd(xmDevInfo.getDevId(), loginName, oldPwdText, userInput, new DeviceManager.OnDevManagerListener() {
+                            @Override
+                            public void onSuccess(String s, int i, Object o) {
+                                popupWindow.dismiss();
+                                Toast.makeText(anchorView.getContext(), "Password changes successfully", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailed(String s, int i, String s1, int errorId) {
+                                popupWindow.dismiss();
+                                Toast.makeText(anchorView.getContext(), "Failed to change the password", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
+                }
+            } else {
+                Toast.makeText(anchorView.getContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+            }
                 /*} else {
                     Toast.makeText(anchorView.getContext(), "Please enter old password", Toast.LENGTH_SHORT).show();
                 }*/
@@ -246,7 +260,10 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
     private void openLanguageSettings() {
 
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         Intent intent = new Intent();
         intent.setClass(DeviceSetting.this, DeviceConfigActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
@@ -254,19 +271,25 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openBatteryManagementSettings(View v) {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
-        Intent i= new Intent(this, AovSettingActivity.class);
-        i.putExtra("devId",xmDevInfo.getDevId());
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
+        Intent i = new Intent(this, AovSettingActivity.class);
+        i.putExtra("devId", xmDevInfo.getDevId());
         startActivity(i);
     }
 
     private void openWorkingModeSettings() {
         //Toast.makeText(this, "Working Mode Settings clicked", Toast.LENGTH_SHORT).show();
 
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
-        Intent i= new Intent(this, AovSettingActivity.class);
-        i.putExtra("devId",xmDevInfo.getDevId());
-        i.putExtra("working",xmDevInfo.getDevId());
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
+        Intent i = new Intent(this, AovSettingActivity.class);
+        i.putExtra("devId", xmDevInfo.getDevId());
+        i.putExtra("working", xmDevInfo.getDevId());
         startActivity(i);
 
     }
@@ -274,7 +297,10 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     private void openSmartAlarmSettings() {
         //Toast.makeText(this, "Smart Alarm clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         Intent intent = new Intent(this, DevAlarmSetActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
@@ -288,6 +314,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
 
 
     }
+
     private void openCloudStorageSettings() {
         //Toast.makeText(this, "Cloud Storage clicked", Toast.LENGTH_SHORT).show();
         // Add navigation logic
@@ -300,7 +327,10 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openAboutDeviceSettings() {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         Intent intent = new Intent(this, DevAboutActivity.class);
         intent.putExtra("firmwareType", "Mcu");
         intent.putExtra("devId", xmDevInfo.getDevId());
@@ -308,14 +338,21 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     private void openPushNotificatioNSetting() {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         Intent intent = new Intent(DeviceSetting.this, DevPushActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
     }
-     void openAdvanceSetting() {
-         if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
-         Intent intent = new Intent(DeviceSetting.this, DevAdvanceActivity.class);
+
+    void openAdvanceSetting() {
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
+        Intent intent = new Intent(DeviceSetting.this, DevAdvanceActivity.class);
         intent.putExtra("devId", xmDevInfo.getDevId());
         startActivity(intent);
     }
@@ -337,7 +374,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
             //Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_S), Toast.LENGTH_LONG);
 
         } else {
-           // Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_F), Toast.LENGTH_LONG);
+            // Toast.makeText(context, getString(R.string.TR_Modify_Dev_Name_F), Toast.LENGTH_LONG);
         }
     }
 
@@ -355,12 +392,16 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     public void onGetChannelListResult(boolean isSuccess, int resultId) {
 
     }
+
     protected DeviceManager getManager() {
         return DeviceManager.getInstance();
     }
 
     public void syncDateTimeDevice() {
-        if(xmDevInfo.getDevState() == 0) { showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);  return;}
+        if (xmDevInfo.getDevState() == 0) {
+            showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
+            return;
+        }
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.time_sync_popup_layout);
         dialog.setCancelable(false); // Prevent dismissal on outside touch
@@ -418,7 +459,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter>  implem
     }
 
     @Override
-    public void logout(){
+    public void logout() {
         finish();
         startActivity(new Intent(this, UserLoginActivity.class));
     }

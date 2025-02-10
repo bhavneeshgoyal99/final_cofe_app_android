@@ -297,6 +297,8 @@
                     android:background="@color/gray_transparent" />
 
                 <RelativeLayout
+                    android:id="@+id/rlNetWorkSettings"
+
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 

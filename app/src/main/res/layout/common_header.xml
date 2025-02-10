@@ -21,6 +21,18 @@
         android:textSize="@dimen/font_normal"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/tvSave"
+        style="@style/text_system_info_title"
+        android:text="@string/save"
+        android:padding="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+
+        android:textSize="@dimen/font_normal"
+        android:textStyle="bold" />
+
 
     <ImageView
         android:id="@+id/ivEdit"

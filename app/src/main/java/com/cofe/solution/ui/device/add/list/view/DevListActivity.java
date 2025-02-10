@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cofe.solution.base.SharedPreference;
+import com.cofe.solution.ui.activity.NetworkSettings;
 import com.cofe.solution.ui.device.add.sn.view.DevSnConnectActivity;
 import com.cofe.solution.ui.device.picture.view.DevPictureActivity;
 import com.cofe.solution.ui.device.push.view.DevPushService;
@@ -1456,6 +1457,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 tvDefault.setTextColor(getResources().getColor(R.color.other_black));
                 filterDeviceList(0); // Show only online devices
                 popupWindow.dismiss();
+
             }
         });
 
