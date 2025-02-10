@@ -61,16 +61,16 @@ public class MuSharedDeviceAdapter extends RecyclerView.Adapter<MuSharedDeviceAd
        /* Item currentItem = itemList.get(position);
         holder.titleTextView.setText(currentItem.getTitle());
         holder.subtitleTextView.setText(currentItem.getSubtitle());*/
-        Log.d("FULL DA",data.get(0).getShareId());
-        Log.d("FULL DA",data.get(0).getAccount());
-        Log.d("FULL DA",data.get(0).getPowers());
-        Log.d("FULL DA",data.get(0).getDevPermissions());
-        Log.d("FULL DA",data.get(0).getDevId());
-        Log.d("FULL DA", String.valueOf(data.get(0).getSameDevUserCount()));
-        Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
+        Log.d("FULL DA",data.get(position).getShareId());
+        Log.d("FULL DA",data.get(position).getAccount());
+        Log.d("FULL DA",data.get(position).getPowers());
+        Log.d("FULL DA",data.get(position).getDevPermissions());
+        Log.d("FULL DA",data.get(position).getDevId());
+        Log.d("FULL DA", String.valueOf(data.get(position).getSameDevUserCount()));
+        Log.d("FULL DA", String.valueOf(data.get(position).getShareState()));
         if (data != null && position < data.size()) {
-            holder.tv1.setText(data.get(position).getAccount());
-            holder.tv2.setText("Shared with "+data.get(0).getShareState()+" User");
+            holder.tv1.setText(data.get(position).getDevId());
+            holder.tv2.setText("Shared with "+data.get(position).getAccount()+" User");
         } else {
             // Handle the null case appropriately, maybe set a default value or log an error.
             holder.tv1.setText("No data available");

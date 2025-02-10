@@ -69,6 +69,9 @@
         <activity
             android:name=".ui.device.add.share.view.NewShareDevToOtherAccountActivity"
             android:exported="false" />
+        <activity android:name=".ui.activity.MySharedUserActivity"
+            android:exported="false" />
+
         <activity
             android:name=".ui.activity.SplashScreen"
             android:exported="true">
@@ -138,6 +141,24 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.DeviceConfigActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AudioVideoSettings"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AccountInformationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AlarmLinkageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShareUserChangePermissionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SmartAlarmActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AlarmPeriodActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.AboutActivity"
@@ -319,10 +340,19 @@
             android:name=".ui.activity.CheckErrorCodeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ui.activity.ErrorCodeListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.device.add.list.view.ChannelListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.scanqrcode.CaptureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PTZSettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.IntelligentDetectionActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.device.config.intelligentvigilance.view.IntelligentVigilanceActivity"
@@ -470,7 +500,7 @@
         <service android:name=".ui.device.push.view.DevPushService"
             android:enabled="true"
             android:exported="false"
-           android:foregroundServiceType="dataSync"/>
+            android:foregroundServiceType="dataSync"/>
     </application>
 
 </manifest>

@@ -24,6 +24,7 @@ import com.manager.device.media.attribute.PlayerAttribute;
 import com.manager.device.media.attribute.RecordPlayerAttribute;
 import com.manager.device.media.calendar.MediaFileCalendarManager;
 import com.manager.device.media.download.DownloadManager;
+import com.manager.device.media.monitor.MonitorManager;
 import com.manager.device.media.playback.CloudRecordManager;
 import com.manager.device.media.playback.DevRecordManager;
 import com.manager.device.media.playback.RecordManager;
@@ -89,12 +90,15 @@ public class DevRecordPresenter extends XMBasePresenter<DeviceManager> implement
     private int playSpeed;
     private int recordFileType;
     private H264_DVR_FILE_DATA curPlayFileInfo;//当前播放的录像文件信息
+    private HashMap<Integer, MonitorManager> monitorManagers;//Multi-screen display of the manager
 
     public DevRecordPresenter(DevRecordContract.IDevRecordView iDevRecordView) {
         this.iDevRecordView = iDevRecordView;
         recordList = new ArrayList<>();
         recordTimeList = new ArrayList<>();
         downloadManager = DownloadManager.getInstance(this);
+        monitorManagers = new HashMap<>();
+
     }
 
     @Override
@@ -663,4 +667,20 @@ public class DevRecordPresenter extends XMBasePresenter<DeviceManager> implement
     public H264_DVR_FILE_DATA getCurPlayFileInfo() {
         return curPlayFileInfo;
     }
+
+
+    public void capture(int chnId) {//Capture the image
+        if (!monitorManagers.containsKey(chnId)) {
+            return;
+        }
+
+        MonitorManager mediaManager = monitorManagers.get(chnId);
+        if (mediaManager != null) {
+            // 传的是抓图保存的路径地址
+            // The path address for saving the captured image is passed
+            mediaManager.capture(SDKDemoApplication.PATH_PHOTO);
+        }
+
+    }
+
 }

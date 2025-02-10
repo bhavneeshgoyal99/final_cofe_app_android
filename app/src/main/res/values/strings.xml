@@ -1064,6 +1064,8 @@
     <string name="manuall_notification_Active">Manual notification is active now.</string>
     <string name="manuall_notification_failed">Manual notification failed to activate</string>
     <string name="unexcepted_error">unexpected error occurred</string>
+    <string name="sharing_management">Sharing Management</string>
+    <string name="permission_setting">Permission Setting</string>
 
 
 </resources>

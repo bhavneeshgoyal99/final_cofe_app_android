@@ -12,6 +12,7 @@ import com.utils.TimeUtils;
 import com.xm.activity.base.XMBasePresenter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ public class DevPicturePresenter extends XMBasePresenter<FileManager> implements
         , DownloadManager.OnDownloadListener, MediaFileCalendarManager.OnMediaFileCalendarListener {
     private DownloadManager downloadManager;
     private DevPictureContract.IDevPictureView iDevPictureView;
-    private List<H264_DVR_FILE_DATA> picList;
+    private List<H264_DVR_FILE_DATA> picList = new ArrayList<>();
     private MediaFileCalendarManager mediaFileCalendarManager;
 
     public DevPicturePresenter(DevPictureContract.IDevPictureView iDevPictureView) {
@@ -116,7 +117,10 @@ public class DevPicturePresenter extends XMBasePresenter<FileManager> implements
 
     @Override
     public void onSearchResult(List<H264_DVR_FILE_DATA> list) {
-        this.picList = list;
+        //this.picList = list;
+        if(list!=null) {
+            this.picList.addAll(list);
+        }
         if (iDevPictureView != null) {
             iDevPictureView.onUpdateView();
         }

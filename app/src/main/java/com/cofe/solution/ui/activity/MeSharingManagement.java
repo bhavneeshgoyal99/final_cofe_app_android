@@ -100,6 +100,8 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
         data = new ArrayList<>();
         myShareUserInfoBeans = new ArrayList<>();
         tvTitleHeader = findViewById(R.id.toolbar_title);
+        tvTitleHeader.setText("Sharing Management");
+
         back_button = findViewById(R.id.back_button);
         llFromSharedDevice = findViewById(R.id.llFromSharedDevice);
         llMySharing = findViewById(R.id.llMySharing);

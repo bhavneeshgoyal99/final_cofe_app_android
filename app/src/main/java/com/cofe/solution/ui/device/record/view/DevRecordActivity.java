@@ -52,6 +52,7 @@ import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.struct.H264_DVR_FILE_DATA;
 import com.manager.ScreenOrientationManager;
 import com.manager.device.media.attribute.PlayerAttribute;
+import com.manager.device.media.monitor.MonitorManager;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.utils.TimeUtils;
 import com.xm.ui.dialog.XMPromptDlg;
@@ -373,6 +374,7 @@ public class DevRecordActivity extends DemoBaseActivity<DevRecordPresenter> impl
             @Override
             public void onClick(View v) {
                 //dealWithMonitorFunction(Integer.parseInt(cameraImg.getTag().toString()), true);
+
             }
         });
         findViewById(R.id.video_ll).setOnClickListener(new View.OnClickListener() {

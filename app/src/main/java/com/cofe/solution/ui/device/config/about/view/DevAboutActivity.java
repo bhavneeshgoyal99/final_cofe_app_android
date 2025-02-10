@@ -266,7 +266,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     public void onClick(View view) {
 
     }
-
+// 数据获取失败：-11301
     @Override
     public void onUpdateView(String result) {
         try {
@@ -310,7 +310,8 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                     @Override
                     public void run() {
                         updateDeviceTime();
-                        handler.postDelayed(this, 1000); // Update every second
+                        if (handler != null)
+                            handler.postDelayed(this, 1000); // Update every second
                     }
                 };
 
@@ -333,6 +334,7 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                 });
             }
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 FunError.getErrorStr(Integer.parseInt(result));
             } catch (Exception e1) {
@@ -342,7 +344,6 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                 finish();
             }
 
-            e.printStackTrace();
         }
     }
 
@@ -778,42 +779,47 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
     }
 
     void callWebAPI(){
-        XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-        ApiService apiService = RetrofitClient.getApiService();
-        Log.d("callWebAPI userToken " ,"token >" + DevDataCenter.getInstance().getAccessToken());
-        Log.d("callWebAPI devToken " ,"token >" + xmDevInfo.getDevToken());
-        // Request body
+        try {
+            XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
+            ApiService apiService = RetrofitClient.getApiService();
+            Log.d("callWebAPI userToken ", "token >" + DevDataCenter.getInstance().getAccessToken());
+            Log.d("callWebAPI devToken ", "token >" + xmDevInfo.getDevToken());
+            // Request body
 
-        String json = "{\"Name\":\"System.TimeZone\"}";
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        // Dynamic headers
-        String authorizationToken = DevDataCenter.getInstance().getAccessToken(); // user toke
-        String deviceAuthToken = xmDevInfo.getDevToken();  // device tokken
-        String acceptLanguage = "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,hi;q=0.6"; // thbis language
+            String json = "{\"Name\":\"System.TimeZone\"}";
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+            // Dynamic headers
+            String authorizationToken = DevDataCenter.getInstance().getAccessToken(); // user toke
+            String deviceAuthToken = xmDevInfo.getDevToken();  // device tokken
+            String acceptLanguage = "en-IN,en-GB;q=0.9,en-US;q=0.8,en;q=0.7,hi;q=0.6"; // thbis language
 
-        apiService.getDeviceConfiguration(authorizationToken, deviceAuthToken, acceptLanguage, "application/json", body )
-                .enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                Log.d("API_RESPONSE", response.body().string());
-                            } catch (Exception e) {
-                                e.printStackTrace();
+            apiService.getDeviceConfiguration(authorizationToken, deviceAuthToken, acceptLanguage, "application/json", body)
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    Log.d("API_RESPONSE", response.body().string());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.e("API_ERROR", "Error: " + response.code());
                             }
-                        } else {
-                            Log.e("API_ERROR", "Error: " + response.code());
+                            loaderDialog.dismiss();
+
                         }
-                        loaderDialog.dismiss();
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("API_ERROR", "Failure: " + t.getMessage());
-                        loaderDialog.dismiss();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("API_ERROR", "Failure: " + t.getMessage());
+                            loaderDialog.dismiss();
+                        }
+                    });
+        } catch (Exception e){
+            e.printStackTrace();
+            finish();
+        }
     }
 
     @Override

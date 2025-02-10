@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.cofe.solution.base.CustomCalendarDialog;
+import com.cofe.solution.base.SharedPreference;
 import com.cofe.solution.ui.device.add.list.view.DevListActivity;
 import com.cofe.solution.ui.device.alarm.view.DevAlarmMsgActivity;
 import com.cofe.solution.ui.user.modify.view.DevMeActivity;
@@ -69,12 +70,14 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
         DevPictureContract.IDevPictureView, XTitleBar.OnRightClickListener, BaseImageManager.OnImageManagerListener {
     private PicListAdapter picListAdapter;
     private RecyclerView rvDevPic;
+    private RecyclerView rvDeVid;
     private Calendar searchMonthCalendar = Calendar.getInstance();
     private Calendar calendarShow;
     private DevImageManager devImageManager;//设备端图片管理（下载缩略图）
     LinearLayout noDataContLl;
     TextView noDatTextv;
     String selectedByuser;
+    SharedPreference cookies;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +87,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
         findViewById(R.id.img_btn).setVisibility(View.VISIBLE);
         noDataContLl = findViewById(R.id.no_data_cont_ll);
         noDatTextv = findViewById(R.id.text_txtv);
-
+        loaderDialog.show();
         findViewById(R.id.img_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +106,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
         });
 
         rvDevPic = findViewById(R.id.rv_dev_pic);
+        rvDeVid = findViewById(R.id.rv_dev_pic2);
         rvDevPic.setLayoutManager(new LinearLayoutManager(this));
 
         LinearLayout homeLL = findViewById(R.id.home_ll);
@@ -141,16 +145,48 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
     }
 
     private void initData() {
+        cookies = new SharedPreference(getApplicationContext());
         calendarShow = Calendar.getInstance();
         picListAdapter = new PicListAdapter();
         rvDevPic.setAdapter(picListAdapter);
-        presenter.searchPicByFile(calendarShow);
+        /*presenter.searchPicByFile(calendarShow);
         showTitleDate();
 
         //初始化设备图片下载管理（缩略图），传入要保存的图片路径
         devImageManager = new DevImageManager(SDKDemoApplication.PATH_PHOTO_TEMP);
         devImageManager.setOnImageManagerListener(this);//监听回调事件
-        devImageManager.setDevId(presenter.getDevId());//设置设备序列号
+        //devImageManager.setDevId(presenter.getDevId());//设置设备序列号*/
+
+        cookies = new SharedPreference(getApplicationContext());
+        if(cookies.getDevList()!=null) {
+            if (cookies.getDevList().size() == 0) {
+                return;
+            } else {
+                for (int i = 0; i < cookies.getDevList().size(); i++) {
+                    presenter.setDevId(cookies.getDevList().get(i).get("devId").toString());
+                    calendarShow = Calendar.getInstance();
+                    devImageManager = new DevImageManager(SDKDemoApplication.PATH_PHOTO_TEMP);
+                    devImageManager.setDevId(cookies.getDevList().get(i).get("devId").toString());//设置设备序列号
+                    devImageManager.setOnImageManagerListener(this);//监听回调事件
+                    presenter.searchPicByFile(calendarShow);
+                    //showTitleDate();
+
+                    //初始化设备图片下载管理（缩略图），传入要保存的图片路径
+
+                }
+            /*calendarShow = Calendar.getInstance();
+            picListAdapter = new PicListAdapter();
+            rvDevPic.setAdapter(picListAdapter);
+            presenter.searchPicByFile(calendarShow);
+            showTitleDate();
+
+            //初始化设备图片下载管理（缩略图），传入要保存的图片路径
+            devImageManager = new DevImageManager(SDKDemoApplication.PATH_PHOTO_TEMP);
+            devImageManager.setOnImageManagerListener(this);//监听回调事件
+            devImageManager.setDevId(presenter.getDevId());//设置设备序列号*/
+
+            }
+        }
 
     }
 
@@ -170,7 +206,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
         if(picListAdapter.getItemCount()<=0){
             noDataContLl.setVisibility(View.VISIBLE);
-            rvDevPic.setVisibility(View.GONE);
+            //rvDevPic.setVisibility(View.GONE);
 
             if(selectedByuser!=null) {
                 noDatTextv.setText(getString(R.string.no_message_yet)+""+selectedByuser);
@@ -211,6 +247,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
     Dialog calendarDlg;
     @Override
     public void onSearchCalendarResult(boolean isSuccess, Object result) {
+        loaderDialog.dismiss();
         if (result instanceof String) {
             XMPromptDlg.onShow(this, (String) result, null);
         } else {
@@ -251,7 +288,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
 
             });
-            dialog.show();
+            //.show();
 
             /*CalendarView calendarView = new CalendarView(DevPictureActivity.this);
             calendarView.setBackgroundColor(Color.WHITE);

@@ -7,9 +7,17 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 public class SharedPreference {
@@ -130,5 +138,34 @@ public class SharedPreference {
         Log.d("retrievisDeviceAOV  ", " device "+ sharedPreference.getBoolean("isDeviceAOV",false));
         return sharedPreference.getBoolean("isDeviceAOV",false);
     }
+
+
+    public List<HashMap<String, Object>> getDevList() {
+        String json = sharedPreference.getString("DEV_LIST", null);
+        Log.d("retrievijsonsDeviceAOV  ", " json  "+ json);
+
+        if (json == null) {
+            return null; // No data found
+        }
+
+        // Convert JSON to List<HashMap<String, Object>>
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<HashMap<String, Object>>>() {}.getType();
+
+        return gson.fromJson(json, type);
+    }
+
+    public  void saveDevList(List<HashMap<String, Object>> newDevList) {
+        SharedPreferences.Editor editor = sharedPreference.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(newDevList);
+
+        // Save the new list, replacing the old one
+        editor.putString("DEV_LIST", json);
+        editor.apply();
+    }
+
+
 
 }

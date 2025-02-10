@@ -128,7 +128,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     // simran declare
     int popup_state = 0;
     String thumbnails_text = "Thumbnail Mode";
-
+    SharedPreference cookies;
     Handler handler;
     boolean isPopupMenuOpen = false;
     @Override
@@ -136,6 +136,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_device_list);
+        cookies = new SharedPreference(getApplicationContext());
         checkLoginStatus();
     }
 
@@ -270,7 +271,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 
                 XMAccountManager.getInstance().logout();
                 if (XMAccountManager.getInstance().getUserName() == null) {
-                    SharedPreference cookies = new SharedPreference(getContext());
                     cookies.saveLoginStatus(1);
 
                     Intent intent = new Intent(DevListActivity.this, UserLoginActivity.class);
@@ -310,7 +310,6 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             }
         });
 
-        SharedPreference cookies = new SharedPreference(getContext());
         cookies.saveLoginStatus(0);
         checkExternalStoragePermission();
     }
@@ -596,7 +595,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onUpdateDevListView() {
         Log.d(TAG,"onUpdateDevListView");
-
+        cookies.saveDevList(presenter.getDevList());
         slRefresh.setRefreshing(false);
 
         Bundle bundle = new Bundle();
@@ -690,6 +689,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     @Override
     public void onUpdateDevStateResult(boolean isSuccess) {//Repeated the walk many times
         Log.d(TAG,"onUpdateDevStateResult");
+        cookies.saveDevList(presenter.getDevList());
 
         //hideWaitDialog();
         loaderDialog.dismiss();
@@ -949,20 +949,55 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             String devId = presenter.getDevId(position);
             presenter.setDevId(devId);
 
-            Gson gson = new Gson();
-            String personJson = gson.toJson(xmDevInfo);
-
-            // Pass the JSON string to another activity via Intent
-            Intent intent = new Intent(this, DeviceSetting.class);
-            intent.putExtra("dev", personJson);
-            startActivity(intent);
-            //turnToActivity(DeviceSetting.class);
+            checkDeviceLoginStatus(xmDevInfo.getDevId(),xmDevInfo);
         } else {
             showToast(getString(R.string.dev_offline), Toast.LENGTH_SHORT);
-
         }
     }
 
+
+    void checkDeviceLoginStatus(String devId, XMDevInfo xmDevInfo){
+        DeviceManager.getInstance().loginDev(devId, new DeviceManager.OnDevManagerListener() {
+
+            /**
+             *Successful callback
+             *
+             *@ param devId Device Type
+             *@ param operationType operation type
+             *@ param result result
+             */
+
+            @Override
+            public void onSuccess(String devId, int operationType, Object o) {
+                Gson gson = new Gson();
+                String personJson = gson.toJson(xmDevInfo);
+
+                // Pass the JSON string to another activity via Intent
+                Intent intent = new Intent(DevListActivity.this, DeviceSetting.class);
+                intent.putExtra("dev", personJson);
+                startActivity(intent);
+                //turnToActivity(DeviceSetting.class);
+            }
+
+            /**
+             *Failed callback
+             *
+             *@ param devId device serial number
+             *@ param msgId Message ID
+             * @param jsonName
+             *@ param errorId error code
+             */
+
+            @Override
+
+            public void onFailed(String devId, int msgId, String jsonName, int i1) {
+                Log.d(TAG, "device login failed  > " + i1  +"  | jsonName > " +jsonName);
+            }
+
+        });
+
+
+    }
     /**
      * 跳转到推送设置
      * Jump to push Settings
@@ -1226,6 +1261,15 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 "    \"Name\": \"Ping\"\n" +
                 "}"}});
     }
+
+
+    // 2 times device name show > preview does not come
+    // preview
+    // app open me > user id > logout > device  >
+    // first step scan > share icon doe snot show >
+    // after login account again > device is able to delete and share icon shows
+    // qr scan > white screen > device name > loading >
+    //
 
     @Override
     protected void onDestroy() {

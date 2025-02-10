@@ -45,6 +45,8 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_me_permission_settings_acitivity);
+        TextView tvTitleHeader = findViewById(R.id.toolbar_title);
+        tvTitleHeader.setText(getString(R.string.permission_setting));
 
         llBluetooth = findViewById(R.id.ll_b);
         llLocation = findViewById(R.id.ll1_l);

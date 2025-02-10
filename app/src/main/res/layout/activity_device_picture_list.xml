@@ -43,11 +43,7 @@
             android:id="@+id/layoutTop"
             layout="@layout/include_title_layout"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_dev_pic"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/layoutTop"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,7 +119,6 @@
             android:layout_height="match_parent"
             android:background="@color/white"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -255,10 +250,12 @@
 
             </LinearLayout>
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/gray_transparent">
+                android:background="@color/gray_transparent"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -291,9 +288,14 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:visibility="gone"
+                android:id="@+id/rv_dev_pic"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dev_pic2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 />
 
 
@@ -301,7 +303,6 @@
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-
             android:id="@+id/parent_rl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -341,11 +342,7 @@
                     android:id="@+id/layoutTop"
                     layout="@layout/include_title_layout" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_dev_pic2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@id/layoutTop" />
+
 
                 <LinearLayout
                     android:id="@+id/no_data_cont_ll"
