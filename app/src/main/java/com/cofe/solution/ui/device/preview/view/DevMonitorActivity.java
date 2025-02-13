@@ -1134,6 +1134,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     @Override
     protected void onResume() {
         super.onResume();
+
         if(getApplicationContext()!=null) {
             SharedPreference cookies = new SharedPreference(getApplicationContext());
             if(cookies.retrievPreviewPageTabSelection().equals("real-tab")) {
@@ -1143,15 +1144,37 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
             }
         }
         overridePendingTransition(0, 0);
+        Log.d("RECREATE","OnResume "+isHomePress);
         if (!isHomePress) {
             loaderDialog.setMessage();
             presenter.loginDev();
+            Log.d("RECREATE","inside isHomePress "+isHomePress);
         }
+
+        // Restart video streams explicitly
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            for (int i = 0; i < chnCount && i < playViews.length; ++i) {
+                presenter.stopMonitor(i); // Ensure old streams are stopped
+                presenter.startMonitor(i); // Restart streams
+                Log.d("RECREATE", "Restarted video stream for channel: " + i);
+            }
+        }, 1000);
+
+
+
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void recreate() {
+        super.recreate();
+        Log.d("RECREATE","CALL");
+
     }
 
     @Override
@@ -1212,8 +1235,13 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     @Override
     public void onLoginResult(boolean isSuccess, int errorId) {
         if (isSuccess) {
+            Log.d("RECREATE","inside onLoginResult "+isSuccess);
+
             for (int i = 0; i < chnCount && i < playViews.length; ++i) {
                 presenter.startMonitor(i);
+                Log.d("RECREATE","inside for "+isSuccess);
+                Log.d("RECREATE","inside for "+i);
+
             }
         } else {
             //密码错误后，会弹出密码输入框，需输入正确的密码重新登录
@@ -2870,6 +2898,8 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.d("RECREATE","onRestart "+isHomePress);
+
         if (isHomePress) {
             KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
             Intent intent = keyguardManager.createConfirmDeviceCredentialIntent(null, null);
@@ -2877,6 +2907,7 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 startActivityForResult(intent, 0);
             }
         }
+
     }
 
     @Override

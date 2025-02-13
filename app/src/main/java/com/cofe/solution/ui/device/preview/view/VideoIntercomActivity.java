@@ -275,6 +275,7 @@ public class VideoIntercomActivity extends DemoBaseActivity<VideoIntercomPresent
         switch (v.getId()) {
             case R.id.ll_close_talk:
                 finish();
+                //turnToActivity(DevMonitorActivity.class);
                 break;
             case R.id.iv_mic:
                 closeOrOpenMic();
