@@ -80,8 +80,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.cofe.solution.app.SDKDemoApplication;
@@ -100,6 +100,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.Gson;
+
 import com.lib.EFUN_ERROR;
 import com.lib.FunSDK;
 import com.lib.MsgContent;
@@ -177,6 +178,8 @@ import static com.cofe.solution.base.DemoConstant.SENSOR_MAX_TIMES;
 import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_THREE_LENS;
 import static com.cofe.solution.base.DemoConstant.SUPPORT_SCALE_TWO_LENS;
 import static com.cofe.solution.base.FunError.EE_DVR_ACCOUNT_PWD_NOT_VALID;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -581,11 +584,30 @@ public class  DevMonitorActivity extends DemoBaseActivity<DevMonitorPresenter> i
                 Log.d("Device id " , " presenter.getDevId() > "  +presenter.getDevId());
                 Log.d("Device id " , " result.OtherFunction.AovMode > "  +result.OtherFunction.AovMode);
                 Log.d("Device id " , " result.OtherFunction.BatteryManager > "  +result.OtherFunction.BatteryManager);
+                Log.d("ROBOT CHECK" , " Result "  +result.getOriginalJson());
 
                 try {
                     XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(devId);
-                    if(xmDevInfo.getDevType() == SDKCONST.DEVICE_TYPE.ROBOT){
+                    /*if(xmDevInfo.getDevType() == SDKCONST.DEVICE_TYPE.ROBOT){
                         findViewById(R.id.iv_answer_call_ll).setVisibility(VISIBLE);
+                    }*/
+                    // Convert original JSON string to JSONObject
+                    JSONObject jsonObject = new JSONObject(result.getOriginalJson());
+
+                    // Navigate to OtherFunction
+                    JSONObject systemFunction = jsonObject.getJSONObject("SystemFunction");
+                    JSONObject otherFunction = systemFunction.getJSONObject("OtherFunction");
+
+                    // Extract SupportVideoTalkV2
+                    boolean isSupportVideoTalkV2 = otherFunction.optBoolean("SupportVideoTalkV2", false);
+
+                    Log.d("ROBOT CHECK", "SupportVideoTalkV2: " + isSupportVideoTalkV2);
+
+                    // Set visibility based on value
+                    if (isSupportVideoTalkV2) {
+                        findViewById(R.id.iv_answer_call_ll).setVisibility(View.VISIBLE);
+                    } else {
+                        findViewById(R.id.iv_answer_call_ll).setVisibility(View.GONE);
                     }
 
                     if (result.OtherFunction.AovMode) {
