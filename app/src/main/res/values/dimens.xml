@@ -60,4 +60,6 @@
     <dimen name="di_20">20dp</dimen>
 
     <dimen name="button_icon_size">24dp</dimen>
+
+    <dimen name="margin_bottom">20dp</dimen>
 </resources>
