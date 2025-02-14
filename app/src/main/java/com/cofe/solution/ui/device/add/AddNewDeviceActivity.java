@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -16,11 +17,13 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,6 +69,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
     LinearLayout wiredLl;
     LinearLayout shareLL;
     Button btnShowBottomSheet;
+    GridLayout gridlayout;
     private static final int BLUETOOTH_PERMISSION_REQUEST_CODE = 1;
 
 
@@ -162,6 +166,25 @@ public class AddNewDeviceActivity extends AppCompatActivity {
         wiredLl = findViewById(R.id.wired_ll);
         shareLL = findViewById(R.id.share_ll);
         btnShowBottomSheet = findViewById(R.id.btn_show_bottom_sheet);
+        gridlayout = findViewById(R.id.gridLay);
+
+        gridlayout.post(new Runnable() {
+            @Override
+            public void run() {
+                int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
+
+                if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
+                    Log.d("UI_MODE_TYPE_MASK", "Device is a TV");
+                    gridlayout.setColumnCount(3); // 3 columns for TV
+                    //gridlayout.setRowCount(2);    // 6 items → 2 rows (3x2)
+                } else {
+                    Log.d("UI_MODE_TYPE_MASK", "Device is NOT a TV");
+
+                    gridlayout.setColumnCount(2); // 2 columns for Phone
+                   // gridlayout.setRowCount(2);    // 6 items → 3 rows (2x3)
+                }
+            }
+        });
 
         findViewById(R.id.back_button).setOnClickListener(new View.OnClickListener() {
             @Override

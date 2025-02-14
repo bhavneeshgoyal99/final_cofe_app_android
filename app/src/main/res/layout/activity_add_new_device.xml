@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/parent_rl">
+    android:background="@color/white">
 
     <!-- AppBarLayout for the Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
@@ -13,11 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        app:elevation="0dp"
-        app:liftOnScroll="false"
-        android:translationZ="0.1dp"
         android:stateListAnimator="@null"
-        >
+        android:translationZ="0.1dp"
+        app:elevation="0dp"
+        app:liftOnScroll="false">
 
         <!-- Top Title Layout -->
         <include
@@ -25,32 +23,32 @@
             layout="@layout/titlebar_with_arrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            app:layout_scrollFlags="scroll|enterAlways" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/half_of_normal_margin"
+        android:layout_marginBottom="70dp"
+        android:fillViewport="true"
         android:paddingLeft="@dimen/half_of_normal_margin"
         android:paddingRight="@dimen/half_of_normal_margin"
-        android:fillViewport="true"
-        android:layout_marginBottom="70dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        android:paddingBottom="@dimen/half_of_normal_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_above="@+id/btn_show_bottom_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/btn_show_bottom_sheet"
+                android:orientation="vertical">
 
                 <!-- Top Buttons -->
                 <LinearLayout
@@ -63,70 +61,68 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
-                        android:text="Turn on Wi-Fi"
                         android:drawableEnd="@drawable/ic_about"
                         android:drawablePadding="8dp"
                         android:padding="12dp"
-                        android:visibility="gone"/>
+                        android:text="Turn on Wi-Fi"
+                        android:visibility="gone" />
 
                     <Button
                         android:id="@+id/btn_turn_on_bluetooth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:backgroundTint="@color/white"
-                        android:text="Turn on Bluetooth"
                         android:drawableEnd="@drawable/ic_about_24x24"
                         android:drawablePadding="8dp"
-                        android:layout_marginTop="8dp"
-                        android:padding="12dp" />
+                        android:text="Turn on Bluetooth"
+
+                        />
                 </LinearLayout>
 
                 <!-- Search Progress -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp"
                     android:weightSum="1">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".7"
-                        android:text="Search for available devices"
                         android:gravity="left"
                         android:paddingHorizontal="8dp"
+                        android:text="Search for available devices"
                         android:textColor="#555555"
-                        android:textSize="16sp"
-                        />
+                        android:textSize="16sp" />
+
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".3"
-                        android:gravity="right"
-                        >
+                        android:gravity="right">
 
                         <ProgressBar
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:indeterminate="true"
+                            android:layout_gravity="right"
                             android:layout_marginTop="8dp"
                             android:layout_marginBottom="7dp"
-                            android:layout_gravity="right"
-                            />
+                            android:indeterminate="true" />
 
                     </LinearLayout>
                 </LinearLayout>
-
 
 
                 <!-- Add Device Manually Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:layout_marginTop="16dp">
+                    android:orientation="horizontal">
 
                     <View
                         android:layout_width="0dp"
@@ -137,9 +133,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add device manually"
                         android:gravity="center"
                         android:paddingHorizontal="8dp"
+                        android:text="Add device manually"
                         android:textColor="#555555"
                         android:textSize="16sp" />
 
@@ -152,24 +148,25 @@
 
                 <!-- Device Options -->
                 <GridLayout
+                    android:id="@+id/gridLay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="2"
-                    android:rowCount="3"
+                    android:layout_marginTop="5dp"
                     android:background="@color/lighter_grey"
-                    android:layout_marginTop="16dp">
+                    android:columnCount="2"
+                    android:rowCount="2"
+                    >
 
                     <LinearLayout
+                        android:id="@+id/wifi_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:padding="15dp"
-                        android:id="@+id/wifi_ll"
-                        >
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
                         <ImageView
                             android:layout_width="48dp"
@@ -179,7 +176,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="Wi-Fi Camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -187,15 +184,15 @@
 
 
                     <LinearLayout
+                        android:id="@+id/g4_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="15dp"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:id="@+id/g4_ll"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp"
 
                         >
 
@@ -207,7 +204,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="4G Camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -216,15 +213,15 @@
                     <!-- Add more devices similarly -->
 
                     <LinearLayout
+                        android:id="@+id/viot_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="15dp"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:id="@+id/viot_ll"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp"
 
                         >
 
@@ -236,7 +233,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="VIOT Station"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -244,15 +241,15 @@
 
 
                     <LinearLayout
+                        android:id="@+id/dvr_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="15dp"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:id="@+id/dvr_ll"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp"
 
                         >
 
@@ -264,7 +261,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="DVR/NVR"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -273,15 +270,15 @@
                     <!-- Add more devices similarly -->
 
                     <LinearLayout
+                        android:id="@+id/wired_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="15dp"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:id="@+id/wired_ll"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp"
 
                         >
 
@@ -293,7 +290,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="Wired Camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -301,16 +298,15 @@
 
 
                     <LinearLayout
+                        android:id="@+id/share_ll"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
-                        android:layout_margin="3dp"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="15dp"
+                        android:layout_margin="2dp"
                         android:background="@color/white"
-                        android:id="@+id/share_ll"
-                        >
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp">
 
                         <ImageView
                             android:layout_width="48dp"
@@ -320,7 +316,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:text="From Shared Device"
                             android:textColor="#555555"
                             android:textSize="14sp" />
@@ -334,18 +330,17 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/btn_show_bottom_sheet"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="end"
+                android:background="@drawable/button_background"
+                android:gravity="center"
+
                 android:text="Other ways to add device"
                 android:textColor="@color/colorAccent"
-                android:gravity="center"
-                android:paddingHorizontal="8dp"
-                android:textSize="14sp"
-                android:layout_gravity="end"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/btn_show_bottom_sheet"
-                android:background="@drawable/button_background"
-                />
+                android:textSize="14sp" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
