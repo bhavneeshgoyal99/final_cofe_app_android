@@ -27,7 +27,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:background="@color/transparent"
-        android:src="@mipmap/logo_app" />
+        android:src="@mipmap/logo_app"
+        android:contentDescription="@null"/>
 
     <TextView
         android:id="@+id/txtVersion"
