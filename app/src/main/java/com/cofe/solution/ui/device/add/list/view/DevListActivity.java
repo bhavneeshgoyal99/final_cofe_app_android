@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -204,8 +205,15 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         listView = findViewById(R.id.listViewDevice);
         noDeviceContLl = findViewById(R.id.no_device_cont_ll);
         textTxtv = findViewById(R.id.text_txtv);
-        LinearLayoutManager llManager = new LinearLayoutManager(this);
-        listView.setLayoutManager(llManager);
+        int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
+
+        if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
+            listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 3));
+
+        }else{
+            LinearLayoutManager llManager = new LinearLayoutManager(this);
+            listView.setLayoutManager(llManager);
+        }
 
         //listView.addItemDecoration(new DividerItemDecoration(this, llManager.getOrientation()));
 //        listView.removeItemDecorationAt(0); // Remove any existing decoration
@@ -1400,24 +1408,33 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 tvDefault.setTextColor(getResources().getColor(R.color.other_black));
                 tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
 */
-                RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
-                //LinearLayoutManager llManager = new LinearLayoutManager(this);
-                // listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
-                //adapter.notifyDataSetChanged();
+                int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
 
-                if (currentLayoutManager instanceof GridLayoutManager) {
-                    tvThumbnails.setText("Thumbnail mode");
-
-                    // Switch to LinearLayoutManager
-                    listView.setLayoutManager(new LinearLayoutManager(DevListActivity.this));
+                if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
+                    listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 5));
                     adapter.notifyDataSetChanged();
-                    isGridLayout = false;
-                } else {
-                    tvThumbnails.setText("Large Image View");
-                    // Switch to GridLayoutManager with 2 columns
-                    listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
-                    isGridLayout = true;
                 }
+                else{
+                    RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
+                    //LinearLayoutManager llManager = new LinearLayoutManager(this);
+                    // listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                    //adapter.notifyDataSetChanged();
+
+                    if (currentLayoutManager instanceof GridLayoutManager) {
+                        tvThumbnails.setText("Thumbnail mode");
+
+                        // Switch to LinearLayoutManager
+                        listView.setLayoutManager(new LinearLayoutManager(DevListActivity.this));
+                        adapter.notifyDataSetChanged();
+                        isGridLayout = false;
+                    } else {
+                        tvThumbnails.setText("Large Image View");
+                        // Switch to GridLayoutManager with 2 columns
+                        listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
+                        isGridLayout = true;
+                    }
+                }
+
                 // adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
                 popupWindow.dismiss();
             }
