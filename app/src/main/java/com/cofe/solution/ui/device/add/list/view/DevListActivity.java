@@ -208,7 +208,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
 
         if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
-            listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 3));
+            listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
 
         }else{
             LinearLayoutManager llManager = new LinearLayoutManager(this);
@@ -1369,6 +1369,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         TextView tvOnlineOffline = popupView.findViewById(R.id.tvOnlineOffline);
         TextView tvDefault = popupView.findViewById(R.id.tvDefault);
         TextView tvThumbnails = popupView.findViewById(R.id.tvThumbnails);
+        View view1 = popupView.findViewById(R.id.view1);
 
 
         // Create a PopupWindow
@@ -1399,6 +1400,17 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
             tvThumbnails.setTextColor(getResources().getColor(R.color.other_black));
         }
 
+
+        int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
+
+        if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
+            llThumbnails.setVisibility(View.GONE);
+            view1.setVisibility(View.GONE);
+        }
+        else{
+            llThumbnails.setVisibility(View.VISIBLE);
+            view1.setVisibility(View.VISIBLE);
+        }
         llThumbnails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1410,11 +1422,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
 */
                 int uiMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_TYPE_MASK;
 
-                if (uiMode == Configuration.UI_MODE_TYPE_TELEVISION) {
-                    listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 5));
-                    adapter.notifyDataSetChanged();
-                }
-                else{
+
                     RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
                     //LinearLayoutManager llManager = new LinearLayoutManager(this);
                     // listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
@@ -1433,7 +1441,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                         listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
                         isGridLayout = true;
                     }
-                }
+
 
                 // adapter.setData((ArrayList<HashMap<String, Object>>) presenter.getDevList());
                 popupWindow.dismiss();
