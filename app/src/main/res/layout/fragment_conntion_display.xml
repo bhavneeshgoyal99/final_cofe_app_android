@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/count_down_text1"
         android:textColor="@color/colorAccent"
-        android:text="asass"
+        android:text="@string/asass"
         />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="10dp"
-        android:text="Maintain a distance of about 25-35 cm between the QR code and the camera "
+        android:text="@string/maintain_a_distance_of_about_25_35_cm_between_the_qr_code_and_the_camera"
         />
 
 

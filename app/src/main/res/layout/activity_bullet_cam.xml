@@ -7,7 +7,7 @@
     android:background="@color/menu_color"
     android:orientation="vertical"
 
-    tools:context=".ui.activity.BulletCamActivity">
+    >
 
     <include layout="@layout/common_header" />
 
@@ -55,7 +55,7 @@
                     android:layout_height="50dp"
                     android:background="@color/white"
                     android:gravity="center"
-                    android:text="Shape of warning area"
+                    android:text="@string/shape_of_warning_area"
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
@@ -103,7 +103,7 @@
                                 android:layout_marginTop="10dp"
 
                                 android:gravity="center"
-                                android:text="Triangle"
+                                android:text="@string/triangle"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -137,42 +137,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
                                 android:gravity="center"
-                                android:text="Rectangle"
-                                android:textColor="@color/black"
-                                android:textSize="12sp" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray_transparent" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@color/white"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <ImageView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:gravity="center"
-                                android:src="@drawable/right_icon_1" />
-
-                            <TextView
-                                style="@style/textGraysmall"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginTop="10dp"
-
-                                android:gravity="center"
-                                android:text="Pentagon"
+                                android:text="@string/rectangle"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -207,7 +172,42 @@
                                 android:layout_marginTop="10dp"
 
                                 android:gravity="center"
-                                android:text="L Shape"
+                                android:text="@string/pentagon"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray_transparent" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:gravity="center"
+                                android:src="@drawable/right_icon_1" />
+
+                            <TextView
+                                style="@style/textGraysmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+
+                                android:gravity="center"
+                                android:text="@string/l_shape"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -241,7 +241,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="Restore"
+                        android:text="@string/restore"
                         android:layout_margin="10dp"
                         android:textColor="@color/deep_gray_transparent"
                         android:textSize="12sp" />
@@ -259,7 +259,7 @@
                         android:gravity="center"
                         android:layout_margin="10dp"
 
-                        android:text="Undo"
+                        android:text="@string/undo"
                         android:textColor="@color/deep_gray_transparent"
                         android:textSize="12sp" />
 
@@ -278,7 +278,7 @@
                     android:padding="10dp"
 
 
-                    android:text="Completed"
+                    android:text="@string/completed"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 

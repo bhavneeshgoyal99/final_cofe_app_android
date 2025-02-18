@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="TR Setting Power Saving Mode"
+                        android:text="@string/tr_setting_power_saving_mode"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -161,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="TR Setting Performance"
+                        android:text="@string/tr_setting_performance"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -212,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="16dp"
-                        android:text="mode customize"
+                        android:text="@string/mode_customize"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -225,7 +225,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="16dp"
-                        android:text="TR Setting Event Record Delay"
+                        android:text="@string/tr_setting_event_record_delay"
                         android:textColor="#ff999999"
                         android:textSize="11sp"
                         uilib:layout_constraintBottom_toBottomOf="parent"
@@ -267,7 +267,7 @@
                         uilib:ItemTitleSize="15sp"
                         uilib:ShowTopLine="true"
                         uilib:Cap=""
-                        uilib:Title="TR Setting Event Record Delay"
+                        uilib:Title="@string/tr_setting_event_record_delay"
                         uilib:singleClick="true" />
 
                     <com.xm.ui.widget.ListSelectItem
@@ -282,7 +282,7 @@
                         uilib:ItemTitleSize="15sp"
                         uilib:ShowTopLine="true"
                         uilib:Cap=""
-                        uilib:Title="TR AOV Fps"
+                        uilib:Title="@string/tr_aov_fps"
                         uilib:singleClick="true" />
                 </LinearLayout>
             </LinearLayout>
@@ -306,7 +306,7 @@
                 android:layout_marginEnd="@dimen/normal_padding"
                 uilib:ShowTopLine="false"
                 uilib:Cap=""
-                uilib:Title="TR AOV Alarm interval"
+                uilib:Title="@string/tr_aov_alarm_interval"
                 uilib:singleClick="true" />
 
             <TextView

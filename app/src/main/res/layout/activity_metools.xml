@@ -44,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="Firmware Management"
+                        android:text="@string/firmware_management"
                         android:textSize="@dimen/font_normal" />
 
 
@@ -92,7 +92,7 @@
                             android:layout_height="wrap_content"
 
 
-                            android:text="Clear Cache"
+                            android:text="@string/clear_cache"
                             android:textSize="14sp" />
 
                         <TextView
@@ -101,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:singleLine="false"
-                            android:text="Clear thumbnails and cache files"
+                            android:text="@string/clear_thumbnails_and_cache_files"
                             android:textColor="@color/gray"
                             android:textSize="12sp" />
 
@@ -121,7 +121,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="47.5k"
+                            android:text="@string/_47_5k"
                             android:textColor="@color/theme"
 
                             android:textSize="10sp" />
@@ -170,7 +170,7 @@
                             android:layout_height="wrap_content"
 
 
-                            android:text="System Notifications"
+                            android:text="@string/system_notifications"
                             android:textSize="14sp" />
 
                         <TextView
@@ -179,7 +179,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:singleLine="false"
-                            android:text="Change sound and vibration settings in system settings"
+                            android:text="@string/change_sound_and_vibration_settings_in_system_settings"
                             android:textColor="@color/gray"
                             android:textSize="12sp" />
 
@@ -238,7 +238,7 @@
                             android:layout_height="wrap_content"
 
 
-                            android:text="Displayed in push message box(toast) at the bottom of app"
+                            android:text="@string/displayed_in_push_message_box_toast_at_the_bottom_of_app"
                             android:textSize="14sp" />
 
                         <TextView
@@ -247,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:singleLine="false"
-                            android:text="This option is not push switch notification.turning it on or off will not effect the push notification displayed in the otification bar of your mobile phone(come inti effect after you restart the app)"
+                            android:text="@string/this_option_is_not_push_switch_notification_turning_it_on_or_off_will_not_effect_the_push_notification_displayed_in_the_otification_bar_of_your_mobile_phone_come_inti_effect_after_you_restart_the_app"
                             android:textColor="@color/gray"
                             android:textSize="12sp" />
 
@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="Auto Highlight"
+                        android:text="@string/auto_highlight"
                         android:textSize="@dimen/font_normal" />
 
 
@@ -325,7 +325,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="Encrypted transmission"
+                        android:text="@string/encrypted_transmission"
                         android:textSize="@dimen/font_normal" />
 
 
@@ -371,7 +371,7 @@
                             android:layout_height="wrap_content"
 
 
-                            android:text="Video Encoding"
+                            android:text="@string/video_encoding"
                             android:textSize="14sp" />
 
 
@@ -391,7 +391,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Adaptive"
+                            android:text="@string/adaptive"
                             android:textColor="@color/item_right_cap_text_color"
 
                             android:textSize="10sp" />
@@ -427,7 +427,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="DSS/RPS Access"
+                        android:text="@string/dss_rps_access"
                         android:textSize="@dimen/font_normal" />
 
 
@@ -460,7 +460,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="Batch Management of device"
+                        android:text="@string/batch_management_of_device"
                         android:textSize="@dimen/font_normal" />
 
 

@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="Image"
+                        android:text="@string/image"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -170,7 +170,7 @@
 
 
                         android:gravity="center"
-                        android:text="Recording"
+                        android:text="@string/recording"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -211,7 +211,7 @@
 
                         android:drawableEnd="@drawable/arrow_drop_down"
 
-                        android:text="All Dates"
+                        android:text="@string/all_dates"
                         android:textSize="14sp" />
 
 
@@ -242,7 +242,7 @@
                         android:drawableEnd="@drawable/arrow_drop_down"
 
                         android:gravity="center"
-                        android:text="All Devices"
+                        android:text="@string/all_devices"
                         android:textSize="14sp" />
 
 
@@ -279,7 +279,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="Nothing..."
+                        android:text="@string/nothing"
                         android:textSize="12sp" />
                 </LinearLayout>
 

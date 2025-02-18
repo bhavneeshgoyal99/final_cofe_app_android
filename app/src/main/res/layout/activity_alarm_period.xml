@@ -59,7 +59,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/ivright"
-                android:text="24H Alarm"
+                android:text="@string/_24h_alarm"
                 android:textSize="15sp" />
 
 
@@ -92,7 +92,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_toEndOf="@+id/ivright1"
-                android:text="Custom Alarm"
+                android:text="@string/custom_alarm"
                 android:textSize="15sp" />
 
 

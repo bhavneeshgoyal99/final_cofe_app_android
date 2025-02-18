@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
-                android:text="It is an ordinary Wi-Fi device. Please connect."
+                android:text="@string/it_is_an_ordinary_wi_fi_device_please_connect"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 />
@@ -76,7 +76,7 @@
                 android:layout_below="@id/routerIcon"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="Please connect to 2.4G Wi-Fi"
+                android:text="@string/please_connect_to_2_4g_wi_fi"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp" />
 
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/instructionText"
                 android:layout_centerHorizontal="true"
-                android:text="5G Device"
+                android:text="@string/_5g_device"
                 android:textColor="#808080"
                 android:textSize="12sp"
                 android:textStyle="italic" />
@@ -116,7 +116,7 @@
                     android:drawablePadding="15dp"
                     android:id="@+id/editWifiSSID"
                     android:background="@null"
-                    android:hint="wifi SSD Name"
+                    android:hint="@string/wifi_ssd_name"
                     android:layout_marginBottom="10dp"
                     />
 
@@ -137,7 +137,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:inputType="textPassword"
                         android:drawableStart="@drawable/password_black_icon"
                         android:textColor="#000000"
@@ -160,7 +160,7 @@
                 android:layout_below="@id/wifiDetails"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="* To quickly connect the device to the network, please select a stable Wi-Fi signal and enter correct Wi-Fi password"
+                android:text="@string/to_quickly_connect_the_device_to_the_network_please_select_a_stable_wi_fi_signal_and_enter_correct_wi_fi_password"
                 android:textColor="#808080"
                 android:textSize="12sp"
                 android:gravity="center" />
@@ -171,7 +171,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Problem with Wi-Fi connection?"
+                android:text="@string/problem_with_wi_fi_connection"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -186,7 +186,7 @@
                 android:layout_height="48dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="16dp"
-                android:text="OK"
+                android:text="@string/ok"
                 android:textColor="@color/colorAccent"
                 android:background="@drawable/button_background" />
         </RelativeLayout>

@@ -8,7 +8,8 @@
 
     <include
         android:id="@+id/layoutTop"
-        layout="@layout/include_title_layout"/>
+        layout="@layout/include_title_layout" />
+
     <include
         android:id="@+id/headerBasicSettings"
         layout="@layout/common_header" />
@@ -20,11 +21,11 @@
         android:layout_below="@id/layoutTop"
         android:footerDividersEnabled="true"
         android:listSelector="@drawable/common_list_selector">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/llBasicSettings"
@@ -55,7 +56,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
 
-                            android:text="Alert tone"
+                            android:text="@string/alert_tone"
                             android:textSize="12sp" />
 
                         <Switch
@@ -86,7 +87,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
-                            android:text="Device Name"
+                            android:text="@string/device_name"
                             android:textSize="12sp" />
 
                         <TextView
@@ -96,7 +97,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivright"
 
-                            android:text="testing"
+                            android:text="@string/testing"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -202,7 +203,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivright1"
 
-                            android:text="english"
+                            android:text="@string/english"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -246,7 +247,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivright2"
 
-                            android:text="5"
+                            android:text="@string/_5"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -290,7 +291,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivright3"
 
-                            android:text="6"
+                            android:text="@string/_6"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -349,7 +350,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivSensitivity"
 
-                            android:text="5"
+                            android:text="@string/_5"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -387,6 +388,7 @@
 
 
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/llSpeakerVolume"
                 android:layout_width="match_parent"
@@ -424,7 +426,7 @@
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivSpeaker"
 
-                            android:text="5"
+                            android:text="@string/_5"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -513,7 +515,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_toStartOf="@+id/ivright4"
-                            android:text="english"
+                            android:text="@string/english"
                             android:textSize="10sp" />
 
                         <ImageView
@@ -538,9 +540,7 @@
                         android:id="@+id/rvLanguage"
 
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-
-
+                        android:layout_height="wrap_content" />
 
 
                 </LinearLayout>
@@ -551,6 +551,7 @@
 
         </LinearLayout>
     </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -755,9 +756,10 @@
             android:id="@+id/ll_wdr_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:orientation="vertical"
+            android:visibility="gone"
             tools:visibility="visible">
+
             <com.xm.ui.widget.ListSelectItem
                 android:id="@+id/lsi_wdr"
                 android:layout_width="match_parent"
@@ -766,13 +768,14 @@
                 uilib:ImageRight2="@mipmap/icon_checked_yes"
                 uilib:ItemTitleColor="@color/black"
                 uilib:ItemTitleSize="@dimen/middle_text_size"
-                uilib:leftMargin="0dp"
+                uilib:RightClickable="false"
                 uilib:Title="@string/setting_broad_thrends_config"
-                uilib:RightClickable="false"/>
+                uilib:leftMargin="0dp" />
+
             <FrameLayout
                 android:id="@+id/fl_monitor_surface"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 

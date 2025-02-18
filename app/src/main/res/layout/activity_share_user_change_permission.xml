@@ -57,7 +57,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Share All"
+                    android:text="@string/share_all"
                     android:textSize="16sp"
                     android:padding="@dimen/half_of_normal_margin"
                     />
@@ -111,7 +111,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="PTZ"
+                            android:text="@string/ptz"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -135,7 +135,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Intercom"
+                            android:text="@string/intercom"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -159,7 +159,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Local Storage"
+                            android:text="@string/local_storage"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -199,7 +199,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Change Device Config"
+                            android:text="@string/change_device_config"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -227,7 +227,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Push"
+                            android:text="@string/push"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -252,7 +252,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View Cloud Video"
+                            android:text="@string/view_cloud_video"
                             android:textSize="12sp"
                             android:gravity="center"
                             android:layout_marginTop="@dimen/half_of_normal_margin"
@@ -278,7 +278,7 @@
             android:id="@+id/viewChangePermission"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Change Permission"
+            android:text="@string/change_permission"
             android:textColor="@color/theme"
             android:textSize="14sp"
             android:paddingVertical="16dp"

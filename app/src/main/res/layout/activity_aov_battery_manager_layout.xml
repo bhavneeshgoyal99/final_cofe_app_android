@@ -78,7 +78,7 @@
                     uilib:RightClickable="false"
                     uilib:ShowBottomLine="true"
                     uilib:ShowTopLine="false"
-                    uilib:Title="TR_Setting_Power_Supply_Mode"
+                    uilib:Title="@string/tr_setting_power_supply_mode"
                     uilib:singleClick="true" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -90,7 +90,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
-                        android:text="TR Setting Current Battery Level"
+                        android:text="@string/tr_setting_current_battery_level"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintHorizontal_bias="0"
@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="23dp"
                         android:layout_marginTop="11dp"
-                        android:text="TR Setting Low Power Mode"
+                        android:text="@string/tr_setting_low_power_mode"
                         android:textColor="#ff5a5a5a"
                         android:textSize="15sp"
                         uilib:layout_constraintStart_toStartOf="parent"
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:layout_marginEnd="23dp"
-                        android:text="TR Setting Low Power Mode Description"
+                        android:text="@string/tr_setting_low_power_mode_description"
                         android:textColor="#ff999999"
                         android:textSize="11sp"
                         uilib:layout_constraintEnd_toEndOf="parent"
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginTop="@dimen/di_20"
-                android:text="TR_Setting_Battery_Statistic"
+                android:text="@string/tr_setting_battery_statistic"
                 android:textColor="#ff777777"
                 android:textSize="13sp"
                 android:visibility="gone"
@@ -220,21 +220,21 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:background="@drawable/corner_white_5"
-                        android:text="TR Today"/>
+                        android:text="@string/tr_today"/>
                     <TextView
                         android:id="@+id/tvWeek"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="TR Setting Last Week"/>
+                        android:text="@string/tr_setting_last_week"/>
 
                 </LinearLayout>
                 <TextView
                     android:id="@+id/tvBatteryLineChartTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TR Setting Power Level"
+                    android:text="@string/tr_setting_power_level"
                     uilib:layout_constraintStart_toStartOf="parent"
                     uilib:layout_constraintTop_toBottomOf="@+id/llSelectType"
                     android:layout_marginStart="15dp"
@@ -256,7 +256,7 @@
                     android:id="@+id/tvBatteryChartTip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="hour"
+                    android:text="@string/hour"
                     android:textColor="@color/text_color"
                     android:textSize="10sp"
                     uilib:layout_constraintBottom_toBottomOf="@+id/LineChart"
@@ -267,7 +267,7 @@
                     android:id="@+id/tvSignalLineChartTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TR Setting Signal"
+                    android:text="@string/tr_setting_signal"
                     uilib:layout_constraintStart_toStartOf="parent"
                     uilib:layout_constraintTop_toBottomOf="@+id/LineChart"
                     android:layout_marginStart="15dp"
@@ -292,7 +292,7 @@
                     android:id="@+id/tvSignalChartTip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="hour"
+                    android:text="@string/hour"
                     android:textSize="10sp"
                     android:textColor="@color/text_color"
                     uilib:layout_constraintBottom_toBottomOf="@+id/signalChart"
@@ -322,7 +322,7 @@
                             uilib:layout_constraintEnd_toStartOf="@+id/ivPreView"
                             uilib:layout_constraintStart_toStartOf="parent"
                             uilib:layout_constraintTop_toTopOf="parent"
-                            android:text="TR Setting Preview Time"
+                            android:text="@string/tr_setting_preview_time"
                             android:layout_marginTop="13dp"
                             android:layout_marginStart="15dp"
                             android:textColor="#ff6b4d3e"
@@ -367,7 +367,7 @@
                             uilib:layout_constraintStart_toStartOf="parent"
                             uilib:layout_constraintTop_toTopOf="parent"
                             uilib:layout_constraintEnd_toStartOf="@+id/ivWake"
-                            android:text="TR Setting Wake Up Time"
+                            android:text="@string/tr_setting_wake_up_time"
                             android:layout_marginTop="13dp"
                             android:layout_marginStart="15dp"
                             android:textColor="#ff6b4d3e"
@@ -417,7 +417,7 @@
                         android:layout_height="wrap_content"
                         uilib:layout_constraintStart_toStartOf="parent"
                         uilib:layout_constraintTop_toTopOf="parent"
-                        android:text="TR Setting Number Of Alarms"
+                        android:text="@string/tr_setting_number_of_alarms"
                         android:layout_marginTop="13dp"
                         android:layout_marginStart="15dp"
                         android:textColor="#ff6b4d3e"
@@ -432,7 +432,7 @@
                         uilib:layout_constraintBottom_toBottomOf="parent"
                         uilib:layout_constraintVertical_bias="0"
                         android:layout_marginBottom="12.5dp"
-                        android:text="11"
+                        android:text="@string/_11"
                         android:textColor="#ff6b4d3e"
                         android:textSize="20sp"/>
 

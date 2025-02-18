@@ -53,7 +53,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AP Configuration"
+                        android:text="@string/ap_configuration"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         />
@@ -61,7 +61,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Configure network and add device"
+                        android:text="@string/configure_network_and_add_device"
                         android:textColor="@color/color_gray_light_open"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -98,7 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="AP Mode"
+                        android:text="@string/ap_mode"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         />
@@ -106,7 +106,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Directly connect your mobile phone to the hotspot of the camera"
+                        android:text="@string/directly_connect_your_mobile_phone_to_the_hotspot_of_the_camera"
                         android:textColor="@color/color_gray_light_open"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -143,7 +143,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Nearby Cameras"
+                        android:text="@string/nearby_cameras"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         />
@@ -151,7 +151,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add devices in the same router"
+                        android:text="@string/add_devices_in_the_same_router"
                         android:textColor="@color/color_gray_light_open"
                         android:textSize="12sp"/>
                 </LinearLayout>

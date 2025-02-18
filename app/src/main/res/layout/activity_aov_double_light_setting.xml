@@ -42,7 +42,7 @@
             app:ImageRight2="@drawable/select_press"
             app:RightClickable="false"
             app:ShowTopLine="false"
-            app:Title="General_Night_Vision"
+            app:Title="@string/general_night_vision_2"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
@@ -56,7 +56,7 @@
             app:ImageRight1="@drawable/select_normal"
             app:ImageRight2="@drawable/select_press"
             app:RightClickable="false"
-            app:Title="TR_Intelligent_Dual_Light"
+            app:Title="@string/tr_intelligent_dual_light"
             app:layout_constraintTop_toBottomOf="@+id/lsi_night_vision"
             tools:visibility="visible" />
 
@@ -70,7 +70,7 @@
             app:ImageRight1="@drawable/select_normal"
             app:ImageRight2="@drawable/select_press"
             app:RightClickable="false"
-            app:Title="Double_Light_Vision"
+            app:Title="@string/double_light_vision_2"
             app:layout_constraintTop_toBottomOf="@+id/lsi_full_color"
             tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,7 +84,7 @@
         app:ShowSwitch="true"
         app:ShowBottomLine="false"
         app:ShowTopLine="false"
-        app:Title="TR_Setting_Device_Indicator_Light"
+        app:Title="@string/tr_setting_device_indicator_light"
         app:layout_constraintTop_toBottomOf="@+id/cl_light_mode"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +104,7 @@
         app:ShowSwitch="true"
         app:ShowBottomLine="false"
         app:ShowTopLine="false"
-        app:Title="TR_Low_Light_Control"
+        app:Title="@string/tr_low_light_control"
         app:Tip="TR_Low_Light_Control_Tip"
         app:layout_constraintTop_toBottomOf="@+id/lis_indicator_light"
         app:layout_constraintStart_toStartOf="parent"

@@ -51,7 +51,7 @@
                         style="@style/user_info_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Bluetooth access Permission"
+                        android:text="@string/bluetooth_access_permission"
                         android:textSize="14sp" />
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="used to search for nearby bluetooth devices for network configuration and connection."
+                        android:text="@string/used_to_search_for_nearby_bluetooth_devices_for_network_configuration_and_connection"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -80,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/colorAccent"
                         android:textSize="10sp"
                         android:tag="status_text"
@@ -118,7 +118,7 @@
                         style="@style/user_info_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Getting location info"
+                        android:text="@string/getting_location_info"
                         android:textSize="14sp" />
 
                     <TextView
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Used to get wifi info during network configuration"
+                        android:text="@string/used_to_get_wifi_info_during_network_configuration"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -147,7 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/colorAccent"
                         android:textSize="10sp"
                         android:tag="status_text"/>
@@ -192,7 +192,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="Memory Access permission"
+                        android:text="@string/memory_access_permission"
                         android:textSize="14sp" />
 
                     <TextView
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Used to save device image and video"
+                        android:text="@string/used_to_save_device_image_and_video"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -221,7 +221,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/red"
                         android:tag="status_text"
                         android:textSize="10sp" />
@@ -266,7 +266,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="Camera Access permission"
+                        android:text="@string/camera_access_permission"
                         android:textSize="14sp" />
 
                     <TextView
@@ -275,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Used to scan Qr code"
+                        android:text="@string/used_to_scan_qr_code"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -295,7 +295,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/red"
                         android:tag="status_text"
                         android:textSize="10sp" />
@@ -340,7 +340,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="MIC Access permission"
+                        android:text="@string/mic_access_permission"
                         android:textSize="14sp" />
 
                     <TextView
@@ -349,7 +349,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Used for voice intercom"
+                        android:text="@string/used_for_voice_intercom"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -369,7 +369,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/red"
                         android:tag="status_text"
                         android:textSize="10sp" />
@@ -421,7 +421,7 @@
                             android:layout_height="wrap_content"
 
 
-                            android:text="Background popup permission"
+                            android:text="@string/background_popup_permission"
                             android:textSize="14sp" />
 
                         <TextView
@@ -430,7 +430,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:singleLine="false"
-                            android:text="Used to notify and remind the call from doorbell"
+                            android:text="@string/used_to_notify_and_remind_the_call_from_doorbell"
                             android:textColor="@color/gray"
                             android:textSize="12sp" />
 
@@ -450,7 +450,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Set"
+                            android:text="@string/set"
                             android:textColor="@color/red"
                             android:tag="status_text"
                             android:textSize="10sp" />
@@ -490,7 +490,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:text="How to Operate"
+                        android:text="@string/how_to_operate"
                         android:textColor="@color/theme"
                         android:textSize="14sp" />
 
@@ -530,7 +530,7 @@
                         style="@style/user_info_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notification management Permission"
+                        android:text="@string/notification_management_permission"
                         android:textSize="14sp" />
 
                     <TextView
@@ -539,7 +539,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Used to set push notifications"
+                        android:text="@string/used_to_set_push_notifications"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -559,7 +559,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Set"
+                        android:text="@string/set"
                         android:textColor="@color/colorAccent"
                         android:textSize="10sp"
                         android:tag="status_text"/>

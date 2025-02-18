@@ -96,14 +96,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Language"
+                        android:text="@string/language"
                         android:textSize="16sp"
                         android:textColor="#333333" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="English"
+                        android:text="@string/english"
                         android:textSize="14sp"
                         android:textColor="#888888"
                         android:layout_marginRight="20dp"
@@ -321,7 +321,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivNetWorkSettings"
-                        android:text="Network settings"
+                        android:text="@string/network_settings"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -599,7 +599,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivDeviceName"
-                        android:text="Device Name"
+                        android:text="@string/device_name"
                         android:textSize="12sp" />
 
                     <TextView
@@ -610,7 +610,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="10dp"
-                        android:text="aov"
+                        android:text="@string/aov"
                         android:textSize="10sp"/>
 
 
@@ -646,7 +646,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivBattery"
-                        android:text="Battery Management"
+                        android:text="@string/battery_management"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -692,7 +692,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivWorkMode"
-                        android:text="Working Mode"
+                        android:text="@string/working_mode"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -740,7 +740,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivPushNoti"
-                        android:text="Push Notification"
+                        android:text="@string/push_notification"
                         android:textSize="12sp" />
 
                     <ImageView

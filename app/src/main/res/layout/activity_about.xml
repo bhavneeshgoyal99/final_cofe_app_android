@@ -37,7 +37,7 @@
         android:layout_below="@id/imgLogo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="Version:1.4.0"
+        android:text="@string/version_1_4_0"
         android:textColor="@color/demo_title"
         android:textSize="18sp" />
 

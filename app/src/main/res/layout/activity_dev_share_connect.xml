@@ -63,7 +63,7 @@
                 android:id="@+id/device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Device Name: aOV"
+                android:text="@string/device_name_aov"
                 android:textSize="16sp"
                 android:textColor="#000000"
                 android:layout_marginBottom="8dp" />
@@ -73,7 +73,7 @@
                 android:id="@+id/device_shared_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The device shared from\n6692bdbf7136626f6df42daa"
+                android:text="@string/the_device_shared_from_n6692bdbf7136626f6df42daa"
                 android:textSize="14sp"
                 android:textColor="#757575"
                 android:gravity="center"
@@ -92,7 +92,7 @@
                 android:id="@+id/valid_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Valid time: 2024-12-21 17:53:37"
+                android:text="@string/valid_time_2024_12_21_17_53_37"
                 android:textSize="14sp"
                 android:textColor="#757575"
                 android:layout_marginBottom="32dp" />
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorAccent"
-                android:text="Share"
+                android:text="@string/share"
                 android:textColor="#FFFFFF"
                 android:layout_marginBottom="16dp"
                 android:padding="12dp" />
@@ -113,7 +113,7 @@
                 android:id="@+id/btn_save_to_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save to Phone"
+                android:text="@string/save_to_phone"
                 android:textColor="@color/black"
                 android:background="@drawable/button_background"
                 android:padding="12dp" />
@@ -166,7 +166,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Search For Other Account"
+                android:hint="@string/search_for_other_account"
                 android:inputType="textPassword"
                 android:textColor="#000000"
                 android:background="@null"

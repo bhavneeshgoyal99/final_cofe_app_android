@@ -18,7 +18,7 @@
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
+        android:text="@string/loading"
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:paddingTop="10dp"/>

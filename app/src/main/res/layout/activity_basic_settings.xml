@@ -41,7 +41,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
 
-                    android:text="Alert tone"
+                    android:text="@string/alert_tone"
                     android:textSize="12sp" />
 
                 <Switch
@@ -72,7 +72,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:text="Device Name"
+                    android:text="@string/device_name"
                     android:textSize="12sp" />
 
                 <TextView
@@ -82,7 +82,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright"
 
-                    android:text="testing"
+                    android:text="@string/testing"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -188,7 +188,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright1"
 
-                    android:text="english"
+                    android:text="@string/english"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -232,7 +232,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright2"
 
-                    android:text="5"
+                    android:text="@string/_5"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -276,7 +276,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright3"
 
-                    android:text="6"
+                    android:text="@string/_6"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -335,7 +335,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivSensitivity"
 
-                    android:text="5"
+                    android:text="@string/_5"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -410,7 +410,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivSpeaker"
 
-                    android:text="5"
+                    android:text="@string/_5"
                     android:textSize="10sp" />
 
                 <ImageView
@@ -499,7 +499,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright4"
-                    android:text="english"
+                    android:text="@string/english"
                     android:textSize="10sp" />
 
                 <ImageView

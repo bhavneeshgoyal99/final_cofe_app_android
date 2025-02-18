@@ -54,7 +54,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:gravity="center"
-            android:text="First, power on the VIOT station. The indicator flashes several times, indicating that the VIOT station starts working."
+            android:text="@string/first_power_on_the_viot_station_the_indicator_flashes_several_times_indicating_that_the_viot_station_starts_working"
             android:textColor="#000000"
             android:textSize="14sp"
             android:lineSpacingExtra="4dp"
@@ -78,7 +78,7 @@
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_margin="16dp"
-            android:text="Next"
+            android:text="@string/next"
             android:textColor="#00BFA5"
             android:background="@drawable/button_background" />
 

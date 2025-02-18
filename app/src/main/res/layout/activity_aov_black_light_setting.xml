@@ -63,7 +63,7 @@
                     app:RightClickable="false"
                     app:ShowSwitch="true"
                     app:ShowTopLine="false"
-                    app:Title="TR_White_Light_Switch"
+                    app:Title="@string/tr_white_light_switch"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -81,7 +81,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="15dp"
-                        android:text="Bright"
+                        android:text="@string/bright"
                         android:textColor="@color/color_5A5A5A"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
                     app:ShowBottomLine="true"
                     app:ShowTopLine="false"
                     app:Tip="TR_AutoLightDetail"
-                    app:Title="TR_AutoLight"
+                    app:Title="@string/tr_autolight"
                     app:layout_constraintTop_toTopOf="parent" />
                 <!--                    app:contentMinHeight="70dp"-->
 
@@ -142,7 +142,7 @@
                         android:layout_marginStart="30dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginEnd="15dp"
-                        android:text="Intelligent_sensitivity"
+                        android:text="@string/intelligent_sensitivity_2"
                         android:textColor="@color/color_5A5A5A"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -173,7 +173,7 @@
                     app:RightClickable="false"
                     app:ShowTopLine="false"
                     app:Tip="TR_TimingLightDetail"
-                    app:Title="TR_TimingLight"
+                    app:Title="@string/tr_timinglight"
                     app:layout_constraintTop_toBottomOf="@+id/cl_sensitive" />
                 <!--                    app:contentMinHeight="70dp"-->
 
@@ -198,7 +198,7 @@
                         android:layout_height="55dp"
                         android:layout_marginStart="30dp"
                         android:gravity="center_vertical"
-                        android:text="start_time"
+                        android:text="@string/start_time_2"
                         android:textColor="@color/color_5A5A5A"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -217,7 +217,7 @@
                         android:layout_height="55dp"
                         android:layout_marginStart="30dp"
                         android:gravity="center_vertical"
-                        android:text="end_time"
+                        android:text="@string/end_time_2"
                         android:textColor="@color/color_5A5A5A"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -237,7 +237,7 @@
                     app:ShowBottomLine="false"
                     app:ShowTopLine="true"
                     app:Tip="TR_ConstantLightDetail"
-                    app:Title="TR_ConstantLight"
+                    app:Title="@string/tr_constantlight"
                     app:layout_constraintTop_toBottomOf="@+id/cl_time" />
                 <!--                    app:contentMinHeight="70dp"-->
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -255,7 +255,7 @@
                 app:ShowBottomLine="false"
                 app:ShowSwitch="true"
                 app:ShowTopLine="false"
-                app:Title="TR_Setting_Device_Indicator_Light"
+                app:Title="@string/tr_setting_device_indicator_light"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_light_mode"
@@ -274,7 +274,7 @@
                 app:ShowSwitch="true"
                 app:ShowTopLine="false"
                 app:Tip="TR_Low_Light_Control_Tip"
-                app:Title="TR_Low_Light_Control"
+                app:Title="@string/tr_low_light_control"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lis_indicator_light"

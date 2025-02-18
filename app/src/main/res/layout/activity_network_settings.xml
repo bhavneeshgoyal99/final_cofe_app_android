@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivSettings"
-                        android:text="AP Mode"
+                        android:text="@string/ap_mode"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -96,14 +96,14 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Language"
+                        android:text="@string/language"
                         android:textSize="16sp"
                         android:textColor="#333333" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="English"
+                        android:text="@string/english"
                         android:textSize="14sp"
                         android:textColor="#888888"
                         android:layout_marginRight="20dp"
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivPasswordManagement"
-                        android:text="Route Mode"
+                        android:text="@string/route_mode"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -185,7 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivStorageManagement"
-                        android:text="COFE_%^76**"
+                        android:text="@string/cofe_76"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -228,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/ivRecordingSettings"
-                        android:text="hghfghf"
+                        android:text=""
                         android:inputType="textPassword"
                         android:textSize="12sp" />
 
@@ -261,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/ivSettings"
-                    android:text="Wi-Fi list"
+                    android:text="@string/wi_fi_list"
                     android:textColor="@color/gray"
                     android:textSize="10sp" />
 

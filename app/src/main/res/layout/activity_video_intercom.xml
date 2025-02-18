@@ -168,7 +168,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="18dp"
                     android:textSize="14sp"
-                    tools:text="00:00" />
+                    tools:text="@string/_00_00" />
 
                 <LinearLayout
                     android:id="@+id/ll_function"

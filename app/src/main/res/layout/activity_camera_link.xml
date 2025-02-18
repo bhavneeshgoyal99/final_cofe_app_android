@@ -19,7 +19,7 @@
         app:RightText="ok"
         app:ShowBottomTip="false"
         uilib:TitleTextColor="@color/white"
-        app:TitleText="TR_Camera_Linkage" />
+        app:TitleText="@string/tr_camera_linkage" />
 
 <!--    <ScrollView-->
 <!--        android:id="@+id/scrollView_link"-->

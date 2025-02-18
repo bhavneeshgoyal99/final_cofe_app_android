@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="no message to display"
+        android:text="@string/no_message_to_display"
         android:gravity="center"/>
 
 </RelativeLayout>

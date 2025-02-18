@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cloud Storage"
+                android:text="@string/cloud_storage"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI"
+                android:text="@string/ai"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Motion Tracking"
+                android:text="@string/motion_tracking"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -109,7 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PTZ"
+                android:text="@string/ptz"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -134,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Strobe Alarm"
+                android:text="@string/strobe_alarm"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -168,7 +168,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cruise Control"
+                android:text="@string/cruise_control"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -192,7 +192,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reset"
+                android:text="@string/reset"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -216,7 +216,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Zoom"
+                android:text="@string/zoom"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -240,7 +240,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Favorites"
+                android:text="@string/favorites"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -272,7 +272,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SD Card Image"
+                android:text="@string/sd_card_image"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -315,7 +315,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Device Image"
+                android:text="@string/device_image"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -340,7 +340,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Battery"
+                android:text="@string/battery"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />
@@ -366,7 +366,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Battery"
+                android:text="@string/battery"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginTop="4dp" />

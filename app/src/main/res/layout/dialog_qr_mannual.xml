@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16sp"
-                android:text="Please enter Cloud Id"
+                android:text="@string/please_enter_cloud_id"
                 android:textColor="#000"
                 android:textSize="18dp" />
 

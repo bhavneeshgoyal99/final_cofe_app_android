@@ -101,7 +101,7 @@
                     android:id="@+id/detection_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Person Detected"
+                    android:text="@string/person_detected"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -110,7 +110,7 @@
                     android:id="@+id/detection_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2025-01-02 20:35:01"
+                    android:text="@string/_2025_01_02_20_35_01"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="14sp" />
             </LinearLayout>

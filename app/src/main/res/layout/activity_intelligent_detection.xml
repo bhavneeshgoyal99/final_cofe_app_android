@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:singleLine="false"
-                        android:text="Currently supports only intelligent human detection"
+                        android:text="@string/currently_supports_only_intelligent_human_detection"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
 
@@ -141,7 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="20dp"
-                        android:text="Low"
+                        android:text="@string/low"
                         android:textColor="@color/deep_gray_transparent"
                         android:textSize="12sp" />
 
@@ -151,7 +151,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
 
-                        android:text="Medium"
+                        android:text="@string/medium"
                         android:textColor="@color/deep_gray_transparent"
                         android:textSize="12sp" />
 
@@ -161,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
-                        android:text="High"
+                        android:text="@string/high"
 
                         android:textColor="@color/deep_gray_transparent"
                         android:textSize="12sp" />
@@ -246,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="10dp"
-                android:text="Warning Area"
+                android:text="@string/warning_area"
                 android:textSize="@dimen/font_normal" />
 
             <RelativeLayout
@@ -266,7 +266,7 @@
                     android:layout_centerVertical="true"
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/cancle_circle"
-                    android:text="Bullet cam 01"
+                    android:text="@string/bullet_cam_01"
                     android:textSize="@dimen/font_normal" />
 
 
@@ -305,7 +305,7 @@
                     android:layout_centerVertical="true"
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/cancle_circle"
-                    android:text="Dome cam 01"
+                    android:text="@string/dome_cam_01"
                     android:textSize="@dimen/font_normal" />
 
 
@@ -343,7 +343,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:text="Alarm Period"
+                    android:text="@string/alarm_period"
                     android:textSize="15sp" />
 
                 <TextView
@@ -353,7 +353,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivright"
 
-                    android:text="24H alarm"
+                    android:text="@string/_24h_alarm"
                     android:textSize="10sp" />
 
                 <ImageView

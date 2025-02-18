@@ -28,7 +28,7 @@
         app:ShowBottomLine="false"
         app:ShowTopLine="false"
         app:Tip=""
-        app:Title="111"
+        app:Title="@string/_111"
         app:leftMargin="0dp"
         android:visibility="gone"/>
 
@@ -141,7 +141,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
-                android:text="Ping"
+                android:text="@string/ping"
                 app:no_press_solid="@color/white"
                 app:pressed_solid="#FCF0E5" />
 
@@ -315,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_margin="8dp"
-                    android:text="Sleep"
+                    android:text="@string/sleep"
                     android:padding="4dp"
                     android:background="@drawable/edit_text_background"
                     android:textColor="#000000"
@@ -351,7 +351,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Share"
+                        android:text="@string/share"
                         android:textSize="12sp"
                         android:textColor="#666666" />
                 </LinearLayout>
@@ -373,7 +373,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Message"
+                        android:text="@string/message"
                         android:textSize="12sp"
                         android:textColor="#666666" />
                 </LinearLayout>
@@ -395,7 +395,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Notification"
+                        android:text="@string/notification"
                         android:textSize="12sp"
                         android:textColor="#666666" />
                 </LinearLayout>
@@ -418,7 +418,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Settings"
+                        android:text="@string/settings"
                         android:textSize="12sp"
                         android:textColor="#666666" />
                 </LinearLayout>

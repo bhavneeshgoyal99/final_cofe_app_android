@@ -247,7 +247,7 @@
                     android:layout_gravity="left"
                     android:layout_marginLeft="40dp"
 
-                    android:text="Free Space"
+                    android:text="@string/free_space"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     tools:ignore="RtlHardcoded" />

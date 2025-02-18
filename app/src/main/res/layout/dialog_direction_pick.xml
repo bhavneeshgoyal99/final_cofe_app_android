@@ -23,7 +23,7 @@
                 uilib:ImageRight2="@mipmap/correct_sel"
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:ItemTitleSize="@dimen/normal_text_size"
-                uilib:Title="Into_alert"
+                uilib:Title="@string/into_alert"
                 uilib:LineColor="@color/line_color"
                 uilib:RightClickable="false"/>
             <com.xm.ui.widget.ListSelectItem
@@ -34,7 +34,7 @@
                 uilib:ImageRight2="@mipmap/correct_sel"
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:ItemTitleSize="@dimen/normal_text_size"
-                uilib:Title="Leave_alert"
+                uilib:Title="@string/leave_alert"
                 uilib:LineColor="@color/line_color"
                 uilib:RightClickable="false"/>
             <com.xm.ui.widget.ListSelectItem
@@ -45,7 +45,7 @@
                 uilib:ImageRight2="@mipmap/correct_sel"
                 uilib:ItemTitleColor="@color/default_normal_text_color"
                 uilib:ItemTitleSize="@dimen/normal_text_size"
-                uilib:Title="Two-way_alert"
+                uilib:Title="@string/two_way_alert"
                 uilib:LineColor="@color/line_color"
                 uilib:RightClickable="false"/>
             <View
@@ -70,7 +70,7 @@
                 android:layout_weight="0.99"
                 android:background="@drawable/textcolor_gray_selector"
                 android:gravity="center"
-                android:text="cancel"
+                android:text="@string/cancel"
                 android:textColor="@color/default_normal_text_color"
                 android:textSize="16sp" />
 
@@ -82,7 +82,7 @@
                 android:layout_weight="0.99"
                 android:background="@drawable/textcolor_gray_selector"
                 android:gravity="center"
-                android:text="confirm"
+                android:text="@string/confirm"
                 android:textColor="@color/theme_color"
                 android:textSize="16sp" />
         </LinearLayout>

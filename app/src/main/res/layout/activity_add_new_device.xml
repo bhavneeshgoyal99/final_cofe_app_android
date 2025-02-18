@@ -64,7 +64,7 @@
                         android:drawableEnd="@drawable/ic_about"
                         android:drawablePadding="8dp"
                         android:padding="12dp"
-                        android:text="Turn on Wi-Fi"
+                        android:text="@string/turn_on_wi_fi"
                         android:visibility="gone" />
 
                     <Button
@@ -75,7 +75,7 @@
                         android:backgroundTint="@color/white"
                         android:drawableEnd="@drawable/ic_about_24x24"
                         android:drawablePadding="8dp"
-                        android:text="Turn on Bluetooth"
+                        android:text="@string/turn_on_bluetooth"
 
                         />
                 </LinearLayout>
@@ -94,7 +94,7 @@
                         android:layout_weight=".7"
                         android:gravity="left"
                         android:paddingHorizontal="8dp"
-                        android:text="Search for available devices"
+                        android:text="@string/search_for_available_devices"
                         android:textColor="#555555"
                         android:textSize="16sp" />
 
@@ -135,7 +135,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:paddingHorizontal="8dp"
-                        android:text="Add device manually"
+                        android:text="@string/add_device_manually"
                         android:textColor="#555555"
                         android:textSize="16sp" />
 
@@ -177,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Wi-Fi Camera"
+                            android:text="@string/wi_fi_camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -205,7 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="4G Camera"
+                            android:text="@string/_4g_camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -234,7 +234,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="VIOT Station"
+                            android:text="@string/viot_station"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -262,7 +262,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="DVR/NVR"
+                            android:text="@string/dvr_nvr"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -291,7 +291,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Wired Camera"
+                            android:text="@string/wired_camera"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -317,7 +317,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="From Shared Device"
+                            android:text="@string/from_shared_device"
                             android:textColor="#555555"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -338,7 +338,7 @@
                 android:background="@drawable/button_background"
                 android:gravity="center"
 
-                android:text="Other ways to add device"
+                android:text="@string/other_ways_to_add_device"
                 android:textColor="@color/colorAccent"
                 android:textSize="14sp" />
         </RelativeLayout>

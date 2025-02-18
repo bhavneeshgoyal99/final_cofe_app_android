@@ -11,6 +11,6 @@
         android:background="@color/white"
         app:ImageRight1="@mipmap/icon_next"
         app:ItemTitleColor="@color/default_normal_text_color"
-        app:Title="tttt"/>
+        app:Title="@string/tttt"/>
 
 </LinearLayout>

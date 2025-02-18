@@ -34,7 +34,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Register"
+                    android:text="@string/register"
                     android:textSize="24sp"
                     android:textColor="#000000"
                     android:gravity="left"
@@ -56,7 +56,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="India"
+                    android:text="@string/india"
                     android:textSize="16sp"
                     android:textColor="#000000" />
 
@@ -71,7 +71,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username - Char number special character"
+                android:hint="@string/username_char_number_special_character"
                 android:padding="12dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/edit_text_background"
@@ -87,7 +87,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".7"
-                    android:hint="Please enter email"
+                    android:hint="@string/please_enter_email"
                     android:padding="12dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/edit_text_background"
@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".3"
-                    android:text="Get code"
+                    android:text="@string/get_code"
                     android:backgroundTint="@color/colorAccent"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
@@ -111,7 +111,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Please enter email verification code"
+                android:hint="@string/please_enter_email_verification_code"
                 android:padding="12dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/edit_text_background"
@@ -133,7 +133,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Please enter password"
+                    android:hint="@string/please_enter_password"
                     android:inputType="textPassword"
                     android:textColor="#000000"
                     android:background="@null"
@@ -162,7 +162,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Enter confirmation password"
+                    android:hint="@string/enter_confirmation_password"
                     android:inputType="textPassword"
                     android:textColor="#000000"
                     android:textSize="16sp"
@@ -182,7 +182,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="• Password must be 8-64 characters\n• Contains uppercase letters, lowercase letters, numbers Password can include: special chars,"
+                android:text="@string/password_must_be_8_64_characters_n_contains_uppercase_letters_lowercase_letters_numbers_password_can_include_special_chars"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="24dp" />
@@ -191,7 +191,7 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Next"
+                android:text="@string/next"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"

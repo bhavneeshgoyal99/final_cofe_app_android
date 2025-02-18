@@ -57,7 +57,7 @@
 
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivRigh2"
-                    android:text="669******367"
+                    android:text="@string/_669_367"
                     android:id="@+id/account_id_txtv"/>
 
                 <ImageView
@@ -98,7 +98,7 @@
                     style="@style/textGraysmall"
                     android:layout_centerVertical="true"
                     android:layout_toStartOf="@+id/ivRight"
-                    android:text="669******367"
+                    android:text="@string/_669_367"
                     android:id="@+id/nick_nametxtv"/>
 
                 <ImageView
@@ -152,7 +152,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="India" />
+                    android:text="@string/india" />
 
 
             </RelativeLayout>

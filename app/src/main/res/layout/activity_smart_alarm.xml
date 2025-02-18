@@ -126,7 +126,7 @@
                         android:layout_height="wrap_content"
 
 
-                        android:text="Push to WeChat"
+                        android:text="@string/push_to_wechat"
                         android:textSize="14sp" />
 
                     <TextView

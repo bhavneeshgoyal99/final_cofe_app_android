@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="JsonName(可通过选择配置名称或者直接手动输入)"
+        android:hint="@string/jsonname"
         uilib:showTopHint="false" />
 
     <com.xm.ui.widget.ListSelectItem

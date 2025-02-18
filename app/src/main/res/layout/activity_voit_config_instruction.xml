@@ -66,7 +66,7 @@
                     android:id="@+id/radioWired"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wired Connection"
+                    android:text="@string/wired_connection"
                     android:checked="true"
                     android:textColor="#000000" />
             </LinearLayout>
@@ -94,7 +94,7 @@
                     android:id="@+id/radioWifi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Wi-Fi Connection"
+                    android:text="@string/wi_fi_connection"
                     android:textColor="@color/black"
                     android:layout_marginTop="20dp"/>
 
@@ -105,7 +105,7 @@
                 android:id="@+id/nextButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Next"
+                android:text="@string/next"
                 android:textColor="@color/colorAccent"
                 android:background="@drawable/button_background"
                 android:layout_alignParentBottom="true"

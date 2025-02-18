@@ -79,7 +79,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="SN"
+                        android:text="@string/sn"
                         android:textAlignment="viewStart"
                         android:textSize="14sp"
                         />
@@ -106,7 +106,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Device Login Name"
+                        android:text="@string/device_login_name"
                         android:textSize="14sp"
                         />
 
@@ -130,7 +130,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Device Version"
+                        android:text="@string/device_version"
                         android:textSize="14sp"
                         />
 
@@ -153,7 +153,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Software Version"
+                        android:text="@string/software_version"
                         android:textSize="14sp"
                         />
 
@@ -177,7 +177,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Publish Date"
+                        android:text="@string/publish_date"
                         android:textSize="14sp"
                         />
 
@@ -201,7 +201,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Timezone"
+                        android:text="@string/timezone"
                         android:textSize="14sp"
                         />
 
@@ -249,7 +249,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Network"
+                        android:text="@string/network"
                         android:textSize="14sp"
                         />
 
@@ -274,7 +274,7 @@
                         android:layout_width="60dp"
                         android:layout_height="wrap_content"
                         android:layout_weight=".4"
-                        android:text="Manufacturing Method"
+                        android:text="@string/manufacturing_method"
                         android:textSize="14sp"
                         />
 
@@ -624,7 +624,7 @@
                     uilib:LineColor="@color/line_color"
                     uilib:RightClickable="false"
                     uilib:ShowBottomLine="true"
-                    uilib:Title="PID" />
+                    uilib:Title="@string/pid" />
 
                 <com.xm.ui.widget.ListSelectItem
                     android:id="@+id/lsi_dev_oemid"
@@ -638,7 +638,7 @@
                     uilib:LineColor="@color/line_color"
                     uilib:RightClickable="false"
                     uilib:ShowBottomLine="true"
-                    uilib:Title="OEMID"
+                    uilib:Title="@string/oemid"
                     android:visibility="gone"/>
 
                 <com.xm.ui.widget.ListSelectItem
@@ -692,7 +692,7 @@
                     uilib:LineColor="@color/line_color"
                     uilib:RightClickable="false"
                     uilib:ShowBottomLine="true"
-                    uilib:Title="ICCID"
+                    uilib:Title="@string/iccid"
                     android:visibility="gone"/>
 
 
@@ -708,7 +708,7 @@
                     uilib:LineColor="@color/line_color"
                     uilib:RightClickable="false"
                     uilib:ShowBottomLine="true"
-                    uilib:Title="IMEI"
+                    uilib:Title="@string/imet"
                     android:visibility="gone"/>
 
                 <com.xm.ui.widget.ListSelectItem
@@ -763,7 +763,7 @@
                     android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".4"
-                    android:text="Upgrade"
+                    android:text="@string/upgrade"
                     android:textSize="14sp"
                     />
 

@@ -65,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/split"
-            android:text="TR_Alarm_Period_End_Time_Can_Not_Less_Than_Or_Equal_To_Start_Time"
+            android:text="@string/tr_alarm_period_end_time_can_not_less_than_or_equal_to_start_time"
             android:gravity="center"
             android:visibility="invisible"
             android:textColor="@color/red" />
@@ -83,7 +83,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="cancel"
+                android:text="@string/cancel"
                 android:textColor="@color/login_page_color"
                 android:textSize="16sp" />
             <TextView
@@ -106,7 +106,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="confirm"
+                android:text="@string/confirm"
                 android:textColor="@color/theme_color"
                 android:textSize="16sp" />
         </LinearLayout>

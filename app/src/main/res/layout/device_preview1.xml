@@ -28,7 +28,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Open TalkChannel" />
+            android:text="@string/open_talkchannel" />
 
         <RelativeLayout
             android:id="@+id/btnVoiceTalk"
