@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.cofe.solution.ui.device.add.AddNewDeviceActivity;
+import com.cofe.solution.ui.device.add.ap.view.DevApConnectActivity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lib.SDKCONST;
 import com.lib.sdk.bean.StringUtils;
 import com.lib.sdk.bean.bluetooth.XMBleData;
@@ -475,5 +479,14 @@ public class DevBluetoothListActivity extends DemoBaseActivity<DevBluetoothConne
                 return;
             }
         }
+    }
+
+    private void showBottomNavigationDrawer() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bluethooth_bottom_sheet, null);
+
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
     }
 }

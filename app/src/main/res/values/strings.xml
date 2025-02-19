@@ -1427,6 +1427,9 @@
     <string name="close_time">close_time</string>
     <string name="intelligent_duration_2">Intelligent_duration</string>
     <string name="video_model">Video_Model</string>
+    <string name="device_in_the_queue_1_device">Device in the queue: 1 device</string>
+    <string name="wifirobotdfbo">WiFiRobotDFBO</string>
+    <string name="following_device_found">Following device found</string>
 
 
 </resources>
