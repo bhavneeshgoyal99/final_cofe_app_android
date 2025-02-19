@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    android:id="@+id/parent_rl">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null"
+        >
+
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/common_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="visible"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="@dimen/half_of_normal_margin"
+        android:paddingLeft="@dimen/half_of_normal_margin"
+        android:paddingRight="@dimen/half_of_normal_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/half_of_normal_margin"
+                android:background="@drawable/rounder_corner"
+                >
+
+                <TextView
+                    android:id="@+id/share_all_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/share_all"
+                    android:textSize="16sp"
+                    android:padding="@dimen/half_of_normal_margin"
+                    />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/toggle_checkboxes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rounder_corner"
+                android:paddingTop="@dimen/half_of_normal_margin"
+                android:orientation="vertical"
+                >
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/button_margin"
+                    android:visibility="gone"
+                    >
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/ptz_ll"
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/set_ic_ptz" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/ptz"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/share_ll"
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_share" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/intercom"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/storage_ll"
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_micro_sd_card" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/local_storage"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Change Device Config -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/button_margin"
+                    android:visibility="gone"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/config_ll"
+
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_setting" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/change_device_config"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            android:paddingBottom="@dimen/button_margin"
+
+                            />
+                    </LinearLayout>
+
+                    <!-- Push -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/push_ll"
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_mute" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/push"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".3"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:id="@+id/cloud_ll"
+                        >
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_cloud" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/view_cloud_video"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_marginTop="@dimen/half_of_normal_margin"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/di_20"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:background="@drawable/rounder_corner"
+        >
+        <TextView
+            android:id="@+id/viewChangePermission"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/change_permission"
+            android:textColor="@color/theme"
+            android:textSize="14sp"
+            android:paddingVertical="16dp"
+
+            android:gravity="center"
+            />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

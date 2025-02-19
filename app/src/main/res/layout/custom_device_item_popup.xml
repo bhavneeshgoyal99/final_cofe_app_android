@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_background"
+    android:padding="10dp"
+
+    android:elevation="4dp">
+
+    <TextView
+        android:id="@+id/popup_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/name"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:textStyle="bold"
+        
+        />
+
+    <TextView
+        android:id="@+id/popup_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/d87bba580a55_3mn9_p25"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:drawableEnd="@drawable/copy_icon"
+        android:drawablePadding="20dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_grey"
+        />
+    <TextView
+        android:id="@+id/message_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_conversation_24x24"
+        android:text="@string/message"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@android:color/black"
+        android:gravity="left"
+        android:drawablePadding="@dimen/button_margin"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_grey"
+        />
+
+    <TextView
+        android:id="@+id/share_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_share_24x24"
+        android:text="@string/share_with_friends"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@android:color/black"
+        android:drawablePadding="@dimen/button_margin"
+
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_grey"
+        />
+
+    <TextView
+        android:id="@+id/settings_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_setting_24x24"
+        android:text="@string/settings"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@android:color/black"
+        android:drawablePadding="@dimen/button_margin"
+
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_grey"
+        />
+
+    <TextView
+        android:id="@+id/cloud_storage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_cloud_24x24"
+        android:text="@string/device_setup_record_cloud"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@android:color/black"
+        android:drawablePadding="@dimen/button_margin"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lighter_grey"
+        />
+    <TextView
+        android:id="@+id/delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/delete_icon"
+        android:text="@string/delete_1"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:background="@drawable/button_background_selector"
+        android:textColor="@android:color/black"
+        android:drawablePadding="@dimen/button_margin"
+
+        />
+
+</LinearLayout>

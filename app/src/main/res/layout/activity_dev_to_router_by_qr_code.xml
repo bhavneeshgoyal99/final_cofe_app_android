@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/parent_rl">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null">
+
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="visible" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/half_of_normal_margin"
+        android:paddingLeft="@dimen/half_of_normal_margin"
+        android:paddingRight="@dimen/half_of_normal_margin"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="50dp"
+        >
+
+
+
+            <RelativeLayout
+            android:id="@+id/layoutRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+                android:background="@color/white"
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_wifi_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <EditText
+                    android:id="@+id/editWifiSSID"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_margin="10dp"
+                    android:background="#00000000"
+                    android:gravity="center_vertical"
+                    android:hint="@string/device_opt_set_wifi_hint_ssid"
+                    android:singleLine="true"
+                    android:textColor="#ff101010"
+                    android:textColorHint="#ffe0e0e0"
+                    android:textSize="16dp" />
+
+                <View
+                    android:id="@+id/divLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/bg_gray" />
+
+                <EditText
+                    android:id="@+id/editWifiPasswd"
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp"
+                    android:layout_margin="10dp"
+                    android:background="#00000000"
+                    android:gravity="center_vertical"
+                    android:hint="@string/device_opt_set_wifi_hint_passwd"
+                    android:singleLine="true"
+                    android:textColor="#ff101010"
+                    android:textColorHint="#ffe0e0e0"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/btn_show_qr_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/common_button_selector_white"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/libfunsdk_set_dev_to_router_by_qr_code"
+                    android:textColor="@drawable/common_text_selector"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/btn_show_qr_code_simple"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/common_button_selector_white"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/libfunsdk_set_dev_to_router_by_qr_code"
+                    android:textColor="@drawable/common_text_selector"
+                    android:textSize="18dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_show_qr_code_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/common_button_selector_white"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/generate_qr_code"
+                android:textColor="@drawable/common_text_selector"
+                android:textSize="18dp"
+                android:visibility="gone"/>
+
+
+            <LinearLayout
+                android:id="@+id/rl_show_qr_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/btn_show_qr_code_1"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:layout_marginTop="10dp"
+                >
+                <ImageView
+                    android:id="@+id/iv_qr_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"/>
+
+
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:layout_width="match_parent"
+                        android:layout_height="270dp"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/viewPager"
+                        />
+                <!-- Dots Indicator -->
+                <LinearLayout
+                    android:id="@+id/indicatorLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_result_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="16dp"
+                android:text="@string/qr_code_network_configuration_prompt"                    android:textColor="@color/colorAccent"
+                android:background="@drawable/button_background"
+                android:visibility="gone"
+                />
+
+            <Button
+                android:id="@+id/cancle_button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:text="@string/cancle"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/button_background"
+                android:layout_marginBottom="?actionBarSize"
+                />
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

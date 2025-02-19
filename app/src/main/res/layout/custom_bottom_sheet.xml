@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/dialog_root_view"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:id="@+id/cancle_button"
+        android:src="@drawable/close_circle_icon"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:id="@+id/parent_rl"
+        android:layout_marginTop="@dimen/button_margin"
+        android:layout_below="@+id/cancle_button"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_message"
+        android:title="Message"
+        android:icon="@drawable/ic_conversation" />
+    <item
+        android:id="@+id/action_share"
+        android:title="Share with Friends"
+        android:icon="@drawable/ic_share" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_setting" />
+    <item
+        android:id="@+id/action_cloud"
+        android:title="Cloud Storage"
+        android:icon="@drawable/ic_server" />
+    <item
+        android:id="@+id/action_delete"
+        android:title="Delete"
+         />
+</menu>

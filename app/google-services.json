@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "409496798944",
+    "project_id": "cofe-online-solutions",
+    "storage_bucket": "cofe-online-solutions.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409496798944:android:ccacfa29d9ed7b8779f285",
+        "android_client_info": {
+          "package_name": "com.cofe.solution"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtOTpmYlJTkWFpuQYgTOI9VYVYwpzsUX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

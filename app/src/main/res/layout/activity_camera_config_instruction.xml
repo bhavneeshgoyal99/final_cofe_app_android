@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/parent_rl">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null">
+
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="visible" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/half_of_normal_margin"
+        android:paddingLeft="@dimen/half_of_normal_margin"
+        android:paddingRight="@dimen/half_of_normal_margin"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="50dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <!-- Instruction Text -->
+            <TextView
+                android:id="@+id/instructionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text = "@string/if_you_hear_start_quick_config_or_waiting_for_connection_from_the_device_click_next"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:gravity="center" />
+
+                <ImageView
+                    android:id="@+id/wifiIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@id/instructionText"
+                    android:layout_marginTop="100dp"
+                    android:src="@drawable/wifi_config"
+                    android:contentDescription="WiFi Icon"
+                    android:layout_centerHorizontal="true"
+                    />
+
+            <!-- Secondary Instruction -->
+            <TextView
+                android:id="@+id/secondaryInstruction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/wifiIcon"
+                android:layout_marginTop="50dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/if_you_don_t_hear_the_alert_tone_press_and_hold_the_set_reset_button_for_about_6_seconds_and_release_the_button_until_you_hear_the_restoring_factory_defaults_please_don_t_power_off_alert_tone_reconnect_after_the_device_restores_the_factory_defaults"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:gravity="center" />
+
+            <!-- Highlighted Note -->
+            <TextView
+                android:id="@+id/highlightedNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/secondaryInstruction"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/to_locate_the_reset_button_see_the_sign_on_the_device_or_the_user_manual"
+                android:textColor="@color/colorAccent"
+                android:textSize="12sp"
+                android:gravity="center" />
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:text="@string/next"
+                android:textColor="@color/colorAccent"
+                android:background="@drawable/button_background"
+                android:layout_marginBottom="?actionBarSize"
+                />
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

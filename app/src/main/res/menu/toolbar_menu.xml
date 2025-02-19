@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/option1"
+        android:title="@string/add_device"
+        android:icon="@drawable/ic_image"/>
+    <item
+        android:id="@+id/option2"
+        android:title="@string/scan"
+        android:icon="@drawable/ic_scan"/>
+</menu>

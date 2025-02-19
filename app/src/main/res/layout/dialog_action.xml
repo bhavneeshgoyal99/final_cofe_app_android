@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
+    android:padding="10dp"
+    android:background="@drawable/solid_white_20">
+
+    <ImageView
+        android:id="@+id/ivCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cancle_circle"
+        android:layout_gravity="end"
+        android:padding="5dp"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_normal"
+        android:text="@string/select_action"
+        android:gravity="center"
+
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_operation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="24dp">
+
+        <Button
+            android:id="@+id/btnChangePermission"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="@string/change_permission"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:background="@drawable/solid_theme"
+            />
+
+        <Button
+            android:id="@+id/btnCancelSharing"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="@string/cancel_sharing"
+            android:textAllCaps="false"
+
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black_opac_60"
+            android:background="@drawable/solid_gray"/>
+    </LinearLayout>
+</LinearLayout>

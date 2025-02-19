@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/parent_rl">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null">
+
+        <!-- Top Title Layout -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:visibility="visible" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:paddingBottom="@dimen/half_of_normal_margin"
+        android:paddingLeft="@dimen/half_of_normal_margin"
+        android:paddingRight="@dimen/half_of_normal_margin"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
+
+        <!-- Content Layout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:background="@color/white"
+            >
+
+            <!-- Instruction Text -->
+            <TextView
+                android:id="@+id/instructionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:text="@string/follow_the_description_of_how_to_power_on_the_camera_in_the_manual_to_ensure_that_the_camera_can_be_normally_turned_on"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:layout_centerHorizontal="true" />
+
+            <!-- WiFi Icon -->
+            <ImageView
+                android:id="@+id/wifiIcon"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@id/instructionText"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/wifi_power"
+                android:contentDescription="WiFi Icon"
+                android:layout_centerHorizontal="true" />
+
+            <!-- Next Button -->
+            <Button
+                android:id="@+id/nextButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/next"
+                android:background="@drawable/button_background"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="?actionBarSize"
+                android:textColor="@color/colorAccent"
+                />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

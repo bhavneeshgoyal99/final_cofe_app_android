@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:uilib="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <!-- AppBarLayout for the Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        app:liftOnScroll="false"
+        app:elevation="0dp"
+        android:translationZ="0.1dp"
+        android:stateListAnimator="@null"
+        >
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"/>
+
+        <!-- Title Bar -->
+        <include
+            android:id="@+id/toolbar_cont"
+            layout="@layout/titlebar_with_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content Section -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true"
+        android:paddingBottom="70dp"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+            <com.xm.ui.widget.ListSelectItem
+                android:id="@+id/lsi_push_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                uilib:Title="@string/push_switch"
+                uilib:ItemTitleSize="@dimen/small_text_size"
+                uilib:ItemTitleColor="@color/default_normal_text_color"
+                uilib:ShowBottomLine="true"
+                uilib:LineColor="@color/line_color"
+                uilib:ImageRight1="@mipmap/icon_checked_no"
+                uilib:ImageRight2="@mipmap/icon_checked_yes"
+                uilib:RightClickable="false"
+                android:background="@color/white"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

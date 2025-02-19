@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/no_play_back_txtv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/parent_ll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_background"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/wnd_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:background="#ff000000">
+
+                    <FrameLayout
+                        android:id="@+id/layoutPlayWnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.xm.ui.widget.XMSeekBar
+                            android:id="@+id/xb_seek_to_record"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/videoProgressArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="#8c000000"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingBottom="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/videoProgressCurrentTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="#ffe0e0e0"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/videoProgressDurationTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="#ffe0e0e0"
+                            android:textSize="12dp" />
+
+                        <SeekBar
+                            android:id="@+id/videoProgressSeekBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/videoProgressDurationTime"
+                            android:layout_toRightOf="@id/videoProgressCurrentTime"
+                            android:maxHeight="5dp"
+                            android:minHeight="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:progressDrawable="@drawable/video_control_seekbar_bg"
+                            android:thumb="@mipmap/video_control_seekbar_thumb_bg" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tv_play_speed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/wnd_cover_gray"
+                        android:text=""
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RadioGroup
+                    android:id="@+id/rg_way_to_get_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/rb_by_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/device_camera_video_by_file" />
+
+                    <RadioButton
+                        android:id="@+id/rb_by_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/device_camera_video_by_time" />
+
+                </RadioGroup>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_record_fun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:id="@+id/banner_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvRecordTimeAxis"
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_records"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

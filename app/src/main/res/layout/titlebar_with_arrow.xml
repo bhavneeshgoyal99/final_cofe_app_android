@@ -1,0 +1,65 @@
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:elevation="4dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_of_normal_margin"
+        >
+    <!-- Back Button -->
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back_arrow_icon"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="back_button"
+        android:layout_gravity="center_vertical"
+        android:visibility="visible"/>
+
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="Title"
+        android:textSize="@dimen/font_large"
+        android:textColor="@color/black"
+        android:textStyle="normal"
+        android:gravity="center"
+        android:layout_toRightOf="@+id/back_button"
+        />
+
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:text="Save"
+            android:textSize="@dimen/font_normal"
+            android:textColor="@color/white"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorAccent"
+            android:visibility="gone"
+        />
+
+        <ImageView
+            android:id="@+id/img_btn"
+            android:src="@drawable/calendar_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+
+
+
+    </RelativeLayout>
+
+</androidx.appcompat.widget.Toolbar>

@@ -1,0 +1,83 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+    <!--  AppBarLayout for the Toolbar  -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:stateListAnimator="@null"
+        android:translationZ="0.1dp"
+        app:elevation="0dp"
+        app:liftOnScroll="false">
+        <!--  Top Title Layout  -->
+        <include
+            android:id="@+id/layoutTop"
+            layout="@layout/include_title_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_scrollFlags="scroll|enterAlways" />
+        <!--  Toolbar  -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/new_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:layout_scrollFlags="scroll|enterAlways" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!--  SwipeRefreshLayout with RecyclerView  -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sl_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listViewDevice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="70dp"
+            android:scrollbars="none" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    <!--  No Device Container  -->
+    <LinearLayout
+        android:id="@+id/no_device_cont_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/add_img"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/plus_circle_icon"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/text_txtv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/add_new_dev"
+            android:textSize="@dimen/middle_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <!--  Bottom Navigation Bar  -->
+    <include
+        android:id="@+id/bottom_nav_bar"
+        layout="@layout/bottom_bav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
