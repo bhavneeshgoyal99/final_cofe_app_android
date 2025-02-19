@@ -16,5 +16,5 @@
         uilib:ItemTitleColor="@color/default_normal_text_color"
         uilib:ItemTitleSize="@dimen/normal_text_size"
         uilib:RightClickable="false"
-        uilib:Title="irCut" />
+        uilib:Title="@string/ircut_2" />
 </LinearLayout>

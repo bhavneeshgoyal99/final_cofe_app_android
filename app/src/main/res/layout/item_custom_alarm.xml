@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        android:text="00:20-24:00"
+        android:text="@string/_00_20_24_00"
         android:textSize="15sp" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/ivright"
 
-        android:text="Disabled"
+        android:text="@string/disabled"
         android:textSize="10sp" />
 
     <ImageView

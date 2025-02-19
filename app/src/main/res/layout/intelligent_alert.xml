@@ -24,7 +24,7 @@
             uilib:ShowBottomLine="true"
             uilib:ShowSwitch="true"
             uilib:ShowTopLine="false"
-            uilib:Title="TR_Intelligent_Warning_Switch" />
+            uilib:Title="@string/tr_intelligent_warning_switch" />
 
         <LinearLayout
             android:id="@+id/ll_smart_alarm_set"
@@ -47,7 +47,7 @@
                 uilib:RightClickable="false"
                 uilib:ShowBottomLine="true"
                 uilib:ShowTopLine="false"
-                uilib:Title="TR_Continuous_alarm_time" />
+                uilib:Title="@string/tr_continuous_alarm_time" />
 
             <com.xm.ui.widget.ListSelectItem
                 style="@style/baseListSelectItemStyle"
@@ -64,7 +64,7 @@
                 uilib:RightClickable="false"
                 uilib:ShowBottomLine="true"
                 uilib:ShowTopLine="false"
-                uilib:Title="TR_Alarm_volume" />
+                uilib:Title="@string/tr_alarm_volume" />
 
             <com.xm.ui.widget.ListSelectItem
                 style="@style/baseListSelectItemStyle"
@@ -81,7 +81,7 @@
                 uilib:RightClickable="false"
                 uilib:ShowBottomLine="true"
                 uilib:ShowTopLine="false"
-                uilib:Title="TR_Alarm_ringtone" />
+                uilib:Title="@string/tr_alarm_ringtone" />
 
             <com.xm.ui.widget.ListSelectItem
                 style="@style/baseListSelectItemStyle"
@@ -95,7 +95,7 @@
                 uilib:ShowBottomLine="true"
                 uilib:ShowSwitch="true"
                 uilib:ShowTopLine="false"
-                uilib:Title="TR_Alarm_Light_Switch" />
+                uilib:Title="@string/tr_alarm_light_switch" />
 
             <com.xm.ui.widget.ListSelectItem
                 style="@style/baseListSelectItemStyle"
@@ -111,7 +111,7 @@
                 uilib:RightClickable="false"
                 uilib:ShowBottomLine="true"
                 uilib:ShowTopLine="false"
-                uilib:Title="TR_Human_body_induction_alarm" />
+                uilib:Title="@string/tr_human_body_induction_alarm" />
         </LinearLayout>
 
     </LinearLayout>

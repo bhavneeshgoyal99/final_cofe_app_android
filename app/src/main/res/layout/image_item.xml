@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/item_min_height"
-        android:text="第一张"
+        android:text="@string/pic_name"
         android:gravity="center"
         android:layout_gravity="bottom"
         android:id="@+id/tv_pic_name"

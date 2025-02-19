@@ -33,7 +33,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="az*****jh7"
+            android:text="@string/az_jh7"
             android:textColor="@color/colorTextBlack"
             android:textSize="@dimen/font_small" />
         <TextView
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="Agreed"
+            android:text="@string/agreed"
             android:textColor="@color/colorTextBlack"
             android:textSize="10dp" />
 

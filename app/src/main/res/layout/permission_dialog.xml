@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
             android:minHeight="60dp"
-            android:text="Permission_Request"
+            android:text="@string/permission_request"
             android:textColor="@android:color/white" />
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
-            android:text="在设置-应用-超级看看-权限"
+            android:text="@string/title_tip"
             android:textColor="@android:color/white" />
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="cancel"
+                android:text="@string/cancel"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:paddingLeft="15dp"
-                android:text="Go_To_Setting"
+                android:text="@string/go_to_setting"
                 android:textColor="@color/theme_color" />
         </LinearLayout>
 

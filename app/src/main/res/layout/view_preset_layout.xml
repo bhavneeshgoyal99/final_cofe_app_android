@@ -75,7 +75,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="1"
+            android:text="@string/_1"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -89,7 +89,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="2"
+            android:text="@string/_2"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -103,7 +103,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="3"
+            android:text="@string/_3"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -117,7 +117,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="4"
+            android:text="@string/_4"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
     </LinearLayout>
@@ -136,7 +136,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="5"
+            android:text="@string/_5"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -150,7 +150,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="6"
+            android:text="@string/_6"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -164,7 +164,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="7"
+            android:text="@string/_7"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -178,7 +178,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="8"
+            android:text="@string/_8"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
     </LinearLayout>
@@ -197,7 +197,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="9"
+            android:text="@string/_9"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 
@@ -211,7 +211,7 @@
             uilib:no_press_solid="@color/button_normal_color"
             uilib:pressed_solid="@color/button_pressed_color"
             android:layout_margin="2dp"
-            android:text="0"
+            android:text="@string/_0"
             android:textColor="@color/default_normal_text_color"
             android:textSize="@dimen/normal_text_size"/>
 

@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="876756 *****jh7"
+            android:text="@string/_876756_jh7"
             android:textColor="@color/colorTextBlack"
             android:textSize="@dimen/font_small" />
         <TextView
@@ -44,7 +44,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@+id/ivSharingManagement"
-            android:text="Shared with 1 user"
+            android:text="@string/shared_with_1_user"
             android:textColor="@color/colorTextBlack"
             android:textSize="10dp" />
 

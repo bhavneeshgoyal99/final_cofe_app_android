@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/set_img_bubble"
             android:gravity="center"
-            android:text="111"
+            android:text="@string/_111"
             android:textColor="@color/white"
             android:visibility="visible"
             uilib:layout_constraintLeft_toLeftOf="parent"
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekbar"
         android:layout_marginStart="@dimen/dp_10"
-        android:text="TR_Low"
+        android:text="@string/tr_low"
         android:textColor="#ff999999"
         uilib:layout_constraintStart_toStartOf="@+id/seekbar"
         uilib:layout_constraintTop_toBottomOf="@+id/seekbar" />
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekbar"
         android:layout_marginEnd="@dimen/dp_10"
-        android:text="TR_High"
+        android:text="@string/tr_high"
         android:textColor="#ff999999"
         uilib:layout_constraintEnd_toEndOf="@+id/seekbar"
         uilib:layout_constraintTop_toBottomOf="@+id/seekbar" />

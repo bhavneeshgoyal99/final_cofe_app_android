@@ -43,7 +43,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="20dp"
             android:textColor="@color/theme"
-            android:text="All Devices"
+            android:text="@string/all_devices"
             android:textSize="14sp" />
 
 

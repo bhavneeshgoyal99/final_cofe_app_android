@@ -23,7 +23,7 @@
             uilib:ShowBottomLine="true"
             uilib:ShowSwitch="true"
             uilib:ShowTopLine="false"
-            uilib:Title="TR_Light_Up_Switch" />
+            uilib:Title="@string/tr_light_up_switch" />
 
         <LinearLayout
             android:id="@+id/ll_light_seekbar"
@@ -38,7 +38,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="TR_Adjustment_Of_Brightness"
+                android:text="@string/tr_adjustment_of_brightness"
                 android:textColor="@color/item_text_color"
                 android:textSize="@dimen/item_text_size" />
 
@@ -88,7 +88,7 @@
             uilib:RightClickable="false"
             uilib:ShowBottomLine="true"
             uilib:ShowTopLine="false"
-            uilib:Title="TR_PIR_Detection" />
+            uilib:Title="@string/tr_pir_detection" />
 
         <!-- 智能警戒开关 -->
         <com.xm.ui.widget.ListSelectItem
@@ -103,7 +103,7 @@
             uilib:ShowBottomLine="true"
             uilib:ShowSwitch="true"
             uilib:ShowTopLine="false"
-            uilib:Title="TR_Intelligent_Warning_Switch" />
+            uilib:Title="@string/tr_intelligent_warning_switch" />
     </LinearLayout>
 
 </LinearLayout>
