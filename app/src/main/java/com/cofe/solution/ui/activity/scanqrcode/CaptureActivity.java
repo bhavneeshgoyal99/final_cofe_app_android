@@ -421,7 +421,7 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 			Intent intent = new Intent();
 			intent.putExtra("result", result.getText());
 			setResult(RESULT_OK, intent);
-			Toast.makeText(this, "Scanned: " + result.getText(), Toast.LENGTH_LONG).show();
+			Toast.makeText(this, getString(R.string.scanned) + result.getText(), Toast.LENGTH_LONG).show();
 			finish();
 		} catch (NotFoundException e) {
 			finish();
@@ -430,7 +430,7 @@ public final class CaptureActivity extends DemoBaseActivity implements SurfaceHo
 		} catch (Exception e) {
 			finish();
 			e.printStackTrace();
-			 Toast.makeText(this, "No barcode found", Toast.LENGTH_SHORT).show();
+			 Toast.makeText(this, getString(R.string.no_barcode_found), Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -82,7 +82,7 @@ public class FromSharedDeviceAdapter extends RecyclerView.Adapter<FromSharedDevi
         Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
         Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
         Log.d("FULL DA", String.valueOf(data.get(0).getShareState()));
-        holder.tv2.setText("sharing from "+data.get(position).getAccount()+"(Agreed)");
+        holder.tv2.setText(activity.getString(R.string.sharing_from)+""+data.get(position).getAccount()+""+activity.getString(R.string.agreed_with_braces));
         holder.tv1.setText(data.get(position).getDevId());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

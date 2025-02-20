@@ -97,9 +97,9 @@ public class InputWiFiInfoActivityForQr extends DemoBaseActivity {
                         intent.putExtra("mac", mac);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(wifiSSIDEdit.getContext(), "Please  enter wifi password", Toast.LENGTH_LONG).show();
+                        Toast.makeText(wifiSSIDEdit.getContext(), getString(R.string.please_enter_wifi_password), Toast.LENGTH_LONG).show();
                 } else{
-                    Toast.makeText(wifiSSIDEdit.getContext(), "Please  enter wifi SSID", Toast.LENGTH_LONG).show();
+                    Toast.makeText(wifiSSIDEdit.getContext(), getString(R.string.please_enter_wifi_ssid), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -168,10 +168,10 @@ public class InputWiFiInfoActivityForQr extends DemoBaseActivity {
                     disposable = null;
                 }
                 if (result instanceof Integer && (Integer) result == 0) {
-                    Toast.makeText(InputWiFiInfoActivityForQr.this, FunSDK.TS("Network_Error"), Toast.LENGTH_LONG).show();
+                    Toast.makeText(InputWiFiInfoActivityForQr.this, FunSDK.TS(getString(R.string.network_error)), Toast.LENGTH_LONG).show();
                 } else {
                     if ((((ScanResult) result).frequency > 4900 && ((ScanResult) result).frequency < 5900)) {
-                        Toast.makeText(InputWiFiInfoActivityForQr.this, FunSDK.TS("Frequency_support"), Toast.LENGTH_LONG).show();
+                        Toast.makeText(InputWiFiInfoActivityForQr.this, FunSDK.TS(getString(R.string.frequency_support)), Toast.LENGTH_LONG).show();
                     }
 
                     String curSSID = xmWifiManager.getSSID();

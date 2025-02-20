@@ -140,7 +140,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
         if (context instanceof Activity) {
             this.activity = (DevMonitorActivity) context;
         } else {
-            throw new ClassCastException(context.toString() + " must be an instance of DevMonitorActivity");
+            throw new ClassCastException(context.toString() + getString(R.string.must_be_an_instance_of_devmonitoractivity));
         }
     }
 
@@ -192,7 +192,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
                         return true;
                     case R.id.menu_item2:
                         // Delete all messages
-                        XMPromptDlg.onShow(activity, "Are you sure you want to delete all messages, images, and videos?", new View.OnClickListener() {
+                        XMPromptDlg.onShow(activity, getString(R.string.are_you_sure_you_want_to_delete_all_messages_images_and_videos), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 presenter.deleteAllAlarmMsg();
@@ -211,7 +211,7 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
     public void onUpdateView() {
         activity.loaderDialog.dismiss();
         if (presenter.getAlarmInfoSize() <= 0) {
-            showToast("No alarm notifications found", Toast.LENGTH_LONG);
+            showToast(getString(R.string.no_alarm_notifications_found), Toast.LENGTH_LONG);
             noDataContLl.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
 
@@ -231,14 +231,14 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevAlarmPresenter> imp
 
     @Override
     public void onDeleteAlarmMsgResult(boolean isSuccess) {
-        showToast(isSuccess ? "Delete successful" : "Delete failed", Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.delete_successful) : getString(R.string.delete_failed), Toast.LENGTH_LONG);
         alarmMsgAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onShowPicResult(boolean isSuccess, Bitmap bitmap) { // Download picture display
         activity.loaderDialog.dismiss();
-        showToast(isSuccess ? "Image download successful" : "Image download failed", Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.image_download_successful) : getString(R.string.image_download_failed), Toast.LENGTH_LONG);
         if (isSuccess && bitmap != null) {
             ImageView imageView = new ImageView(activity.getContext());
             imageView.setImageBitmap(bitmap);

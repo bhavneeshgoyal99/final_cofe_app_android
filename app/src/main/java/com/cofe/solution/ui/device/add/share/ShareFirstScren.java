@@ -127,13 +127,13 @@ public class ShareFirstScren extends AppCompatActivity {
         // Set OnClickListener for sharing methods
         shareQRCodeIcon.setOnClickListener(v ->
 
-                sharQR("Share QR Code selected")
+                sharQR(getString(R.string.share_qr_code_selected))
 
         );
-        accountShareIcon.setOnClickListener(v ->showToast("Account Share selected"));
+        accountShareIcon.setOnClickListener(v ->showToast(getString(R.string.account_share_selected)));
 
         // Set OnClickListener for footer link
-        footerLink.setOnClickListener(v -> showToast("View Share Management clicked"));
+        footerLink.setOnClickListener(v -> showToast(getString(R.string.view_share_management_clicked)));
     }
 
     // Helper method to display a Toast message

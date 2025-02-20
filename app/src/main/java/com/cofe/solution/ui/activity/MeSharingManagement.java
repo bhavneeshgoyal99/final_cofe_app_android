@@ -93,14 +93,14 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
 
     private void initUis() {
         loaderDialog = new LoaderDialog(this);
-        loaderDialog.setMessage("Please wait...");
+        loaderDialog.setMessage(getString(R.string.please_wait));
         // Initialize the second presenter
         shareDevListPresenter = new ShareDevListPresenter(this);
         //
         data = new ArrayList<>();
         myShareUserInfoBeans = new ArrayList<>();
         tvTitleHeader = findViewById(R.id.toolbar_title);
-        tvTitleHeader.setText("Sharing Management");
+        tvTitleHeader.setText(getString(R.string.sharing_management));
 
         back_button = findViewById(R.id.back_button);
         llFromSharedDevice = findViewById(R.id.llFromSharedDevice);
@@ -137,7 +137,7 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
             }
         });
         rvFromSharedDevice.setAdapter(fromSharedDeviceAdapter);
-        tvTitleHeader.setText("Sharing Management");
+        tvTitleHeader.setText(getString(R.string.sharing_management));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -325,7 +325,7 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
             loaderDialog.dismiss();
         }
         if (otherShareDevUserBeans != null && !otherShareDevUserBeans.isEmpty()) {
-            llFromSharedDeviceCount.setText("Get " + otherShareDevUserBeans.size() + " times device share");
+            llFromSharedDeviceCount.setText(getString(R.string.get)+" " + otherShareDevUserBeans.size() + " "+getString(R.string.times_device_share));
             fromSharedDeviceAdapter.setData(otherShareDevUserBeans);
         }
     }
@@ -369,7 +369,7 @@ public class MeSharingManagement extends DemoBaseActivity<DevShareAccountListPre
                     data.add(myShareUserInfoBean.getAccount() + "[" + strShareState + "]");
                 }
             }
-            tvMySharingCount.setText("Initiated " + myShareUserInfoBeans.size() + " items device share");
+            tvMySharingCount.setText(getString(R.string.initiated)+" " + myShareUserInfoBeans.size() + getString(R.string.items_device_share));
             muSharedDeviceAdapter.setData(myShareUserInfoBeans);
         } else {
             // muSharedDeviceAdapter.setData(null);

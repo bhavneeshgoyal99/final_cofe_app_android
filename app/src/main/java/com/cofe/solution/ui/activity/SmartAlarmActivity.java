@@ -41,7 +41,7 @@ public class SmartAlarmActivity extends AppCompatActivity {
 
 
 
-        tvTitleHeader.setText("Smart Alarm");
+        tvTitleHeader.setText(getString(R.string.smart_alarm));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

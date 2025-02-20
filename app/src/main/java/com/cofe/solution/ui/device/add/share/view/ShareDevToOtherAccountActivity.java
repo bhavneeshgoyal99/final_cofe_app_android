@@ -193,7 +193,7 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
 
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to share the screenshot", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.failed_to_share_the_screenshot), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -210,23 +210,23 @@ public class ShareDevToOtherAccountActivity extends DemoBaseActivity<DevShareCon
             String savedImageURL = MediaStore.Images.Media.insertImage(
                     getContentResolver(),
                     qrBitmap,
-                    "QRCode_" + System.currentTimeMillis(),
-                    "QR code image saved by the app"
+                    getString(R.string.qrcode) + System.currentTimeMillis(),
+                    getString(R.string.qr_code_image_saved_by_the_app)
             );
 
             if (savedImageURL != null) {
                 // Notify the user that the QR code has been saved
-                Toast.makeText(this, "QR code saved to Gallery", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.qr_code_saved_to_gallery), Toast.LENGTH_SHORT).show();
 
                 // Optionally, you can log or use the saved image URL
                 System.out.println("Saved Image URL: " + savedImageURL);
             } else {
                 // Notify the user if saving failed
-                Toast.makeText(this, "Failed to save QR code", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.failed_to_save_qr_code), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "An error occurred while saving the QR code", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.an_error_occurred_while_saving_the_qr_code), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -40,7 +40,7 @@ public class NetworkSettings extends AppCompatActivity {
         tvSave=findViewById(R.id.tvSave);
         tvSave.setVisibility(View.VISIBLE);
 
-        tvTitleHeader.setText("Network Settings");
+        tvTitleHeader.setText(getString(R.string.network_settings));
 
         rvWifiList.setLayoutManager(new LinearLayoutManager(this));
         rvWifiList.setAdapter(new WifiListAdapter(this));

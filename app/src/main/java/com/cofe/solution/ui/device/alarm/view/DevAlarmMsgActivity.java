@@ -167,7 +167,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
     public void onUpdateView() {
         loaderDialog.dismiss();
         if (presenter.getAlarmInfoSize() <= 0) {
-            showToast("No alarm notifications found", Toast.LENGTH_LONG);
+            showToast(getString(R.string.no_alarm_notifications_found), Toast.LENGTH_LONG);
             noDataContLl.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
 
@@ -187,14 +187,14 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
 
     @Override
     public void onDeleteAlarmMsgResult(boolean isSuccess) {
-        showToast(isSuccess ? "Delete successful" : "Delete failed", Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.delete_successful) : getString(R.string.delete_failed), Toast.LENGTH_LONG);
         alarmMsgAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onShowPicResult(boolean isSuccess, Bitmap bitmap) { // Download picture display
         loaderDialog.dismiss();
-        showToast(isSuccess ? "Image download successful" : "Image download failed", Toast.LENGTH_LONG);
+        showToast(isSuccess ? getString(R.string.image_download_successful) : getString(R.string.image_download_failed), Toast.LENGTH_LONG);
         if (isSuccess && bitmap != null) {
             ImageView imageView = new ImageView(this);
             imageView.setImageBitmap(bitmap);
@@ -231,8 +231,8 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                 AlarmTranslationIconBean alarmTranslationIconBean = new AlarmTranslationIconBean();
                 String eventTitlte  = alarmInfo.getEvent().replace("Alarm","")
                         .replace("appEvent","");
-                eventTitlte = eventTitlte.equals("Human")?"Human Detection": eventTitlte;
-                eventTitlte = eventTitlte.equals("VideoBlind")?"Video Blind": eventTitlte;
+                eventTitlte = eventTitlte.equals("Human")?getString(R.string.human_detection): eventTitlte;
+                eventTitlte = eventTitlte.equals("VideoBlind")?getString(R.string.video_blind): eventTitlte;
                 holder.detectionText.setText(eventTitlte);
 
                 //Object afterTranslation = ((SDKDemoApplication) getApplication()).getAlarmTranslationIconBean().getLanguageInfo().get("ZH").get(alarmInfo.getEvent());
@@ -264,7 +264,7 @@ public class DevAlarmMsgActivity extends DemoBaseActivity<DevAlarmPresenter> imp
                 } else {
                     holder.photoImage.setVisibility(View.GONE);
                 }
-                holder.photoImage.setTag((alarmInfo.isVideoInfo())?"video":"image");
+                holder.photoImage.setTag((alarmInfo.isVideoInfo())?getString(R.string.video):getString(R.string.image));
                 //holder.btnVideo.setVisibility(alarmInfo.isVideoInfo() ? View.VISIBLE : View.GONE);
 
 

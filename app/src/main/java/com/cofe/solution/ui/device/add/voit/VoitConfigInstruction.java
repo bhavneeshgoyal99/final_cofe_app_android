@@ -68,9 +68,9 @@ public class VoitConfigInstruction extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (radioWired.isChecked()) {
-                    Toast.makeText(VoitConfigInstruction.this, "Wired Connection Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VoitConfigInstruction.this, getString(R.string.wired_connection_selected), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(VoitConfigInstruction.this, "Wi-Fi Connection Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VoitConfigInstruction.this, getString(R.string.wi_fi_connection_selected), Toast.LENGTH_SHORT).show();
                 }
                 // Proceed to the next activity here
             }

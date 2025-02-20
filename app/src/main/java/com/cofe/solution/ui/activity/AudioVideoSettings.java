@@ -43,7 +43,7 @@ public class AudioVideoSettings extends AppCompatActivity {
         llAudiVideoSettings=findViewById(R.id.llAudiVideoSettings);
 
 
-        tvTitleHeader.setText("Audio & Video Settings");
+        tvTitleHeader.setText(getString(R.string.audio_video_settings));
 
 
 

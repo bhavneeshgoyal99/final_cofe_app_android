@@ -40,7 +40,7 @@ public class PTZSettingsActivity extends AppCompatActivity {
         llPtzOptions=findViewById(R.id.llPtzOptions);
 
 
-        tvTitleHeader.setText("PTZ Settings");
+        tvTitleHeader.setText(getString(R.string.ptz_settings));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

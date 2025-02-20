@@ -256,14 +256,14 @@ public class GardenDoubleLightActivity extends BaseConfigActivity<GardenDoubleLi
     @Override
     public void showWorkMode(WhiteLightBean mWhiteLight){
         if (mWhiteLight != null) {
-            if (mWhiteLight.getWorkMode().equals("Auto")) {
+            if (mWhiteLight.getWorkMode().equals(getString(R.string.auto))) {
                 mSpWhiteLightSwitch.setValue(0);
                 mLisWhiteLightSwitch.setRightText((CharSequence)mSpWhiteLightSwitch.getSelectedName());
 
-            } else if (mWhiteLight.getWorkMode().equals("KeepOpen")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.keepopen))) {
                 mSpWhiteLightSwitch.setValue(1);
                 mLisWhiteLightSwitch.setRightText((CharSequence)mSpWhiteLightSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Timing")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.timing))) {
                 mSpWhiteLightSwitch.setValue(3);
                 mLisWhiteLightSwitch.setRightText((CharSequence)mSpWhiteLightSwitch.getSelectedName());
                 mTimeSettingLayout.setVisibility(View.VISIBLE);
@@ -271,10 +271,10 @@ public class GardenDoubleLightActivity extends BaseConfigActivity<GardenDoubleLi
                 String closeTime = ParseTimeUtil.parseTime(mWhiteLight.getWorkPeriod().getEHour(), mWhiteLight.getWorkPeriod().getEMinute());
                 mWhiteLightOpenTime.setText(openTime);
                 mWhiteLightCloseTime.setText(closeTime);
-            } else if (mWhiteLight.getWorkMode().equals("Close")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.close))) {
                 mSpWhiteLightSwitch.setValue(2);
                 mLisWhiteLightSwitch.setRightText((CharSequence)mSpWhiteLightSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Intelligent") && null != mWhiteLight.getMoveTrigLight()) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.intelligent)) && null != mWhiteLight.getMoveTrigLight()) {
                 mSpWhiteLightSwitch.setValue(4);
                 mLisWhiteLightSwitch.setRightText((CharSequence)mSpWhiteLightSwitch.getSelectedName());
                 mIntelligentModelLayout.setVisibility(View.VISIBLE);
@@ -290,7 +290,7 @@ public class GardenDoubleLightActivity extends BaseConfigActivity<GardenDoubleLi
                 }
             }
         } else {
-            Toast.makeText(getApplicationContext(), FunSDK.TS("Data_exception"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), FunSDK.TS(getString(R.string.data_exception)), Toast.LENGTH_SHORT).show();
             onHideWaitDialog();
         }
     }
@@ -376,7 +376,7 @@ public class GardenDoubleLightActivity extends BaseConfigActivity<GardenDoubleLi
         } else {
             String closeTime = ParseTimeUtil.combineTime(hour) + ":" + ParseTimeUtil.combineTime(min);
             if (StringUtils.contrast(closeTime, mWhiteLightOpenTime.getText().toString().trim())) {
-                Toast.makeText(getApplicationContext(), FunSDK.TS("TR_Open_Time_Not_Equal_Close_Time"), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), FunSDK.TS(getString(R.string.tr_open_time_not_equal_close_time)), Toast.LENGTH_LONG).show();
                 return true;
             }
             mWhiteLightCloseTime.setText(closeTime);

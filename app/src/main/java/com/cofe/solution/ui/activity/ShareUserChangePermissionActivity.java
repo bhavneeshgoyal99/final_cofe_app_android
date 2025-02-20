@@ -90,7 +90,7 @@ public class ShareUserChangePermissionActivity extends AppCompatActivity {
         toggle_checkboxes=findViewById(R.id.toggle_checkboxes);
 
 
-        tvTitleHeader.setText("Sharing permission");
+        tvTitleHeader.setText(getString(R.string.sharing_permission));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
@@ -207,7 +207,7 @@ public class ShareUserChangePermissionActivity extends AppCompatActivity {
         // Send the combined permissions to the SDK in one call
         ShareManager.getInstance(this).setDevSharePermission(share_id, permissionBuilder.toString());
 
-        Toast.makeText(this, "All permissions updated successfully!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.all_permissions_updated_successfully), Toast.LENGTH_SHORT).show();
         Intent intent=new Intent(this,MeSharingManagement.class);
         startActivity(intent);
     }

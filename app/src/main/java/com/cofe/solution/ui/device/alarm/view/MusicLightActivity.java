@@ -41,8 +41,8 @@ public class MusicLightActivity extends WhiteLightActivity{
 
     private void initMusicSwitchData() {
         mMusicSwitchArray = new String[]{
-                FunSDK.TS("Auto_model"),FunSDK.TS("open"),FunSDK.TS("close"),
-                FunSDK.TS("timing"),FunSDK.TS("Atmosphere"),FunSDK.TS("Glint")
+                FunSDK.TS(getString(R.string.auto_model)),FunSDK.TS(getString(R.string.open)),FunSDK.TS(getString(R.string.close)),
+                FunSDK.TS(getString(R.string.timing)),FunSDK.TS(getString(R.string.atmosphere)),FunSDK.TS(getString(R.string.glint))
         };
         mLsiMusicSwitch.setTip(XUtils.getLightViewTips(mMusicSwitchArray));
         mSpMusicSwitch = mLsiMusicSwitch.getExtraSpinner();
@@ -64,19 +64,19 @@ public class MusicLightActivity extends WhiteLightActivity{
                         case 0:
                             mTimeSettingLayout.setVisibility(View.GONE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
-                            mWhiteLight.setWorkMode("Auto");
+                            mWhiteLight.setWorkMode(getString(R.string.auto));
                             presenter.saveWhiteLight();
                             break;
                         case 1:
                             mTimeSettingLayout.setVisibility(View.GONE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
-                            mWhiteLight.setWorkMode("KeepOpen");
+                            mWhiteLight.setWorkMode(getString(R.string.keepopen));
                             presenter.saveWhiteLight();
                             break;
                         case 2:
                             mTimeSettingLayout.setVisibility(View.GONE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
-                            mWhiteLight.setWorkMode("Close");
+                            mWhiteLight.setWorkMode(getString(R.string.close));
                             presenter.saveWhiteLight();
                             break;
                         case 3:
@@ -86,7 +86,7 @@ public class MusicLightActivity extends WhiteLightActivity{
                                     mWhiteLight.getWorkPeriod().getEMinute());
                             mWhiteLightOpenTime.setText(openTime);
                             mWhiteLightCloseTime.setText(closeTime);
-                            mWhiteLight.setWorkMode("Timing");
+                            mWhiteLight.setWorkMode(getString(R.string.timing));
                             mTimeSettingLayout.setVisibility(View.VISIBLE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
                             presenter.saveWhiteLight();
@@ -95,7 +95,7 @@ public class MusicLightActivity extends WhiteLightActivity{
                             //气氛灯开关
                             mTimeSettingLayout.setVisibility(View.GONE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
-                            mWhiteLight.setWorkMode("Atmosphere");
+                            mWhiteLight.setWorkMode(getString(R.string.atmosphere));
                             presenter.saveWhiteLight();
                             break;
                         case 5:
@@ -103,7 +103,7 @@ public class MusicLightActivity extends WhiteLightActivity{
                             mTimeSettingLayout.setVisibility(View.GONE);
                             mIntelligentModelLayout.setVisibility(View.GONE);
 
-                            mWhiteLight.setWorkMode("Glint");
+                            mWhiteLight.setWorkMode(getString(R.string.glint));
                             presenter.saveWhiteLight();
                             break;
                         default:
@@ -121,28 +121,28 @@ public class MusicLightActivity extends WhiteLightActivity{
     public void showWorkMode(WhiteLightBean mWhiteLight) {
         super.showWorkMode(mWhiteLight);
         if (mWhiteLight != null) {
-            if (mWhiteLight.getWorkMode().equals("Auto")) {
+            if (mWhiteLight.getWorkMode().equals(getString(R.string.auto))) {
                 mSpMusicSwitch.setValue(0);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("KeepOpen")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.keepopen))) {
                 mSpMusicSwitch.setValue(1);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Timing")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.timing))) {
                 mSpMusicSwitch.setValue(3);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Close")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.close))) {
                 mSpMusicSwitch.setValue(2);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Intelligent") && null != mWhiteLight.getMoveTrigLight()) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.intelligent)) && null != mWhiteLight.getMoveTrigLight()) {
 
-            } else if (mWhiteLight.getWorkMode().equals("Atmosphere")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.atmosphere))) {
                 mSpMusicSwitch.setValue(4);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
-            } else if (mWhiteLight.getWorkMode().equals("Glint")) {
+            } else if (mWhiteLight.getWorkMode().equals(getString(R.string.glint))) {
                 mSpMusicSwitch.setValue(5);
                 mLsiMusicSwitch.setRightText((CharSequence)mSpMusicSwitch.getSelectedName());
             } else {
-                Toast.makeText(getApplicationContext(), FunSDK.TS("Data_exception"), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), FunSDK.TS(getString(R.string.data_exception)), Toast.LENGTH_SHORT).show();
             }
         }
     }

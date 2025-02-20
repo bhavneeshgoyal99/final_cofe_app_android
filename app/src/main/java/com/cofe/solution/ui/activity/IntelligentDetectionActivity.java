@@ -1,5 +1,6 @@
 package com.cofe.solution.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ public class IntelligentDetectionActivity extends AppCompatActivity {
         initUis();
     }
 
+    @SuppressLint("SetTextI18n")
     private void initUis() {
         tvTitleHeader = findViewById(R.id.toolbar_title);
         back_button = findViewById(R.id.back_button);
@@ -38,7 +40,7 @@ public class IntelligentDetectionActivity extends AppCompatActivity {
         rlBulletCam = findViewById(R.id.rlBulletCam);
 
 
-        tvTitleHeader.setText("Smart Alarm");
+        tvTitleHeader.setText(getString(R.string.smart_alarm));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

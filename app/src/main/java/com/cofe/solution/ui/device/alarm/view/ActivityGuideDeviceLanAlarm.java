@@ -136,7 +136,7 @@ public class ActivityGuideDeviceLanAlarm extends ActivityDemo implements OnClick
 		loaderDialog.setMessage();
 
 		DeviceManager deviceManager = DeviceManager.getInstance();
-		deviceManager.loginDev(xmDevInfo.getDevId(), "admin", "", new DeviceManager.OnDevManagerListener() {
+		deviceManager.loginDev(xmDevInfo.getDevId(), getString(R.string.admin), "", new DeviceManager.OnDevManagerListener() {
 			@Override
 			public void onSuccess(String s, int i, Object o) {
 			      loaderDialog.dismiss();

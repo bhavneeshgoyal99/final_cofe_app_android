@@ -66,7 +66,7 @@ public class MySharedUserActivity extends DemoBaseActivity<DevShareAccountListPr
     private void initUis()
     {
         loaderDialog = new LoaderDialog(this);
-        loaderDialog.setMessage("Please wait...");
+        loaderDialog.setMessage(getString(R.string.please_wait));
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -81,7 +81,7 @@ public class MySharedUserActivity extends DemoBaseActivity<DevShareAccountListPr
         back_button=findViewById(R.id.back_button);
         rvSharedUser=findViewById(R.id.rvSharedUser);
 
-        tvTitleHeader.setText("Shared Users");
+        tvTitleHeader.setText(getString(R.string.shared_users));
 
 
         rvSharedUser.setLayoutManager(new LinearLayoutManager(this));

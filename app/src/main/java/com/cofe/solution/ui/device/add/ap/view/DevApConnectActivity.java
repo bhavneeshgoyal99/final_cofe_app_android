@@ -116,10 +116,10 @@ public class DevApConnectActivity extends DemoBaseActivity<DevApConnectPresenter
                     }
                     loaderDialog.dismiss();
                     if (result instanceof Integer && (Integer) result == 0) {
-                        showToast(FunSDK.TS("Network_Error"), Toast.LENGTH_LONG);
+                        showToast(FunSDK.TS(getString(R.string.network_error)), Toast.LENGTH_LONG);
                     } else {
                         if ((((ScanResult) result).frequency > 4900 && ((ScanResult) result).frequency < 5900)) {
-                            showToast(FunSDK.TS("Frequency_support"),Toast.LENGTH_LONG);
+                            showToast(FunSDK.TS(getString(R.string.frequency_support)),Toast.LENGTH_LONG);
                         } else {
                             presenter.devApConnect();
                         }

@@ -45,7 +45,7 @@ public class ChannelListActivity extends DemoBaseActivity<ChannelListPresenter> 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_list);
-        loaderDialog.setMessage("THIS IS CHANNEL LIST");
+        loaderDialog.setMessage(getString(R.string.this_is_channel_list));
         initView();
         initData();
     }

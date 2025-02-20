@@ -1,5 +1,6 @@
 package com.cofe.solution.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ public class AlarmLinkageActivity extends AppCompatActivity {
         initUis();
     }
 
+    @SuppressLint("SetTextI18n")
     private void initUis()
     {
         tvTitleHeader=findViewById(R.id.toolbar_title);
@@ -53,10 +55,7 @@ public class AlarmLinkageActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        tvTitleHeader.setText("Alarm Linkage");
+        tvTitleHeader.setText(getString(R.string.alarm_linkage));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,12 +63,6 @@ public class AlarmLinkageActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
-
-
-
 
     }
 }

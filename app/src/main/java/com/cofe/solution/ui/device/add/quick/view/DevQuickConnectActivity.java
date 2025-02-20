@@ -145,7 +145,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
 
     void showDevNameDialog() {
         XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(presenter.getDevId());
-        XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+        XMPromptDlg.onShowEditDialog(this, getString(R.string.change_device_name),xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
                 XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener(){
@@ -153,7 +153,7 @@ public class DevQuickConnectActivity extends DemoBaseActivity<DevQuickConnectPre
                     @Override
                     public void onSuccess(int msgId) {
                         /// turnToActivity(DevMonitorActivity.class);
-                        Toast.makeText(DevQuickConnectActivity.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DevQuickConnectActivity.this, getString(R.string.device_name_changed_successfully), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

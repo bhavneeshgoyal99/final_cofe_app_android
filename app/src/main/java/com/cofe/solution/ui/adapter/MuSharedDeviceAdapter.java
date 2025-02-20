@@ -70,10 +70,10 @@ public class MuSharedDeviceAdapter extends RecyclerView.Adapter<MuSharedDeviceAd
         Log.d("FULL DA", String.valueOf(data.get(position).getShareState()));
         if (data != null && position < data.size()) {
             holder.tv1.setText(data.get(position).getDevId());
-            holder.tv2.setText("Shared with "+data.get(position).getAccount()+" User");
+            holder.tv2.setText(activity.getString(R.string.shared_with)+""+data.get(position).getAccount()+""+activity.getString(R.string.user));
         } else {
             // Handle the null case appropriately, maybe set a default value or log an error.
-            holder.tv1.setText("No data available");
+            holder.tv1.setText(activity.getString(R.string.no_data_available));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

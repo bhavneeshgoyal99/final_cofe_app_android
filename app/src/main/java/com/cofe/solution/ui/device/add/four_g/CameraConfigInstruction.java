@@ -22,6 +22,7 @@ import com.cofe.solution.ui.device.add.wifi.InputWiFiInfoActivityForQr;
 
 public class CameraConfigInstruction extends AppCompatActivity {
     int CAMERA_PERMISSION_REQUEST_CODE = 111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,7 @@ public class CameraConfigInstruction extends AppCompatActivity {
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_is_required_to_use_the_camera), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup();
@@ -68,7 +69,6 @@ public class CameraConfigInstruction extends AppCompatActivity {
             }
         }
     }
-
 
 
     private void checkCameraPermission() {
@@ -84,7 +84,7 @@ public class CameraConfigInstruction extends AppCompatActivity {
     private void showPermissionExplanationPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Camera Permission Required")
-                .setMessage("This app needs camera access to take photos. Please grant the permission to proceed.")
+                .setMessage(getString(R.string.this_app_needs_camera_access_to_take_photos_please_grant_the_permission_to_proceed))
                 .setCancelable(false)
                 .setPositiveButton("Accept", (dialog, which) -> {
                     // Request camera permission
@@ -93,7 +93,7 @@ public class CameraConfigInstruction extends AppCompatActivity {
                 })
                 .setNegativeButton("Reject", (dialog, which) -> {
                     dialog.dismiss();
-                    Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
                 });
         builder.create().show();
     }
@@ -101,8 +101,8 @@ public class CameraConfigInstruction extends AppCompatActivity {
 
     private void showSettingsRedirectPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Camera Permission Required")
-                .setMessage("Camera permission is permanently denied. Please enable it in the app settings.")
+        builder.setTitle(getString(R.string.camera_permission_required))
+                .setMessage(getString(R.string.camera_permission_is_permanently_denied_please_enable_it_in_the_app_settings))
                 .setCancelable(false)
                 .setPositiveButton("Open Settings", (dialog, which) -> openAppSettings())
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -110,7 +110,7 @@ public class CameraConfigInstruction extends AppCompatActivity {
     }
 
     private void openCamera() {
-        Toast.makeText(this, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.camera_is_now_accessible), Toast.LENGTH_SHORT).show();
         Intent i = new Intent(CameraConfigInstruction.this, DevSnConnectActivity.class);
         startActivity(i);
     }
@@ -122,7 +122,6 @@ public class CameraConfigInstruction extends AppCompatActivity {
         intent.setData(uri);
         startActivity(intent);
     }
-
 
 
 }

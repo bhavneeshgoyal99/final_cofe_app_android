@@ -30,7 +30,7 @@ public class METoolsActivity extends AppCompatActivity {
     {
         tvTitleHeader=findViewById(R.id.toolbar_title);
         back_button=findViewById(R.id.back_button);
-        tvTitleHeader.setText("Tools");
+        tvTitleHeader.setText(getString(R.string.tools));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

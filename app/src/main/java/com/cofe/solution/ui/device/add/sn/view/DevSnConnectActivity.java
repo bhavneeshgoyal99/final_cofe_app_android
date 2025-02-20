@@ -251,8 +251,6 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
     }
 
 
-
-
     // 扫描二维码
     /*Scan the QR code*/
     private void startScanQrCode() {
@@ -266,13 +264,13 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         switch (view.getId()) {
             case R.id.devLoginBtn: {
 
-                if(DevDataCenter.getInstance().getAccountUserName()!=null) {
-                    if(DevDataCenter.getInstance().getAccessToken()==null) {
+                if (DevDataCenter.getInstance().getAccountUserName() != null) {
+                    if (DevDataCenter.getInstance().getAccessToken() == null) {
                         AccountManager.getInstance().xmLogin(DevDataCenter.getInstance().getAccountUserName(), DevDataCenter.getInstance().getAccountPassword(), 1,
                                 new BaseAccountManager.OnAccountManagerListener() {
                                     @Override
                                     public void onSuccess(int msgId) {
-                                        Log.d("Access toekn" ," > "  +DevDataCenter.getInstance().getAccessToken());
+                                        Log.d("Access toekn", " > " + DevDataCenter.getInstance().getAccessToken());
                                         String devId = devSNEdit.getText().toString().trim().toLowerCase();
                                         presenter.addDev(
                                                 devId,
@@ -304,13 +302,13 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                     }
 
                 } else {
-                        String devId = devSNEdit.getText().toString().trim().toLowerCase();
-                        presenter.addDev(
-                                devId,
-                                devLoginNameEdit.getText().toString().trim(),
-                                devLoginPasswdEdit.getText().toString().trim(),
-                                devLoginTokenEdit.getText().toString().trim(),
-                                (Integer) spDevType.getSelectedValue(), devPidEdit.getText().toString());
+                    String devId = devSNEdit.getText().toString().trim().toLowerCase();
+                    presenter.addDev(
+                            devId,
+                            devLoginNameEdit.getText().toString().trim(),
+                            devLoginPasswdEdit.getText().toString().trim(),
+                            devLoginTokenEdit.getText().toString().trim(),
+                            (Integer) spDevType.getSelectedValue(), devPidEdit.getText().toString());
 
                 }
 
@@ -336,15 +334,15 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
         super.onActivityResult(requestCode, responseCode, data);
         if (requestCode == 1 && responseCode == RESULT_OK) {
             if (null != data) {
-                if(data.getStringExtra("useredit_sr")!=null) {
+                if (data.getStringExtra("useredit_sr") != null) {
 
-                    if(XUtils.isSn(data.getStringExtra("useredit_sr"))) {
+                    if (XUtils.isSn(data.getStringExtra("useredit_sr"))) {
                         devSNEdit.setText(data.getStringExtra("useredit_sr"));
                         devLoginBtn.performClick();
                         return;
                     }
                 }
-                Log.d("onActivityResult", "data.getStringExtra(\"result\") > " +data.getStringExtra("result"));
+                Log.d("onActivityResult", "data.getStringExtra(\"result\") > " + data.getStringExtra("result"));
                 String result = data.getStringExtra("result");
                 //Toast.makeText(DevSnConnectActivity.this, "after san result > " +result, Toast.LENGTH_SHORT).show();
 
@@ -364,8 +362,8 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                     //设备序列号
                     if (null != devSNEdit) {
                         devSNEdit.setText(devInfos[0].split(":")[1]);
-                        Toast.makeText(DevSnConnectActivity.this, "devSNEdit i snot null > called", Toast.LENGTH_SHORT).show();
-                       // devLoginBtn.performClick();
+                        Toast.makeText(DevSnConnectActivity.this, getString(R.string.devsnedit_i_snot_null_called), Toast.LENGTH_SHORT).show();
+                        // devLoginBtn.performClick();
                         finish();
 
                     }
@@ -497,7 +495,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
             presenter.setDevId(devSNEdit.getText().toString());
 
         } else {
-            Toast.makeText(DevSnConnectActivity.this, "Device does not added to account", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DevSnConnectActivity.this, getString(R.string.device_does_not_added_to_account), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -513,7 +511,7 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_is_required_to_use_the_camera), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup();
@@ -521,7 +519,6 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
             }
         }
     }
-
 
 
     private void checkCameraPermission() {
@@ -536,17 +533,17 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
     private void showPermissionExplanationPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Camera Permission Required")
-                .setMessage("This app needs camera access to take photos. Please grant the permission to proceed.")
+        builder.setTitle(getString(R.string.camera_permission_required))
+                .setMessage(getString(R.string.this_app_needs_camera_access_to_take_photos_please_grant_the_permission_to_proceed))
                 .setCancelable(false)
-                .setPositiveButton("Accept", (dialog, which) -> {
+                .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
                     // Request camera permission
                     ActivityCompat.requestPermissions(DevSnConnectActivity.this,
                             new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
                 })
-                .setNegativeButton("Reject", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.reject), (dialog, which) -> {
                     dialog.dismiss();
-                    Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
                 });
         builder.create().show();
     }
@@ -554,14 +551,14 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
     void showDevNameDialog() {
         XMDevInfo xmDevInfo = DevDataCenter.getInstance().getDevInfo(devSNEdit.getText().toString());
-        XMPromptDlg.onShowEditDialog(this, "Change Device Name",xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+        XMPromptDlg.onShowEditDialog(this, getString(R.string.change_device_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
-                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener(){
+                XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener() {
 
                     @Override
                     public void onSuccess(int msgId) {
-                        Log.d("onSuccess", "devId > " +xmDevInfo.getDevId());
+                        Log.d("onSuccess", "devId > " + xmDevInfo.getDevId());
                         presenter.setDevId(xmDevInfo.getDevId());
 
                         Intent intent1 = new Intent(DevSnConnectActivity.this, DevListActivity.class);
@@ -570,18 +567,18 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
 
                         Intent intent = new Intent(DevSnConnectActivity.this, DevMonitorActivity.class);
-                        intent.putExtra("devId",presenter.getDevId());
-                       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("devId", presenter.getDevId());
+                        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish(); // Finish current activity
 
                         turnToActivity(DevMonitorActivity.class);
-                        Toast.makeText(DevSnConnectActivity.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DevSnConnectActivity.this, getString(R.string.device_name_changed_successfully), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailed(int msgId, int errorId) {
-                        Log.d("onFailed", "devId > " +xmDevInfo.getDevId());
+                        Log.d("onFailed", "devId > " + xmDevInfo.getDevId());
                         presenter.setDevId(xmDevInfo.getDevId());
 
                         Intent intent1 = new Intent(DevSnConnectActivity.this, DevListActivity.class);
@@ -589,12 +586,12 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
                         startActivity(intent1);
 
                         Intent intent = new Intent(DevSnConnectActivity.this, DevMonitorActivity.class);
-                        intent.putExtra("devId",presenter.getDevId());
+                        intent.putExtra("devId", presenter.getDevId());
                         //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish(); // Finish current activity
 
-                        Toast.makeText(DevSnConnectActivity.this, "Failed to changed device name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DevSnConnectActivity.this, getString(R.string.failed_to_changed_device_name), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -610,16 +607,16 @@ public class DevSnConnectActivity extends DemoBaseActivity<DevSnConnectPresenter
 
     private void showSettingsRedirectPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Camera Permission Required")
-                .setMessage("Camera permission is permanently denied. Please enable it in the app settings.")
+        builder.setTitle(getString(R.string.camera_permission_required))
+                .setMessage(getString(R.string.camera_permission_is_permanently_denied_please_enable_it_in_the_app_settings))
                 .setCancelable(false)
-                .setPositiveButton("Open Settings", (dialog, which) -> openAppSettings())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                .setPositiveButton(getString(R.string.open_settings), (dialog, which) -> openAppSettings())
+                .setNegativeButton(getString(R.string.cancle), (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
     private void openCamera() {
-        Toast.makeText(this, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.camera_is_now_accessible), Toast.LENGTH_SHORT).show();
         //Intent j =  new Intent(DevSnConnectActivity.this, DevSnConnectActivity.class);
         //startActivity(j);
     }

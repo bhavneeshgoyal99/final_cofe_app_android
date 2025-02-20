@@ -304,17 +304,17 @@ public class WhiteLightActivity extends BaseConfigActivity<WhiteLightPresenter> 
 		if (FunSDK.GetDevAbility(devId, "OtherFunction/NotSupportAutoAndIntelligent") == 1) {
 			//AOV设备隐藏常亮
 			if (FunSDK.GetDevAbility(devId,"OtherFunction/AovMode") > 0) {
-				return new String[]{FunSDK.TS("close")};
+				return new String[]{FunSDK.TS(getString(R.string.close_small))};
 			} else {
-				return new String[]{FunSDK.TS("open"), FunSDK.TS("close")};
+				return new String[]{FunSDK.TS(getString(R.string.open)), FunSDK.TS(getString(R.string.close_small))};
 			}
 		} else {
 			if (FunSDK.GetDevAbility(devId,"OtherFunction/AovMode") > 0) {
-				return new String[]{FunSDK.TS("Auto_model"),
-						FunSDK.TS("close"), FunSDK.TS("timing")};
+				return new String[]{FunSDK.TS(getString(R.string.auto_model)),
+						FunSDK.TS(getString(R.string.close_small)), FunSDK.TS(getString(R.string.timing))};
 			} else {
-				return new String[]{FunSDK.TS("Auto_model"), FunSDK.TS("open"),
-						FunSDK.TS("close"), FunSDK.TS("timing")};
+				return new String[]{FunSDK.TS("Auto_model"), FunSDK.TS(getString(R.string.open)),
+						FunSDK.TS(getString(R.string.close_small)), FunSDK.TS(getString(R.string.timing))};
 			}
 		}
 	}
@@ -349,7 +349,7 @@ public class WhiteLightActivity extends BaseConfigActivity<WhiteLightPresenter> 
 		mSpWhiteLightSwitch = mLisWhiteLightSwitch.getExtraSpinner();
 		if (FunSDK.GetDevAbility(devId,"OtherFunction/AovMode") > 0) {
 			//AOV设备，灯光开关改为白光开关
-			mLisWhiteLightSwitch.setTitle(FunSDK.TS("TR_White_Light_Switch"));
+			mLisWhiteLightSwitch.setTitle(FunSDK.TS(getString(R.string.tr_white_light_switch)));
 		}
 		mSpWhiteLightSwitch.initData(mWhiteLightSwitchArray, getWhiteLightSwitchIntValue());
 		mLisWhiteLightSwitch.setOnClickListener(new View.OnClickListener() {
@@ -369,20 +369,20 @@ public class WhiteLightActivity extends BaseConfigActivity<WhiteLightPresenter> 
 						case 0:
 							mTimeSettingLayout.setVisibility(View.GONE);
 							mIntelligentModelLayout.setVisibility(View.GONE);
-							mWhiteLight.setWorkMode("Auto");
+							mWhiteLight.setWorkMode(getString(R.string.auto));
 							presenter.saveWhiteLight();
 							break;
 						case 1:
 //                            注:设置开始和结束时间相同，且在定时模式下，为打开灯泡
 							mTimeSettingLayout.setVisibility(View.GONE);
 							mIntelligentModelLayout.setVisibility(View.GONE);
-							mWhiteLight.setWorkMode("KeepOpen");
+							mWhiteLight.setWorkMode(getString(R.string.keepopen));
 							presenter.saveWhiteLight();
 							break;
 						case 2:
 							mTimeSettingLayout.setVisibility(View.GONE);
 							mIntelligentModelLayout.setVisibility(View.GONE);
-							mWhiteLight.setWorkMode("Close");
+							mWhiteLight.setWorkMode(getString(R.string.close));
 							presenter.saveWhiteLight();
 							break;
 						case 3:
@@ -392,14 +392,14 @@ public class WhiteLightActivity extends BaseConfigActivity<WhiteLightPresenter> 
 									mWhiteLight.getWorkPeriod().getEMinute());
 							mWhiteLightOpenTime.setText(openTime);
 							mWhiteLightCloseTime.setText(closeTime);
-							mWhiteLight.setWorkMode("Timing");
+							mWhiteLight.setWorkMode(getString(R.string.timing));
 							mTimeSettingLayout.setVisibility(View.VISIBLE);
 							mIntelligentModelLayout.setVisibility(View.GONE);
 							presenter.saveWhiteLight();
 							break;
 						case 4:
 							if (null != mWhiteLight.getMoveTrigLight()) {
-								mWhiteLight.setWorkMode("Intelligent");
+								mWhiteLight.setWorkMode(getString(R.string.intelligent));
 								mIntelligentModelLayout.setVisibility(View.VISIBLE);
 								mTimeSettingLayout.setVisibility(View.GONE);
 								int level = mWhiteLight.getMoveTrigLight().getLevel();

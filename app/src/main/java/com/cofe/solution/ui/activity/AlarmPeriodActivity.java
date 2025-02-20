@@ -46,7 +46,7 @@ public class AlarmPeriodActivity extends AppCompatActivity {
         rvCustomAlarm.setAdapter(new CustomAlarmAdapter(AlarmPeriodActivity.this));
 
 
-        tvTitleHeader.setText("Alarm Period");
+        tvTitleHeader.setText(getString(R.string.alarm_period));
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override

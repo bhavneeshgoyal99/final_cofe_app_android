@@ -1,5 +1,6 @@
 package com.cofe.solution.ui.device.add.qrcode.view.fragement;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -85,13 +86,14 @@ public class ConntionDisplayFragment extends Fragment {
             public void onTick(long millisUntilFinished) {
                 // Update the TextView with remaining time in seconds
                 long secondsRemaining = millisUntilFinished / 1000;
-                countdownText.setText("Time remaining: " + secondsRemaining + " seconds");
+                countdownText.setText(getString(R.string.time_remaining) + secondsRemaining + getString(R.string.seconds));
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onFinish() {
                 // When the timer finishes
-                countdownText.setText("Time's up!");
+                countdownText.setText(getString(R.string.time_s_up));
             }
         };
 

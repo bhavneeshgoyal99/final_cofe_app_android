@@ -83,23 +83,23 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                 switch (wifiState) {
                     case WifiManager.WIFI_STATE_ENABLED:
                         btnTurnOnWifi.setVisibility(View.GONE);
-                        Toast.makeText(context, "WiFi Turned ON", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.wifi_turned_on), Toast.LENGTH_SHORT).show();
                         break;
                     case WifiManager.WIFI_STATE_DISABLED:
                         btnTurnOnWifi.setVisibility(View.VISIBLE);
 
-                        Toast.makeText(context, "WiFi Turned OFF", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.wifi_turned_off), Toast.LENGTH_SHORT).show();
                         break;
                     case WifiManager.WIFI_STATE_ENABLING:
                         btnTurnOnWifi.setVisibility(View.GONE);
-                        Toast.makeText(context, "WiFi Turning ON...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.wifi_turning_on), Toast.LENGTH_SHORT).show();
                         break;
                     case WifiManager.WIFI_STATE_DISABLING:
                         btnTurnOnWifi.setVisibility(View.VISIBLE);
-                        Toast.makeText(context, "WiFi Turning OFF...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.wifi_turning_off), Toast.LENGTH_SHORT).show();
                         break;
                     case WifiManager.WIFI_STATE_UNKNOWN:
-                        Toast.makeText(context, "WiFi State Unknown", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.wifi_state_unknown), Toast.LENGTH_SHORT).show();
                         btnTurnOnWifi.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -131,7 +131,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
             if (WifiManager.SUPPLICANT_STATE_CHANGED_ACTION.equals(action)) {
                 int errorCode = intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, -1);
                 if (errorCode == WifiManager.ERROR_AUTHENTICATING) {
-                    Toast.makeText(context, "WiFi Authentication Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.wifi_authentication_error), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -139,9 +139,9 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                 ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                    Toast.makeText(context, "WiFi Internet Connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.wifi_internet_connected), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "WiFi Internet Not Available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.wifi_internet_not_available), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -261,7 +261,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
             wifiManager.setWifiEnabled(true);
         } else {
             //enableWifiTab();
-            Toast.makeText(this, "Wi-Fi is already on", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.wi_fi_is_already_on), Toast.LENGTH_SHORT).show();
             scanForNearbyDevices();
         }
 
@@ -270,10 +270,10 @@ public class AddNewDeviceActivity extends AppCompatActivity {
             if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
                 enableWifiTab();
-                Toast.makeText(this, "Wi-Fi turned on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.wi_fi_turned_on), Toast.LENGTH_SHORT).show();
             } else {
                 enableWifiTab();
-                Toast.makeText(this, "Wi-Fi is already on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.wi_fi_is_already_on), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -319,13 +319,13 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                         //Toast.makeText(this, "Found device: " + result.SSID, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "No devices found nearby", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.no_devices_found_nearby), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "Please turn on Wi-Fi first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.please_turn_on_wi_fi_first), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "Location permission is required to scan for devices", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.location_permission_is_required_to_scan_for_devices), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -334,17 +334,17 @@ public class AddNewDeviceActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show();
                 enableWifiTab();
 
             } else {
                 showAppSettingsPopup(" WIFI ");
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == BLUETOOTH_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //startActivity(new Intent(AddNewDeviceActivity.this, DevBluetoothListActivity.class));
-                Toast.makeText(this, "Bluetooth permission granted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.bluetooth_permission_granted), Toast.LENGTH_SHORT).show();
                 btnTurnOnBluetooth.setVisibility(View.GONE);
                 // Enable Bluetooth
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -361,14 +361,14 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                     }
                     bluetoothAdapter.enable();
                     // Enable Bluetooth
-                    Toast.makeText(this, "Bluetooth enabled.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.bluetooth_enabled), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.BLUETOOTH_CONNECT)) {
                     // User permanently denied permission
                     //showAppSettingsPopup();
                 } else {
-                    Toast.makeText(this, "Bluetooth permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.bluetooth_permission_denied), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -390,8 +390,8 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                   startActivity(i);
               }
           });
-        btnOption2.setOnClickListener(v -> Toast.makeText(this, "AP mode", Toast.LENGTH_SHORT).show());
-        btnOption3.setOnClickListener(v -> Toast.makeText(this, "Near By Camera", Toast.LENGTH_SHORT).show());
+        btnOption2.setOnClickListener(v -> Toast.makeText(this, getString(R.string.ap_mode), Toast.LENGTH_SHORT).show());
+        btnOption3.setOnClickListener(v -> Toast.makeText(this, getString(R.string.near_by_camera), Toast.LENGTH_SHORT).show());
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
@@ -416,17 +416,17 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                 // Permission already granted
                 btnTurnOnBluetooth.setVisibility(View.GONE);
                 //startActivity(new Intent(AddNewDeviceActivity.this, DevBluetoothListActivity.class));
-                Toast.makeText(this, "Bluetooth permission granted.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.bluetooth_permission_granted), Toast.LENGTH_SHORT).show();
             }
         } else {
             // For Android versions below 12, no need to check for BLUETOOTH_CONNECT
-            Toast.makeText(this, "Bluetooth permission not required for this version.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.bluetooth_permission_not_required_for_this_version), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showPermissionRationale() {
         // Show a custom dialog or Toast explaining why the permission is needed
-        Toast.makeText(this, "Bluetooth permission is required to connect to devices.", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.bluetooth_permission_is_required_to_connect_to_devices), Toast.LENGTH_LONG).show();
         // Request permission again
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, BLUETOOTH_PERMISSION_REQUEST_CODE);
     }
@@ -435,7 +435,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(permissionName +" Permission Required")
-                    .setMessage("This app requires location permission to manage "  + permissionName+ " Without this permission, the app cannot suggest or connect to" +permissionName +" networks.")
+                    .setMessage(getString(R.string.this_app_requires_location_permission_to_manage)  + permissionName+ getString(R.string.without_this_permission_the_app_cannot_suggest_or_connect_to) +permissionName +getString(R.string.networks))
 
                     .setCancelable(false)
                     .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
@@ -450,7 +450,7 @@ public class AddNewDeviceActivity extends AppCompatActivity {
                     .setNegativeButton("Reject", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(AddNewDeviceActivity.this, "Permission rejected. WiFi features won't work.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewDeviceActivity.this, getString(R.string.permission_rejected_wifi_features_won_t_work), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -463,9 +463,9 @@ public class AddNewDeviceActivity extends AppCompatActivity {
             result -> {
                 // Check permission again after returning from settings
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Bluetooth permission granted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.bluetooth_permission_granted), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Bluetooth permission is still not granted.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.bluetooth_permission_is_still_not_granted), Toast.LENGTH_SHORT).show();
                 }
             }
     );

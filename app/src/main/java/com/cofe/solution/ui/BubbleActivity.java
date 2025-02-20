@@ -3,6 +3,7 @@ package com.cofe.solution.ui;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.cofe.solution.R;
 import com.xm.activity.base.XMBaseActivity;
 import com.xm.activity.base.XMBasePresenter;
 
@@ -21,7 +22,7 @@ public class BubbleActivity extends XMBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TextView textView = new TextView(this);
-        textView.setText("Test");
+        textView.setText(getString(R.string.test));
         setContentView(textView);
     }
 }

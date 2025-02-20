@@ -186,7 +186,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
     private void initView() {
         loaderDialog = new LoaderDialog(this);
-        loaderDialog.setMessage("Please wait...");
+        loaderDialog.setMessage(getString(R.string.please_wait));
 
 
         /*titleBar = findViewById(R.id.layoutTop);
@@ -406,7 +406,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 })
                 .setNegativeButton("Reject", (dialog, which) -> {
                     dialog.dismiss();
-                    Toast.makeText(this, "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
                 });
         builder.create().show();
     }
@@ -423,7 +423,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_is_required_to_use_the_camera), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup("Camera");
@@ -438,7 +438,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)) {
                     // Show the explanation again
-                    Toast.makeText(this, "Permission is required for push notifications.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_is_required_for_push_notifications), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
                     showSettingsRedirectPopup("Push Notification ");
@@ -449,7 +449,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                 // Permission granted
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    Toast.makeText(this, "Permission is required to save screenshot and videos from  the camera device to your mobile phone.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permission_is_required_to_save_screenshot_and_videos_from_the_camera_device_to_your_mobile_phone), Toast.LENGTH_SHORT).show();
                 } else {
                     showSettingsRedirectPopup("Write External Storage");
                 }
@@ -1313,7 +1313,7 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
     }
 
     private void enablePushNotifications() {
-        Toast.makeText(this, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.push_notifications_enabled), Toast.LENGTH_SHORT).show();
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
         startService(new Intent(this, DevPushService.class));
 
@@ -1383,9 +1383,9 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
         RecyclerView.LayoutManager currentLayoutManager = listView.getLayoutManager();
 
         if (currentLayoutManager instanceof GridLayoutManager) {
-            tvThumbnails.setText("Large Image View");
+            tvThumbnails.setText(getString(R.string.large_image_view));
         } else {
-            tvThumbnails.setText("Thumbnail Mode");
+            tvThumbnails.setText(getString(R.string.thumbnail_mode));
         }
         // popup_state 0 means default 1 means thumbnails and 2 means online offline
         if (popup_state == 0) {
@@ -1429,14 +1429,14 @@ public class DevListActivity extends DemoBaseActivity<DevListConnectPresenter>
                     //adapter.notifyDataSetChanged();
 
                     if (currentLayoutManager instanceof GridLayoutManager) {
-                        tvThumbnails.setText("Thumbnail mode");
+                        tvThumbnails.setText(getString(R.string.thumbnail_mode));
 
                         // Switch to LinearLayoutManager
                         listView.setLayoutManager(new LinearLayoutManager(DevListActivity.this));
                         adapter.notifyDataSetChanged();
                         isGridLayout = false;
                     } else {
-                        tvThumbnails.setText("Large Image View");
+                        tvThumbnails.setText(getString(R.string.large_image_view));
                         // Switch to GridLayoutManager with 2 columns
                         listView.setLayoutManager(new GridLayoutManager(DevListActivity.this, 2));
                         isGridLayout = true;
