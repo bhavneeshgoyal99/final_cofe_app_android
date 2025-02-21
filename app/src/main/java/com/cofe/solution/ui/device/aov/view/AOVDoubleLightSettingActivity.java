@@ -97,20 +97,20 @@ public class AOVDoubleLightSettingActivity extends BaseConfigActivity<AOVDoubleL
                 mLsiFullColor.setRightImage(SDKCONST.Switch.Close);
                 mLsiNightVision.setRightImage(SDKCONST.Switch.Open);
                 mLsiDoubleLight.setRightImage(SDKCONST.Switch.Close);
-                presenter.saveWorkMode("Close");
+                presenter.saveWorkMode(getString(R.string.close));
 
                 break;
             case R.id.lsi_full_color:
                 mLsiFullColor.setRightImage(SDKCONST.Switch.Open);
                 mLsiNightVision.setRightImage(SDKCONST.Switch.Close);
                 mLsiDoubleLight.setRightImage(SDKCONST.Switch.Close);
-                presenter.saveWorkMode("Auto");
+                presenter.saveWorkMode(getString(R.string.auto));
                 break;
             case R.id.lsi_double_light:
                 mLsiFullColor.setRightImage(SDKCONST.Switch.Close);
                 mLsiNightVision.setRightImage(SDKCONST.Switch.Close);
                 mLsiDoubleLight.setRightImage(SDKCONST.Switch.Open);
-                presenter.saveWorkMode("Intelligent");
+                presenter.saveWorkMode(getString(R.string.intelligent));
                 break;
             case R.id.lis_indicator_light:
                 mLisIndicatorLight.setSwitchState(mLisIndicatorLight.getSwitchState() == SDKCONST.Switch.Open

@@ -1,6 +1,7 @@
 package com.cofe.solution.ui.device.aov.view;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -76,6 +77,7 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void initData() {
         loaderDialog.setMessage();
         devId = getIntent().getStringExtra("devId");
@@ -93,7 +95,7 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
                 protected void convert(@NonNull BaseViewHolder baseViewHolder, String s) {
                     TextView textView = baseViewHolder.findView(R.id.tvTitle);
                     ImageView imageView = baseViewHolder.findView(R.id.ivSelect);
-                    textView.setText(s+" fps");
+                    textView.setText(s+getString(R.string.fps));
                     Drawable drawable;
                     if (StringUtils.contrast(presenter.getCurFps(), s)) {
                         drawable = getDrawable(R.drawable.check_pre);
@@ -124,12 +126,12 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
             if(presenter.getCurFps().contains("/")){
                 String[] split = presenter.getCurFps().split("/");
                 if(split.length >= 2){
-                    tvTips.setText(presenter.getCurFps()+"fps,"+String.format(FunSDK.TS("TR_Set_Aov_Fps_Tips"),split[1],split[0]));
+                    tvTips.setText(presenter.getCurFps()+getString(R.string.fps_with_comma)+String.format(FunSDK.TS("TR_Set_Aov_Fps_Tips"),split[1],split[0]));
                     tvTips.setVisibility(View.VISIBLE);
                 }
 
             }else {
-                tvTips.setText(presenter.getCurFps()+"fps,"+String.format(FunSDK.TS("TR_Set_Aov_Fps_Tips"),1,presenter.getCurFps()));
+                tvTips.setText(presenter.getCurFps()+getString(R.string.fps_with_comma)+String.format(FunSDK.TS("TR_Set_Aov_Fps_Tips"),1,presenter.getCurFps()));
                 tvTips.setVisibility(View.VISIBLE);
             }
 
@@ -141,7 +143,7 @@ public class SetFPSActivity extends BaseConfigActivity<SetFPSPresenter> implemen
                 protected void convert(@NonNull BaseViewHolder baseViewHolder, Integer s) {
                     TextView textView = baseViewHolder.findView(R.id.tvTitle);
                     ImageView imageView = baseViewHolder.findView(R.id.ivSelect);
-                    textView.setText(s.toString() +"s");
+                    textView.setText(s.toString() +getString(R.string.s));
                     Drawable drawable;
                     if (presenter.getCurRecordLatch() == s.intValue()) {
                         drawable = getDrawable(R.drawable.check_pre);

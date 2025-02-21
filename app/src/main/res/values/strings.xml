@@ -1529,6 +1529,36 @@
     <string name="atmosphere">Atmosphere</string>
     <string name="glint">Glint</string>
     <string name="close_small">close</string>
+    <string name="fps">fps</string>
+    <string name="s">s</string>
+    <string name="fps_with_comma">fps,</string>
+    <string name="unable_to_create_webview">无法创建webView</string>
+    <string name="failed_to_retrieve_user_information">Failed to retrieve user information</string>
+    <string name="restoring_defaults">Restoring Defaults...</string>
+    <string name="restarting_device">Restarting Device...</string>
+    <string name="storage_permission_granted">Storage permission granted!</string>
+    <string name="allow_permission_for_storage_access">Allow permission for storage access!</string>
+    <string name="permissions_granted">Permissions granted!</string>
+    <string name="storage_permissions_are_required">Storage permissions are required!</string>
+    <string name="device_id_not_found">device id not found</string>
+    <string name="password_changes_successfully">Password changes successfully</string>
+    <string name="failed_to_change_the_password">Failed to change the password</string>
+    <string name="permissionname_permission_required">permissionName Permission Required</string>
+    <string name="camera">Camera</string>
+    <string name="permission_required">" Permission Required"</string>
+    <string name="permission_is_permanently_denied_please_enable_it_in_the_app_settings">" permission is permanently denied. Please enable it in the app settings."</string>
+    <string name="this_app_needs_your_permission_to_send_push_notifications_please_grant_the_permission_to_stay_updated">This app needs your permission to send push notifications. Please grant the permission to stay updated.</string>
+    <string name="real_time">Real-time</string>
+    <string name="playback_2">Playback</string>
+    <string name="failed_to_obtain_ir_cut_configuration_please_try_again">Failed to obtain IR-Cut configuration, please try again!</string>
+    <string name="do_you_want_to_set_a_cruise_point">Do you want to set a cruise point?</string>
+    <string name="are_you_sure_you_want_to_delete_this_cruise_point">Are you sure you want to delete this cruise point?</string>
+    <string name="selected">"Selected: "</string>
+    <string name="deny">Deny</string>
+    <string name="this_permission_has_been_permanently_denied_you_need_to_enable_it_manually_in_settings">This permission has been permanently denied. You need to enable it manually in settings.</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="load_face_model_error">load_face_model_error</string>
+    <string name="restarting_background_service">Restarting Background Service</string>
 
 
 </resources>

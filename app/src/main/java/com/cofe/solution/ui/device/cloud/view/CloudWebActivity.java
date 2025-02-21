@@ -117,7 +117,7 @@ public class CloudWebActivity extends DemoBaseActivity<CloudWebPresenter> implem
             setContentView(R.layout.activity_cloud_web);
             ButterKnife.bind(this);
         }catch (Exception e) {
-            Toast.makeText(this, "无法创建webView", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.unable_to_create_webview), Toast.LENGTH_LONG).show();
             finish();
             e.printStackTrace();
             return;
@@ -235,7 +235,13 @@ public class CloudWebActivity extends DemoBaseActivity<CloudWebPresenter> implem
     private String createCloudUrl() {
         String userId = FunSDK.GetFunStrAttr(EFUN_ATTR.LOGIN_USER_ID);
         if (userId == null) {
-            XMPromptDlg.onShow(this,"用户信息获取失败", new View.OnClickListener() {
+           /* XMPromptDlg.onShow(this,"用户信息获取失败", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });*/
+            XMPromptDlg.onShow(this,getString(R.string.failed_to_retrieve_user_information), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();

@@ -296,11 +296,11 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
     private void showPermissionExplanationPopup(String permissionName, String message) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("permissionName Permission Required")
+        builder.setTitle(getString(R.string.permissionname_permission_required))
                 .setMessage(message)
                 .setCancelable(false)
-                .setPositiveButton("Accept", (dialog, which) -> {
-                    if (permissionName.equals("Camera")) {
+                .setPositiveButton(getString(R.string.accept), (dialog, which) -> {
+                    if (permissionName.equals(getString(R.string.camera))) {
                         // Request camera permission
                         // Request camera permission
                         ActivityCompat.requestPermissions(activity,
@@ -315,9 +315,9 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
                     }
                 })
-                .setNegativeButton("Reject", (dialog, which) -> {
+                .setNegativeButton(getString(R.string.reject), (dialog, which) -> {
                     dialog.dismiss();
-                    Toast.makeText(activity, "Permission denied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
                 });
         builder.create().show();
     }
@@ -334,10 +334,10 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.CAMERA)) {
                     // Show the explanation again
-                    Toast.makeText(activity, "Permission is required to use the camera.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.permission_is_required_to_use_the_camera), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
-                    showSettingsRedirectPopup("Camera");
+                    showSettingsRedirectPopup(getString(R.string.camera));
                 }
             }
         } else if (requestCode == NOTIFICATION_PERMISSION_REQUEST_CODE) {
@@ -350,10 +350,10 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
                 // Permission denied
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.POST_NOTIFICATIONS)) {
                     // Show the explanation again
-                    Toast.makeText(activity, "Permission is required for push notifications.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.permission_is_required_for_push_notifications), Toast.LENGTH_SHORT).show();
                 } else {
                     // Permission denied with "Do Not Ask Again"
-                    showSettingsRedirectPopup("Push Notification ");
+                    showSettingsRedirectPopup(getString(R.string.push_notification));
                 }
             }
         }
@@ -362,16 +362,16 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
     private void showSettingsRedirectPopup(String permisonName) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(permisonName + " Permission Required")
-                .setMessage(permisonName + " permission is permanently denied. Please enable it in the app settings.")
+        builder.setTitle(permisonName + activity.getString(R.string.permission_required))
+                .setMessage(permisonName + activity.getString(R.string.permission_is_permanently_denied_please_enable_it_in_the_app_settings))
                 .setCancelable(false)
-                .setPositiveButton("Open Settings", (dialog, which) -> openAppSettings())
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                .setPositiveButton(getString(R.string.open_settings), (dialog, which) -> openAppSettings())
+                .setNegativeButton(getString(R.string.cancle), (dialog, which) -> dialog.dismiss());
         builder.create().show();
     }
 
     private void openCamera() {
-        Toast.makeText(activity, "Camera is now accessible.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, getString(R.string.camera_is_now_accessible), Toast.LENGTH_SHORT).show();
         Intent j = new Intent(activity, DevSnConnectActivity.class);
         startActivity(j);
     }
@@ -915,13 +915,13 @@ public class DevAlarmMsgFragment extends DemoBaseFragment<DevListConnectPresente
 
             } else {
                 // Show permission explanation popup
-                showPermissionExplanationPopup("Push Notification ", "This app needs your permission to send push notifications. Please grant the permission to stay updated.");
+                showPermissionExplanationPopup(getString(R.string.push_notification), getString(R.string.this_app_needs_your_permission_to_send_push_notifications_please_grant_the_permission_to_stay_updated));
             }
         }
     }
 
     private void enablePushNotifications() {
-        Toast.makeText(activity, "Push notifications enabled.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, getString(R.string.push_notifications_enabled), Toast.LENGTH_SHORT).show();
         // Add your logic for handling push notifications here (e.g., subscribing to topics)
     }
 

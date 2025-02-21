@@ -140,7 +140,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter> impleme
             dTxtv.setText(xmDevInfo.getDevName());
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(getContext(), "device id not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.device_id_not_found), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
@@ -157,7 +157,7 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter> impleme
             showToast(getString(R.string.device_stauts_offline), Toast.LENGTH_SHORT);
             return;
         }
-        XMPromptDlg.onShowEditDialog(this, "Change Device Name", xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
+        XMPromptDlg.onShowEditDialog(this, getString(R.string.change_device_name), xmDevInfo.getDevName(), new EditDialog.OnEditContentListener() {
             @Override
             public void onResult(String devName) {
                 XMAccountManager.getInstance().modifyDevName(xmDevInfo.getDevId(), devName, new BaseAccountManager.OnAccountManagerListener() {
@@ -166,13 +166,13 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter> impleme
                     public void onSuccess(int msgId) {
                         dTxtv.setText(devName);
                         presenter.onModifyDevNameFromServerResult(true);
-                        Toast.makeText(DeviceSetting.this, "Device name changed successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DeviceSetting.this, getString(R.string.device_name_changed_successfully), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailed(int msgId, int errorId) {
                         presenter.onModifyDevNameFromServerResult(false);
-                        Toast.makeText(DeviceSetting.this, "Failed to changed device name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DeviceSetting.this, getString(R.string.failed_to_changed_device_name), Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -236,19 +236,19 @@ public class DeviceSetting extends BaseConfigActivity<DevAboutPresenter> impleme
                             @Override
                             public void onSuccess(String s, int i, Object o) {
                                 popupWindow.dismiss();
-                                Toast.makeText(anchorView.getContext(), "Password changes successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(anchorView.getContext(), getString(R.string.password_changes_successfully), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onFailed(String s, int i, String s1, int errorId) {
                                 popupWindow.dismiss();
-                                Toast.makeText(anchorView.getContext(), "Failed to change the password", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(anchorView.getContext(), getString(R.string.failed_to_change_the_password), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                 }
             } else {
-                Toast.makeText(anchorView.getContext(), "Please enter password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(anchorView.getContext(), getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             }
                 /*} else {
                     Toast.makeText(anchorView.getContext(), "Please enter old password", Toast.LENGTH_SHORT).show();

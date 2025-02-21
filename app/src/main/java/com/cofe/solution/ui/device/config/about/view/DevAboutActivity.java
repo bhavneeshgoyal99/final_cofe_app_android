@@ -324,12 +324,12 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
 
                 // Button Click Listeners
                 btnRestoreDefaults.setOnClickListener(v -> {
-                    Toast.makeText(DevAboutActivity.this, "Restoring Defaults...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DevAboutActivity.this, getString(R.string.restoring_defaults), Toast.LENGTH_SHORT).show();
                     // Add restore functionality here
                 });
 
                 btnRestart.setOnClickListener(v -> {
-                    Toast.makeText(DevAboutActivity.this, "Restarting Device...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DevAboutActivity.this, getString(R.string.restarting_device), Toast.LENGTH_SHORT).show();
                     // Add restart functionality here
                 });
             }
@@ -491,9 +491,9 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
         if (requestCode == MANAGE_STORAGE_PERMISSION_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
-                    Toast.makeText(this, "Storage permission granted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.storage_permission_granted), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.allow_permission_for_storage_access), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -553,10 +553,10 @@ public class DevAboutActivity extends BaseConfigActivity<DevAboutPresenter> impl
                 boolean writeGranted = grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                 if (readGranted && writeGranted) {
-                    Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.permissions_granted), Toast.LENGTH_SHORT).show();
                     openStorage(); // Open file picker after permissions are granted
                 } else {
-                    Toast.makeText(this, "Storage permissions are required!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.storage_permissions_are_required), Toast.LENGTH_SHORT).show();
                 }
             }
         }

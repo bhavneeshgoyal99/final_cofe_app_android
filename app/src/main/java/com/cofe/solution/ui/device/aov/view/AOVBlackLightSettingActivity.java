@@ -180,7 +180,7 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
         mClBright.setVisibility(mSupportSetBrightness ? View.VISIBLE : View.GONE);
         mSbBright.setProgress(Math.max(0, mWhiteLight.getBrightness() - 1));
         mTvBright.setText(FunSDK.TS("Bright") + " (" + mWhiteLight.getBrightness() + "%)");
-        if ("Auto".equals(mWhiteLight.getWorkMode())) {
+        if (getString(R.string.auto).equals(mWhiteLight.getWorkMode())) {
             //自动
             mClSensitive.setVisibility(mSoftLedThr ? View.VISIBLE : View.GONE);
             mClTime.setVisibility(View.GONE);
@@ -189,7 +189,7 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
             mLsiAutoLight.setRightImage(SDKCONST.Switch.Open);
             mLsiTimeLight.setRightImage(SDKCONST.Switch.Close);
             mLsiKeepOn.setRightImage(SDKCONST.Switch.Close);
-        } else if ("Timing".equals(mWhiteLight.getWorkMode())) {
+        } else if (getString(R.string.timing).equals(mWhiteLight.getWorkMode())) {
             //定时
             mClSensitive.setVisibility(View.GONE);
             mClTime.setVisibility(View.VISIBLE);
@@ -198,7 +198,7 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
             mLsiAutoLight.setRightImage(SDKCONST.Switch.Close);
             mLsiTimeLight.setRightImage(SDKCONST.Switch.Open);
             mLsiKeepOn.setRightImage(SDKCONST.Switch.Close);
-        } else if ("KeepOpen".equals(mWhiteLight.getWorkMode())) {
+        } else if (getString(R.string.keepopen).equals(mWhiteLight.getWorkMode())) {
             //常亮
             mClSensitive.setVisibility(View.GONE);
             mClTime.setVisibility(View.GONE);
@@ -314,7 +314,7 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
                 mLsiAutoLight.setRightImage(SDKCONST.Switch.Close);
                 mLsiTimeLight.setRightImage(SDKCONST.Switch.Open);
                 mLsiKeepOn.setRightImage(SDKCONST.Switch.Close);
-                presenter.saveWorkMode("Timing");
+                presenter.saveWorkMode(getString(R.string.timing));
 
             }
         });
@@ -330,7 +330,7 @@ public class AOVBlackLightSettingActivity extends BaseConfigActivity<AOVBlackLig
                 mLsiAutoLight.setRightImage(SDKCONST.Switch.Close);
                 mLsiTimeLight.setRightImage(SDKCONST.Switch.Close);
                 mLsiKeepOn.setRightImage(SDKCONST.Switch.Open);
-                presenter.saveWorkMode("KeepOpen");
+                presenter.saveWorkMode(getString(R.string.keepopen));
 
             }
         });

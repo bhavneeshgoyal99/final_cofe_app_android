@@ -614,13 +614,13 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position) {
                     case 0:
-                        tab.setText("Real-time");
+                        tab.setText(getString(R.string.real_time));
                         break;
                     case 1:
-                        tab.setText("Playback");
+                        tab.setText(getString(R.string.playback_2));
                         break;
                     case 2:
-                        tab.setText("Message");
+                        tab.setText(getString(R.string.message));
                         break;
                 }
             }
@@ -1941,7 +1941,8 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
                     lsiIrCut.setSwitchState(presenter.getCameraParamBean().IrcutSwap);
                 } else {
                     presenter.getIrCutInfo();
-                    showToast("获取irCut配置失败，请重试！", Toast.LENGTH_LONG);
+                    //showToast("获取irCut配置失败，请重试！", Toast.LENGTH_LONG);
+                    showToast(getString(R.string.failed_to_obtain_ir_cut_configuration_please_try_again), Toast.LENGTH_LONG);
                 }
 
             }
@@ -2538,7 +2539,14 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
             }
         }
 
-        XMPromptDlg.onShow(activity, "是否设置巡航点?", new View.OnClickListener() {
+       /* XMPromptDlg.onShow(activity, "是否设置巡航点?", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.addTour(0, presetId);
+            }
+        }, null);*/
+
+        XMPromptDlg.onShow(activity, getString(R.string.do_you_want_to_set_a_cruise_point), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 presenter.addTour(0, presetId);
@@ -2557,12 +2565,18 @@ public class DevMonitorFragment extends DemoBaseFragment<DevMonitorPresenter> im
             for (TourBean tourBean : tourBeans) {
                 if (tourBean != null) {
                     if (tourBean.Id == presetId) {//判断巡航点是否设置了
-                        XMPromptDlg.onShow(activity, "确定删除该巡航点?", new View.OnClickListener() {
+                        XMPromptDlg.onShow(activity, getString(R.string.are_you_sure_you_want_to_delete_this_cruise_point), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 presenter.deleteTour(0, presetId);
                             }
                         }, null);
+                        /*XMPromptDlg.onShow(activity, "确定删除该巡航点?", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                presenter.deleteTour(0, presetId);
+                            }
+                        }, null);*/
                         return;
                     }
                 }

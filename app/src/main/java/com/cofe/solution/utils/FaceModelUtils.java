@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.cofe.solution.R;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,7 +55,7 @@ public class FaceModelUtils {
                 success &= copyAssetsResToSDCard(context, fileName, modelPath + fileName);
             }
         } catch (IOException e) {
-            Toast.makeText(context, "load_face_model_error", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.load_face_model_error), Toast.LENGTH_LONG).show();
             Log.e("moveAssert exception", e.getMessage());
             return "";
         }

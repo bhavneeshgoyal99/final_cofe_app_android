@@ -60,13 +60,13 @@ public class DevActivity extends AppCompatActivity implements RealTimeFragment.O
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position) {
                     case 0:
-                        tab.setText("Real-time");
+                        tab.setText(getString(R.string.realtime_text));
                         break;
                     case 1:
-                        tab.setText("Playback");
+                        tab.setText(getString(R.string.playback_2));
                         break;
                     case 2:
-                        tab.setText("Message");
+                        tab.setText(getString(R.string.message));
                         break;
                 }
             }

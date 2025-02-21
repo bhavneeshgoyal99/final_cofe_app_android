@@ -298,13 +298,13 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
             if (StringUtils.contrast(mode, SetFPSActivity.MODE_FPS)) {
                 if(workModeBean!=null && workModeBean.getCustom()!=null){
                     workModeBean.getCustom().setFps(data.getStringExtra(SetFPSActivity.MODE_FPS));
-                    lisFpsSetting.setRightText(""+workModeBean.getCustom().getFps()+"fps");
+                    lisFpsSetting.setRightText(""+workModeBean.getCustom().getFps()+getString(R.string.fps));
                 }
 
             } else if (StringUtils.contrast(mode, SetFPSActivity.MODE_RECORD_LATCH)) {
                 if(workModeBean!=null && workModeBean.getCustom()!=null){
                     workModeBean.getCustom().setRecordLatch(data.getIntExtra(SetFPSActivity.MODE_RECORD_LATCH, 10));
-                    lisRecordSetting.setRightText( ""+workModeBean.getCustom().getRecordLatch()+"s" );
+                    lisRecordSetting.setRightText( ""+workModeBean.getCustom().getRecordLatch()+getString(R.string.s) );
                 }
             }else if(StringUtils.contrast(mode,SetFPSActivity.MODE_ALARM_TIME_INTERVAL)){
                 if(workModeBean!=null){
@@ -312,7 +312,7 @@ public class AOVWorkingModeActivity extends BaseConfigActivity<AOVWorkingModePre
                     if(workModeBean.getAlarmHoldTime() == 0){
                         lisAovAlarmTimeInterval.setRightText(FunSDK.TS("TR_Smart_PowerReal"));
                     }else{
-                        lisAovAlarmTimeInterval.setRightText( ""+workModeBean.getAlarmHoldTime()+"s" );
+                        lisAovAlarmTimeInterval.setRightText( ""+workModeBean.getAlarmHoldTime()+getString(R.string.s) );
                     }
                 }
 

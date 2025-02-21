@@ -574,7 +574,7 @@ public class DiplicateDevMonitoActivty extends DemoBaseActivity<DevMonitorPresen
                 else{
                     rlRecordingTime.setVisibility(View.GONE);
                     handler_record.removeCallbacks(timerRunnable); // Stop timer
-                    tvRecordingTime.setText("00:00"); // Reset timer display
+                    tvRecordingTime.setText(getString(R.string._00_00)); // Reset timer display
                 }
 
                 dealWithMonitorFunction(Integer.parseInt(videoImg.getTag().toString()), isVideoCaptureStart);
@@ -656,13 +656,13 @@ public class DiplicateDevMonitoActivty extends DemoBaseActivity<DevMonitorPresen
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position) {
                     case 0:
-                        tab.setText("Real-time");
+                        tab.setText(getString(R.string.real_time));
                         break;
                     case 1:
-                        tab.setText("Playback");
+                        tab.setText(getString(R.string.playback_text));
                         break;
                     case 2:
-                        tab.setText("Message");
+                        tab.setText(getString(R.string.message));
                         break;
                 }
             }
@@ -2247,7 +2247,8 @@ public class DiplicateDevMonitoActivty extends DemoBaseActivity<DevMonitorPresen
                     lsiIrCut.setSwitchState(presenter.getCameraParamBean().IrcutSwap);
                 } else {
                     presenter.getIrCutInfo();
-                    showToast("获取irCut配置失败，请重试！", Toast.LENGTH_LONG);
+                    //showToast("获取irCut配置失败，请重试！", Toast.LENGTH_LONG);
+                    showToast(getString(R.string.failed_to_obtain_ir_cut_configuration_please_try_again), Toast.LENGTH_LONG);
                 }
 
             }

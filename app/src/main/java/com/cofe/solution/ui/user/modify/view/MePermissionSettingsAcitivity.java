@@ -119,10 +119,10 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
 
     private void showPermissionInfoDialog(String permission, String message) {
         new AlertDialog.Builder(this)
-                .setTitle("Permission Required")
+                .setTitle(getString(R.string.permission_required))
                 .setMessage(message)
-                .setPositiveButton("Accept", (dialog, which) -> requestPermission(permission))
-                .setNegativeButton("Deny", (dialog, which) -> updateUI(permission, false))
+                .setPositiveButton(getString(R.string.accept), (dialog, which) -> requestPermission(permission))
+                .setNegativeButton(getString(R.string.deny), (dialog, which) -> updateUI(permission, false))
                 .show();
     }
 
@@ -144,10 +144,10 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
     }
     private void showPermissionInfoDialogForStorage(String[] permission, String message) {
         new AlertDialog.Builder(this)
-                .setTitle("Permission Required")
+                .setTitle(getString(R.string.permission_required))
                 .setMessage(message)
-                .setPositiveButton("Accept", (dialog, which) -> requestPermissionForStorage(permission))
-                .setNegativeButton("Deny", (dialog, which) -> updateUI(Manifest.permission.WRITE_EXTERNAL_STORAGE, false))
+                .setPositiveButton(getString(R.string.accept), (dialog, which) -> requestPermissionForStorage(permission))
+                .setNegativeButton(getString(R.string.deny), (dialog, which) -> updateUI(Manifest.permission.WRITE_EXTERNAL_STORAGE, false))
                 .show();
     }
 
@@ -207,9 +207,9 @@ public class MePermissionSettingsAcitivity extends AppCompatActivity {
 
     private void openAppSettings() {
         new AlertDialog.Builder(this)
-                .setTitle("Permission Denied")
-                .setMessage("This permission has been permanently denied. You need to enable it manually in settings.")
-                .setPositiveButton("Go to Settings", (dialog, which) -> {
+                .setTitle(getString(R.string.permission_denied))
+                .setMessage(getString(R.string.this_permission_has_been_permanently_denied_you_need_to_enable_it_manually_in_settings))
+                .setPositiveButton(getString(R.string.go_to_settings), (dialog, which) -> {
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                             Uri.fromParts("package", getPackageName(), null));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -272,7 +272,7 @@ public class DevPictureActivity extends DemoBaseActivity<DevPicturePresenter> im
 
                 CustomCalendarDialog dialog = new CustomCalendarDialog(this, highlightedDates, selectedDate -> {
                     // Handle selected date
-                    Toast.makeText(this, "Selected: " + selectedDate, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.selected)+"" + selectedDate, Toast.LENGTH_SHORT).show();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                 try {
                     Date date1 = sdf.parse((selectedDate.getDate()+"").replace("-",""));
